@@ -1,15 +1,17 @@
 ATRIP_ROOT := $(PWD)
 CONFIG ?= gcc
-include etc/config/$(CONFIG).mk
+SOURCES_FILE := Sources.mk
+
+include $(SOURCES_FILE)
+include ./etc/emacs.mk
+include ./etc/config/$(CONFIG).mk
 include ./bench/config.mk
 
-EMACS = emacs -q --batch
-define tangle
-$(EMACS) $(1) --eval "(require 'org)" --eval '(org-babel-tangle)'
-endef
-
 MAIN = README.org
-SOURCES = $(shell grep -oe ':tangle \+[^ ]\+' $(MAIN) | awk '{print $$2}' | sort -u)
+
+$(SOURCES_FILE): $(MAIN)
+	echo -n "SOURCES = " > $@
+	$(EMACS) --eval '(atrip-print-sources)' >> $@
 
 $(SOURCES): $(MAIN)
 	$(call tangle,$<)

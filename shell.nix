@@ -3,7 +3,15 @@
 pkgs.mkShell rec {
 
   buildInputs = with pkgs; [
-    emacs gcc blas
+
+    coreutils
+    git
+
+    gcc
+    blas
+    openmpi
+
+    emacs
   ];
 
 }

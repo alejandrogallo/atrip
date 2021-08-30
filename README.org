@@ -9,8 +9,20 @@ The algorithm uses two main data types, the =Slice= and the
 
 ** The slice
 
-#+begin_src c++ :tangle include/Slice.hpp
+#+begin_src c++ :tangle (atrip-slice-h)
 #pragma once
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <mpi.h>
+
+#include <atrip/Utils.hpp>
+
+namespace atrip {
+
+using ABCTuple = std::array<size_t, 3>;
+using PartialTuple = std::array<size_t, 2>;
+
 struct Slice {
 
   using F = double;
@@ -26,7 +38,7 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
 
 
 
-#+begin_src c++ :tangle include/Slice.hpp
+#+begin_src c++ :tangle (atrip-slice-h)
   // ASSOCIATED TYPES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   struct Location { size_t rank; size_t source; };
@@ -455,7 +467,7 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
       {}
 
 
-  };
+  }; // struct Slice
 
 
 std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
