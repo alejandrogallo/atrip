@@ -1,0 +1,9 @@
+{ pkgs ? import <nixpkgs> {} }:
+
+pkgs.mkShell rec {
+
+  buildInputs = with pkgs; [
+    emacs gcc blas
+  ];
+
+}
