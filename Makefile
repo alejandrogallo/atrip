@@ -1,3 +1,8 @@
+ATRIP_ROOT := $(PWD)
+CONFIG ?= gcc
+include etc/config/$(CONFIG).mk
+include ./bench/config.mk
+
 EMACS = emacs -q --batch
 define tangle
 $(EMACS) $(1) --eval "(require 'org)" --eval '(org-babel-tangle)'
@@ -12,6 +17,17 @@ $(SOURCES): $(MAIN)
 tangle: $(SOURCES)
 
 clean:
-	rm -r $(SOURCES)
+	-rm -v $(SOURCES)
 
-.PHONY: clean tangle
+clean-all: bench-clean clean
+
+bench: $(BENCH_TARGETS)
+
+.PHONY: clean tangle bench
+
+%: %.o
+	$(CXX) $< $(CXXFLAGS) $(LDFLAGS) -o $@
+
+%.o: %.cxx
+	$(CXX) -c $< $(CXXFLAGS) -o $@
+
