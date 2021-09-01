@@ -1,2 +1,2 @@
-include ./etc/ctf_vars.mk
-include ./etc/ctf_rules.mk
+include ./etc/make/ctf_vars.mk
+include ./etc/make/ctf_rules.mk

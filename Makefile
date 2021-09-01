@@ -3,7 +3,7 @@ CONFIG ?= gcc
 SOURCES_FILE := Sources.mk
 
 include $(SOURCES_FILE)
-include ./etc/emacs.mk
+include ./etc/make/emacs.mk
 include ./etc/config/$(CONFIG).mk
 include ./bench/config.mk
 
