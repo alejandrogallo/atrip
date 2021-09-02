@@ -9,7 +9,7 @@ include ./bench/config.mk
 
 MAIN = README.org
 
-$(SOURCES_FILE): $(MAIN)
+$(SOURCES_FILE): $(MAIN) config.el
 	echo -n "SOURCES = " > $@
 	$(EMACS) --eval '(atrip-print-sources)' >> $@
 

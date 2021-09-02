@@ -28,6 +28,9 @@ int main(int argc, char** argv) {
     , Vppph(4, vvvo.data(), symmetries.data(), world)
     ;
 
+  atrip::Atrip::init();
+  atrip::Atrip::run({&ei, &ea, &Tph, &Tpphh, &Vpphh, &Vhhhp, &Vppph});
+
   std::cout << "Hello world" << std::endl;
   MPI_Finalize();
   return 0;
