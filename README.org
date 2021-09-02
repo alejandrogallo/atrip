@@ -1886,18 +1886,8 @@ Output Atrip::run(Input const& in){
   // Timings in seconds ================================================{{{1
   Timings chrono{};
 
-  // Get the distributed ctf tensor data
-  CTF::Tensor<> *ei(getTensorArgument("HoleEigenEnergies"))
-              , *ea(getTensorArgument("ParticleEigenEnergies"))
-              , *Tph(getTensorArgument("CcsdSinglesAmplitudes"))
-              , *Tpphh(getTensorArgument("CcsdDoublesAmplitudes"))
-              , *Vpphh(getTensorArgument("PPHHCoulombIntegrals"))
-              , *Vhhhp(getTensorArgument("HHHPCoulombIntegrals"))
-              , *Vppph(getTensorArgument("PPPHCoulombIntegrals"))
-              ;
-
-  No = ei->lens[0];
-  Nv = ea->lens[0];
+  No = in.ei->lens[0];
+  Nv = in.ea->lens[0];
   LOG(0,"NEW_TRIPLES") << "No: " << No << "\n";
   LOG(0,"NEW_TRIPLES") << "Nv: " << Nv << "\n";
 
@@ -1911,9 +1901,9 @@ Output Atrip::run(Input const& in){
                     , Tai(No * Nv)
                     ;
 
-  ei->read_all(epsi.data());
-  ea->read_all(epsa.data());
-  Tph->read_all(Tai.data());
+  in.ei->read_all(epsi.data());
+  in.ea->read_all(epsa.data());
+  in.Tph->read_all(Tai.data());
 
   // COMMUNICATOR CONSTRUCTION ========================================={{{1
   //
@@ -1929,7 +1919,7 @@ Output Atrip::run(Input const& in){
   if (np == 1) {
     child_comm = universe;
   } else {
-    MPI_Comm_split(cc4s::Cc4s::world->comm, color, crank, &child_comm);
+    MPI_Comm_split(universe, color, crank, &child_comm);
     MPI_Comm_rank(child_comm, &child_rank);
     MPI_Comm_size(child_comm, &child_size);
     //CTF::World child_world(child_comm);
@@ -1939,16 +1929,16 @@ Output Atrip::run(Input const& in){
   chrono["nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   LOG(0,"NEW_TRIPLES") << "BUILD NV-SLICES\n";
-  TAPHH taphh(*Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  HHHA  hhha(*Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   chrono["nv-slices"].stop();
 
   chrono["nv-nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   LOG(0,"NEW_TRIPLES") << "BUILD NV x NV-SLICES\n";
-  ABPH abph(*Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  ABHH abhh(*Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  TABHH tabhh(*Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   chrono["nv-nv-slices"].stop();
 
   // all tensors
