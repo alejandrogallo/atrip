@@ -34,4 +34,4 @@ jobs:
       run: nix-shell --run 'make lib'
 
     - name: Build bench
-      run: nix-shell --run 'make lib'
+      run: nix-shell --run 'make bench'
