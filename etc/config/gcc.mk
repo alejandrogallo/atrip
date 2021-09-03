@@ -5,7 +5,16 @@ CXX = mpic++
 CXXFLAGS += -I$(ATRIP_ROOT)/include
 
 CXXFLAGS += -I$(CTF_INCLUDE_PATH)
-LDFLAGS += -Wl,-Bstatic -L$(CTF_BUILD_PATH)/lib -lctf
-LDFLAGS += -fopenmp -L/usr/lib -L/opt/OpenBLAS/lib -lopenblas
-LDFLAGS += -L/usr/local/lib -lscalapack
+CXXFLAGS += -fPIC
+
+LDFLAGS += -fopenmp
+LDFLAGS += -Wl,-Bstatic
+LDFLAGS += -L$(CTF_BUILD_PATH)/lib -lctf
+LDFLAGS += -L$(SCALAPACK_PATH)/lib -lscalapack
 LDFLAGS += -Wl,-Bdynamic
+
+bench: CXXFLAGS := $(filter-out -fPIC,$(CXXFLAGS))
+bench: LDFLAGS += -Wl,-Bstatic
+bench: LDFLAGS += -Llib/ -latrip
+bench: LDFLAGS += -L$(OPENBLAS_PATH)/lib -lopenblas
+bench: LDFLAGS += -Wl,-Bdynamic

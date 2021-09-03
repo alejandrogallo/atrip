@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cmakeFlagsArray+=(
-      -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON
+      -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
       )
