@@ -29,3 +29,9 @@ jobs:
 
     - name: Tangle
       run: nix-shell --run 'make tangle'
+
+    - name: Build lib
+      run: nix-shell --run 'make lib'
+
+    - name: Build bench
+      run: nix-shell --run 'make lib'

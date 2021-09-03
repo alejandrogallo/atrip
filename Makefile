@@ -8,10 +8,28 @@ include ./etc/config/$(CONFIG).mk
 include ./bench/config.mk
 
 MAIN = README.org
+OBJ_FILES = $(patsubst %.cxx,%.o,$(filter-out %.hpp,$(SOURCES)))
+DEP_FILES = $(patsubst %.o,%.d,$(OBJ_FILES))
+SHARED_LIBRARY = lib/libatrip.so
+STATIC_LIBRARY = lib/libatrip.a
+
+lib: ctf
+lib: $(SHARED_LIBRARY) $(STATIC_LIBRARY)
+
+$(SHARED_LIBRARY): $(OBJ_FILES)
+	mkdir -p $(@D)
+	$(CXX) -shared $< $(CXXFLAGS) $(LDFLAGS) -o $@
+
+$(STATIC_LIBRARY): $(OBJ_FILES)
+	mkdir -p $(@D)
+	$(AR) rcs $@ $<
 
 $(SOURCES_FILE): $(MAIN) config.el
 	echo -n "SOURCES = " > $@
 	$(EMACS) --eval '(atrip-print-sources)' >> $@
+
+print:
+	$(info $(filter-out %.hpp,$(SOURCES)))
 
 $(SOURCES): $(MAIN)
 	$(call tangle,$<)
@@ -33,3 +51,5 @@ bench: $(BENCH_TARGETS)
 %.o: %.cxx
 	$(CXX) -c $< $(CXXFLAGS) -o $@
 
+%.d: %.cxx
+	$(CXX) -M $< $(CXXFLAGS) -o $@

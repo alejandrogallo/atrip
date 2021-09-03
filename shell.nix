@@ -10,9 +10,14 @@ pkgs.mkShell rec {
     gcc
     blas
     openmpi
+    mpi
 
     emacs
   ];
+
+  openblas =  pkgs.openblas.override {
+    enableStatic = true;
+  };
 
   scalapack = import ./etc/nix/scalapack.nix {
     lib = pkgs.lib;
@@ -29,6 +34,7 @@ pkgs.mkShell rec {
   shellHook = ''
     export LAPACK_PATH=${pkgs.lapack}
     export BLAS_PATH=${pkgs.blas}
+    export OPENBLAS_PATH=${openblas}
     export SCALAPACK_PATH=${scalapack}
     export LD_LIBRARY_PATH=${scalapack}/lib:$LD_LIBRARY_PATH
   '';

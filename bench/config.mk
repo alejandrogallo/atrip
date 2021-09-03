@@ -3,5 +3,7 @@ BENCH_TARGETS = $(patsubst %.cxx,%,$(BENCH_SOURCES))
 
 $(BENCH_TARGETS): CXXFLAGS += -I.
 $(BENCH_TARGETS): CXXFLAGS += -fopenmp
+$(BENCH_TARGETS): lib
 bench-clean:
 	-rm -v $(BENCH_TARGETS)
+

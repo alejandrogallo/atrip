@@ -29,6 +29,7 @@
 (atrip-def-hdr atrip-unions-h "Unions.hpp")
 (atrip-def-hdr atrip-tuples-h "Tuples.hpp")
 (atrip-def-hdr atrip-equations-h "Equations.hpp")
+(atrip-def-hdr atrip-debug-h "Debug.hpp")
 
 (atrip-def-hdr atrip-atrip-h "Atrip.hpp")
 (atrip-def-src atrip-atrip-cxx "Atrip.cxx")
