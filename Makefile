@@ -16,6 +16,8 @@ STATIC_LIBRARY = lib/libatrip.a
 lib: ctf
 lib: $(SHARED_LIBRARY) $(STATIC_LIBRARY)
 
+include $(DEP_FILES)
+
 $(SHARED_LIBRARY): $(OBJ_FILES)
 	mkdir -p $(@D)
 	$(CXX) -shared $< $(CXXFLAGS) $(LDFLAGS) -o $@

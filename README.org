@@ -940,7 +940,7 @@ namespace atrip {
               //, slices(2 * sliceTypes.size(), Slice{ sources[0].size() })
     { // constructor begin
 
-      LOG(0,"NEW_TRIPLES") << "INIT SliceUnion: " << name << "\n";
+      LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
 
       slices
         = std::vector<Slice>(2 * sliceTypes.size(), { sources[0].size() });
@@ -953,27 +953,27 @@ namespace atrip {
 
 
 
-      LOG(1,"NEW_TRIPLES") << "rankMap.nSources "
+      LOG(1,"Atrip") << "rankMap.nSources "
                            << rankMap.nSources() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#slices "
+      LOG(1,"Atrip") << "#slices "
                            << slices.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#slices[0] "
+      LOG(1,"Atrip") << "#slices[0] "
                            << slices[0].size << "\n";
-      LOG(1,"NEW_TRIPLES") << "#sources "
+      LOG(1,"Atrip") << "#sources "
                            << sources.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#sources[0] "
+      LOG(1,"Atrip") << "#sources[0] "
                            << sources[0].size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#freePointers "
+      LOG(1,"Atrip") << "#freePointers "
                            << freePointers.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#sliceBuffers "
+      LOG(1,"Atrip") << "#sliceBuffers "
                            << sliceBuffers.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#sliceBuffers[0] "
+      LOG(1,"Atrip") << "#sliceBuffers[0] "
                            << sliceBuffers[0].size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#sliceLength "
+      LOG(1,"Atrip") << "#sliceLength "
                            << sliceLength.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "#paramLength "
+      LOG(1,"Atrip") << "#paramLength "
                            << paramLength.size() << "\n";
-      LOG(1,"NEW_TRIPLES") << "GB*" << np << " "
+      LOG(1,"Atrip") << "GB*" << np << " "
                            << double(sources.size() + sliceBuffers.size())
                             ,* sources[0].size()
                             ,* 8 * np
@@ -993,7 +993,7 @@ namespace atrip {
                          __sliceLength.data(),
                          syms.data(),
                          w);
-      LOG(1,"NEW_TRIPLES") << "slicing... \n";
+      LOG(1,"Atrip") << "slicing... \n";
 
       // setUp sources
       for (size_t it(0); it < rankMap.nSources(); ++it) {
@@ -1859,6 +1859,9 @@ namespace atrip {
       Input& with_Vabij(CTF::Tensor<double> * t) { Vpphh = t; return *this; }
       Input& with_Vijka(CTF::Tensor<double> * t) { Vhhhp = t; return *this; }
       Input& with_Vabci(CTF::Tensor<double> * t) { Vppph = t; return *this; }
+      Input& with_maxIterations(int i) { maxIterations = i; return *this; }
+      Input& with_iterationMod(int i) { iterationMod = i; return *this; }
+      Input& with_barrier(bool i) { barrier = i; return *this; }
     };
 
     struct Output {
@@ -1889,7 +1892,7 @@ void Atrip::init()  {
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
 }
 
-Atrip::Output Atrip::run(Atrip::Input const& in){
+Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
@@ -1900,8 +1903,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 
   const size_t No = in.ei->lens[0];
   const size_t Nv = in.ea->lens[0];
-  LOG(0,"NEW_TRIPLES") << "No: " << No << "\n";
-  LOG(0,"NEW_TRIPLES") << "Nv: " << Nv << "\n";
+  LOG(0,"Atrip") << "No: " << No << "\n";
+  LOG(0,"Atrip") << "Nv: " << Nv << "\n";
 
   // allocate the three scratches, see piecuch
   std::vector<double> Tijk(No*No*No) // doubles only (see piecuch)
@@ -1940,14 +1943,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 
   chrono["nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
-  LOG(0,"NEW_TRIPLES") << "BUILD NV-SLICES\n";
+  LOG(0,"Atrip") << "BUILD NV-SLICES\n";
   TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   chrono["nv-slices"].stop();
 
   chrono["nv-nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
-  LOG(0,"NEW_TRIPLES") << "BUILD NV x NV-SLICES\n";
+  LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
   ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
@@ -1957,7 +1960,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
   std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   //CONSTRUCT TUPLE LIST ==============================================={{{1
-  LOG(0,"NEW_TRIPLES") << "BUILD TUPLE LIST\n";
+  LOG(0,"Atrip") << "BUILD TUPLE LIST\n";
   const auto tuplesList = std::move(getTuplesList(Nv));
   WITH_RANK << "tupList.size() = " << tuplesList.size() << "\n";
 
@@ -1975,7 +1978,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 #endif
 
   WITH_RANK << "abcIndex = " << pretty_print(abcIndex) << "\n";
-  LOG(0,"NEW_TRIPLES") << "#iterations: "
+  LOG(0,"Atrip") << "#iterations: "
                        << nIterations << "\n";
 
   // first abc
@@ -2150,7 +2153,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
     chrono["oneshot-mpi:barrier"].stop();
 
     if (iteration % in.iterationMod == 0) {
-      LOG(0,"NEW_TRIPLES")
+      LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
         << " (" << doublesFlops * iteration / chrono["doubles"].count()
@@ -2394,7 +2397,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 
   // PRINT TUPLES ========================================================={{{1
 #if defined(HAVE_OCD) || defined(TRIPLES_PRINT_TUPLES)
-  LOG(0,"NEW_TRIPLES") << "tuple energies" << "\n";
+  LOG(0,"Atrip") << "tuple energies" << "\n";
   for (size_t i = 0; i < np; i++) {
     MPI_Barrier(universe);
     for (auto const& pair: tupleEnergies) {
@@ -2411,7 +2414,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 #endif
 
   // COMMUNICATE THE ENERGIES ============================================={{{1
-  LOG(0,"NEW_TRIPLES") << "COMMUNICATING ENERGIES \n";
+  LOG(0,"Atrip") << "COMMUNICATING ENERGIES \n";
   double globalEnergy = 0;
   MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
 
@@ -2429,6 +2432,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
   LOG(0, "atrip:flops")
     << nIterations * doublesFlops / chrono["doubles"].count() << "\n";
 
+  return { energy };
+
 }
 #+end_src
 
@@ -2442,7 +2447,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in){
 #define TRIPLES_USE_DGEMM
 //#define TRIPLES_PRINT_TUPLES
 
-#define LOG(name, level) if (Atrip::rank == 0) std::cout << name << ": "
+#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
 
 #if TRIPLES_DEBUG == 4
 #  pragma message("WARNING: You have OCD debugging ABC triples "\

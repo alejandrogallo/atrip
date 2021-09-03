@@ -28,10 +28,36 @@ int main(int argc, char** argv) {
     , Vppph(4, vvvo.data(), symmetries.data(), world)
     ;
 
-  atrip::Atrip::init();
-  atrip::Atrip::run({&ei, &ea, &Tph, &Tpphh, &Vpphh, &Vhhhp, &Vppph});
+  ei.fill_random(-40.0, -2);
+  ea.fill_random(2, 50);
+  Tpphh.fill_random(0, 1);
+  Tph.fill_random(0, 1);
+  Vpphh.fill_random(0, 1);
+  Vhhhp.fill_random(0, 1);
+  Vppph.fill_random(0, 1);
 
-  std::cout << "Hello world" << std::endl;
+  atrip::Atrip::init();
+  atrip::Atrip::Input in;
+
+  in
+    // Tensors
+    .with_epsilon_i(&ei)
+    .with_epsilon_a(&ea)
+    .with_Tai(&Tph)
+    .with_Tabij(&Tpphh)
+    .with_Vabij(&Vpphh)
+    .with_Vijka(&Vhhhp)
+    .with_Vabci(&Vppph)
+    // some options
+    .with_barrier(false)
+    .with_iterationMod(100)
+    ;
+
+  auto out = atrip::Atrip::run(in);
+
+  if (atrip::Atrip::rank == 0)
+    std::cout << "Energy: " << out.energy << std::endl;
+
   MPI_Finalize();
   return 0;
 }
