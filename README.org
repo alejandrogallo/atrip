@@ -607,11 +607,11 @@ namespace atrip {
     sliceIntoBuffer(size_t iteration, Tensor &to, Tensor const& from) = 0;
 
     /*
-     ,* This function should enforce an important property of a SliceUnion.
-     ,* Namely, there can be no two Slices of the same nature.
-     ,*
-     ,* This means that there can be at most one slice with a given Ty_x_Tu.
-     ,*/
+     * This function should enforce an important property of a SliceUnion.
+     * Namely, there can be no two Slices of the same nature.
+     *
+     * This means that there can be at most one slice with a given Ty_x_Tu.
+     */
     void checkForDuplicates() const {
       std::vector<Slice::Ty_x_Tu> tytus;
       for (auto const& s: slices) {
@@ -639,24 +639,24 @@ namespace atrip {
     }
 
     /* buildLocalDatabase
-     ,*
-     ,* It should build a database of slices so that we know what is needed
-     ,* to fetch in the next iteration represented by the tuple 'abc'.
-     ,*
-     ,* 1. The algorithm works as follows, we build a database of the all
-     ,* the slice types that we need together with their tuple.
-     ,*
-     ,* 2. Look in the SliceUnion if we already have this tuple,
-     ,* if we already have it mark it (TODO)
-     ,*
-     ,* 3. If we don't have the tuple, look for a (state=acceptor, type=blank)
-     ,* slice and mark this slice as type=Fetch with the corresponding type
-     ,* and tuple.
-     ,*
-     ,* NOTE: The algorithm should certify that we always have enough blank
-     ,* slices.
-     ,*
-     ,*/
+     *
+     * It should build a database of slices so that we know what is needed
+     * to fetch in the next iteration represented by the tuple 'abc'.
+     *
+     * 1. The algorithm works as follows, we build a database of the all
+     * the slice types that we need together with their tuple.
+     *
+     * 2. Look in the SliceUnion if we already have this tuple,
+     * if we already have it mark it (TODO)
+     *
+     * 3. If we don't have the tuple, look for a (state=acceptor, type=blank)
+     * slice and mark this slice as type=Fetch with the corresponding type
+     * and tuple.
+     *
+     * NOTE: The algorithm should certify that we always have enough blank
+     * slices.
+     *
+     */
     Slice::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
       Slice::LocalDatabase result;
 
@@ -795,11 +795,11 @@ namespace atrip {
     }
 
     /*
-     ,* Garbage collect slices not needed for the next iteration.
-     ,*
-     ,* It will throw if it tries to gc a slice that has not been
-     ,* previously unwrapped, as a safety mechanism.
-     ,*/
+     * Garbage collect slices not needed for the next iteration.
+     *
+     * It will throw if it tries to gc a slice that has not been
+     * previously unwrapped, as a safety mechanism.
+     */
     void clearUnusedSlicesForNext(ABCTuple const& abc) {
       auto const needed = neededSlices(abc);
 
@@ -975,8 +975,8 @@ namespace atrip {
                            << paramLength.size() << "\n";
       LOG(1,"Atrip") << "GB*" << np << " "
                            << double(sources.size() + sliceBuffers.size())
-                            ,* sources[0].size()
-                            ,* 8 * np
+                            * sources[0].size()
+                            * 8 * np
                             / 1073741824.0
                            << "\n";
     } // constructor ends
@@ -1009,8 +1009,8 @@ namespace atrip {
     }
 
     /**
-     ,* \brief Send asynchronously only if the state is Fetch
-     ,*/
+     * \brief Send asynchronously only if the state is Fetch
+     */
     void send( size_t otherRank
              , Slice::Info const& info
              , size_t tag) const noexcept {
@@ -1036,8 +1036,8 @@ namespace atrip {
     }
 
     /**
-     ,* \brief Receive asynchronously only if the state is Fetch
-     ,*/
+     * \brief Receive asynchronously only if the state is Fetch
+     */
     void receive(Slice::Info const& info, size_t tag) noexcept {
       auto& slice = Slice::findByInfo(slices, info);
 
@@ -1046,7 +1046,7 @@ namespace atrip {
       if (slice.info.state == Slice::Fetch) {
         // TODO: do it through the slice class
         slice.info.state = Slice::Dispatched;
-        MPI_Request request;
+        MPI_Request request = nullptr;
         slice.request = request;
         MPI_Irecv( slice.data
                  , slice.size
