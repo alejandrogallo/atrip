@@ -504,7 +504,7 @@ namespace atrip {
   template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
-#if TRIPLES_DEBUG > 1
+#if ATRIP_DEBUG > 1
     dbg::pretty_print(stream, std::forward<T>(value));
 #endif
     return stream.str();
@@ -1245,7 +1245,7 @@ namespace atrip {
                    << "," << pretty_print(origin_.low)
               << "\n";
 
-#ifndef TRIPLES_DONT_SLICE
+#ifndef ATRIP_DONT_SLICE
     toSlice.slice( toSlice_.low.data()
                  , toSlice_.up.data()
                  , 0.0
@@ -1618,7 +1618,7 @@ namespace atrip {
               , NoNo = No*No, NoNv = No*Nv
               ;
 
-  #if defined(TRIPLES_USE_DGEMM)
+  #if defined(ATRIP_USE_DGEMM)
   #define _IJK_(i, j, k) i + j*No + k*NoNo
   #define REORDER(__II, __JJ, __KK)                                 \
     t_reorder.start();                                              \
@@ -1968,7 +1968,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   auto abcIndex = getABCRange(np, rank, tuplesList);
   size_t nIterations = abcIndex.second - abcIndex.first;
 
-#ifdef TRIPLES_BENCHMARK
+#ifdef ATRIP_BENCHMARK
   { const size_t maxIterations = in.maxIterations;
     if (maxIterations != 0) {
       abcIndex.second = abcIndex.first + maxIterations % (nIterations + 1);
@@ -2116,7 +2116,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   };
 
-#if defined(HAVE_OCD) || defined(TRIPLES_PRINT_TUPLES)
+#if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   std::map<ABCTuple, double> tupleEnergies;
 #endif
 
@@ -2296,7 +2296,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
       chrono["energy"].stop();
 
-#if defined(HAVE_OCD) || defined(TRIPLES_PRINT_TUPLES)
+#if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
       tupleEnergies[abc] = tupleEnergy;
 #endif
 
@@ -2396,7 +2396,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   MPI_Barrier(universe);
 
   // PRINT TUPLES ========================================================={{{1
-#if defined(HAVE_OCD) || defined(TRIPLES_PRINT_TUPLES)
+#if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0,"Atrip") << "tuple energies" << "\n";
   for (size_t i = 0; i < np; i++) {
     MPI_Barrier(universe);
@@ -2441,16 +2441,16 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 ** Debug
 #+begin_src c++ :tangle (atrip-debug-h)
 #pragma once
-#define TRIPLES_BENCHMARK
-#define TRIPLES_DONT_SLICE
-#define TRIPLES_DEBUG 1
-//#define TRIPLES_WORKLOAD_DUMP
-#define TRIPLES_USE_DGEMM
-//#define TRIPLES_PRINT_TUPLES
+#define ATRIP_BENCHMARK
+#define ATRIP_DONT_SLICE
+#define ATRIP_DEBUG 1
+//#define ATRIP_WORKLOAD_DUMP
+#define ATRIP_USE_DGEMM
+//#define ATRIP_PRINT_TUPLES
 
 #define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
 
-#if TRIPLES_DEBUG == 4
+#if ATRIP_DEBUG == 4
 #  pragma message("WARNING: You have OCD debugging ABC triples "\
                   "expect GB of output and consult your therapist")
 #  include <dbg.h>
@@ -2463,7 +2463,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_CRAZY_DEBUG
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
-#elif TRIPLES_DEBUG == 3
+#elif ATRIP_DEBUG == 3
 #  pragma message("WARNING: You have crazy debugging ABC triples,"\
                   " expect GB of output")
 #  include <dbg.h>
@@ -2475,7 +2475,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_CRAZY_DEBUG
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
-#elif TRIPLES_DEBUG == 2
+#elif ATRIP_DEBUG == 2
 #  pragma message("WARNING: You have some debugging info for ABC triples")
 #  include <dbg.h>
 #  define OCD_Barrier(com)
@@ -2486,7 +2486,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_CRAZY_DEBUG if (false)
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
-#elif TRIPLES_DEBUG == 1
+#elif ATRIP_DEBUG == 1
 #  define OCD_Barrier(com)
 #  define WITH_OCD if (false)
 #  define WITH_ROOT if (false)
@@ -2496,7 +2496,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_CRAZY_DEBUG if (false)
 #  define DBG(...)
 #else
-#  error("TRIPLES_DEBUG is not defined!")
+#  error("ATRIP_DEBUG is not defined!")
 #endif
 #+end_src
 
