@@ -4,6 +4,9 @@ pkgs.mkShell rec {
 
   buildInputs = with pkgs; [
 
+    clang
+    llvmPackages.openmp
+
     coreutils
     git
 
@@ -19,9 +22,7 @@ pkgs.mkShell rec {
   openblas =  pkgs.openblas.override {
     enableStatic = true;
   };
-  */
 
-  /*
   scalapack = import ./etc/nix/scalapack.nix {
     lib = pkgs.lib;
     stdenv = pkgs.stdenv;

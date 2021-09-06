@@ -8,6 +8,8 @@ CXXFLAGS += -I$(ATRIP_ROOT)/include
 
 CXXFLAGS += -I$(CTF_INCLUDE_PATH)
 CXXFLAGS += -fPIC
+CXXFLAGS += -std=c++11
+CXXFLAGS += -pedantic -Wall
 
 LDFLAGS += -fopenmp
 LDFLAGS += -Wl,-Bstatic
