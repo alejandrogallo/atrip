@@ -40,7 +40,7 @@ jobs:
       run: nix-shell --run 'make bench'
 
     - name: create doc
-      run:
+      run: |
         cd doc && nix-shell --run 'make all'
         cd doc && echo hello world > index.html
 
