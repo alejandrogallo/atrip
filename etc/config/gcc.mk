@@ -16,5 +16,5 @@ LDFLAGS += -L$(SCALAPACK_PATH)/lib -lscalapack
 bench: CXXFLAGS := $(filter-out -fPIC,$(CXXFLAGS))
 bench: LDFLAGS += -Wl,-Bstatic
 bench: LDFLAGS += -Llib/ -latrip
-bench: LDFLAGS += -L$(OPENBLAS_PATH)/lib -lopenblas
 bench: LDFLAGS += -Wl,-Bdynamic
+bench: LDFLAGS += -L$(OPENBLAS_PATH)/lib -lopenblas

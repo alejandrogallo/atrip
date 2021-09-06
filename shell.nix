@@ -15,10 +15,13 @@ pkgs.mkShell rec {
     emacs
   ];
 
+  /*
   openblas =  pkgs.openblas.override {
     enableStatic = true;
   };
+  */
 
+  /*
   scalapack = import ./etc/nix/scalapack.nix {
     lib = pkgs.lib;
     stdenv = pkgs.stdenv;
@@ -30,13 +33,14 @@ pkgs.mkShell rec {
     blas = pkgs.blas;
     lapack = pkgs.lapack;
   };
+  */
 
   shellHook = ''
     export LAPACK_PATH=${pkgs.lapack}
     export BLAS_PATH=${pkgs.blas}
-    export OPENBLAS_PATH=${openblas}
-    export SCALAPACK_PATH=${scalapack}
-    export LD_LIBRARY_PATH=${scalapack}/lib:$LD_LIBRARY_PATH
+    export OPENBLAS_PATH=${pkgs.openblas}
+    export SCALAPACK_PATH=${pkgs.scalapack}
+    export LD_LIBRARY_PATH=${pkgs.scalapack}/lib:$LD_LIBRARY_PATH
   '';
 
 }

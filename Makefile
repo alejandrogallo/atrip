@@ -13,10 +13,24 @@ DEP_FILES = $(patsubst %.o,%.d,$(OBJ_FILES))
 SHARED_LIBRARY = lib/libatrip.so
 STATIC_LIBRARY = lib/libatrip.a
 
-lib: ctf
+
+extern: $(EXTERNAL_DEPENDENCIES)
+clean-extern: CLEANING=yes
+clean-extern:
+	rm -vrf extern
+#$(DEP_FILES): extern
+.PHONY: extern
+
+lib: extern
+lib: $(DEP_FILES)
 lib: $(SHARED_LIBRARY) $(STATIC_LIBRARY)
+static: $(STATIC_LIBRARY)
+shared: $(SHARED_LIBRARY)
+.PHONY: lib static shared
 
 include $(DEP_FILES)
+
+
 
 $(SHARED_LIBRARY): $(OBJ_FILES)
 	mkdir -p $(@D)
@@ -38,13 +52,16 @@ $(SOURCES): $(MAIN)
 
 tangle: $(SOURCES)
 
+clean-emacs: CLEANING=yes
 clean-emacs:
 	-rm -v $(SOURCES)
 
+clean: CLEANING=yes
 clean:
 	-rm -v $(OBJ_FILES) $(DEP_FILES)
 
-clean-all: bench-clean clean
+clean-all: CLEANING=yes
+clean-all: bench-clean clean-emacs clean clean-extern
 
 bench: $(BENCH_TARGETS)
 
