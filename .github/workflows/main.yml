@@ -50,9 +50,9 @@ jobs:
          branch: gh-pages
          folder: ./doc
 
-    - name: Upload dist
-      uses: actions/upload-artifacts@v2
-      with:
-        name: lib
-        path: ./lib
+    #- name: Upload dist
+      #uses: actions/upload-artifacts@v1
+      #with:
+        #name: lib
+        #path: ./lib
 
