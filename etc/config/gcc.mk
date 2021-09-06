@@ -2,6 +2,8 @@ include etc/make/ctf.mk
 
 CXX = mpic++
 
+bench: lib
+
 CXXFLAGS += -I$(ATRIP_ROOT)/include
 
 CXXFLAGS += -I$(CTF_INCLUDE_PATH)

@@ -7,6 +7,8 @@ include ./etc/make/emacs.mk
 include ./etc/config/$(CONFIG).mk
 include ./bench/config.mk
 
+$(info using configuration CONFIG=$(CONFIG))
+
 MAIN = README.org
 OBJ_FILES = $(patsubst %.cxx,%.o,$(filter-out %.hpp,$(SOURCES)))
 DEP_FILES = $(patsubst %.o,%.d,$(OBJ_FILES))
