@@ -40,7 +40,9 @@ jobs:
       run: nix-shell --run 'make bench'
 
     - name: create doc
-      run: mkdir doc && cd doc && echo hello world > index.html
+      run:
+        cd doc && nix-shell --run 'make all'
+        cd doc && echo hello world > index.html
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
@@ -51,6 +53,6 @@ jobs:
     - name: Upload dist
       uses: actions/upload-artifacts@v2
       with:
-        name: lib.tar.gz
-        path: lib
+        name: lib
+        path: ./lib
 
