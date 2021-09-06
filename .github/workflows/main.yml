@@ -30,6 +30,9 @@ jobs:
     - name: Tangle
       run: nix-shell --run 'make tangle'
 
+    - name: Build external dependencies
+      run: nix-shell --run 'make extern'
+
     - name: Build lib
       run: nix-shell --run 'make lib'
 
