@@ -28,7 +28,9 @@ static: $(STATIC_LIBRARY)
 shared: $(SHARED_LIBRARY)
 .PHONY: lib static shared
 
+ifeq ($(MAKECMD),lib)
 include $(DEP_FILES)
+endif
 
 
 
@@ -63,7 +65,7 @@ clean:
 clean-all: CLEANING=yes
 clean-all: bench-clean clean-emacs clean clean-extern
 
-bench: $(BENCH_TARGETS)
+bench: lib $(BENCH_TARGETS)
 
 .PHONY: clean tangle bench
 
