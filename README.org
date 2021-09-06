@@ -1245,7 +1245,7 @@ namespace atrip {
                    << "," << pretty_print(origin_.low)
               << "\n";
 
-#ifdef TODO
+#ifndef TRIPLES_DONT_SLICE
     toSlice.slice( toSlice_.low.data()
                  , toSlice_.up.data()
                  , 0.0
@@ -2442,6 +2442,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #+begin_src c++ :tangle (atrip-debug-h)
 #pragma once
 #define TRIPLES_BENCHMARK
+#define TRIPLES_DONT_SLICE
 #define TRIPLES_DEBUG 1
 //#define TRIPLES_WORKLOAD_DUMP
 #define TRIPLES_USE_DGEMM

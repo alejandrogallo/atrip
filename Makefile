@@ -65,7 +65,7 @@ clean:
 clean-all: CLEANING=yes
 clean-all: bench-clean clean-emacs clean clean-extern
 
-bench: lib $(BENCH_TARGETS)
+bench: $(BENCH_TARGETS)
 
 .PHONY: clean tangle bench
 
