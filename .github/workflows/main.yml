@@ -38,3 +38,13 @@ jobs:
 
     - name: Build bench
       run: nix-shell --run 'make bench'
+
+    - name: create doc
+      run: mkdir doc && cd doc && echo hello world > index.html
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+         branch: gh-pages
+         folder: ./doc
+
