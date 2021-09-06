@@ -38,8 +38,11 @@ $(SOURCES): $(MAIN)
 
 tangle: $(SOURCES)
 
-clean:
+clean-emacs:
 	-rm -v $(SOURCES)
+
+clean:
+	-rm -v $(OBJ_FILES) $(DEP_FILES)
 
 clean-all: bench-clean clean
 
