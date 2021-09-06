@@ -9,11 +9,11 @@ include ./bench/config.mk
 
 $(info ==ATRIP== using configuration CONFIG=$(CONFIG))
 
-MAIN = README.org
+ORG_MAIN = atrip.org
 OBJ_FILES = $(patsubst %.cxx,%.o,$(filter-out %.hpp,$(SOURCES)))
 DEP_FILES = $(patsubst %.o,%.d,$(OBJ_FILES))
-SHARED_LIBRARY = lib/libatrip.so
-STATIC_LIBRARY = lib/libatrip.a
+ATRIP_SHARED_LIBRARY = lib/$(CONFIG)/libatrip.so
+ATRIP_STATIC_LIBRARY = lib/$(CONFIG)/libatrip.a
 
 
 extern: $(EXTERNAL_DEPENDENCIES)
@@ -25,9 +25,9 @@ clean-extern:
 
 lib: extern
 lib: $(DEP_FILES)
-lib: $(SHARED_LIBRARY) $(STATIC_LIBRARY)
-static: $(STATIC_LIBRARY)
-shared: $(SHARED_LIBRARY)
+lib: $(ATRIP_SHARED_LIBRARY) $(ATRIP_STATIC_LIBRARY)
+static: $(ATRIP_STATIC_LIBRARY)
+shared: $(ATRIP_SHARED_LIBRARY)
 .PHONY: lib static shared
 
 ifeq ($(MAKECMD),lib)
@@ -36,22 +36,22 @@ endif
 
 
 
-$(SHARED_LIBRARY): $(OBJ_FILES)
+$(ATRIP_SHARED_LIBRARY): $(OBJ_FILES)
 	mkdir -p $(@D)
 	$(CXX) -shared $< $(CXXFLAGS) $(LDFLAGS) -o $@
 
-$(STATIC_LIBRARY): $(OBJ_FILES)
+$(ATRIP_STATIC_LIBRARY): $(OBJ_FILES)
 	mkdir -p $(@D)
 	$(AR) rcs $@ $<
 
-$(SOURCES_FILE): $(MAIN) config.el
+$(SOURCES_FILE): $(ORG_MAIN) config.el
 	echo -n "SOURCES = " > $@
 	$(EMACS) --eval '(atrip-print-sources)' >> $@
 
 print:
 	$(info $(filter-out %.hpp,$(SOURCES)))
 
-$(SOURCES): $(MAIN)
+$(SOURCES): $(ORG_MAIN)
 	$(call tangle,$<)
 
 tangle: $(SOURCES)
