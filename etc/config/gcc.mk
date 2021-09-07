@@ -4,8 +4,6 @@ CXX = mpic++
 
 bench: lib
 
-CXXFLAGS += -I$(ATRIP_ROOT)/include
-
 CXXFLAGS += -I$(CTF_INCLUDE_PATH)
 CXXFLAGS += -fPIC
 CXXFLAGS += -std=c++11

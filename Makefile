@@ -1,4 +1,4 @@
-ATRIP_ROOT := $(PWD)
+include atrip.mk
 CONFIG ?= gcc
 PREFIX ?= /usr
 SOURCES_FILE := Sources.mk

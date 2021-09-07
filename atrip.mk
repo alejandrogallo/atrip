@@ -1,0 +1,2 @@
+ATRIP_ROOT := $(PWD)
+CXXFLAGS += -I$(ATRIP_ROOT)/include
