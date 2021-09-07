@@ -10,7 +10,7 @@ include ./bench/config.mk
 $(info ==ATRIP== using configuration CONFIG=$(CONFIG))
 
 ORG_MAIN = atrip.org
-OBJ_FILES = $(patsubst %.cxx,%.o,$(filter-out %.hpp,$(SOURCES)))
+OBJ_FILES = $(patsubst %.cxx,%.o,$(filter-out %.hpp,$(ATRIP_SOURCES)))
 DEP_FILES = $(patsubst %.o,%.d,$(OBJ_FILES))
 ATRIP_SHARED_LIBRARY = lib/$(CONFIG)/libatrip.so
 ATRIP_STATIC_LIBRARY = lib/$(CONFIG)/libatrip.a
@@ -45,20 +45,20 @@ $(ATRIP_STATIC_LIBRARY): $(OBJ_FILES)
 	$(AR) rcs $@ $<
 
 $(SOURCES_FILE): $(ORG_MAIN) config.el
-	echo -n "SOURCES = " > $@
+	echo -n "ATRIP_SOURCES = " > $@
 	$(EMACS) --eval '(atrip-print-sources)' >> $@
 
 print:
-	$(info $(filter-out %.hpp,$(SOURCES)))
+	$(info $(filter-out %.hpp,$(ATRIP_SOURCES)))
 
-$(SOURCES): $(ORG_MAIN)
+$(ATRIP_SOURCES): $(ORG_MAIN)
 	$(call tangle,$<)
 
-tangle: $(SOURCES)
+tangle: $(ATRIP_SOURCES)
 
 clean-emacs: CLEANING=yes
 clean-emacs:
-	-rm -v $(SOURCES)
+	-rm -v $(ATRIP_SOURCES)
 
 clean: CLEANING=yes
 clean:
