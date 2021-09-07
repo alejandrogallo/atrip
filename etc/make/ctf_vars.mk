@@ -1,10 +1,10 @@
-CTF_REPOSITORY = https://github.com/cyclops-community/ctf
-CTF_COMMIT    ?= v1.5.0
+CTF_REPOSITORY ?= https://github.com/cyclops-community/ctf
+CTF_COMMIT     ?= v1.5.0
 
-CTF_SRC_PATH     = $(ATRIP_ROOT)/extern/src/ctf/$(CTF_COMMIT)
-CTF_BUILD_PATH   = $(ATRIP_ROOT)/extern/build/$(CONFIG)/ctf/$(CTF_COMMIT)
+CTF_SRC_PATH     ?= $(ATRIP_ROOT)/extern/src/ctf/$(CTF_COMMIT)
+CTF_BUILD_PATH   ?= $(ATRIP_ROOT)/extern/build/$(CONFIG)/ctf/$(CTF_COMMIT)
 
-CTF_CONFIG_FLAGS =
+CTF_CONFIG_FLAGS ?=
 
-CTF_STATIC_LIB   = $(CTF_BUILD_PATH)/lib/libctf.a
-CTF_INCLUDE_PATH = $(CTF_BUILD_PATH)/include
+CTF_STATIC_LIB   ?= $(CTF_BUILD_PATH)/lib/libctf.a
+CTF_INCLUDE_PATH ?= $(CTF_BUILD_PATH)/include
