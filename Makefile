@@ -1,5 +1,6 @@
 ATRIP_ROOT := $(PWD)
 CONFIG ?= gcc
+PREFIX ?= /usr
 SOURCES_FILE := Sources.mk
 
 include $(SOURCES_FILE)
@@ -79,3 +80,11 @@ bench: $(BENCH_TARGETS)
 
 %.d: %.cxx
 	$(CXX) -M $< $(CXXFLAGS) -o $@
+
+.PHONY: install
+install: lib
+	mkdir -p $(PREFIX)/include
+	cp -r include/* $(PREFIX)/include/
+	mkdir -p $(PREFIX)/lib
+	cp $(ATRIP_SHARED_LIBRARY) $(PREFIX)/lib/
+	cp $(ATRIP_STATIC_LIBRARY) $(PREFIX)/lib/
