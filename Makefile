@@ -82,9 +82,8 @@ bench: $(BENCH_TARGETS)
 	$(CXX) -M $< $(CXXFLAGS) -o $@
 
 .PHONY: install
-install: lib
+install:
 	mkdir -p $(PREFIX)/include
 	cp -r include/* $(PREFIX)/include/
 	mkdir -p $(PREFIX)/lib
-	cp $(ATRIP_SHARED_LIBRARY) $(PREFIX)/lib/
-	cp $(ATRIP_STATIC_LIBRARY) $(PREFIX)/lib/
+	cp $(wildcard $(ATRIP_SHARED_LIBRARY) $(ATRIP_STATIC_LIBRARY)) $(PREFIX)/lib/
