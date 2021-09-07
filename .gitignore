@@ -1,4 +1,6 @@
 .emacs
 doc/doxygen/
+extern
+lib
 *.o
 *.d
