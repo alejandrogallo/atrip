@@ -6,7 +6,6 @@
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
-#include <atrip/RankMap.hpp>
 
 using namespace atrip;
 

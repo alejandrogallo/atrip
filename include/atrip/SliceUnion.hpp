@@ -2,6 +2,7 @@
 #pragma once
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>
+#include <atrip/RankMap.hpp>
 
 namespace atrip {
 

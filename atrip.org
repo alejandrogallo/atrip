@@ -595,6 +595,7 @@ namespace atrip {
 #pragma once
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>
+#include <atrip/RankMap.hpp>
 
 namespace atrip {
 
@@ -1882,7 +1883,6 @@ namespace atrip {
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
-#include <atrip/RankMap.hpp>
 
 using namespace atrip;
 
