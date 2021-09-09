@@ -45,7 +45,7 @@ $(ATRIP_STATIC_LIBRARY): $(OBJ_FILES)
 	mkdir -p $(@D)
 	$(AR) rcs $@ $<
 
-$(SOURCES_FILE): $(ORG_MAIN) config.el
+$(SOURCES_FILE): config.el
 	echo -n "ATRIP_SOURCES = " > $@
 	$(EMACS) --eval '(atrip-print-sources)' >> $@
 
