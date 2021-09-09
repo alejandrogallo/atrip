@@ -528,7 +528,7 @@ namespace atrip {
 #+end_src
 
 ** The rank mapping
-#+begin_src c++ :tangle (atrip-utils-h)
+#+begin_src c++ :tangle (atrip-rankmap-h)
 #pragma once
 
 #include <vector>
