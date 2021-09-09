@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Atrip][Atrip:2]]
+// [[file:../../atrip.org::*Main][Main:1]]
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
@@ -6,6 +6,7 @@
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
+#include <atrip/RankMap.hpp>
 
 using namespace atrip;
 
@@ -560,4 +561,4 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   return { energy };
 
 }
-// Atrip:2 ends here
+// Main:1 ends here

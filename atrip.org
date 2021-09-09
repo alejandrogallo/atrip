@@ -1872,6 +1872,8 @@ namespace atrip {
 }
 #+end_src
 
+*** Main
+
 #+begin_src c++ :tangle (atrip-atrip-cxx)
 #include <iomanip>
 
@@ -1880,6 +1882,7 @@ namespace atrip {
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
+#include <atrip/RankMap.hpp>
 
 using namespace atrip;
 
