@@ -62,7 +62,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     MPI_Comm_split(universe, color, crank, &child_comm);
     MPI_Comm_rank(child_comm, &child_rank);
     MPI_Comm_size(child_comm, &child_size);
-    //CTF::World child_world(child_comm);
   }
 
 

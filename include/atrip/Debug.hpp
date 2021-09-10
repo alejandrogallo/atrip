@@ -1,7 +1,7 @@
 // [[file:../../atrip.org::*Debug][Debug:1]]
 #pragma once
 #define ATRIP_BENCHMARK
-#define ATRIP_DONT_SLICE
+//#define ATRIP_DONT_SLICE
 #define ATRIP_DEBUG 1
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM

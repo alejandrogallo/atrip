@@ -1939,7 +1939,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     MPI_Comm_split(universe, color, crank, &child_comm);
     MPI_Comm_rank(child_comm, &child_rank);
     MPI_Comm_size(child_comm, &child_size);
-    //CTF::World child_world(child_comm);
   }
 
 
@@ -2444,7 +2443,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #+begin_src c++ :tangle (atrip-debug-h)
 #pragma once
 #define ATRIP_BENCHMARK
-#define ATRIP_DONT_SLICE
+//#define ATRIP_DONT_SLICE
 #define ATRIP_DEBUG 1
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM
