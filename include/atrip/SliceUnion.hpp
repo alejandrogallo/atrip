@@ -453,7 +453,7 @@ namespace atrip {
       if (slice.info.state == Slice::Fetch) {
         // TODO: do it through the slice class
         slice.info.state = Slice::Dispatched;
-        MPI_Request request = nullptr;
+        MPI_Request request;
         slice.request = request;
         MPI_Irecv( slice.data
                  , slice.size

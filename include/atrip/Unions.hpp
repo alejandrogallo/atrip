@@ -63,10 +63,9 @@ namespace atrip {
 
     void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
     {
-      const int rank = Atrip::rank
-              , Nv = sliceLength[0]
+      const int Nv = sliceLength[0]
               , No = sliceLength[1]
-              , a = rankMap.find({static_cast<size_t>(rank), it});
+              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it});
               ;
 
 
@@ -102,9 +101,8 @@ namespace atrip {
     void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
     {
 
-      const int rank = Atrip::rank
-              , No = sliceLength[0]
-              , a = rankMap.find({static_cast<size_t>(rank), it})
+      const int No = sliceLength[0]
+              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it})
               ;
 
       sliceIntoVector( sources[it]
@@ -140,8 +138,7 @@ namespace atrip {
 
       const int Nv = sliceLength[0]
               , No = sliceLength[1]
-              , rank = Atrip::rank
-              , el = rankMap.find({static_cast<size_t>(rank), it})
+              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
@@ -179,8 +176,7 @@ namespace atrip {
 
       const int Nv = from.lens[0]
               , No = sliceLength[1]
-              , rank = Atrip::rank
-              , el = rankMap.find({static_cast<size_t>(rank), it})
+              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
@@ -220,8 +216,7 @@ namespace atrip {
 
       const int Nv = from.lens[0]
               , No = sliceLength[1]
-              , rank = Atrip::rank
-              , el = rankMap.find({static_cast<size_t>(rank), it})
+              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
