@@ -546,7 +546,7 @@ namespace atrip {
       : lengths(lens)
       , np(np_)
       , size(std::accumulate(lengths.begin(), lengths.end(),
-                            1, std::multiplies<size_t>()))
+                            1UL, std::multiplies<size_t>()))
     { assert(lengths.size() <= 2); }
 
     size_t find(Slice::Location const& p) const noexcept {
@@ -933,7 +933,7 @@ namespace atrip {
                         std::vector<F>
                           (std::accumulate(sliceLength.begin(),
                                            sliceLength.end(),
-                                           1, std::multiplies<size_t>())))
+                                           1UL, std::multiplies<size_t>())))
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers, sources[0])
@@ -1190,7 +1190,7 @@ namespace atrip {
             ==
             ( std::accumulate(n_tuples_per_rank.begin(),
                               n_tuples_per_rank.end(),
-                              0)
+                              0UL)
             + nExtraInvalid
             ));
   #endif

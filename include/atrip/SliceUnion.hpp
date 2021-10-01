@@ -340,7 +340,7 @@ namespace atrip {
                         std::vector<F>
                           (std::accumulate(sliceLength.begin(),
                                            sliceLength.end(),
-                                           1, std::multiplies<size_t>())))
+                                           1UL, std::multiplies<size_t>())))
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers, sources[0])

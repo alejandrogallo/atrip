@@ -51,7 +51,7 @@ namespace atrip {
             ==
             ( std::accumulate(n_tuples_per_rank.begin(),
                               n_tuples_per_rank.end(),
-                              0)
+                              0UL)
             + nExtraInvalid
             ));
   #endif

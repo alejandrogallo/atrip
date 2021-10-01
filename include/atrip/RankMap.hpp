@@ -16,7 +16,7 @@ namespace atrip {
       : lengths(lens)
       , np(np_)
       , size(std::accumulate(lengths.begin(), lengths.end(),
-                            1, std::multiplies<size_t>()))
+                            1UL, std::multiplies<size_t>()))
     { assert(lengths.size() <= 2); }
 
     size_t find(Slice::Location const& p) const noexcept {
