@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <array>
+#include <numeric>
 
 #include <atrip/Utils.hpp>
 #include <atrip/Debug.hpp>
@@ -51,7 +52,8 @@ namespace atrip {
             ==
             ( std::accumulate(n_tuples_per_rank.begin(),
                               n_tuples_per_rank.end(),
-                              0UL)
+                              0UL,
+                              std::plus<size_t>())
             + nExtraInvalid
             ));
   #endif
