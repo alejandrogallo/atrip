@@ -2398,7 +2398,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   WITH_RANK << "local energy " << energy << "\n";
   LOG(0, "Atrip") << "Energy: "
     << std::setprecision(15) << std::setw(23)
-    << globalEnergy << std::endl;
+    << (- globalEnergy) << std::endl;
 
   // PRINT TIMINGS {{{1
   if (in.chrono)
