@@ -287,6 +287,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         << " ===========================\n";
 
       // PRINT TIMINGS
+      if (in.chrono)
       for (auto const& pair: chrono)
         LOG(1, " ") << pair.first << " :: "
                     << pair.second.count()
@@ -525,6 +526,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     << globalEnergy << std::endl;
 
   // PRINT TIMINGS {{{1
+  if (in.chrono)
   for (auto const& pair: chrono)
     LOG(0,"atrip:chrono") << pair.first << " "
                           << pair.second.count() << std::endl;

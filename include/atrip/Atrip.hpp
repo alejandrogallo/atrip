@@ -25,7 +25,8 @@ namespace atrip {
                         , *Vppph = nullptr
                         ;
       int maxIterations = 0, iterationMod = -1;
-      bool barrier = true;
+      bool barrier = false;
+      bool chrono = false;
       Input& with_epsilon_i(CTF::Tensor<double> * t) { ei = t; return *this; }
       Input& with_epsilon_a(CTF::Tensor<double> * t) { ea = t; return *this; }
       Input& with_Tai(CTF::Tensor<double> * t) { Tph = t; return *this; }
@@ -36,6 +37,7 @@ namespace atrip {
       Input& with_maxIterations(int i) { maxIterations = i; return *this; }
       Input& with_iterationMod(int i) { iterationMod = i; return *this; }
       Input& with_barrier(bool i) { barrier = i; return *this; }
+      Input& with_chrono(bool i) { chrono = i; return *this; }
     };
 
     struct Output {
