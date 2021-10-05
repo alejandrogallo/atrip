@@ -1480,7 +1480,7 @@ namespace atrip {
           const size_t iend( std::min( No, ii+blockSize) );
           for (size_t k(kk); k < kend; k++){
             const double ek(epsi[k]);
-            const size_t jstart = jj > k ? kk : k;
+            const size_t jstart = jj > k ? jj : k;
             for (size_t j(jstart); j < jend; j++){
               const double ej(epsi[j]);
               double facjk( j == k ? 0.5 : 1.0);
