@@ -487,19 +487,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     }
 
       WITH_RANK << iteration << "-th cleaning up....... DONE\n";
-    }
 
-    // CLEAN CHRONO ======================================================{{{1
     chrono["iterations"].stop();
-    { // TODO: REMOVEME
-      chrono["oneshot-doubles"].clear();
-      chrono["oneshot-mpi:barrier"].clear();
-      chrono["oneshot-db:comm:allgather"].clear();
-      chrono["oneshot-unwrap"].clear();
-    }
-
     // ITERATION END ====================================================={{{1
-  }  // END OF MAIN LOOP
+
+  }
+    // END OF MAIN LOOP
 
   MPI_Barrier(universe);
 
