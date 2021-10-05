@@ -1978,8 +1978,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #endif
 
   WITH_RANK << "abcIndex = " << pretty_print(abcIndex) << "\n";
-  LOG(0,"Atrip") << "#iterations: "
-                       << nIterations << "\n";
+  LOG(0,"Atrip") << "#iterations: " << nIterations << "\n";
 
   // first abc
   const ABCTuple firstAbc = tuplesList[abcIndex.first];
@@ -2408,8 +2407,10 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                           << pair.second.count() << std::endl;
 
 
-  LOG(0, "atrip:flops")
+  LOG(0, "atrip:flops(doubles)")
     << nIterations * doublesFlops / chrono["doubles"].count() << "\n";
+  LOG(0, "atrip:flops(iterations)")
+    << nIterations * doublesFlops / chrono["iterations"].count() << "\n";
 
   // TODO: change the sign in  the getEnergy routines
   return { - globalEnergy };
