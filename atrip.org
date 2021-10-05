@@ -2396,7 +2396,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
 
   WITH_RANK << "local energy " << energy << "\n";
-  LOG(0,"LOOP FINISHED, energy")
+  LOG(0, "Atrip") << "Energy: "
     << std::setprecision(15) << std::setw(23)
     << globalEnergy << std::endl;
 
