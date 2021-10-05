@@ -533,7 +533,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   LOG(0, "atrip:flops")
     << nIterations * doublesFlops / chrono["doubles"].count() << "\n";
 
-  return { energy };
+  // TODO: change the sign in  the getEnergy routines
+  return { - globalEnergy };
 
 }
 // Main:1 ends here
