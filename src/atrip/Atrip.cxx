@@ -426,23 +426,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
       energy += tupleEnergy;
 
-#ifdef HAVE_OCD
-      auto const print_slices
-        = [](ABCTuple const& abc, ABCTuple const& want, SliceUnion& u) {
-          if (abc != want) return;
-
-          for (auto type: u.sliceTypes) {
-            auto const& ptr = u.unwrapSlice(type, abc);
-            auto const& slice = Slice::findByTypeAbc(u.slices, type, abc);
-            WITH_RANK << "__print_slice__:n" << u.name << " "
-                      << pretty_print(abc) << " "
-                      << pretty_print(slice.info)
-                      ;
-            for (size_t i = 0; i < 20; i++) std::cout << ptr[i] << ", ";
-            std::cout << std::endl;
-          }
-        };
-#endif
+    }
 
     if (isFakeTuple(i)) {
       // fake iterations should also unwrap whatever they got
