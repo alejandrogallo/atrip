@@ -58,9 +58,13 @@ jobs:
 
     - name: create atrip.html
       run: |
-        cd doc
         nix-shell --run 'make html'
         mv atrip.html doc/
+
+    - name: create doxygen
+      run: |
+        nix-shell --run 'make -C ./doc all'
+        cd doc
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
