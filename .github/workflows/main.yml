@@ -31,23 +31,23 @@ jobs:
       run: nix-shell --run 'make tangle'
 
       ## TODO: do this in a matrix
-    - name: gcc -> Build external dependencies
+    - name: gcc → Build external dependencies
       run: nix-shell --run 'make extern CONFIG=gcc'
 
-    - name: gcc -> Build lib
+    - name: gcc → Build lib
       run: nix-shell --run 'make lib CONFIG=gcc'
 
-    - name: gcc -> Build bench
+    - name: gcc → Build bench
       run: nix-shell --run 'make bench CONFIG=gcc'
 
-    - name: clang -> Build external dependencies
-      run: nix-shell --run 'make extern CONFIG=clang'
+    - name: clang → Build external dependencies
+      run: nix-shell --arg with-clang true --run 'make extern CONFIG=clang'
 
-    - name: clang -> Build lib
-      run: nix-shell --run 'make lib CONFIG=clang'
+    - name: clang → Build lib
+      run: nix-shell --arg with-clang true --run 'make lib CONFIG=clang'
 
-    - name: clang -> Build bench
-      run: nix-shell --run 'make bench CONFIG=clang'
+    - name: clang → Build bench
+      run: nix-shell --arg with-clang true --run 'make bench CONFIG=clang'
 
     - name: create doc
       run: |
