@@ -87,3 +87,8 @@ install:
 	cp -r include/* $(PREFIX)/include/
 	mkdir -p $(PREFIX)/lib
 	cp $(wildcard $(ATRIP_SHARED_LIBRARY) $(ATRIP_STATIC_LIBRARY)) $(PREFIX)/lib/
+
+.PHONY: html
+EMACS_HTML = $(EMACS) --load ./etc/emacs/html.el
+html:
+	$(EMACS_HTML) $(ORG_MAIN) --eval "(org-html-export-to-html)"

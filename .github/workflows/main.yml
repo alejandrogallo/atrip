@@ -51,9 +51,16 @@ jobs:
 
     - name: create doc
       run: |
+        mkdir -p doc
         cd doc
         nix-shell --run 'make all'
         echo hello world > index.html
+
+    - name: create atrip.html
+      run: |
+        cd doc
+        nix-shell --run 'make html'
+        mv atrip.html doc/
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
