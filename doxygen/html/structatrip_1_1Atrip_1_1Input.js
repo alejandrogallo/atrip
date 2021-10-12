@@ -1,6 +1,7 @@
 var structatrip_1_1Atrip_1_1Input =
 [
     [ "with_barrier", "structatrip_1_1Atrip_1_1Input.html#ad380591bc7cd074642ec6d85d53ccc7c", null ],
+    [ "with_chrono", "structatrip_1_1Atrip_1_1Input.html#ae04c68f4899ced8ecb01c7583ae68400", null ],
     [ "with_epsilon_a", "structatrip_1_1Atrip_1_1Input.html#ae22d392be5f0c6b20e775c5ce659e558", null ],
     [ "with_epsilon_i", "structatrip_1_1Atrip_1_1Input.html#ad87cc26ea96f5a570dc7f3218d2c3cee", null ],
     [ "with_iterationMod", "structatrip_1_1Atrip_1_1Input.html#a51a38bb79ecc3438fd90cf8d032a7ece", null ],
@@ -11,6 +12,7 @@ var structatrip_1_1Atrip_1_1Input =
     [ "with_Vabij", "structatrip_1_1Atrip_1_1Input.html#a1feaa683cbfa68112140c93a3890005d", null ],
     [ "with_Vijka", "structatrip_1_1Atrip_1_1Input.html#affeeda38c7ac6048092d2701132644ca", null ],
     [ "barrier", "structatrip_1_1Atrip_1_1Input.html#ab2e0f611aa1d49e79b67509953f1adbc", null ],
+    [ "chrono", "structatrip_1_1Atrip_1_1Input.html#aea0b59c2c4df5ee2e5a48b9f3414679b", null ],
     [ "ea", "structatrip_1_1Atrip_1_1Input.html#a849c4ef9544a5778bdbaf1d3fc2f80e1", null ],
     [ "ei", "structatrip_1_1Atrip_1_1Input.html#a441685230239157725aaadc5167d2b1c", null ],
     [ "iterationMod", "structatrip_1_1Atrip_1_1Input.html#a91ee332a67433ef0e066f079805f248d", null ],

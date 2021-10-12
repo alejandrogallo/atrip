@@ -2,7 +2,6 @@ var Debug_8hpp =
 [
     [ "ATRIP_BENCHMARK", "Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df", null ],
     [ "ATRIP_DEBUG", "Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e", null ],
-    [ "ATRIP_DONT_SLICE", "Debug_8hpp.html#ad0ea8da5fd42be18fdb57181028b8bf5", null ],
     [ "ATRIP_USE_DGEMM", "Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf", null ],
     [ "DBG", "Debug_8hpp.html#ae8924623ca601364965e3d88fb7f40fa", null ],
     [ "LOG", "Debug_8hpp.html#aab91ba8612c2b67dad4376d30871eb95", null ],

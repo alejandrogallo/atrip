@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['info_66',['Info',['../structatrip_1_1Slice_1_1Info.html',1,'atrip::Slice::Info'],['../structatrip_1_1Slice_1_1Info.html#a541a0984403764d5add7a4a5f992e433',1,'atrip::Slice::Info::Info()'],['../structatrip_1_1Slice_1_1LocalDatabaseElement.html#a598e830b2a3e87823b9861fb5ae45ac6',1,'atrip::Slice::LocalDatabaseElement::info()'],['../structatrip_1_1Slice.html#ad3e724a8e6040f1b4423da1da754d5cb',1,'atrip::Slice::info()']]],
+  ['info_66',['Info',['../structatrip_1_1Slice_1_1Info.html',1,'atrip::Slice::Info'],['../structatrip_1_1Slice_1_1LocalDatabaseElement.html#a598e830b2a3e87823b9861fb5ae45ac6',1,'atrip::Slice::LocalDatabaseElement::info()'],['../structatrip_1_1Slice.html#ad3e724a8e6040f1b4423da1da754d5cb',1,'atrip::Slice::info()'],['../structatrip_1_1Slice_1_1Info.html#a541a0984403764d5add7a4a5f992e433',1,'atrip::Slice::Info::Info()']]],
   ['init_67',['init',['../structatrip_1_1Atrip.html#ac5d9d695dca918f22ca9182f4f3b0478',1,'atrip::Atrip::init()'],['../structatrip_1_1SliceUnion.html#ab3a87ecd4327e69b81b5dd88adfe562f',1,'atrip::SliceUnion::init()']]],
   ['input_68',['Input',['../structatrip_1_1Atrip_1_1Input.html',1,'atrip::Atrip']]],
   ['isdirectlyfetchable_69',['isDirectlyFetchable',['../structatrip_1_1Slice.html#a59e67378e9106347adcf0798063a2aa5',1,'atrip::Slice']]],

@@ -14,6 +14,5 @@ var searchData=
   ['atrip_2ehpp_13',['Atrip.hpp',['../Atrip_8hpp.html',1,'(Global Namespace)'],['../atrip_8hpp.html',1,'(Global Namespace)']]],
   ['atrip_5fbenchmark_14',['ATRIP_BENCHMARK',['../Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df',1,'Debug.hpp']]],
   ['atrip_5fdebug_15',['ATRIP_DEBUG',['../Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e',1,'Debug.hpp']]],
-  ['atrip_5fdont_5fslice_16',['ATRIP_DONT_SLICE',['../Debug_8hpp.html#ad0ea8da5fd42be18fdb57181028b8bf5',1,'Debug.hpp']]],
-  ['atrip_5fuse_5fdgemm_17',['ATRIP_USE_DGEMM',['../Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf',1,'Debug.hpp']]]
+  ['atrip_5fuse_5fdgemm_16',['ATRIP_USE_DGEMM',['../Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf',1,'Debug.hpp']]]
 ];

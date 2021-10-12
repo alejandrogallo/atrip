@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['rank_284',['rank',['../structatrip_1_1Atrip.html#a384ab5ffeacf4d84a5c614f6c0621a17',1,'atrip::Atrip::rank()'],['../structatrip_1_1Slice_1_1Location.html#a9f8da7a7c6a688c2093406d424db6a12',1,'atrip::Slice::Location::rank()']]],
-  ['rankmap_285',['rankMap',['../structatrip_1_1SliceUnion.html#a8d4653e3f6d3a36ff446089823e5b953',1,'atrip::SliceUnion']]],
-  ['recycling_286',['recycling',['../structatrip_1_1Slice_1_1Info.html#a78ec82998cc0ff862f2551f3757cb839',1,'atrip::Slice::Info']]],
-  ['request_287',['request',['../structatrip_1_1Slice.html#a7f1130f6a6256aac4493c78a907c5f66',1,'atrip::Slice']]]
+  ['name_286',['name',['../structatrip_1_1Slice_1_1LocalDatabaseElement.html#a749fa5d9a6b870207f62908bd80d83ee',1,'atrip::Slice::LocalDatabaseElement::name()'],['../structatrip_1_1SliceUnion.html#a26898da2b86d7484f75bf44a014fb72d',1,'atrip::SliceUnion::name()']]],
+  ['np_287',['np',['../structatrip_1_1Atrip.html#a3ae9ddbec7d076ff8a99260febe93779',1,'atrip::Atrip::np()'],['../structatrip_1_1RankMap.html#aedf71eba472b94c6d9f4ff38da814a19',1,'atrip::RankMap::np()']]]
 ];

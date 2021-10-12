@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['data_271',['data',['../structatrip_1_1Slice.html#aa92054c0d3ebf73d7efe8867cb50fd4a',1,'atrip::Slice']]],
-  ['duration_272',['duration',['../structatrip_1_1Timer.html#ab0c5de41ee1b8def08b719ce6ce94409',1,'atrip::Timer']]]
+  ['chrono_274',['chrono',['../structatrip_1_1Atrip_1_1Input.html#aea0b59c2c4df5ee2e5a48b9f3414679b',1,'atrip::Atrip::Input']]]
 ];

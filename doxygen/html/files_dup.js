@@ -11,6 +11,9 @@ var files_dup =
     [ "Blas.hpp", "Blas_8hpp.html", "Blas_8hpp" ],
     [ "Debug.hpp", "Debug_8hpp.html", "Debug_8hpp" ],
     [ "Equations.hpp", "Equations_8hpp.html", "Equations_8hpp" ],
+    [ "RankMap.hpp", "RankMap_8hpp.html", [
+      [ "RankMap", "structatrip_1_1RankMap.html", "structatrip_1_1RankMap" ]
+    ] ],
     [ "Slice.hpp", "Slice_8hpp.html", "Slice_8hpp" ],
     [ "SliceUnion.hpp", "SliceUnion_8hpp.html", "SliceUnion_8hpp" ],
     [ "Tuples.hpp", "Tuples_8hpp.html", "Tuples_8hpp" ],
