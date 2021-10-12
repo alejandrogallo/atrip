@@ -73,12 +73,15 @@ bench: $(BENCH_TARGETS)
 .PHONY: clean tangle bench
 
 %: %.o
+	$(info [bin] $@)
 	$(CXX) $< $(CXXFLAGS) $(LDFLAGS) -o $@
 
 %.o: %.cxx
+	$(info [obj] $@)
 	$(CXX) -c $< $(CXXFLAGS) -o $@
 
 %.d: %.cxx
+	$(info [dep] $@)
 	$(CXX) -M $< $(CXXFLAGS) -o $@
 
 .PHONY: install

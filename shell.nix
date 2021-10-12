@@ -1,40 +1,28 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> {} , with-clang ? false }:
 
-pkgs.mkShell rec {
+let
+  compiler-configuration
+    = if with-clang
+      then (import ./etc/nix/clang.nix { inherit pkgs; }).buildInputs
+      else [ pkgs.gcc ];
+
+in
+
+pkgs.mkShell {
 
   buildInputs = with pkgs; [
-
-    clang
-    llvmPackages.openmp
 
     coreutils
     git
 
-    gcc
     blas
     openmpi
-    mpi
 
+    gnumake
+    binutils
     emacs
-  ];
 
-  /*
-  openblas =  pkgs.openblas.override {
-    enableStatic = true;
-  };
-
-  scalapack = import ./etc/nix/scalapack.nix {
-    lib = pkgs.lib;
-    stdenv = pkgs.stdenv;
-    fetchFromGitHub = pkgs.fetchFromGitHub;
-    cmake = pkgs.cmake;
-    openssh = pkgs.openssh;
-    gfortran = pkgs.gfortran;
-    mpi = pkgs.mpi;
-    blas = pkgs.blas;
-    lapack = pkgs.lapack;
-  };
-  */
+  ] ++ compiler-configuration;
 
   shellHook = ''
     export LAPACK_PATH=${pkgs.lapack}
