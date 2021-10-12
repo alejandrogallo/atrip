@@ -93,5 +93,7 @@ install:
 
 .PHONY: html
 EMACS_HTML = $(EMACS) --load ./etc/emacs/html.el
-html:
-	$(EMACS_HTML) $(ORG_MAIN) --eval "(org-html-export-to-html)"
+HTML_MAIN = $(patsubst %.org,%.html,$(ORG_MAIN))
+html: $(HTML_MAIN)
+%.html: %.org
+	$(EMACS_HTML) $< --eval "(org-html-export-to-html)"
