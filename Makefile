@@ -69,6 +69,7 @@ clean-all: CLEANING=yes
 clean-all: bench-clean clean-emacs clean clean-extern
 
 bench: $(BENCH_TARGETS)
+$(BENCH_TARGETS): $(ATRIP_STATIC_LIBRARY)
 
 .PHONY: clean tangle bench
 
