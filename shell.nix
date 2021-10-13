@@ -1,6 +1,12 @@
-{ pkgs ? import <nixpkgs> {} , with-clang ? false }:
+{ pkgs ? import <nixpkgs> {} , with-clang ? false , with-mkl ? false }:
 
 let
+
+  mkl = import ./etc/nix/mkl.nix { pkgs = (import <nixpkgs> {
+    config.allowUnfree = true;
+  }); };
+
+  openblas = import ./etc/nix/openblas.nix { inherit pkgs; }; 
 
   clang = import ./etc/nix/clang.nix { inherit pkgs; };
 
@@ -13,28 +19,25 @@ in
 
 pkgs.mkShell {
 
-  buildInputs = with pkgs; [
+  buildInputs
+    = with pkgs; [
 
-    coreutils
-    git
+        coreutils
+        git
 
-    blas
-    openmpi
+        openmpi
 
-    gnumake
-    binutils
-    emacs
+        gnumake
+        binutils
+        emacs
+      ]
+    ++ compiler-configuration
+    ++ (if with-mkl then mkl.buildInputs else openblas.buildInputs)
+    ;
 
-  ] ++ compiler-configuration;
-
-  shellHook = ''
-    export LAPACK_PATH=${pkgs.lapack}
-    export BLAS_PATH=${pkgs.blas}
-    export OPENBLAS_PATH=${pkgs.openblas}
-    export SCALAPACK_PATH=${pkgs.scalapack}
-    export LD_LIBRARY_PATH=${pkgs.scalapack}/lib:$LD_LIBRARY_PATH
-  ''
-  + (if with-clang then clang.shellHook else "")
-  ;
+  shellHook
+    = (if with-clang then clang.shellHook else "")
+    + (if with-mkl then mkl.shellHook else openblas.shellHook)
+    ;
 
 }
