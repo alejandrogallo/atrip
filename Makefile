@@ -3,6 +3,7 @@ CONFIG ?= gcc
 PREFIX ?= /usr
 SOURCES_FILE := Sources.mk
 
+-include config.mk
 include $(SOURCES_FILE)
 include ./etc/make/emacs.mk
 include ./etc/config/$(CONFIG).mk

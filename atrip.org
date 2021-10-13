@@ -710,6 +710,9 @@ std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
 #+end_src
 
 ** Utils
+
+This section presents some utilities
+*** Prolog                                                         :noexport:
 #+begin_src c++ :tangle (atrip-utils-h)
 #pragma once
 #include <sstream>
@@ -720,8 +723,13 @@ std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
 #include <ctf.hpp>
 
 namespace atrip {
+#+end_src
 
+*** Pretty printing
 
+The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]] package.
+
+#+begin_src c++ :tangle (atrip-utils-h)
   template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
@@ -731,22 +739,37 @@ namespace atrip {
     return stream.str();
   }
 
-#define WITH_CHRONO(__chrono, ...) \
-  __chrono.start(); __VA_ARGS__ __chrono.stop();
+#+end_src
 
-  struct Timer {
-    using Clock = std::chrono::high_resolution_clock;
-    using Event = std::chrono::time_point<Clock>;
-    std::chrono::duration<double> duration;
-    Event _start;
-    inline void start() noexcept { _start = Clock::now(); }
-    inline void stop() noexcept { duration += Clock::now() - _start; }
-    inline void clear() noexcept { duration *= 0; }
-    inline double count() const noexcept { return duration.count(); }
-  };
-  using Timings = std::map<std::string, Timer>;
+*** Chrono
+
+The chrono is just a simple wrapper for a high resolution clock
+that can be found in the =std::chrono= namespace of the standard library.
+
+#+begin_src c++ :tangle (atrip-utils-h)
+#define WITH_CHRONO(__chrono, ...)              \
+  __chrono.start();                             \
+  __VA_ARGS__                                   \
+  __chrono.stop();
+
+struct Timer {
+  using Clock = std::chrono::high_resolution_clock;
+  using Event = std::chrono::time_point<Clock>;
+  std::chrono::duration<double> duration;
+  Event _start;
+  inline void start() noexcept { _start = Clock::now(); }
+  inline void stop() noexcept { duration += Clock::now() - _start; }
+  inline void clear() noexcept { duration *= 0; }
+  inline double count() const noexcept { return duration.count(); }
+};
+using Timings = std::map<std::string, Timer>;
+
+#+end_src
+
+
+*** Epilog                                                         :noexport:
+#+begin_src c++ :tangle (atrip-utils-h)
 }
-
 #+end_src
 
 ** The rank mapping
