@@ -3,13 +3,25 @@
 #include <ctf.hpp>
 #include <bench/hauta.h>
 
+#define _print_size(what, size)                 \
+  if (rank == 0) {                              \
+    std::cout << #what                          \
+              << " => "                         \
+              << (double)size * elem_to_gb      \
+              << "GB"                           \
+              << std::endl;                     \
+  }
+
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
   CTF::World world(argc, argv);
-
+  int rank;
+  MPI_Comm_rank(world.comm, &rank);
+  constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
   const int no(hauta::option<int>(argc, argv, "--no"))
           , nv(hauta::option<int>(argc, argv, "--nv"))
           ;
+
 
   std::vector<int> symmetries(4, NS)
                  , vo({nv, no})
@@ -27,6 +39,10 @@ int main(int argc, char** argv) {
     , Vhhhp(4, ooov.data(), symmetries.data(), world)
     , Vppph(4, vvvo.data(), symmetries.data(), world)
     ;
+
+  _print_size(Vabci, no*nv*nv*nv)
+  _print_size(Vabij, no*no*nv*nv)
+  _print_size(Vijka, no*no*no*nv)
 
   ei.fill_random(-40.0, -2);
   ea.fill_random(2, 50);
