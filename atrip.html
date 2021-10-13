@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-13 Wed 13:45 -->
+<!-- 2021-10-13 Wed 15:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATRIP: An MPI-asynchronous implementation of CCSD(T)</title>
@@ -244,31 +244,45 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org091893b">1. Implementation</a>
+<li><a href="#org818658f">1. Implementation</a>
 <ul>
-<li><a href="#orgaa29036">1.1. The slice</a></li>
-<li><a href="#org5f2200f">1.2. Utils</a></li>
-<li><a href="#org3e490ce">1.3. The rank mapping</a></li>
-<li><a href="#orgd818af6">1.4. The slice union</a></li>
-<li><a href="#orga058e69">1.5. Tuples</a></li>
-<li><a href="#org69680bd">1.6. Unions</a></li>
-<li><a href="#orgfccf67b">1.7. Equations</a></li>
-<li><a href="#org174086a">1.8. Blas</a></li>
-<li><a href="#org51e9818">1.9. Atrip</a>
+<li><a href="#org983bce8">1.1. The slice</a>
 <ul>
-<li><a href="#orgfe5d2c3">1.9.1. Main</a></li>
+<li><a href="#org705df0d">1.1.1. Introduction</a></li>
+<li><a href="#orgaa57733">1.1.2. Location</a></li>
+<li><a href="#org5646bd0">1.1.3. Type</a></li>
+<li><a href="#org3cdecbf">1.1.4. State</a></li>
+<li><a href="#org9b55bb9">1.1.5. The Info structure</a></li>
+<li><a href="#org9ef8228">1.1.6. Name</a></li>
+<li><a href="#org19ad138">1.1.7. Database</a></li>
+<li><a href="#org5081f52">1.1.8. MPI Types</a></li>
+<li><a href="#orgef6f584">1.1.9. Static utilities</a></li>
+<li><a href="#org9955cff">1.1.10. Attributes</a></li>
+<li><a href="#org735963a">1.1.11. Member functions</a></li>
 </ul>
 </li>
-<li><a href="#orgefe0704">1.10. Debug</a></li>
-<li><a href="#orgaaf4662">1.11. Include header</a></li>
+<li><a href="#org9867479">1.2. Utils</a></li>
+<li><a href="#org57fc59c">1.3. The rank mapping</a></li>
+<li><a href="#orgd784999">1.4. The slice union</a></li>
+<li><a href="#orga9a3f6c">1.5. Tuples</a></li>
+<li><a href="#org2b2af92">1.6. Unions</a></li>
+<li><a href="#org08d732b">1.7. Equations</a></li>
+<li><a href="#org1b446c3">1.8. Blas</a></li>
+<li><a href="#orgdc6ecdd">1.9. Atrip</a>
+<ul>
+<li><a href="#org4708728">1.9.1. Main</a></li>
+</ul>
+</li>
+<li><a href="#orgc3a73a0">1.10. Debug</a></li>
+<li><a href="#orgcc9e38a">1.11. Include header</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org091893b" class="outline-2">
-<h2 id="org091893b"><span class="section-number-2">1</span> Implementation</h2>
+<div id="outline-container-org818658f" class="outline-2">
+<h2 id="org818658f"><span class="section-number-2">1</span> Implementation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The algorithm uses two main data types, the <code>Slice</code> and the
@@ -276,28 +290,17 @@ The algorithm uses two main data types, the <code>Slice</code> and the
 </p>
 </div>
 
-<div id="outline-container-orgaa29036" class="outline-3">
-<h3 id="orgaa29036"><span class="section-number-3">1.1</span> The slice</h3>
+<div id="outline-container-org983bce8" class="outline-3">
+<h3 id="org983bce8"><span class="section-number-3">1.1</span> The slice</h3>
 <div class="outline-text-3" id="text-1-1">
-<div class="org-src-container">
-<pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iostream&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;algorithm&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;vector&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;mpi.h&gt;</span>
-
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;atrip/Tuples.hpp&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;atrip/Utils.hpp&gt;</span>
-
-<span style="color: #a626a4;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">atrip</span> {
-
-
-<span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Slice</span> {
-
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">F</span> = <span style="color: #c18401;">double</span>;
-</pre>
+<p>
+The following section introduces the idea of a slice.
+</p>
 </div>
 
+<div id="outline-container-org705df0d" class="outline-4">
+<h4 id="org705df0d"><span class="section-number-4">1.1.1</span> Introduction</h4>
+<div class="outline-text-4" id="text-1-1-1">
 <p>
 A slice is the concept of a subset of values of a given tensor.
 As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds of objects:
@@ -309,15 +312,84 @@ tensor \( T^{ab}_{ij} \) of size \( N_\mathrm{o}^2 \times N_\mathrm{v} \)</li>
 <li>the object \( \mathsf{T}(a,b)_{ij} \) which for every pair of \( a, b \)
 corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </ul>
+</div>
+</div>
 
+<div id="outline-container-orgaa57733" class="outline-4">
+<h4 id="orgaa57733"><span class="section-number-4">1.1.2</span> Location</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Every slice set, for instance,
+\( S_k = \left\{
+    a \mapsto \mathsf{T}(a)^{b}_{ij}
+    \mid
+    a \in A_k
+\right\} \)
+where \( A_k \) is some subset of
+\( \mathsf{N}_\mathrm{v} \),
+gets stored in some rank \( k \).
+In general however, the number of elements in \( A_k \) can be bigger
+than the number of processes \( n_p \). Therefore in order to uniquely
+indentify a given slice in \( S_k \) we need two identifiers,
+the rank \( k \), which tells us in which core's memory the slice is
+allocated, and an additional tag which we will call <code>source</code>.
+</p>
+
+<p>
+The datatype that simply models this state of affairs
+is therefore a simple structure:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Location</span> { <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">rank</span>; <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">source</span>; };
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5646bd0" class="outline-4">
+<h4 id="org5646bd0"><span class="section-number-4">1.1.3</span> Type</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+Due to the permutation operators in the equations
+it is noticeable that for every one dimensional
+slice and triple \( (a,b,c) \)
+</p>
+\begin{equation*}
+a \mapsto \mathsf{t}(a)
+\end{equation*}
+<p>
+one needs at the same time
+\( \mathsf{t}(a) \),
+\( \mathsf{t}(b) \) and
+\( \mathsf{t}(c) \).
+For two dimensional slices, i.e., slices of the form
+</p>
+\begin{equation*}
+(a,b) \mapsto \mathsf{t}(a,b)
+\end{equation*}
+<p>
+one needs in the equations the slices
+\( \mathsf{t}(a,b) \),
+\( \mathsf{t}(b,c) \) and
+\( \mathsf{t}(a,c) \).
+In addition, in the case of diagrams where
+the integral \( V^{ab}_{ci} \) appears,
+we additionaly need the permuted slices
+from before, i.e.
+\( \mathsf{t}(b,a) \),
+\( \mathsf{t}(c,b) \) and
+\( \mathsf{t}(c,a) \).
+</p>
+
+<p>
+This means, every slice has associated with it
+a type which denotes which permutation it is.
+</p>
 
 
 <div class="org-src-container">
-<pre class="src src-c++">  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">ASSOCIATED TYPES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-
-  <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Location</span> { <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">rank</span>; <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">source</span>; };
-
-  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">Type</span>
+<pre class="src src-c++">  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">Type</span>
     { <span style="color: #8b4513;">A</span> = 10
     , <span style="color: #8b4513;">B</span>
     , <span style="color: #8b4513;">C</span>
@@ -332,312 +404,540 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">The non-typed slice</span>
     , <span style="color: #8b4513;">Blank</span> = 404
     };
+</pre>
+</div>
+</div>
+</div>
 
-  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">State</span> {
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Fetch represents the state where a slice is to be fetched</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">and has a valid data pointer that can be written to</span>
+<div id="outline-container-org3cdecbf" class="outline-4">
+<h4 id="org3cdecbf"><span class="section-number-4">1.1.4</span> State</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+Every slice can be in different states and every state
+denotes which function the slice is going to provide
+and which relations they have between themselves.
+</p>
+
+<dl class="org-dl">
+<dt>Fetch</dt><dd>A slice is in state <code>Fetch</code> when it
+has a valid data pointer that <b><b>must</b></b> be written to.
+A <code>Fetch</code> slice should not live very long, this means
+that after the database send and receive phase,
+<code>Fetch</code> slices should be changed into <code>Dispatched</code>
+in order to start the process of writing to the
+data pointer from some other rank.</dd>
+<dt>Dispatched</dt><dd>A <code>Dispatched</code> slice indicates that at some point
+send and receive MPI calls have been dispatched
+in order to get the data.
+However, the calls have just been dispatched and there
+is no warranty for the data to be there, for that,
+the slice must be unwrapped.</dd>
+<dt>Ready</dt><dd><code>Ready</code> means that the data pointer can be read from
+directly.</dd>
+<dt>SelfSufficient</dt><dd>A slice is <code>SelfSufficient</code> when its contents are located
+in the same rank that it lives, so that it does not have to
+fetch from no other rank.
+This is important in order to handle the data pointers correctly
+and in order to save calls to MPI receive and send functions.</dd>
+<dt>Recycled</dt><dd><code>Recycled</code> means that this slice gets its data pointer from another
+slice, so it should not be written to</dd>
+<dt>Acceptor</dt><dd><code>Acceptor</code> means that the slice can accept a new slice, it is
+the counterpart of the <code>Blank</code> type, but for states</dd>
+</dl>
+
+<p>
+Again the implementation is a simple enum type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">State</span> {
     <span style="color: #8b4513;">Fetch</span> = 0,
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Dispatches represents the state that an MPI call has been</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">dispatched in order to get the data, but the data has not been</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">yet unwrapped, the data might be there or we might have to wait.</span>
     <span style="color: #8b4513;">Dispatched</span> = 2,
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Ready means that the data pointer can be read from</span>
     <span style="color: #8b4513;">Ready</span> = 1,
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Self sufficient is a slice when its contents are located</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">in the same rank that it lives, so that it does not have to</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">fetch from no one else.</span>
     <span style="color: #8b4513;">SelfSufficient</span> = 911,
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Recycled means that this slice gets its data pointer from another</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">slice, so it should not be written to</span>
     <span style="color: #8b4513;">Recycled</span> = 123,
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Acceptor means that the Slice can accept a new Slice, it is</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">the counterpart of the Blank type, but for states</span>
     <span style="color: #8b4513;">Acceptor</span> = 405
   };
+</pre>
+</div>
+</div>
+</div>
 
-  <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Info</span> {
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">which part of a,b,c the slice holds</span>
-    <span style="color: #c18401;">PartialTuple</span> <span style="color: #8b4513;">tuple</span>;
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">The type of slice for the user to retrieve the correct one</span>
-    <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>;
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">What is the state of the slice</span>
-    <span style="color: #c18401;">State</span> <span style="color: #8b4513;">state</span>;
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Where the slice is to be retrieved</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">NOTE: this can actually be computed from tuple</span>
-    <span style="color: #c18401;">Location</span> <span style="color: #8b4513;">from</span>;
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">If the data are actually to be found in this other slice</span>
-    <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">recycling</span>;
+<div id="outline-container-org9b55bb9" class="outline-4">
+<h4 id="org9b55bb9"><span class="section-number-4">1.1.5</span> The Info structure</h4>
+<div class="outline-text-4" id="text-1-1-5">
+<p>
+Every slice has an information structure associated with it
+that keeps track of the <b><b>variable</b></b> type, state and so on.
+</p>
 
-    <span style="color: #0184bc;">Info</span>() : tuple{0,0}
-           , type{Blank}
-           , state{Acceptor}
-           , from{0,0}
-           , recycling{Blank}
-           {}
-  };
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Info</span> {
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">which part of a,b,c the slice holds</span>
+  <span style="color: #c18401;">PartialTuple</span> <span style="color: #8b4513;">tuple</span>;
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">The type of slice for the user to retrieve the correct one</span>
+  <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>;
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">What is the state of the slice</span>
+  <span style="color: #c18401;">State</span> <span style="color: #8b4513;">state</span>;
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Where the slice is to be retrieved</span>
+  <span style="color: #c18401;">Location</span> <span style="color: #8b4513;">from</span>;
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">If the data are actually to be found in this other slice</span>
+  <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">recycling</span>;
 
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">Ty_x_Tu</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt; <span style="color: #c18401;">Type</span>, <span style="color: #c18401;">PartialTuple</span> &gt;;
+  <span style="color: #0184bc;">Info</span>() : tuple{0,0}
+          , type{Blank}
+          , state{Acceptor}
+          , from{0,0}
+          , recycling{Blank}
+          {}
+};
 
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Names of the integrals that are considered in CCSD(T)</span>
-  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">Name</span>
+<span style="color: #a626a4;">using</span> <span style="color: #c18401;">Ty_x_Tu</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt; <span style="color: #c18401;">Type</span>, <span style="color: #c18401;">PartialTuple</span> &gt;;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ef8228" class="outline-4">
+<h4 id="org9ef8228"><span class="section-number-4">1.1.6</span> Name</h4>
+<div class="outline-text-4" id="text-1-1-6">
+<p>
+CCSD(T) needs in this algorithm 5 types of tensor slices,
+namely
+\( V^{ij}_{ka} \), \( V^{ab}_{ci} \),
+\( V^{ab}_{ij} \)
+and two times \( T^{ab}_{ij} \).
+The reason why we need two times the doubles
+amplitudes is because in the doubles contribution
+to the energy, the \( T \) amplidutes will be sliced
+through one parameter for the particle contribution
+and through two parameters for the hole contribution.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">Name</span>
     { <span style="color: #8b4513;">TA</span>    = 100
     , <span style="color: #8b4513;">VIJKA</span> = 101
     , <span style="color: #8b4513;">VABCI</span> = 200
     , <span style="color: #8b4513;">TABIJ</span> = 201
     , <span style="color: #8b4513;">VABIJ</span> = 202
     };
+</pre>
+</div>
+</div>
+</div>
 
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">DATABASE ==========================================================={{{1</span>
-  <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">LocalDatabaseElement</span> {
+<div id="outline-container-org19ad138" class="outline-4">
+<h4 id="org19ad138"><span class="section-number-4">1.1.7</span> Database</h4>
+<div class="outline-text-4" id="text-1-1-7">
+<p>
+The database is a simple representation of the slices of a slice union.
+Every element of the database is given by the name of the tensor it
+represents and the internal information structure.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">LocalDatabaseElement</span> {
     <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Name</span> <span style="color: #8b4513;">name</span>;
     <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>;
   };
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">LocalDatabase</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">LocalDatabaseElement</span>&gt;;
+</pre>
+</div>
+
+<p>
+A local database (of a given rank) and the global database is thus simply
+a vector of these elements.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">LocalDatabase</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;LocalDatabaseElement&gt;;
   <span style="color: #a626a4;">using</span> <span style="color: #c18401;">Database</span> = LocalDatabase;
+</pre>
+</div>
+</div>
+</div>
 
+<div id="outline-container-org5081f52" class="outline-4">
+<h4 id="org5081f52"><span class="section-number-4">1.1.8</span> MPI Types</h4>
+<div class="outline-text-4" id="text-1-1-8">
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
 
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">STATIC METHODS ===========================================================</span>
-    <span style="color: #a0a1a7; font-weight: bold;">//</span>
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">They are useful to organize the structure of slices</span>
-
-    <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
-
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">vector</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span>, <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">DT</span>) {
-        <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
-        MPI_Type_vector(n, 1, 1, DT, &amp;dt);
-        MPI_Type_commit(&amp;dt);
-        <span style="color: #a626a4;">return</span> dt;
-      }
-
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">sliceLocation</span> () {
-        <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 2;
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">create a sliceLocation to measure in the current architecture</span>
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">the packing of the struct</span>
-        <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Location</span> <span style="color: #8b4513;">measure</span>;
-        <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
-        <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
-        <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n] = {usizeDt(), usizeDt()};
-
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">measure the displacements in the struct</span>
-        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
-        <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
-        MPI_Get_address(&amp;measure.rank,   &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.source, &amp;displacements[j++]);
-        <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
-        displacements[0] = 0;
-
-        MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
-        MPI_Type_commit(&amp;dt);
-        <span style="color: #a626a4;">return</span> dt;
-      }
-
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">enumDt</span>() { <span style="color: #a626a4;">return</span> MPI_INT; }
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">usizeDt</span>() { <span style="color: #a626a4;">return</span> MPI_UINT64_T; }
-
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">sliceInfo</span> () {
-        <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 5;
-        <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
-        <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">measure</span>;
-        <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
-        <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n]
-          = { vector(2, <span style="color: #c18401;">usizeDt</span>())
-            , enumDt()
-            , enumDt()
-            , sliceLocation()
-            , enumDt()
-            };
-
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">create the displacements from the info measurement struct</span>
-        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
-        <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
-        MPI_Get_address(measure.tuple.data(), &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.type,        &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.state,       &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.from,        &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.recycling,   &amp;displacements[j++]);
-        <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
-        displacements[0] = 0;
-
-        MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
-        MPI_Type_commit(&amp;dt);
-        <span style="color: #a626a4;">return</span> dt;
-      }
-
-      <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">localDatabaseElement</span> () {
-        <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 2;
-        <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
-        <span style="color: #c18401;">LocalDatabaseElement</span> <span style="color: #8b4513;">measure</span>;
-        <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
-        <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n]
-          = { enumDt()
-            , sliceInfo()
-            };
-
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">measure the displacements in the struct</span>
-        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
-        <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
-        MPI_Get_address(&amp;measure.name, &amp;displacements[j++]);
-        MPI_Get_address(&amp;measure.info, &amp;displacements[j++]);
-        <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
-        displacements[0] = 0;
-
-        MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
-        MPI_Type_commit(&amp;dt);
-        <span style="color: #a626a4;">return</span> dt;
-      }
-
-    };
-
-  <span style="color: #a626a4;">static</span>
-  <span style="color: #c18401;">PartialTuple</span> <span style="color: #0184bc;">subtupleBySlice</span>(<span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">abc</span>, <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">sliceType</span>) {
-    <span style="color: #a626a4;">switch</span> (sliceType) {
-      <span style="color: #a626a4;">case</span> AB: <span style="color: #a626a4;">return</span> {abc[0], abc[1]};
-      <span style="color: #a626a4;">case</span> BC: <span style="color: #a626a4;">return</span> {abc[1], abc[2]};
-      <span style="color: #a626a4;">case</span> AC: <span style="color: #a626a4;">return</span> {abc[0], abc[2]};
-      <span style="color: #a626a4;">case</span> CB: <span style="color: #a626a4;">return</span> {abc[2], abc[1]};
-      <span style="color: #a626a4;">case</span> BA: <span style="color: #a626a4;">return</span> {abc[1], abc[0]};
-      <span style="color: #a626a4;">case</span> CA: <span style="color: #a626a4;">return</span> {abc[2], abc[0]};
-      <span style="color: #a626a4;">case</span>  A: <span style="color: #a626a4;">return</span> {abc[0], 0};
-      <span style="color: #a626a4;">case</span>  B: <span style="color: #a626a4;">return</span> {abc[1], 0};
-      <span style="color: #a626a4;">case</span>  C: <span style="color: #a626a4;">return</span> {abc[2], 0};
-      <span style="color: #a626a4;">default</span>: <span style="color: #a626a4;">throw</span> <span style="color: #50a14f;">"Switch statement not exhaustive!"</span>;
-    }
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">vector</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span>, <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">DT</span>) {
+    <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
+    MPI_Type_vector(n, 1, 1, DT, &amp;dt);
+    MPI_Type_commit(&amp;dt);
+    <span style="color: #a626a4;">return</span> dt;
   }
 
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">sliceLocation</span> () {
+    <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 2;
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">create a sliceLocation to measure in the current architecture</span>
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">the packing of the struct</span>
+    <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Location</span> <span style="color: #8b4513;">measure</span>;
+    <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
+    <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n] = {usizeDt(), usizeDt()};
 
-    <span style="color: #50a14f; font-style: italic;">/**</span>
-<span style="color: #50a14f; font-style: italic;">     * It is important here to return a reference to a Slice</span>
-<span style="color: #50a14f; font-style: italic;">     * not to accidentally copy the associated buffer of the slice.</span>
-<span style="color: #50a14f; font-style: italic;">     */</span>
-    <span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findOneByType</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>) {
-        <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
-          = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
-                         [&amp;<span style="color: #8b4513;">type</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
-                           <span style="color: #a626a4;">return</span> type == s.info.type;
-                         });
-        <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
-        <span style="color: #8b4513;">WITH_RANK</span>
-          &lt;&lt; <span style="color: #50a14f;">"\t__ looking for "</span> &lt;&lt; type &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-        <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
-          <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error(<span style="color: #50a14f;">"Slice by type not found!"</span>);
-        <span style="color: #a626a4;">return</span> *sliceIt;
-    }
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">measure the displacements in the struct</span>
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
+    <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
+    MPI_Get_address(&amp;measure.rank,   &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.source, &amp;displacements[j++]);
+    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
+    displacements[0] = 0;
 
-    <span style="color: #a0a1a7; font-weight: bold;">/*</span>
-<span style="color: #a0a1a7;">     * Check if an info has</span>
-<span style="color: #a0a1a7;">     *</span>
-<span style="color: #a0a1a7; font-weight: bold;">     */</span>
-    <span style="color: #a626a4;">static</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>*&gt; <span style="color: #0184bc;">hasRecycledReferencingToIt</span>
-      ( <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>
-      , <span style="color: #c18401;">Info</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">info</span>
-      ) {
-      <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>*&gt; <span style="color: #8b4513;">result</span>;
+    MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
+    MPI_Type_commit(&amp;dt);
+    <span style="color: #a626a4;">return</span> dt;
+  }
 
-      <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">s</span>: slices)
-        <span style="color: #a626a4;">if</span> (  s.info.recycling == info.type
-           &amp;&amp; s.info.tuple == info.tuple
-           &amp;&amp; s.info.state == Recycled
-           ) result.push_back(&amp;s);
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">enumDt</span>() { <span style="color: #a626a4;">return</span> MPI_INT; }
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">usizeDt</span>() { <span style="color: #a626a4;">return</span> MPI_UINT64_T; }
 
-      <span style="color: #a626a4;">return</span> result;
-    }
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">sliceInfo</span> () {
+    <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 5;
+    <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
+    <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">measure</span>;
+    <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n]
+      = { vector(2, <span style="color: #c18401;">usizeDt</span>())
+        , enumDt()
+        , enumDt()
+        , sliceLocation()
+        , enumDt()
+        };
 
-    <span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp;
-    <span style="color: #0184bc;">findRecycledSource</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>) {
-      <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
-        = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
-                       [&amp;<span style="color: #8b4513;">info</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
-                         <span style="color: #a626a4;">return</span> info.recycling == s.info.type
-                             &amp;&amp; info.tuple == s.info.tuple
-                             &amp;&amp; <span style="font-weight: bold; text-decoration: underline;">State</span>::Recycled != s.info.state
-                             ;
-                       });
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">create the displacements from the info measurement struct</span>
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
+    <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
+    MPI_Get_address(measure.tuple.data(), &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.type,        &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.state,       &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.from,        &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.recycling,   &amp;displacements[j++]);
+    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
+    displacements[0] = 0;
 
-      <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
-      <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find: recycling source of "</span>
-                &lt;&lt; pretty_print(info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-      <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
-        <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice not found: "</span>
-                               + pretty_print(info)
-                               + <span style="color: #50a14f;">" rank: "</span>
-                               + pretty_print(<span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank)
-                               );
-      WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__slice__:find: "</span> &lt;&lt; pretty_print(sliceIt-&gt;info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-      <span style="color: #a626a4;">return</span> *sliceIt;
-    }
+    MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
+    MPI_Type_commit(&amp;dt);
+    <span style="color: #a626a4;">return</span> dt;
+  }
 
-    <span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findByTypeAbc</span>
-      ( <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>
-      , <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>
-      , <span style="color: #c18401;">ABCTuple</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">abc</span>
-      ) {
-        <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">tuple</span> = <span style="font-weight: bold; text-decoration: underline;">Slice</span>::subtupleBySlice(abc, type);
-        <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
-          = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
-                         [&amp;<span style="color: #8b4513;">type</span>, &amp;<span style="color: #8b4513;">tuple</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
-                           <span style="color: #a626a4;">return</span> type == s.info.type
-                               &amp;&amp; tuple == s.info.tuple
-                               ;
-                         });
-        <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
-        <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find:"</span> &lt;&lt; type &lt;&lt; <span style="color: #50a14f;">" and tuple "</span>
-                  &lt;&lt; pretty_print(tuple)
-                  &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-        <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
-          <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice not found: "</span>
-                                 + pretty_print(tuple)
-                                 + <span style="color: #50a14f;">", "</span>
-                                 + pretty_print(type)
-                                 + <span style="color: #50a14f;">" rank: "</span>
-                                 + pretty_print(<span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank)
-                                 );
-        <span style="color: #a626a4;">return</span> *sliceIt;
-    }
+  <span style="color: #a626a4;">static</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #0184bc;">localDatabaseElement</span> () {
+    <span style="color: #a626a4;">constexpr</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">n</span> = 2;
+    <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">dt</span>;
+    <span style="color: #c18401;">LocalDatabaseElement</span> <span style="color: #8b4513;">measure</span>;
+    <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">lengths</span>(n, 1);
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">types</span>[n]
+      = { enumDt()
+        , sliceInfo()
+        };
 
-    <span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findByInfo</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>,
-                             <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">info</span>) {
-        <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
-          = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
-                         [&amp;<span style="color: #8b4513;">info</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
-                           <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TODO: maybe implement comparison in Info struct</span>
-                           <span style="color: #a626a4;">return</span> info.type == s.info.type
-                               &amp;&amp; info.state == s.info.state
-                               &amp;&amp; info.tuple == s.info.tuple
-                               &amp;&amp; info.from.rank == s.info.from.rank
-                               &amp;&amp; info.from.source == s.info.from.source
-                                ;
-                         });
-        <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
-        <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find:looking for "</span> &lt;&lt; pretty_print(info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-        <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
-          <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice by info not found: "</span>
-                                 + pretty_print(info));
-        <span style="color: #a626a4;">return</span> *sliceIt;
-    }
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">measure the displacements in the struct</span>
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0;
+    <span style="color: #c18401;">MPI_Aint</span> <span style="color: #8b4513;">displacements</span>[n];
+    MPI_Get_address(&amp;measure.name, &amp;displacements[j++]);
+    MPI_Get_address(&amp;measure.info, &amp;displacements[j++]);
+    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 1; i &lt; n; i++) displacements[i] -= displacements[0];
+    displacements[0] = 0;
 
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">SLICE DEFINITION  =================================================={{{1</span>
+    MPI_Type_create_struct(n, lengths.data(), displacements, types, &amp;dt);
+    MPI_Type_commit(&amp;dt);
+    <span style="color: #a626a4;">return</span> dt;
+  }
 
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">ATTRIBUTES ============================================================</span>
-    <span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>;
-    <span style="color: #c18401;">F</span>  *<span style="color: #8b4513;">data</span>;
-    <span style="color: #c18401;">MPI_Request</span> <span style="color: #8b4513;">request</span>;
-    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">size</span>;
+};
+</pre>
+</div>
+</div>
+</div>
 
-    <span style="color: #c18401;">void</span> <span style="color: #0184bc;">markReady</span>() <span style="color: #a626a4;">noexcept</span> {
+<div id="outline-container-orgef6f584" class="outline-4">
+<h4 id="orgef6f584"><span class="section-number-4">1.1.9</span> Static utilities</h4>
+<div class="outline-text-4" id="text-1-1-9">
+<p>
+This section presents some functions which are useful to work with
+slices and are inside the namespace created by the slice struct.
+</p>
+
+
+<p>
+The function <code>subtupleBySlice</code> gives to every <code>Slice::Type</code>
+its meaning in terms of the triples \( (a,b,c) \).
+</p>
+
+<p>
+Notice that since in general the relation
+\( a < b < c \) holds (in our implementation), the case
+of one-dimensional parametrizations <code>A</code>, <code>B</code> and <code>C</code> is well
+defined.
+</p>
+
+<p>
+The function should only throw if there is an implementation
+error where the <code>Slice::Type</code> enum has been expanded and this
+function has not been updated accordingly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span>
+<span style="color: #c18401;">PartialTuple</span> <span style="color: #0184bc;">subtupleBySlice</span>(<span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">abc</span>, <span style="color: #c18401;">Type</span> <span style="color: #8b4513;">sliceType</span>) {
+  <span style="color: #a626a4;">switch</span> (sliceType) {
+    <span style="color: #a626a4;">case</span> AB: <span style="color: #a626a4;">return</span> {abc[0], abc[1]};
+    <span style="color: #a626a4;">case</span> BC: <span style="color: #a626a4;">return</span> {abc[1], abc[2]};
+    <span style="color: #a626a4;">case</span> AC: <span style="color: #a626a4;">return</span> {abc[0], abc[2]};
+    <span style="color: #a626a4;">case</span> CB: <span style="color: #a626a4;">return</span> {abc[2], abc[1]};
+    <span style="color: #a626a4;">case</span> BA: <span style="color: #a626a4;">return</span> {abc[1], abc[0]};
+    <span style="color: #a626a4;">case</span> CA: <span style="color: #a626a4;">return</span> {abc[2], abc[0]};
+    <span style="color: #a626a4;">case</span>  A: <span style="color: #a626a4;">return</span> {abc[0], 0};
+    <span style="color: #a626a4;">case</span>  B: <span style="color: #a626a4;">return</span> {abc[1], 0};
+    <span style="color: #a626a4;">case</span>  C: <span style="color: #a626a4;">return</span> {abc[2], 0};
+    <span style="color: #a626a4;">default</span>: <span style="color: #a626a4;">throw</span> <span style="color: #50a14f;">"Switch statement not exhaustive!"</span>;
+  }
+}
+</pre>
+</div>
+
+<p>
+In the context of cleaning up slices during the main loop,
+it is important to check if a given slice has some slices
+referencing to it in quality of recycled slices.
+</p>
+
+<p>
+This function should therefore return a vector of pointers
+of slices referencing to the given slice's info, when
+the length of the vector is zero, then there are no dangling
+links.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>*&gt; <span style="color: #0184bc;">hasRecycledReferencingToIt</span>
+  ( <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>
+  , <span style="color: #c18401;">Info</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">info</span>
+  ) {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>*&gt; <span style="color: #8b4513;">result</span>;
+
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">s</span>: slices)
+    <span style="color: #a626a4;">if</span> (  s.info.recycling == info.type
+        &amp;&amp; s.info.tuple == info.tuple
+        &amp;&amp; s.info.state == Recycled
+        ) result.push_back(&amp;s);
+
+  <span style="color: #a626a4;">return</span> result;
+}
+</pre>
+</div>
+
+<p>
+The rest of the coming functions are utilities in order to find in a vector
+of slices a given slice by reference. Mostly they are merely convenience
+wrappers to the standard library function <code>std::find_if</code>.
+</p>
+
+<p>
+They are named as <code>find&lt;...&gt;</code>, where <code>&lt;...&gt;</code> represents some condition
+and must always return a reference to the found slice, i.e., <code>Slice&amp;</code>.
+<code>Atrip</code> relies on these functions to find the sought for slices,
+therefore these functions will throw a <code>std::domain_error</code> if the
+given slice could not be found.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findOneByType</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>) {
+    <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
+      = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
+                      [&amp;<span style="color: #8b4513;">type</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
+                        <span style="color: #a626a4;">return</span> type == s.info.type;
+                      });
+    <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
+    <span style="color: #8b4513;">WITH_RANK</span>
+      &lt;&lt; <span style="color: #50a14f;">"\t__ looking for "</span> &lt;&lt; type &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+    <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
+      <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error(<span style="color: #50a14f;">"Slice by type not found!"</span>);
+    <span style="color: #a626a4;">return</span> *sliceIt;
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp;
+<span style="color: #0184bc;">findRecycledSource</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>) {
+  <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
+    = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
+                    [&amp;<span style="color: #8b4513;">info</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
+                      <span style="color: #a626a4;">return</span> info.recycling == s.info.type
+                          &amp;&amp; info.tuple == s.info.tuple
+                          &amp;&amp; <span style="font-weight: bold; text-decoration: underline;">State</span>::Recycled != s.info.state
+                          ;
+                    });
+
+  <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
+  <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find: recycling source of "</span>
+            &lt;&lt; pretty_print(info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
+    <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice not found: "</span>
+                            + pretty_print(info)
+                            + <span style="color: #50a14f;">" rank: "</span>
+                            + pretty_print(<span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank)
+                            );
+  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__slice__:find: "</span> &lt;&lt; pretty_print(sliceIt-&gt;info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  <span style="color: #a626a4;">return</span> *sliceIt;
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findByTypeAbc</span>
+  ( <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>
+  , <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Type</span> <span style="color: #8b4513;">type</span>
+  , <span style="color: #c18401;">ABCTuple</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">abc</span>
+  ) {
+    <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">tuple</span> = <span style="font-weight: bold; text-decoration: underline;">Slice</span>::subtupleBySlice(abc, type);
+    <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
+      = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
+                      [&amp;<span style="color: #8b4513;">type</span>, &amp;<span style="color: #8b4513;">tuple</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
+                        <span style="color: #a626a4;">return</span> type == s.info.type
+                            &amp;&amp; tuple == s.info.tuple
+                            ;
+                      });
+    <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
+    <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find:"</span> &lt;&lt; type &lt;&lt; <span style="color: #50a14f;">" and tuple "</span>
+              &lt;&lt; pretty_print(tuple)
+              &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+    <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
+      <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice not found: "</span>
+                              + pretty_print(tuple)
+                              + <span style="color: #50a14f;">", "</span>
+                              + pretty_print(type)
+                              + <span style="color: #50a14f;">" rank: "</span>
+                              + pretty_print(<span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank)
+                              );
+    <span style="color: #a626a4;">return</span> *sliceIt;
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">static</span> <span style="color: #c18401;">Slice</span>&amp; <span style="color: #0184bc;">findByInfo</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">Slice</span>&gt; &amp;<span style="color: #8b4513;">slices</span>,
+                         <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">info</span>) {
+  <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">sliceIt</span>
+    = <span style="font-weight: bold; text-decoration: underline;">std</span>::find_if(slices.begin(), slices.end(),
+                   [&amp;<span style="color: #8b4513;">info</span>](<span style="color: #c18401;">Slice</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
+                     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TODO: maybe implement comparison in Info struct</span>
+                     <span style="color: #a626a4;">return</span> info.type == s.info.type
+                       &amp;&amp; info.state == s.info.state
+                       &amp;&amp; info.tuple == s.info.tuple
+                       &amp;&amp; info.from.rank == s.info.from.rank
+                       &amp;&amp; info.from.source == s.info.from.source
+                       ;
+                   });
+  <span style="color: #c18401;">WITH_CRAZY_DEBUG</span>
+    <span style="color: #8b4513;">WITH_RANK</span> &lt;&lt; <span style="color: #50a14f;">"__slice__:find:looking for "</span> &lt;&lt; pretty_print(info) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  <span style="color: #a626a4;">if</span> (sliceIt == slices.end())
+    <span style="color: #a626a4;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::domain_error( <span style="color: #50a14f;">"Slice by info not found: "</span>
+                             + pretty_print(info));
+  <span style="color: #a626a4;">return</span> *sliceIt;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9955cff" class="outline-4">
+<h4 id="org9955cff"><span class="section-number-4">1.1.10</span> Attributes</h4>
+<div class="outline-text-4" id="text-1-1-10">
+<p>
+A slice object does not own data, it is just a container
+or a pointer to data together with additional bookkeeping facilities.
+</p>
+
+<p>
+It includes an info structure with the information about the slice,
+<code>Type</code>, <code>State</code> etc, which will be later communicated to other ranks.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>;
+</pre>
+</div>
+
+<p>
+A pointer to data is also necessary for the <code>Slice</code> but not necessary
+to be communicated to other ranks. The <code>Slice</code> should never allocate
+or deallocate itself the pointer.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">F</span>  *<span style="color: #8b4513;">data</span>;
+</pre>
+</div>
+
+<p>
+An <code>MPI_Request</code> handle is also included so that the slices that are
+to receive data through MPI can know which request they belong to.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">MPI_Request</span> <span style="color: #8b4513;">request</span>;
+</pre>
+</div>
+
+<p>
+For practical purposes in MPI calls, the number of elements in <code>data</code> is also included.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">size</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org735963a" class="outline-4">
+<h4 id="org735963a"><span class="section-number-4">1.1.11</span> Member functions</h4>
+<div class="outline-text-4" id="text-1-1-11">
+<p>
+It is important to note that a ready slice should not be recycled from
+any other slice, so that it can have access by itself to the data.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">void</span> <span style="color: #0184bc;">markReady</span>() <span style="color: #a626a4;">noexcept</span> {
       info.state = Ready;
       info.recycling = Blank;
     }
+</pre>
+</div>
 
-    <span style="color: #a0a1a7; font-weight: bold;">/*</span>
-<span style="color: #a0a1a7;">     * This means that the data is there</span>
-<span style="color: #a0a1a7; font-weight: bold;">     */</span>
-    <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isUnwrapped</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
+
+<p>
+The following function asks wether or not
+the slice has effectively been unwrapped or not,
+i.e., wether or not the data are accessible and already
+there. This can only happen in two ways, either
+is the slice <code>Ready</code> or it is <code>SelfSufficient</code>,
+i.e., the data pointed to was pre-distributed to the current node.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isUnwrapped</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
       <span style="color: #a626a4;">return</span> info.state == Ready
           || info.state == SelfSufficient
           ;
     }
+</pre>
+</div>
 
-    <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isUnwrappable</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
+<p>
+The function <code>isUnwrappable</code> answers which slices can be unwrapped
+potentially. Unwrapped slices can be unwrapped again idempotentially.
+Also <code>Recycled</code> slices can be unwrapped, i.e. the slices pointed to by them
+will be unwrapped.
+The only other possibility is that the slice has been dispatched
+in the past and can be unwrapped. The case where the state
+is <code>Dispatched</code> is the canonical intuitive case where a real process
+of unwrapping, i.e. waiting for the data to get through the network,
+is done.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isUnwrappable</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
       <span style="color: #a626a4;">return</span> isUnwrapped()
           || info.state == Recycled
           || info.state == Dispatched
@@ -668,20 +968,30 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
            ;
     }
 
+</pre>
+</div>
 
-    <span style="color: #a0a1a7; font-weight: bold;">/*</span>
-<span style="color: #a0a1a7;">     * This function answers the question, which slices can be recycled.</span>
-<span style="color: #a0a1a7;">     *</span>
-<span style="color: #a0a1a7;">     * A slice can only be recycled if it is Fetch or Ready and has</span>
-<span style="color: #a0a1a7;">     * a valid datapointer.</span>
-<span style="color: #a0a1a7;">     *</span>
-<span style="color: #a0a1a7;">     * In particular, SelfSufficient are not recyclable, since it is easier</span>
-<span style="color: #a0a1a7;">     * just to create a SelfSufficient slice than deal with data dependencies.</span>
-<span style="color: #a0a1a7;">     *</span>
-<span style="color: #a0a1a7;">     * Furthermore, a recycled slice is not recyclable, if this is the case</span>
-<span style="color: #a0a1a7;">     * then it is either bad design or a bug.</span>
-<span style="color: #a0a1a7; font-weight: bold;">     */</span>
-    <span style="color: #a626a4;">inline</span> <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isRecyclable</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
+<p>
+The function <code>isRecylable</code> answers the question, which slices can be recycled.
+</p>
+
+<p>
+A slice can only be recycled if it is Fetch or Ready and has
+a valid datapointer.
+</p>
+
+<p>
+In particular, SelfSufficient are not recyclable, since it is easier
+just to create a SelfSufficient slice than deal with data dependencies.
+</p>
+
+<p>
+Furthermore, a recycled slice is not recyclable, if this is the case
+then it is either bad design or a bug.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #a626a4;">inline</span> <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">isRecyclable</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
       <span style="color: #a626a4;">return</span> (  info.state == Dispatched
              || info.state == Ready
              || info.state == Fetch
@@ -689,22 +999,49 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
           &amp;&amp; hasValidDataPointer()
           ;
     }
+</pre>
+</div>
 
-    <span style="color: #a0a1a7; font-weight: bold;">/*</span>
-<span style="color: #a0a1a7;">     * This function describes if a slice has a valid data pointer.</span>
-<span style="color: #a0a1a7;">     *</span>
-<span style="color: #a0a1a7;">     * This is important to know if the slice has some data to it, also</span>
-<span style="color: #a0a1a7;">     * some structural checks are done, so that it should not be Acceptor</span>
-<span style="color: #a0a1a7;">     * or Blank, if this is the case then it is a bug.</span>
-<span style="color: #a0a1a7; font-weight: bold;">     */</span>
-    <span style="color: #a626a4;">inline</span> <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">hasValidDataPointer</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
+
+<p>
+The function <code>hasValidDataPointer</code> describes if a slice has a valid
+data pointer.
+</p>
+
+<p>
+This is important to know if the slice has some data to it, also
+some structural checks are done, so that it should not be <code>Acceptor</code>
+or <code>Blank</code>, if this is the case then it is a bug.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #a626a4;">inline</span> <span style="color: #c18401;">bool</span> <span style="color: #0184bc;">hasValidDataPointer</span>() <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">noexcept</span> {
       <span style="color: #a626a4;">return</span> data       != <span style="font-weight: bold; text-decoration: underline;">nullptr</span>
           &amp;&amp; info.state != Acceptor
           &amp;&amp; info.type  != Blank
           ;
     }
+</pre>
+</div>
 
-    <span style="color: #c18401;">void</span> <span style="color: #0184bc;">unwrapAndMarkReady</span>() {
+
+<p>
+The function
+<code>unwrapAndMarkReady</code>
+calls the low-level MPI functions
+in order to wait whenever the state of the slice is correct.
+The main behaviour of the function should
+</p>
+<ul class="org-ul">
+<li>return if state is <code>Ready</code>, since then there is nothing to be done.</li>
+<li>throw if the state is not <code>Dispatched</code>, only a dispatched slice
+can be unwrapped through MPI.</li>
+<li>throw if an MPI error happens.</li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #c18401;">void</span> <span style="color: #0184bc;">unwrapAndMarkReady</span>() {
       <span style="color: #a626a4;">if</span> (info.state == Ready) <span style="color: #a626a4;">return</span>;
       <span style="color: #a626a4;">if</span> (info.state != Dispatched)
         <span style="color: #a626a4;">throw</span>
@@ -733,40 +1070,14 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
                 &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
 <span style="color: #e44649;">#endif</span>
     }
-
-    <span style="color: #0184bc;">Slice</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">size_</span>)
-      : info({})
-      , data(<span style="font-weight: bold; text-decoration: underline;">nullptr</span>)
-      , size(size_)
-      {}
-
-
-  }; <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">struct Slice</span>
-
-
-<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">ostream</span>&amp; <span style="color: #a626a4;">operator</span><span style="color: #0184bc;">&lt;&lt;</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">ostream</span>&amp; <span style="color: #8b4513;">out</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Location</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">v</span>) {
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TODO: remove me</span>
-  out &lt;&lt; <span style="color: #50a14f;">"{.r("</span> &lt;&lt; v.rank &lt;&lt; <span style="color: #50a14f;">"), .s("</span> &lt;&lt; v.source &lt;&lt; <span style="color: #50a14f;">")};"</span>;
-  <span style="color: #a626a4;">return</span> out;
-}
-
-<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">ostream</span>&amp; <span style="color: #a626a4;">operator</span><span style="color: #0184bc;">&lt;&lt;</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">ostream</span>&amp; <span style="color: #8b4513;">out</span>, <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Info</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">i</span>) {
-  out &lt;&lt; <span style="color: #50a14f;">"&#171;t"</span> &lt;&lt; i.type &lt;&lt; <span style="color: #50a14f;">", s"</span> &lt;&lt; i.state &lt;&lt; <span style="color: #50a14f;">"&#187;"</span>
-      &lt;&lt; <span style="color: #50a14f;">" &#8857; {"</span> &lt;&lt; i.from.rank &lt;&lt; <span style="color: #50a14f;">", "</span> &lt;&lt; i.from.source &lt;&lt; <span style="color: #50a14f;">"}"</span>
-      &lt;&lt; <span style="color: #50a14f;">" &#8756; {"</span> &lt;&lt; i.tuple[0] &lt;&lt; <span style="color: #50a14f;">", "</span> &lt;&lt; i.tuple[1] &lt;&lt; <span style="color: #50a14f;">"}"</span>
-      &lt;&lt; <span style="color: #50a14f;">" &#9842;t"</span> &lt;&lt; i.recycling
-      ;
-  <span style="color: #a626a4;">return</span> out;
-}
-
-} <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">namespace atrip</span>
 </pre>
 </div>
 </div>
 </div>
+</div>
 
-<div id="outline-container-org5f2200f" class="outline-3">
-<h3 id="org5f2200f"><span class="section-number-3">1.2</span> Utils</h3>
+<div id="outline-container-org9867479" class="outline-3">
+<h3 id="org9867479"><span class="section-number-3">1.2</span> Utils</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -810,9 +1121,15 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-org3e490ce" class="outline-3">
-<h3 id="org3e490ce"><span class="section-number-3">1.3</span> The rank mapping</h3>
+<div id="outline-container-org57fc59c" class="outline-3">
+<h3 id="org57fc59c"><span class="section-number-3">1.3</span> The rank mapping</h3>
 <div class="outline-text-3" id="text-1-3">
+<p>
+This section introduces the concept of rank mapping,
+which defines how slices will be allocated to every
+rank.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
 
@@ -878,8 +1195,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-orgd818af6" class="outline-3">
-<h3 id="orgd818af6"><span class="section-number-3">1.4</span> The slice union</h3>
+<div id="outline-container-orgd784999" class="outline-3">
+<h3 id="orgd784999"><span class="section-number-3">1.4</span> The slice union</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1429,8 +1746,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-orga058e69" class="outline-3">
-<h3 id="orga058e69"><span class="section-number-3">1.5</span> Tuples</h3>
+<div id="outline-container-orga9a3f6c" class="outline-3">
+<h3 id="orga9a3f6c"><span class="section-number-3">1.5</span> Tuples</h3>
 <div class="outline-text-3" id="text-1-5">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1511,8 +1828,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-org69680bd" class="outline-3">
-<h3 id="org69680bd"><span class="section-number-3">1.6</span> Unions</h3>
+<div id="outline-container-org2b2af92" class="outline-3">
+<h3 id="org2b2af92"><span class="section-number-3">1.6</span> Unions</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 Since every tensor slice in a different way, we can override the slicing procedure
@@ -1759,8 +2076,8 @@ and define subclasses of slice unions.
 </div>
 
 
-<div id="outline-container-orgfccf67b" class="outline-3">
-<h3 id="orgfccf67b"><span class="section-number-3">1.7</span> Equations</h3>
+<div id="outline-container-org08d732b" class="outline-3">
+<h3 id="org08d732b"><span class="section-number-3">1.7</span> Equations</h3>
 <div class="outline-text-3" id="text-1-7">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2103,8 +2420,8 @@ and define subclasses of slice unions.
 </div>
 </div>
 
-<div id="outline-container-org174086a" class="outline-3">
-<h3 id="org174086a"><span class="section-number-3">1.8</span> Blas</h3>
+<div id="outline-container-org1b446c3" class="outline-3">
+<h3 id="org1b446c3"><span class="section-number-3">1.8</span> Blas</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 The main matrix-matrix multiplication method used in this algorithm
@@ -2137,8 +2454,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org51e9818" class="outline-3">
-<h3 id="org51e9818"><span class="section-number-3">1.9</span> Atrip</h3>
+<div id="outline-container-orgdc6ecdd" class="outline-3">
+<h3 id="orgdc6ecdd"><span class="section-number-3">1.9</span> Atrip</h3>
 <div class="outline-text-3" id="text-1-9">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2193,8 +2510,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-orgfe5d2c3" class="outline-4">
-<h4 id="orgfe5d2c3"><span class="section-number-4">1.9.1</span> Main</h4>
+<div id="outline-container-org4708728" class="outline-4">
+<h4 id="org4708728"><span class="section-number-4">1.9.1</span> Main</h4>
 <div class="outline-text-4" id="text-1-9-1">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iomanip&gt;</span>
@@ -2745,8 +3062,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 
 
-<div id="outline-container-orgefe0704" class="outline-3">
-<h3 id="orgefe0704"><span class="section-number-3">1.10</span> Debug</h3>
+<div id="outline-container-orgc3a73a0" class="outline-3">
+<h3 id="orgc3a73a0"><span class="section-number-3">1.10</span> Debug</h3>
 <div class="outline-text-3" id="text-1-10">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2812,8 +3129,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-orgaaf4662" class="outline-3">
-<h3 id="orgaaf4662"><span class="section-number-3">1.11</span> Include header</h3>
+<div id="outline-container-orgcc9e38a" class="outline-3">
+<h3 id="orgcc9e38a"><span class="section-number-3">1.11</span> Include header</h3>
 <div class="outline-text-3" id="text-1-11">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2827,7 +3144,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-10-13 Wed 13:45</p>
+<p class="date">Created: 2021-10-13 Wed 15:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
