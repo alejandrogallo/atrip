@@ -1387,6 +1387,12 @@ namespace atrip {
 #+end_src
 
 ** Tuples
+
+This section introduces the types for tuples \( (a,b,c) \)
+as well as their distribution to nodes and cores.
+
+
+*** Prolog                                                         :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 #pragma once
 
@@ -1398,74 +1404,101 @@ namespace atrip {
 #include <atrip/Debug.hpp>
 
 namespace atrip {
+#+end_src
 
-  using ABCTuple = std::array<size_t, 3>;
-  using PartialTuple = std::array<size_t, 2>;
-  using ABCTuples = std::vector<ABCTuple>;
+*** Tuples types
 
-  ABCTuples getTuplesList(size_t Nv) {
-    const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
-    ABCTuples result(n);
-    size_t u(0);
+The main tuple types are simple type aliases for finite-size arrays.
+A tuple is thus simply 3 natural numbers \( (a,b,c) \)
+whereas a partial tuple is a two dimensional subset of these three.
 
-    for (size_t a(0); a < Nv; a++)
-    for (size_t b(a); b < Nv; b++)
-    for (size_t c(b); c < Nv; c++){
-      if ( a == b && b == c ) continue;
-      result[u++] = {a, b, c};
-    }
+#+begin_src c++ :tangle (atrip-tuples-h)
+using ABCTuple = std::array<size_t, 3>;
+using PartialTuple = std::array<size_t, 2>;
+using ABCTuples = std::vector<ABCTuple>;
+#+end_src
 
-    return result;
+*** Naive list
 
+The naive implementation of the global tuples list is simple
+three for loops creating tuples of the sort
+\( (a,b,c) \) where the following conditions are met at the same time:
+- \( a \leq b \leq c \)
+- \(
+  a \neq b \land b \neq c
+  \)
+
+This means,
+\( (1, 2, 3)
+ , (1, 1, 3)
+ , (1, 2, 2)
+\) are acceptable tuples wherease \( (2, 1, 1) \) and \( (1, 1, 1) \) are not.
+
+
+#+begin_src c++ :tangle (atrip-tuples-h)
+ABCTuples getTuplesList(size_t Nv) {
+  const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+  ABCTuples result(n);
+  size_t u(0);
+
+  for (size_t a(0); a < Nv; a++)
+  for (size_t b(a); b < Nv; b++)
+  for (size_t c(b); c < Nv; c++){
+    if ( a == b && b == c ) continue;
+    result[u++] = {a, b, c};
   }
 
-
-  std::pair<size_t, size_t>
-  getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
-
-    std::vector<size_t> n_tuples_per_rank(np, tuplesList.size()/np);
-    const size_t
-        // how many valid tuples should we still verteilen to nodes
-        // since the number of tuples is not divisible by the number of nodes
-        nRoundRobin = tuplesList.size() % np
-        // every node must have the sanme amount of tuples in order for the
-        // other nodes to receive and send somewhere, therefore
-        // some nodes will get extra tuples but that are dummy tuples
-      , nExtraInvalid = (np - nRoundRobin) % np
-      ;
-
-    if (nRoundRobin) for (int i = 0; i < np; i++) n_tuples_per_rank[i]++;
-
-  #if defined(TODO)
-    assert( tuplesList.size()
-            ==
-            ( std::accumulate(n_tuples_per_rank.begin(),
-                              n_tuples_per_rank.end(),
-                              0UL,
-                              std::plus<size_t>())
-            + nExtraInvalid
-            ));
-  #endif
-
-    WITH_RANK << "nRoundRobin = " << nRoundRobin << "\n";
-    WITH_RANK << "nExtraInvalid = " << nExtraInvalid << "\n";
-    WITH_RANK << "ntuples = " << n_tuples_per_rank[rank] << "\n";
-
-    auto const& it = n_tuples_per_rank.begin();
-
-    return
-      { std::accumulate(it, it + rank    , 0)
-      , std::accumulate(it, it + rank + 1, 0)
-      };
-
-  }
+  return result;
 
 }
 #+end_src
 
+Once the list of tuples is built, every rank will only go through
+a section of the list, the start and end indices in the original
+global list are given by the following function.
+
+#+begin_src c++ :tangle (atrip-tuples-h)
+std::pair<size_t, size_t>
+getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
+
+  std::vector<size_t> n_tuples_per_rank(np, tuplesList.size()/np);
+  const size_t
+      // how many valid tuples should we still verteilen to nodes
+      // since the number of tuples is not divisible by the number of nodes
+      nRoundRobin = tuplesList.size() % np
+      // every node must have the sanme amount of tuples in order for the
+      // other nodes to receive and send somewhere, therefore
+      // some nodes will get extra tuples but that are dummy tuples
+    , nExtraInvalid = (np - nRoundRobin) % np
+    ;
+
+  if (nRoundRobin) for (int i = 0; i < np; i++) n_tuples_per_rank[i]++;
+
+  WITH_RANK << "nRoundRobin = " << nRoundRobin << "\n";
+  WITH_RANK << "nExtraInvalid = " << nExtraInvalid << "\n";
+  WITH_RANK << "ntuples = " << n_tuples_per_rank[rank] << "\n";
+
+  auto const& it = n_tuples_per_rank.begin();
+
+  return
+    { std::accumulate(it, it + rank    , 0)
+    , std::accumulate(it, it + rank + 1, 0)
+    };
+
+}
+#+end_src
+
+*** Group and sort list
+*** Epilog                                                         :noexport:
+#+begin_src c++ :tangle (atrip-tuples-h)
+}
+#+end_src
+
 ** Unions
-Since every tensor slice in a different way, we can override the slicing procedure
-and define subclasses of slice unions.
+
+Every slice pertaining to every different tensor
+is sliced differently.
+
 
 #+begin_src c++ :tangle (atrip-unions-h)
 #pragma once
