@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-13 Wed 16:14 -->
+<!-- 2021-10-14 Thu 13:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATRIP: An MPI-asynchronous implementation of CCSD(T)</title>
@@ -244,50 +244,56 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org9b74718">1. Implementation</a>
+<li><a href="#org6d42529">1. Implementation</a>
 <ul>
-<li><a href="#orgc489fad">1.1. The slice</a>
+<li><a href="#orga7f6059">1.1. The slice</a>
 <ul>
-<li><a href="#org7e61146">1.1.1. Introduction</a></li>
-<li><a href="#org27499b1">1.1.2. Location</a></li>
-<li><a href="#orgaf3c97f">1.1.3. Type</a></li>
-<li><a href="#org5aebef9">1.1.4. State</a></li>
-<li><a href="#orgad778f9">1.1.5. The Info structure</a></li>
-<li><a href="#org5b5011e">1.1.6. Name</a></li>
-<li><a href="#orgb30da49">1.1.7. Database</a></li>
-<li><a href="#orgda4d0c1">1.1.8. MPI Types</a></li>
-<li><a href="#orgab163bc">1.1.9. Static utilities</a></li>
-<li><a href="#orgfb0a160">1.1.10. Attributes</a></li>
-<li><a href="#orge030807">1.1.11. Member functions</a></li>
+<li><a href="#orgaaf72e3">1.1.1. Introduction</a></li>
+<li><a href="#org2cc1c8e">1.1.2. Location</a></li>
+<li><a href="#orgbecf0dd">1.1.3. Type</a></li>
+<li><a href="#org0587a15">1.1.4. State</a></li>
+<li><a href="#org4cdd69b">1.1.5. The Info structure</a></li>
+<li><a href="#org0020267">1.1.6. Name</a></li>
+<li><a href="#org287c56c">1.1.7. Database</a></li>
+<li><a href="#orge429876">1.1.8. MPI Types</a></li>
+<li><a href="#orgd33c3a2">1.1.9. Static utilities</a></li>
+<li><a href="#org34cf1d4">1.1.10. Attributes</a></li>
+<li><a href="#org1046786">1.1.11. Member functions</a></li>
 </ul>
 </li>
-<li><a href="#org26da7ae">1.2. Utils</a>
+<li><a href="#orga2d73b8">1.2. Utils</a>
 <ul>
-<li><a href="#org34458b0">1.2.1. Pretty printing</a></li>
-<li><a href="#org630f3f9">1.2.2. Chrono</a></li>
+<li><a href="#org16703df">1.2.1. Pretty printing</a></li>
+<li><a href="#orgf4bf928">1.2.2. Chrono</a></li>
 </ul>
 </li>
-<li><a href="#org2c4db5c">1.3. The rank mapping</a></li>
-<li><a href="#orgd445dd2">1.4. The slice union</a></li>
-<li><a href="#orge5de66b">1.5. Tuples</a></li>
-<li><a href="#org3775eac">1.6. Unions</a></li>
-<li><a href="#orgacb145d">1.7. Equations</a></li>
-<li><a href="#org417c6fa">1.8. Blas</a></li>
-<li><a href="#org3b75e3e">1.9. Atrip</a>
+<li><a href="#orgb292b76">1.3. The rank mapping</a></li>
+<li><a href="#org4ad81d6">1.4. The slice union</a></li>
+<li><a href="#orgd007e88">1.5. Tuples</a>
 <ul>
-<li><a href="#org9595d3b">1.9.1. Main</a></li>
+<li><a href="#org51412c8">1.5.1. Tuples types</a></li>
+<li><a href="#org568718e">1.5.2. Naive list</a></li>
+<li><a href="#org4964bf1">1.5.3. Group and sort list</a></li>
 </ul>
 </li>
-<li><a href="#org18126a3">1.10. Debug</a></li>
-<li><a href="#org31f676d">1.11. Include header</a></li>
+<li><a href="#org50fe627">1.6. Unions</a></li>
+<li><a href="#orgf913422">1.7. Equations</a></li>
+<li><a href="#org2239bb9">1.8. Blas</a></li>
+<li><a href="#org95f2b9b">1.9. Atrip</a>
+<ul>
+<li><a href="#org451a6d4">1.9.1. Main</a></li>
+</ul>
+</li>
+<li><a href="#orgbc66d13">1.10. Debug</a></li>
+<li><a href="#orgfa10aa7">1.11. Include header</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org9b74718" class="outline-2">
-<h2 id="org9b74718"><span class="section-number-2">1</span> Implementation</h2>
+<div id="outline-container-org6d42529" class="outline-2">
+<h2 id="org6d42529"><span class="section-number-2">1</span> Implementation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The algorithm uses two main data types, the <code>Slice</code> and the
@@ -295,16 +301,16 @@ The algorithm uses two main data types, the <code>Slice</code> and the
 </p>
 </div>
 
-<div id="outline-container-orgc489fad" class="outline-3">
-<h3 id="orgc489fad"><span class="section-number-3">1.1</span> The slice</h3>
+<div id="outline-container-orga7f6059" class="outline-3">
+<h3 id="orga7f6059"><span class="section-number-3">1.1</span> The slice</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 The following section introduces the idea of a slice.
 </p>
 </div>
 
-<div id="outline-container-org7e61146" class="outline-4">
-<h4 id="org7e61146"><span class="section-number-4">1.1.1</span> Introduction</h4>
+<div id="outline-container-orgaaf72e3" class="outline-4">
+<h4 id="orgaaf72e3"><span class="section-number-4">1.1.1</span> Introduction</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 A slice is the concept of a subset of values of a given tensor.
@@ -320,8 +326,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-org27499b1" class="outline-4">
-<h4 id="org27499b1"><span class="section-number-4">1.1.2</span> Location</h4>
+<div id="outline-container-org2cc1c8e" class="outline-4">
+<h4 id="org2cc1c8e"><span class="section-number-4">1.1.2</span> Location</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Every slice set, for instance,
@@ -352,8 +358,8 @@ is therefore a simple structure:
 </div>
 </div>
 
-<div id="outline-container-orgaf3c97f" class="outline-4">
-<h4 id="orgaf3c97f"><span class="section-number-4">1.1.3</span> Type</h4>
+<div id="outline-container-orgbecf0dd" class="outline-4">
+<h4 id="orgbecf0dd"><span class="section-number-4">1.1.3</span> Type</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 Due to the permutation operators in the equations
@@ -414,8 +420,8 @@ a type which denotes which permutation it is.
 </div>
 </div>
 
-<div id="outline-container-org5aebef9" class="outline-4">
-<h4 id="org5aebef9"><span class="section-number-4">1.1.4</span> State</h4>
+<div id="outline-container-org0587a15" class="outline-4">
+<h4 id="org0587a15"><span class="section-number-4">1.1.4</span> State</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 Every slice can be in different states and every state
@@ -468,8 +474,8 @@ Again the implementation is a simple enum type.
 </div>
 </div>
 
-<div id="outline-container-orgad778f9" class="outline-4">
-<h4 id="orgad778f9"><span class="section-number-4">1.1.5</span> The Info structure</h4>
+<div id="outline-container-org4cdd69b" class="outline-4">
+<h4 id="org4cdd69b"><span class="section-number-4">1.1.5</span> The Info structure</h4>
 <div class="outline-text-4" id="text-1-1-5">
 <p>
 Every slice has an information structure associated with it
@@ -503,8 +509,8 @@ that keeps track of the <b><b>variable</b></b> type, state and so on.
 </div>
 </div>
 
-<div id="outline-container-org5b5011e" class="outline-4">
-<h4 id="org5b5011e"><span class="section-number-4">1.1.6</span> Name</h4>
+<div id="outline-container-org0020267" class="outline-4">
+<h4 id="org0020267"><span class="section-number-4">1.1.6</span> Name</h4>
 <div class="outline-text-4" id="text-1-1-6">
 <p>
 CCSD(T) needs in this algorithm 5 types of tensor slices,
@@ -533,8 +539,8 @@ and through two parameters for the hole contribution.
 </div>
 </div>
 
-<div id="outline-container-orgb30da49" class="outline-4">
-<h4 id="orgb30da49"><span class="section-number-4">1.1.7</span> Database</h4>
+<div id="outline-container-org287c56c" class="outline-4">
+<h4 id="org287c56c"><span class="section-number-4">1.1.7</span> Database</h4>
 <div class="outline-text-4" id="text-1-1-7">
 <p>
 The database is a simple representation of the slices of a slice union.
@@ -563,8 +569,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orgda4d0c1" class="outline-4">
-<h4 id="orgda4d0c1"><span class="section-number-4">1.1.8</span> MPI Types</h4>
+<div id="outline-container-orge429876" class="outline-4">
+<h4 id="orge429876"><span class="section-number-4">1.1.8</span> MPI Types</h4>
 <div class="outline-text-4" id="text-1-1-8">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
@@ -659,8 +665,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orgab163bc" class="outline-4">
-<h4 id="orgab163bc"><span class="section-number-4">1.1.9</span> Static utilities</h4>
+<div id="outline-container-orgd33c3a2" class="outline-4">
+<h4 id="orgd33c3a2"><span class="section-number-4">1.1.9</span> Static utilities</h4>
 <div class="outline-text-4" id="text-1-1-9">
 <p>
 This section presents some functions which are useful to work with
@@ -850,8 +856,8 @@ given slice could not be found.
 </div>
 </div>
 
-<div id="outline-container-orgfb0a160" class="outline-4">
-<h4 id="orgfb0a160"><span class="section-number-4">1.1.10</span> Attributes</h4>
+<div id="outline-container-org34cf1d4" class="outline-4">
+<h4 id="org34cf1d4"><span class="section-number-4">1.1.10</span> Attributes</h4>
 <div class="outline-text-4" id="text-1-1-10">
 <p>
 A slice object does not own data, it is just a container
@@ -897,8 +903,8 @@ For practical purposes in MPI calls, the number of elements in <code>data</code>
 </div>
 </div>
 
-<div id="outline-container-orge030807" class="outline-4">
-<h4 id="orge030807"><span class="section-number-4">1.1.11</span> Member functions</h4>
+<div id="outline-container-org1046786" class="outline-4">
+<h4 id="org1046786"><span class="section-number-4">1.1.11</span> Member functions</h4>
 <div class="outline-text-4" id="text-1-1-11">
 <p>
 It is important to note that a ready slice should not be recycled from
@@ -1081,15 +1087,15 @@ can be unwrapped through MPI.</li>
 </div>
 </div>
 
-<div id="outline-container-org26da7ae" class="outline-3">
-<h3 id="org26da7ae"><span class="section-number-3">1.2</span> Utils</h3>
+<div id="outline-container-orga2d73b8" class="outline-3">
+<h3 id="orga2d73b8"><span class="section-number-3">1.2</span> Utils</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 This section presents some utilities
 </p>
 </div>
-<div id="outline-container-org34458b0" class="outline-4">
-<h4 id="org34458b0"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
+<div id="outline-container-org16703df" class="outline-4">
+<h4 id="org16703df"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-macro</a> package.
@@ -1110,8 +1116,8 @@ The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-
 </div>
 </div>
 
-<div id="outline-container-org630f3f9" class="outline-4">
-<h4 id="org630f3f9"><span class="section-number-4">1.2.2</span> Chrono</h4>
+<div id="outline-container-orgf4bf928" class="outline-4">
+<h4 id="orgf4bf928"><span class="section-number-4">1.2.2</span> Chrono</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 The chrono is just a simple wrapper for a high resolution clock
@@ -1142,8 +1148,8 @@ that can be found in the <code>std::chrono</code> namespace of the standard libr
 </div>
 </div>
 
-<div id="outline-container-org2c4db5c" class="outline-3">
-<h3 id="org2c4db5c"><span class="section-number-3">1.3</span> The rank mapping</h3>
+<div id="outline-container-orgb292b76" class="outline-3">
+<h3 id="orgb292b76"><span class="section-number-3">1.3</span> The rank mapping</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 This section introduces the concept of rank mapping,
@@ -1216,8 +1222,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-orgd445dd2" class="outline-3">
-<h3 id="orgd445dd2"><span class="section-number-3">1.4</span> The slice union</h3>
+<div id="outline-container-org4ad81d6" class="outline-3">
+<h3 id="org4ad81d6"><span class="section-number-3">1.4</span> The slice union</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1767,81 +1773,110 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-orge5de66b" class="outline-3">
-<h3 id="orge5de66b"><span class="section-number-3">1.5</span> Tuples</h3>
+<div id="outline-container-orgd007e88" class="outline-3">
+<h3 id="orgd007e88"><span class="section-number-3">1.5</span> Tuples</h3>
 <div class="outline-text-3" id="text-1-5">
+<p>
+This section introduces the types for tuples \( (a,b,c) \)
+as well as their distribution to nodes and cores.
+</p>
+</div>
+
+
+<div id="outline-container-org51412c8" class="outline-4">
+<h4 id="org51412c8"><span class="section-number-4">1.5.1</span> Tuples types</h4>
+<div class="outline-text-4" id="text-1-5-1">
+<p>
+The main tuple types are simple type aliases for finite-size arrays.
+A tuple is thus simply 3 natural numbers \( (a,b,c) \)
+whereas a partial tuple is a two dimensional subset of these three.
+</p>
+
 <div class="org-src-container">
-<pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
+<pre class="src src-c++"><span style="color: #a626a4;">using</span> <span style="color: #c18401;">ABCTuple</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">array</span>&lt;<span style="color: #c18401;">size_t</span>, 3&gt;;
+<span style="color: #a626a4;">using</span> <span style="color: #c18401;">PartialTuple</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">array</span>&lt;<span style="color: #c18401;">size_t</span>, 2&gt;;
+<span style="color: #a626a4;">using</span> <span style="color: #c18401;">ABCTuples</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt;;
+</pre>
+</div>
+</div>
+</div>
 
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;vector&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;array&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;numeric&gt;</span>
+<div id="outline-container-org568718e" class="outline-4">
+<h4 id="org568718e"><span class="section-number-4">1.5.2</span> Naive list</h4>
+<div class="outline-text-4" id="text-1-5-2">
+<p>
+The naive implementation of the global tuples list is simple
+three for loops creating tuples of the sort
+\( (a,b,c) \) where the following conditions are met at the same time:
+</p>
+<ul class="org-ul">
+<li>\( a \leq b \leq c \)</li>
+<li>\(
+  a \neq b \land b \neq c
+  \)</li>
+</ul>
 
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;atrip/Utils.hpp&gt;</span>
-<span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;atrip/Debug.hpp&gt;</span>
+<p>
+This means,
+\( (1, 2, 3)
+ , (1, 1, 3)
+ , (1, 2, 2)
+\) are acceptable tuples wherease \( (2, 1, 1) \) and \( (1, 1, 1) \) are not.
+</p>
 
-<span style="color: #a626a4;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">atrip</span> {
 
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">ABCTuple</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">array</span>&lt;<span style="color: #c18401;">size_t</span>, 3&gt;;
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">PartialTuple</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">array</span>&lt;<span style="color: #c18401;">size_t</span>, 2&gt;;
-  <span style="color: #a626a4;">using</span> <span style="color: #c18401;">ABCTuples</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt;;
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #c18401;">ABCTuples</span> <span style="color: #0184bc;">getTuplesList</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">Nv</span>) {
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span> = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+  <span style="color: #c18401;">ABCTuples</span> <span style="color: #8b4513;">result</span>(n);
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">u</span>(0);
 
-  <span style="color: #c18401;">ABCTuples</span> <span style="color: #0184bc;">getTuplesList</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">Nv</span>) {
-    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span> = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
-    <span style="color: #c18401;">ABCTuples</span> <span style="color: #8b4513;">result</span>(n);
-    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">u</span>(0);
-
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">a</span>(0); a &lt; Nv; a++)
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">b</span>(a); b &lt; Nv; b++)
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">c</span>(b); c &lt; Nv; c++){
-      <span style="color: #a626a4;">if</span> ( a == b &amp;&amp; b == c ) <span style="color: #a626a4;">continue</span>;
-      result[u++] = {a, b, c};
-    }
-
-    <span style="color: #a626a4;">return</span> result;
-
+  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">a</span>(0); a &lt; Nv; a++)
+  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">b</span>(a); b &lt; Nv; b++)
+  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">c</span>(b); c &lt; Nv; c++){
+    <span style="color: #a626a4;">if</span> ( a == b &amp;&amp; b == c ) <span style="color: #a626a4;">continue</span>;
+    result[u++] = {a, b, c};
   }
 
+  <span style="color: #a626a4;">return</span> result;
 
-  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="color: #c18401;">size_t</span>&gt;
-  <span style="color: #0184bc;">getABCRange</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">np</span>, <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">rank</span>, <span style="color: #c18401;">ABCTuples</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tuplesList</span>) {
+}
+</pre>
+</div>
 
-    <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #8b4513;">n_tuples_per_rank</span>(np, tuplesList.size()/np);
-    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span>
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">how many valid tuples should we still verteilen to nodes</span>
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">since the number of tuples is not divisible by the number of nodes</span>
-        <span style="color: #8b4513;">nRoundRobin</span> = tuplesList.size() % np
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">every node must have the sanme amount of tuples in order for the</span>
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">other nodes to receive and send somewhere, therefore</span>
-        <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">some nodes will get extra tuples but that are dummy tuples</span>
-      , <span style="color: #8b4513;">nExtraInvalid</span> = (np - nRoundRobin) % np
-      ;
+<p>
+Once the list of tuples is built, every rank will only go through
+a section of the list, the start and end indices in the original
+global list are given by the following function.
+</p>
 
-    <span style="color: #a626a4;">if</span> (nRoundRobin) <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span> = 0; i &lt; np; i++) n_tuples_per_rank[i]++;
+<div class="org-src-container">
+<pre class="src src-c++"><span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="color: #c18401;">size_t</span>&gt;
+<span style="color: #0184bc;">getABCRange</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">np</span>, <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">rank</span>, <span style="color: #c18401;">ABCTuples</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tuplesList</span>) {
 
-<span style="color: #e44649;">  #if</span> <span style="color: #e44649;">defined</span>(TODO)
-    assert( tuplesList.size()
-            ==
-            ( <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(n_tuples_per_rank.begin(),
-                              n_tuples_per_rank.end(),
-                              0UL,
-                              <span style="font-weight: bold; text-decoration: underline;">std</span>::plus&lt;<span style="color: #c18401;">size_t</span>&gt;())
-            + nExtraInvalid
-            ));
-<span style="color: #e44649;">  #endif</span>
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #8b4513;">n_tuples_per_rank</span>(np, tuplesList.size()/np);
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span>
+      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">how many valid tuples should we still verteilen to nodes</span>
+      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">since the number of tuples is not divisible by the number of nodes</span>
+      <span style="color: #8b4513;">nRoundRobin</span> = tuplesList.size() % np
+      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">every node must have the sanme amount of tuples in order for the</span>
+      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">other nodes to receive and send somewhere, therefore</span>
+      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">some nodes will get extra tuples but that are dummy tuples</span>
+    , <span style="color: #8b4513;">nExtraInvalid</span> = (np - nRoundRobin) % np
+    ;
 
-    WITH_RANK &lt;&lt; <span style="color: #50a14f;">"nRoundRobin = "</span> &lt;&lt; nRoundRobin &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-    WITH_RANK &lt;&lt; <span style="color: #50a14f;">"nExtraInvalid = "</span> &lt;&lt; nExtraInvalid &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-    WITH_RANK &lt;&lt; <span style="color: #50a14f;">"ntuples = "</span> &lt;&lt; n_tuples_per_rank[rank] &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  <span style="color: #a626a4;">if</span> (nRoundRobin) <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span> = 0; i &lt; np; i++) n_tuples_per_rank[i]++;
 
-    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">it</span> = n_tuples_per_rank.begin();
+  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"nRoundRobin = "</span> &lt;&lt; nRoundRobin &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"nExtraInvalid = "</span> &lt;&lt; nExtraInvalid &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"ntuples = "</span> &lt;&lt; n_tuples_per_rank[rank] &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
 
-    <span style="color: #a626a4;">return</span>
-      { <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank    , 0)
-      , <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank + 1, 0)
-      };
+  <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">it</span> = n_tuples_per_rank.begin();
 
-  }
+  <span style="color: #a626a4;">return</span>
+    { <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank    , 0)
+    , <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank + 1, 0)
+    };
 
 }
 </pre>
@@ -1849,13 +1884,19 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-org3775eac" class="outline-3">
-<h3 id="org3775eac"><span class="section-number-3">1.6</span> Unions</h3>
+<div id="outline-container-org4964bf1" class="outline-4">
+<h4 id="org4964bf1"><span class="section-number-4">1.5.3</span> Group and sort list</h4>
+</div>
+</div>
+
+<div id="outline-container-org50fe627" class="outline-3">
+<h3 id="org50fe627"><span class="section-number-3">1.6</span> Unions</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
-Since every tensor slice in a different way, we can override the slicing procedure
-and define subclasses of slice unions.
+Every slice pertaining to every different tensor
+is sliced differently.
 </p>
+
 
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2097,8 +2138,8 @@ and define subclasses of slice unions.
 </div>
 
 
-<div id="outline-container-orgacb145d" class="outline-3">
-<h3 id="orgacb145d"><span class="section-number-3">1.7</span> Equations</h3>
+<div id="outline-container-orgf913422" class="outline-3">
+<h3 id="orgf913422"><span class="section-number-3">1.7</span> Equations</h3>
 <div class="outline-text-3" id="text-1-7">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2441,8 +2482,8 @@ and define subclasses of slice unions.
 </div>
 </div>
 
-<div id="outline-container-org417c6fa" class="outline-3">
-<h3 id="org417c6fa"><span class="section-number-3">1.8</span> Blas</h3>
+<div id="outline-container-org2239bb9" class="outline-3">
+<h3 id="org2239bb9"><span class="section-number-3">1.8</span> Blas</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 The main matrix-matrix multiplication method used in this algorithm
@@ -2475,8 +2516,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org3b75e3e" class="outline-3">
-<h3 id="org3b75e3e"><span class="section-number-3">1.9</span> Atrip</h3>
+<div id="outline-container-org95f2b9b" class="outline-3">
+<h3 id="org95f2b9b"><span class="section-number-3">1.9</span> Atrip</h3>
 <div class="outline-text-3" id="text-1-9">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2531,8 +2572,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org9595d3b" class="outline-4">
-<h4 id="org9595d3b"><span class="section-number-4">1.9.1</span> Main</h4>
+<div id="outline-container-org451a6d4" class="outline-4">
+<h4 id="org451a6d4"><span class="section-number-4">1.9.1</span> Main</h4>
 <div class="outline-text-4" id="text-1-9-1">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iomanip&gt;</span>
@@ -3083,8 +3124,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 
 
-<div id="outline-container-org18126a3" class="outline-3">
-<h3 id="org18126a3"><span class="section-number-3">1.10</span> Debug</h3>
+<div id="outline-container-orgbc66d13" class="outline-3">
+<h3 id="orgbc66d13"><span class="section-number-3">1.10</span> Debug</h3>
 <div class="outline-text-3" id="text-1-10">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3150,8 +3191,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org31f676d" class="outline-3">
-<h3 id="org31f676d"><span class="section-number-3">1.11</span> Include header</h3>
+<div id="outline-container-orgfa10aa7" class="outline-3">
+<h3 id="orgfa10aa7"><span class="section-number-3">1.11</span> Include header</h3>
 <div class="outline-text-3" id="text-1-11">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3165,7 +3206,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-10-13 Wed 16:14</p>
+<p class="date">Created: 2021-10-14 Thu 13:31</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
