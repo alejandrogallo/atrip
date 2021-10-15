@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['rank_290',['rank',['../structatrip_1_1Atrip.html#a384ab5ffeacf4d84a5c614f6c0621a17',1,'atrip::Atrip::rank()'],['../structatrip_1_1Slice_1_1Location.html#a9f8da7a7c6a688c2093406d424db6a12',1,'atrip::Slice::Location::rank()']]],
-  ['rankmap_291',['rankMap',['../structatrip_1_1SliceUnion.html#a8d4653e3f6d3a36ff446089823e5b953',1,'atrip::SliceUnion']]],
-  ['recycling_292',['recycling',['../structatrip_1_1Slice_1_1Info.html#a78ec82998cc0ff862f2551f3757cb839',1,'atrip::Slice::Info']]],
-  ['request_293',['request',['../structatrip_1_1Slice.html#a7f1130f6a6256aac4493c78a907c5f66',1,'atrip::Slice']]]
+  ['name_314',['name',['../structatrip_1_1Slice_1_1LocalDatabaseElement.html#a749fa5d9a6b870207f62908bd80d83ee',1,'atrip::Slice::LocalDatabaseElement::name()'],['../structatrip_1_1SliceUnion.html#a26898da2b86d7484f75bf44a014fb72d',1,'atrip::SliceUnion::name()'],['../structatrip_1_1group__and__sort_1_1RankInfo.html#a9cea37289d3061cf8ddf16bfca3604c7',1,'atrip::group_and_sort::RankInfo::name()']]],
+  ['nnodes_315',['nNodes',['../structatrip_1_1group__and__sort_1_1Info.html#ac66551138125dc11034726633a21d91e',1,'atrip::group_and_sort::Info']]],
+  ['nodeid_316',['nodeId',['../structatrip_1_1group__and__sort_1_1RankInfo.html#ab6a3c307ec48edbbe6e6d4d9f1eac1c1',1,'atrip::group_and_sort::RankInfo::nodeId()'],['../structatrip_1_1group__and__sort_1_1Info.html#a2449f1b8a24d5695df2037b9edf669b4',1,'atrip::group_and_sort::Info::nodeId()']]],
+  ['np_317',['np',['../structatrip_1_1Atrip.html#a3ae9ddbec7d076ff8a99260febe93779',1,'atrip::Atrip::np()'],['../structatrip_1_1RankMap.html#aedf71eba472b94c6d9f4ff38da814a19',1,'atrip::RankMap::np()'],['../structatrip_1_1group__and__sort_1_1Info.html#a312be0f6ec7a8488c305d74cca8751fd',1,'atrip::group_and_sort::Info::np()']]],
+  ['nv_318',['Nv',['../structatrip_1_1group__and__sort_1_1Info.html#a987e57f98f7c2b4ceebb1ee2c7c37466',1,'atrip::group_and_sort::Info']]]
 ];

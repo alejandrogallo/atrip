@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-15 Fri 17:07 -->
+<!-- 2021-10-15 Fri 17:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATRIP: An MPI-asynchronous implementation of CCSD(T)</title>
@@ -244,56 +244,56 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgebebc21">1. Implementation</a>
+<li><a href="#org5add05a">1. Implementation</a>
 <ul>
-<li><a href="#orgfa7d865">1.1. The slice</a>
+<li><a href="#org6f88ae9">1.1. The slice</a>
 <ul>
-<li><a href="#orga05ad97">1.1.1. Introduction</a></li>
-<li><a href="#org39aa7b1">1.1.2. Location</a></li>
-<li><a href="#org6d44855">1.1.3. Type</a></li>
-<li><a href="#orgf65154d">1.1.4. State</a></li>
-<li><a href="#org9c68722">1.1.5. The Info structure</a></li>
-<li><a href="#org7c6c7cf">1.1.6. Name</a></li>
-<li><a href="#orgedbe582">1.1.7. Database</a></li>
-<li><a href="#orgf795859">1.1.8. MPI Types</a></li>
-<li><a href="#orga8d8482">1.1.9. Static utilities</a></li>
-<li><a href="#org95b47ef">1.1.10. Attributes</a></li>
-<li><a href="#org494fb5d">1.1.11. Member functions</a></li>
+<li><a href="#orgf85f49f">1.1.1. Introduction</a></li>
+<li><a href="#orge20bfe9">1.1.2. Location</a></li>
+<li><a href="#org5bdd399">1.1.3. Type</a></li>
+<li><a href="#orgf82c5ad">1.1.4. State</a></li>
+<li><a href="#org781fe8b">1.1.5. The Info structure</a></li>
+<li><a href="#org2c896b4">1.1.6. Name</a></li>
+<li><a href="#orga56f51f">1.1.7. Database</a></li>
+<li><a href="#orgb16b985">1.1.8. MPI Types</a></li>
+<li><a href="#org72add93">1.1.9. Static utilities</a></li>
+<li><a href="#orgbc5d197">1.1.10. Attributes</a></li>
+<li><a href="#org07ffcb9">1.1.11. Member functions</a></li>
 </ul>
 </li>
-<li><a href="#orgff90996">1.2. Utils</a>
+<li><a href="#orga74aaeb">1.2. Utils</a>
 <ul>
-<li><a href="#org2c707a4">1.2.1. Pretty printing</a></li>
-<li><a href="#org3d54ca3">1.2.2. Chrono</a></li>
+<li><a href="#org8653696">1.2.1. Pretty printing</a></li>
+<li><a href="#orga136097">1.2.2. Chrono</a></li>
 </ul>
 </li>
-<li><a href="#orgd9ea369">1.3. The rank mapping</a></li>
-<li><a href="#org55b026e">1.4. The slice union</a></li>
-<li><a href="#org2fd1003">1.5. Tuples</a>
+<li><a href="#org35a1e36">1.3. The rank mapping</a></li>
+<li><a href="#org59fb587">1.4. The slice union</a></li>
+<li><a href="#orged00c9d">1.5. Tuples</a>
 <ul>
-<li><a href="#orga96451a">1.5.1. Tuples types</a></li>
-<li><a href="#org63c6150">1.5.2. Naive list</a></li>
-<li><a href="#org3c8dfeb">1.5.3. Group and sort list</a></li>
+<li><a href="#orgc0029b3">1.5.1. Tuples types</a></li>
+<li><a href="#orged9fc02">1.5.2. Naive list</a></li>
+<li><a href="#orgf646f42">1.5.3. Group and sort list</a></li>
 </ul>
 </li>
-<li><a href="#orgde10782">1.6. Unions</a></li>
-<li><a href="#orgb02ee00">1.7. Equations</a></li>
-<li><a href="#org41ec0a1">1.8. Blas</a></li>
-<li><a href="#org59350d5">1.9. Atrip</a>
+<li><a href="#orgd440fc7">1.6. Unions</a></li>
+<li><a href="#org8fb1244">1.7. Equations</a></li>
+<li><a href="#orgc210d72">1.8. Blas</a></li>
+<li><a href="#orge4c9ce6">1.9. Atrip</a>
 <ul>
-<li><a href="#org8f21b2c">1.9.1. Main</a></li>
+<li><a href="#org598e5f5">1.9.1. Main</a></li>
 </ul>
 </li>
-<li><a href="#org8471613">1.10. Debug</a></li>
-<li><a href="#org2c6753c">1.11. Include header</a></li>
+<li><a href="#org8cd139a">1.10. Debug</a></li>
+<li><a href="#org1749762">1.11. Include header</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgebebc21" class="outline-2">
-<h2 id="orgebebc21"><span class="section-number-2">1</span> Implementation</h2>
+<div id="outline-container-org5add05a" class="outline-2">
+<h2 id="org5add05a"><span class="section-number-2">1</span> Implementation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The algorithm uses two main data types, the <code>Slice</code> and the
@@ -301,16 +301,16 @@ The algorithm uses two main data types, the <code>Slice</code> and the
 </p>
 </div>
 
-<div id="outline-container-orgfa7d865" class="outline-3">
-<h3 id="orgfa7d865"><span class="section-number-3">1.1</span> The slice</h3>
+<div id="outline-container-org6f88ae9" class="outline-3">
+<h3 id="org6f88ae9"><span class="section-number-3">1.1</span> The slice</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 The following section introduces the idea of a slice.
 </p>
 </div>
 
-<div id="outline-container-orga05ad97" class="outline-4">
-<h4 id="orga05ad97"><span class="section-number-4">1.1.1</span> Introduction</h4>
+<div id="outline-container-orgf85f49f" class="outline-4">
+<h4 id="orgf85f49f"><span class="section-number-4">1.1.1</span> Introduction</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 A slice is the concept of a subset of values of a given tensor.
@@ -326,8 +326,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-org39aa7b1" class="outline-4">
-<h4 id="org39aa7b1"><span class="section-number-4">1.1.2</span> Location</h4>
+<div id="outline-container-orge20bfe9" class="outline-4">
+<h4 id="orge20bfe9"><span class="section-number-4">1.1.2</span> Location</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Every slice set, for instance,
@@ -358,8 +358,8 @@ is therefore a simple structure:
 </div>
 </div>
 
-<div id="outline-container-org6d44855" class="outline-4">
-<h4 id="org6d44855"><span class="section-number-4">1.1.3</span> Type</h4>
+<div id="outline-container-org5bdd399" class="outline-4">
+<h4 id="org5bdd399"><span class="section-number-4">1.1.3</span> Type</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 Due to the permutation operators in the equations
@@ -420,8 +420,8 @@ a type which denotes which permutation it is.
 </div>
 </div>
 
-<div id="outline-container-orgf65154d" class="outline-4">
-<h4 id="orgf65154d"><span class="section-number-4">1.1.4</span> State</h4>
+<div id="outline-container-orgf82c5ad" class="outline-4">
+<h4 id="orgf82c5ad"><span class="section-number-4">1.1.4</span> State</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 Every slice can be in different states and every state
@@ -474,8 +474,8 @@ Again the implementation is a simple enum type.
 </div>
 </div>
 
-<div id="outline-container-org9c68722" class="outline-4">
-<h4 id="org9c68722"><span class="section-number-4">1.1.5</span> The Info structure</h4>
+<div id="outline-container-org781fe8b" class="outline-4">
+<h4 id="org781fe8b"><span class="section-number-4">1.1.5</span> The Info structure</h4>
 <div class="outline-text-4" id="text-1-1-5">
 <p>
 Every slice has an information structure associated with it
@@ -509,8 +509,8 @@ that keeps track of the <b><b>variable</b></b> type, state and so on.
 </div>
 </div>
 
-<div id="outline-container-org7c6c7cf" class="outline-4">
-<h4 id="org7c6c7cf"><span class="section-number-4">1.1.6</span> Name</h4>
+<div id="outline-container-org2c896b4" class="outline-4">
+<h4 id="org2c896b4"><span class="section-number-4">1.1.6</span> Name</h4>
 <div class="outline-text-4" id="text-1-1-6">
 <p>
 CCSD(T) needs in this algorithm 5 types of tensor slices,
@@ -539,8 +539,8 @@ and through two parameters for the hole contribution.
 </div>
 </div>
 
-<div id="outline-container-orgedbe582" class="outline-4">
-<h4 id="orgedbe582"><span class="section-number-4">1.1.7</span> Database</h4>
+<div id="outline-container-orga56f51f" class="outline-4">
+<h4 id="orga56f51f"><span class="section-number-4">1.1.7</span> Database</h4>
 <div class="outline-text-4" id="text-1-1-7">
 <p>
 The database is a simple representation of the slices of a slice union.
@@ -569,8 +569,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orgf795859" class="outline-4">
-<h4 id="orgf795859"><span class="section-number-4">1.1.8</span> MPI Types</h4>
+<div id="outline-container-orgb16b985" class="outline-4">
+<h4 id="orgb16b985"><span class="section-number-4">1.1.8</span> MPI Types</h4>
 <div class="outline-text-4" id="text-1-1-8">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
@@ -665,8 +665,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orga8d8482" class="outline-4">
-<h4 id="orga8d8482"><span class="section-number-4">1.1.9</span> Static utilities</h4>
+<div id="outline-container-org72add93" class="outline-4">
+<h4 id="org72add93"><span class="section-number-4">1.1.9</span> Static utilities</h4>
 <div class="outline-text-4" id="text-1-1-9">
 <p>
 This section presents some functions which are useful to work with
@@ -856,8 +856,8 @@ given slice could not be found.
 </div>
 </div>
 
-<div id="outline-container-org95b47ef" class="outline-4">
-<h4 id="org95b47ef"><span class="section-number-4">1.1.10</span> Attributes</h4>
+<div id="outline-container-orgbc5d197" class="outline-4">
+<h4 id="orgbc5d197"><span class="section-number-4">1.1.10</span> Attributes</h4>
 <div class="outline-text-4" id="text-1-1-10">
 <p>
 A slice object does not own data, it is just a container
@@ -903,8 +903,8 @@ For practical purposes in MPI calls, the number of elements in <code>data</code>
 </div>
 </div>
 
-<div id="outline-container-org494fb5d" class="outline-4">
-<h4 id="org494fb5d"><span class="section-number-4">1.1.11</span> Member functions</h4>
+<div id="outline-container-org07ffcb9" class="outline-4">
+<h4 id="org07ffcb9"><span class="section-number-4">1.1.11</span> Member functions</h4>
 <div class="outline-text-4" id="text-1-1-11">
 <p>
 It is important to note that a ready slice should not be recycled from
@@ -1087,15 +1087,15 @@ can be unwrapped through MPI.</li>
 </div>
 </div>
 
-<div id="outline-container-orgff90996" class="outline-3">
-<h3 id="orgff90996"><span class="section-number-3">1.2</span> Utils</h3>
+<div id="outline-container-orga74aaeb" class="outline-3">
+<h3 id="orga74aaeb"><span class="section-number-3">1.2</span> Utils</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 This section presents some utilities
 </p>
 </div>
-<div id="outline-container-org2c707a4" class="outline-4">
-<h4 id="org2c707a4"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
+<div id="outline-container-org8653696" class="outline-4">
+<h4 id="org8653696"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-macro</a> package.
@@ -1116,8 +1116,8 @@ The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-
 </div>
 </div>
 
-<div id="outline-container-org3d54ca3" class="outline-4">
-<h4 id="org3d54ca3"><span class="section-number-4">1.2.2</span> Chrono</h4>
+<div id="outline-container-orga136097" class="outline-4">
+<h4 id="orga136097"><span class="section-number-4">1.2.2</span> Chrono</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 The chrono is just a simple wrapper for a high resolution clock
@@ -1148,8 +1148,8 @@ that can be found in the <code>std::chrono</code> namespace of the standard libr
 </div>
 </div>
 
-<div id="outline-container-orgd9ea369" class="outline-3">
-<h3 id="orgd9ea369"><span class="section-number-3">1.3</span> The rank mapping</h3>
+<div id="outline-container-org35a1e36" class="outline-3">
+<h3 id="org35a1e36"><span class="section-number-3">1.3</span> The rank mapping</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 This section introduces the concept of rank mapping,
@@ -1222,8 +1222,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-org55b026e" class="outline-3">
-<h3 id="org55b026e"><span class="section-number-3">1.4</span> The slice union</h3>
+<div id="outline-container-org59fb587" class="outline-3">
+<h3 id="org59fb587"><span class="section-number-3">1.4</span> The slice union</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1773,8 +1773,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-org2fd1003" class="outline-3">
-<h3 id="org2fd1003"><span class="section-number-3">1.5</span> Tuples</h3>
+<div id="outline-container-orged00c9d" class="outline-3">
+<h3 id="orged00c9d"><span class="section-number-3">1.5</span> Tuples</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 This section introduces the types for tuples \( (a,b,c) \)
@@ -1783,8 +1783,8 @@ as well as their distribution to nodes and cores.
 </div>
 
 
-<div id="outline-container-orga96451a" class="outline-4">
-<h4 id="orga96451a"><span class="section-number-4">1.5.1</span> Tuples types</h4>
+<div id="outline-container-orgc0029b3" class="outline-4">
+<h4 id="orgc0029b3"><span class="section-number-4">1.5.1</span> Tuples types</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <p>
 The main tuple types are simple type aliases for finite-size arrays.
@@ -1803,8 +1803,8 @@ whereas a partial tuple is a two dimensional subset of these three.
 </div>
 </div>
 
-<div id="outline-container-org63c6150" class="outline-4">
-<h4 id="org63c6150"><span class="section-number-4">1.5.2</span> Naive list</h4>
+<div id="outline-container-orged9fc02" class="outline-4">
+<h4 id="orged9fc02"><span class="section-number-4">1.5.2</span> Naive list</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <p>
 The naive implementation of the global tuples list is simple
@@ -1886,13 +1886,543 @@ global list are given by the following function.
 </div>
 </div>
 
-<div id="outline-container-org3c8dfeb" class="outline-4">
-<h4 id="org3c8dfeb"><span class="section-number-4">1.5.3</span> Group and sort list</h4>
+<div id="outline-container-orgf646f42" class="outline-4">
+<h4 id="orgf646f42"><span class="section-number-4">1.5.3</span> Group and sort list</h4>
+<div class="outline-text-4" id="text-1-5-3">
+</div>
+<ol class="org-ol">
+<li><a id="org2970065"></a>Node information<br />
+<div class="outline-text-5" id="text-1-5-3-1">
+<dl class="org-dl">
+<dt>nodeList</dt><dd>List of hostnames of size \( N_n \)</dd>
+<dt>nodeInfos</dt><dd>List of (hostname, local rank Id)
+of size \( N_p \), i.e., size of ranks
+where local rank id goes from 0 to 48.</dd>
+</dl>
+
+
+
+<p>
+<code>getNodeNames</code> gets the names of the nodes used,
+i.e., the size of the resulting vector gives the
+number of nodes.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">std</span>::string&gt; <span style="color: #0184bc;">getNodeNames</span>(<span style="color: #c18401;">MPI_Comm</span> <span style="color: #8b4513;">comm</span>){
+  <span style="color: #c18401;">int</span> <span style="color: #8b4513;">rank</span>, <span style="color: #8b4513;">np</span>;
+  MPI_Comm_rank(comm, &amp;rank);
+  MPI_Comm_size(comm, &amp;np);
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">std</span>::string&gt; <span style="color: #8b4513;">nodeList</span>(np);
+  <span style="color: #c18401;">char</span> <span style="color: #8b4513;">nodeName</span>[MPI_MAX_PROCESSOR_NAME]
+     , <span style="color: #8b4513;">nodeNames</span>[np*MPI_MAX_PROCESSOR_NAME]
+     ;
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #8b4513;">nameLengths</span>(np)
+                 , <span style="color: #8b4513;">off</span>(np)
+                 ;
+  <span style="color: #c18401;">int</span> <span style="color: #8b4513;">nameLength</span>;
+  MPI_Get_processor_name(nodeName, &amp;nameLength);
+  MPI_Allgather(&amp;nameLength,
+                1,
+                MPI_INT,
+                nameLengths.data(),
+                1,
+                MPI_INT,
+                comm);
+  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span>(1); i &lt; np; i++)
+    off[i] = off[i-1] + nameLengths[i-1];
+  MPI_Allgatherv(nodeName,
+                 nameLengths[rank],
+                 MPI_BYTE,
+                 nodeNames,
+                 nameLengths.data(),
+                 off.data(),
+                 MPI_BYTE,
+                 comm);
+  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span>(0); i &lt; np; i++) {
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">string</span> <span style="color: #a626a4;">const</span> <span style="color: #8b4513;">s</span>(&amp;nodeNames[off[i]], <span style="color: #c18401;">nameLengths</span>[i]);
+    nodeList[i] = s;
+  }
+  <span style="color: #a626a4;">return</span> nodeList;
+}
+</pre>
+</div>
+
+<p>
+<code>getNodeInfos</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">RankInfo</span> {
+  <span style="color: #a626a4;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">string</span> <span style="color: #8b4513;">name</span>;
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nodeId</span>;
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">globalRank</span>;
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">localRank</span>;
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">ranksPerNode</span>;
+};
+
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">RankInfo</span>&gt;
+<span style="color: #0184bc;">getNodeInfos</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">string</span>&gt; <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">nodeNames</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">RankInfo</span>&gt; <span style="color: #8b4513;">result</span>;
+  <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">uniqueNames</span> = nodeNames;
+  {
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(uniqueNames.begin(), uniqueNames.end());
+    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">last</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::unique(uniqueNames.begin(), uniqueNames.end());
+    uniqueNames.erase(last, uniqueNames.end());
+  }
+  <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">index</span> = [&amp;<span style="color: #8b4513;">uniqueNames</span>](<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">string</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">s</span>) {
+    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">it</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::find(uniqueNames.begin(), uniqueNames.end(), s);
+    <span style="color: #a626a4;">return</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::distance(uniqueNames.begin(), it);
+  };
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #8b4513;">localRanks</span>(uniqueNames.size(), 0);
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">rank</span> = 0;
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">name</span>: nodeNames) {
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nodeId</span> = index(name);
+    result.push_back({name,
+                      nodeId,
+                      rank++,
+                      localRanks[nodeId]++,
+                      <span style="font-weight: bold; text-decoration: underline;">std</span>::count(nodeNames.begin(),
+                                 nodeNames.end(),
+                                 name)
+                      });
+  }
+  <span style="color: #a626a4;">return</span> result;
+}
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orga29713a"></a>Utils<br />
+<div class="outline-text-5" id="text-1-5-3-2">
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Provides the node on which the slice-element is found</span>
+<span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Right now we distribute the slices in a round robin fashion</span>
+<span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">over the different nodes (NOTE: not mpi ranks but nodes)</span>
+<span style="color: #c18401;">size_t</span> <span style="color: #0184bc;">isOnNode</span>(<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">tuple</span>, <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nodes</span>) { <span style="color: #a626a4;">return</span> tuple % nodes; }
+
+
+<span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Info</span> {
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nNodes</span>;
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">Nv</span>;
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">np</span>;
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nodeId</span>;
+};
+
+
+<span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">return the node (or all nodes) where the elements of this</span>
+<span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">tuple are located</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #0184bc;">getTupleNodes</span>(<span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">t</span>, <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nNodes</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #8b4513;">result</span>;
+  <span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">nTuple</span> = { isOnNode(t[0], nNodes)
+                    , isOnNode(t[1], nNodes)
+                    , isOnNode(t[2], nNodes)
+                    };
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(nTuple.begin(), nTuple.end());
+  <span style="font-weight: bold; text-decoration: underline;">ABCTuple</span>::<span style="color: #c18401;">iterator</span> <span style="color: #8b4513;">it</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::unique(nTuple.begin(), nTuple.end());
+  result.resize(it - nTuple.begin());
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(nTuple.begin(), it, result.begin());
+  <span style="color: #a626a4;">return</span> result;
+}
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org6032b70"></a>Distribution<br />
+<div class="outline-text-5" id="text-1-5-3-3">
+<p>
+wording: home element = element which is located on the given node
+</p>
+<ol class="org-ol">
+<li>we distribute the tuples such that each tuple has at least one 'home element'</li>
+<li>we sort each tuple in a way that the 'home element' are the fastest indices</li>
+<li>we sort the list of tuples on every node</li>
+<li>we resort the tuples that for every tuple abc the following holds: a&lt;b&lt;c</li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt;
+<span style="color: #0184bc;">specialDistribution</span>(<span style="color: #c18401;">Info</span> <span style="color: #8b4513;">info</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">allTuples</span>) {
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #8b4513;">nodeTuples</span>;
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nNodes</span>(info.nNodes);
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">np</span>(info.np);
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">N</span>(allTuples.size());
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">tuplePerNode</span>( ceil( ((<span style="color: #c18401;">double</span>)N) / nNodes) );
+
+  <span style="color: #a0a1a7; font-weight: bold;">//      </span><span style="color: #a0a1a7;">nodeid          tuple list</span>
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">map</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; &gt; <span style="color: #8b4513;">container1d</span>;
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">map</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; &gt; <span style="color: #8b4513;">container2d</span>;
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">map</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; &gt; <span style="color: #8b4513;">container3d</span>;
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">build container-n-d's</span>
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">t</span>: allTuples) {
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">one which node(s) are the tuple elements located...</span>
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">put them into the right container</span>
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">nt</span> = getTupleNodes(t, nNodes);
+    <span style="color: #a626a4;">if</span> ( nt.size() == 1) container1d[nt[0]].push_back(t);
+    <span style="color: #a626a4;">if</span> ( nt.size() == 2) container2d[nt[0] + nNodes*nt[1]].push_back(t);
+    <span style="color: #a626a4;">if</span> ( nt.size() == 3)
+      container3d[nt[0] + nNodes*nt[1] + nNodes*nNodes*nt[2]].push_back(t);
+  }
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">DISTRIBUTE 1-d containers</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">every tuple which is only located at one node belongs to this node</span>
+  {
+    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tuplesVec</span> = container1d[info.nodeId];
+    nodeTuples.resize(tuplesVec.size());
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(tuplesVec.begin(), tuplesVec.end(), nodeTuples.begin());
+  }
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">DISTRIBUTE 2-d containers</span>
+  <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">the tuples which are located at two nodes are half/half given to these nodes</span>
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> &amp;<span style="color: #8b4513;">m</span>: container2d) {
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">idx</span> = m.first%nNodes;
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">idy</span> = m.first/nNodes;
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">myNode</span> = idx;
+
+    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">either idx or idy is my node</span>
+    <span style="color: #a626a4;">if</span> (idx != info.nodeId &amp;&amp; idy != info.nodeId) <span style="color: #a626a4;">continue</span>;
+    <span style="color: #a626a4;">if</span> (idy == info.nodeId) myNode = idy;
+
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">tuplesVec</span> = m.second;
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">n</span> = tuplesVec.size() / 2;
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">size</span> = nodeTuples.size();
+    <span style="color: #a626a4;">if</span> (myNode == idx) {
+      nodeTuples.resize(size + n);
+      <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(tuplesVec.begin(),
+                tuplesVec.begin() + n,
+                nodeTuples.begin() + size);
+    } <span style="color: #a626a4;">else</span> {
+      <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">ny</span> = tuplesVec.size() - n;
+      nodeTuples.resize(size + ny);
+      <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(tuplesVec.begin() + n,
+                tuplesVec.end(),
+                nodeTuples.begin() + size);
+    }
+
+  }
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">DISTRIBUTE 3-d containers</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">similar game for the tuples which belong to three different nodes</span>
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">m</span>: container3d){
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">tuplesVec</span> = m.second;
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">idx</span> = m.first%nNodes;
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">idy</span> = (m.first/nNodes)%nNodes;
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">idz</span> = m.first/nNodes/nNodes;
+    <span style="color: #a626a4;">if</span> (idx != info.nodeId &amp;&amp; idy != info.nodeId &amp;&amp; idz != info.nodeId) <span style="color: #a626a4;">continue</span>;
+
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nx</span> = tuplesVec.size() / 3;
+    <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span>, <span style="color: #8b4513;">nbegin</span>, <span style="color: #8b4513;">nend</span>;
+    <span style="color: #a626a4;">if</span> (info.nodeId == idx) {
+      n = nx;
+      nbegin = 0;
+      nend = n;
+    } <span style="color: #a626a4;">else</span> <span style="color: #a626a4;">if</span> (info.nodeId == idy) {
+      n = nx;
+      nbegin = n;
+      nend = n + n;
+    } <span style="color: #a626a4;">else</span> {
+      n = tuplesVec.size() - 2 * nx;
+      nbegin = 2 * nx;
+      nend = 2 * nx + n;
+    }
+
+    <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">size</span> = nodeTuples.size();
+    nodeTuples.resize(size + n);
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(tuplesVec.begin() + nbegin,
+              tuplesVec.begin() + nend,
+              nodeTuples.begin() + size);
+
+  }
+
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">sort part of group-and-sort algorithm</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">every tuple on a given node is sorted in a way that</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">the 'home elements' are the fastest index.</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">1:yyy 2:yyn(x) 3:yny(x) 4:ynn(x) 5:nyy 6:nyn(x) 7:nny 8:nnn</span>
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">n</span> = info.nodeId;
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> &amp;<span style="color: #8b4513;">nt</span>: nodeTuples){
+    <span style="color: #a626a4;">if</span> ( isOnNode(nt[0], nNodes) == n ){ <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">1234</span>
+      <span style="color: #a626a4;">if</span> ( isOnNode(nt[2], nNodes) != n ){ <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">24</span>
+        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">x</span>(nt[0]); nt[0] = nt[2]; nt[2] = x; <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">switch first and last</span>
+      }
+      <span style="color: #a626a4;">else</span> <span style="color: #a626a4;">if</span> ( isOnNode(nt[1], nNodes) != n){ <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">3</span>
+        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">x</span>(nt[0]); nt[0] = nt[1]; nt[1] = x; <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">switch first two</span>
+      }
+    } <span style="color: #a626a4;">else</span> {
+      <span style="color: #a626a4;">if</span> ( isOnNode(nt[1], nNodes) == n   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">56</span>
+        &amp;&amp; isOnNode(nt[2], nNodes) != n){ <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">6</span>
+        <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">x</span>(nt[1]); nt[1] = nt[2]; nt[2] = x; <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">switch last two</span>
+      }
+    }
+  }
+  <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">now we sort the list of tuples</span>
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(nodeTuples.begin(), nodeTuples.end());
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">we bring the tuples abc back in the order a&lt;b&lt;c</span>
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> &amp;<span style="color: #8b4513;">t</span>: nodeTuples)  <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(t.begin(), t.end());
+
+  <span style="color: #a626a4;">return</span> nodeTuples;
+
+}
+
+<span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">determine which element has to be fetched from sources for the next iteration</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #0184bc;">fetchElement</span>(<span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">cur</span>, <span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">suc</span>){
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">size_t</span>&gt; <span style="color: #8b4513;">result</span>;
+  <span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">inter</span>;
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(cur.begin(), cur.end());
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::sort(suc.begin(), suc.end());
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">array</span>&lt;<span style="color: #c18401;">size_t</span>,3&gt;::<span style="color: #c18401;">iterator</span> <span style="color: #8b4513;">rit</span>, <span style="color: #8b4513;">cit</span>, <span style="color: #8b4513;">sit</span>;
+  cit = <span style="font-weight: bold; text-decoration: underline;">std</span>::unique(cur.begin(), cur.end());
+  sit = <span style="font-weight: bold; text-decoration: underline;">std</span>::unique(suc.begin(), suc.end());
+  rit = <span style="font-weight: bold; text-decoration: underline;">std</span>::set_difference(suc.begin(), sit, cur.begin(), cit, inter.begin());
+  result.resize(rit - inter.begin());
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(inter.begin(), rit, result.begin());
+  <span style="color: #a626a4;">return</span> result;
+}
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgca4e9d2"></a>Main<br />
+<div class="outline-text-5" id="text-1-5-3-4">
+<p>
+The main routine should return the list of tuples to be handled by the current rank.
+</p>
+
+<p>
+Let \( N_p \) be the number of ranks or processes.
+Let \( N_n \) be the number of nodes or sockets.
+</p>
+
+<p>
+Then we have the following
+</p>
+
+<pre class="example" id="orgeb72bd3">
+Global rank | 0 1 2 3 4 5 6 7 8
+nodeId      | 0 1 0 1 1 0 2 2 2
+Local rank  | 0 0 1 1 2 2 0 1 2
+intra color | 0 1 0 1 1 0 2 2 2
+key         | global rank
+</pre>
+
+
+
+
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #0184bc;">main</span>(<span style="color: #c18401;">MPI_Comm</span> <span style="color: #8b4513;">universe</span>, <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">Nv</span>) {
+
+  <span style="color: #c18401;">int</span> <span style="color: #8b4513;">rank</span>, <span style="color: #8b4513;">np</span>;
+  MPI_Comm_rank(universe, &amp;rank);
+  MPI_Comm_size(universe, &amp;np);
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #8b4513;">result</span>;
+
+  <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">nodeNames</span>(getNodeNames(universe));
+  <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">nodeNamesUnique</span>(nodeNames);
+  {
+    <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">last</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::unique(nodeNamesUnique.begin(),
+                                   nodeNamesUnique.end());
+    nodeNamesUnique.erase(last, nodeNamesUnique.end());
+  }
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">we pick one rank from every node</span>
+  <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">nodeInfos</span> = getNodeInfos(nodeNames);
+  <span style="color: #c18401;">size_t</span> <span style="color: #a626a4;">const</span> <span style="color: #8b4513;">nNodes</span> = nodeNamesUnique.size();
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">We want to construct a communicator which only contains of one</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">element per node</span>
+  <span style="color: #c18401;">bool</span> <span style="color: #8b4513;">makeDistribution</span>
+    = nodeInfos[rank].localRank == 0
+    ? <span style="font-weight: bold; text-decoration: underline;">true</span>
+    : <span style="font-weight: bold; text-decoration: underline;">false</span>
+    ;
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt;
+    <span style="color: #8b4513;">nodeTuples</span> = makeDistribution
+               ? specialDistribution(Info{ nNodes
+                                         , Nv
+                                         , np
+                                         , nodeInfos[rank].nodeId
+                                         },
+                                      getTuplesList(Nv))
+               : <span style="font-weight: bold; text-decoration: underline;">std</span>::vector&lt;ABCTuple&gt;()
+               ;
+
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">now we have to send the data from **one** rank on each node</span>
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">to all others ranks of this node</span>
+    <span style="color: #a626a4;">const</span>
+  <span style="color: #c18401;">int</span> <span style="color: #8b4513;">color</span> = nodeInfos[rank].nodeId
+    , <span style="color: #8b4513;">key</span> = nodeInfos[rank].localRank
+    ;
+
+
+  <span style="color: #c18401;">MPI_Comm</span> <span style="color: #8b4513;">INTRA_COMM</span>;
+  MPI_Comm_split(universe, color, key, &amp;INTRA_COMM);
+</pre>
+</div>
+
+<p>
+Every node has to distribute <b><b>at least</b></b>
+nodeTuples.size() / nodeInfos[rank].ranksPerNode
+tuples among the ranks.
+</p>
+
+<p>
+We have to communicate this quantity among all nodes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">
+  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span>
+    <span style="color: #8b4513;">tuplesPerRankLocal</span>
+       = nodeTuples.size() / nodeInfos[rank].ranksPerNode
+       + size_t(nodeTuples.size() % nodeInfos[rank].ranksPerNode != 0)
+       ;
+
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">tuplesPerRankGlobal</span>;
+
+  MPI_Reduce(&amp;tuplesPerRankLocal,
+             &amp;tuplesPerRankGlobal,
+             1,
+             MPI_UINT64_T,
+             MPI_MAX,
+             0,
+             universe);
+
+  MPI_Bcast(&amp;tuplesPerRankGlobal,
+            1,
+            MPI_UINT64_T,
+            0,
+            universe);
+</pre>
+</div>
+
+<p>
+Now we have the tuples that every rank has to have, i.e.,
+<code>tuplesPerRankGlobal</code>.
+</p>
+
+<p>
+However before this,
+the tuples in <code>nodeTuples</code> now have to be sent from the local rank
+in every node to all the ranks in the given node,
+and we have to make sure that every rank inside a given node
+gets the same amount of tuples, in this case it should be
+<code>tuplesPerRankLocal</code>, and in our node the total number
+of tuples should be <code>tuplesPerRankLocal * nodeInfos[rank].ranksPerNode</code>,
+however this might not be the case up to now due to divisibility issues.
+</p>
+
+<p>
+Up to now we have exactly <code>nodeTuples.size()</code> tuples, we have to make sure by
+resizing that the condition above is met, i.e., so we can resize
+and add some fake tuples at the end as padding.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #c18401;">size_t</span> <span style="color: #a626a4;">const</span> <span style="color: #8b4513;">totalTuplesLocal</span>
+  = tuplesPerRankLocal
+  * nodeInfos[rank].ranksPerNode;
+
+<span style="color: #a626a4;">if</span> (makeDistribution)
+  nodeTuples.insert(nodeTuples.end(),
+                    totalTuplesLocal - nodeTuples.size(),
+                    FAKE_TUPLE);
+</pre>
+</div>
+
+<p>
+The next step is sending the tuples in the local root rank
+to the other ranks in the node, this we do with the MPI function
+<code>MPI_Scatterv</code>.
+Every rank gets <code>tuplesPerRankLocal</code> tuples and
+the <code>nodeTuples</code> vector is now homogeneous and divisible by the number
+of ranks per node in our node.
+Therefore, the <code>displacements</code> are simply the vector
+</p>
+\begin{equation*}
+  \left\{
+  k * \mathrm{tuplesPerNodeLocal}
+  \mid
+  k \in
+  \left\{ 0
+        , \ldots
+        , \#\text{ranks in node} - 1
+        \right\}
+  \right\}
+\end{equation*}
+
+<p>
+and the <code>sendCounts</code> vector is simply the constant vector
+<code>tuplesPerRankLocal</code> of size <code>ranksPerNode</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">{
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt; <span style="color: #a626a4;">const</span>
+    <span style="color: #8b4513;">sendCounts</span>(nodeInfos[rank].ranksPerNode, tuplesPerRankLocal);
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;<span style="color: #c18401;">int</span>&gt;
+    <span style="color: #8b4513;">displacements</span>(nodeInfos[rank].ranksPerNode);
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::iota(displacements.begin(),
+            displacements.end(),
+            tuplesPerRankLocal);
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">important!</span>
+  result.resize(tuplesPerRankLocal);
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">construct mpi type for abctuple</span>
+  <span style="color: #c18401;">MPI_Datatype</span> <span style="color: #8b4513;">MPI_ABCTUPLE</span>;
+  MPI_Type_vector(nodeTuples[0].size(), 1, 1, MPI_UINT64_T, &amp;MPI_ABCTUPLE);
+  MPI_Type_commit(&amp;MPI_ABCTUPLE);
+
+  MPI_Scatterv(nodeTuples.data(),
+              sendCounts.data(),
+              displacements.data(),
+              MPI_ABCTUPLE,
+              result.data(),
+              tuplesPerRankLocal,
+              MPI_ABCTUPLE,
+              0,
+              INTRA_COMM);
+
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">free type</span>
+  MPI_Type_free(&amp;MPI_ABCTUPLE);
+
+}
+</pre>
+</div>
+
+<p>
+and now we have to make sure that the size of the result
+is the same with every rank in the universe communicator,
+inserting fake tuples where needed
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">
+  result.insert(result.end(),
+                tuplesPerRankGlobal - result.size(),
+                FAKE_TUPLE);
+
+  <span style="color: #a626a4;">return</span> result;
+
+}
+</pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 
-<div id="outline-container-orgde10782" class="outline-3">
-<h3 id="orgde10782"><span class="section-number-3">1.6</span> Unions</h3>
+<div id="outline-container-orgd440fc7" class="outline-3">
+<h3 id="orgd440fc7"><span class="section-number-3">1.6</span> Unions</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 Every slice pertaining to every different tensor
@@ -2140,8 +2670,8 @@ is sliced differently.
 </div>
 
 
-<div id="outline-container-orgb02ee00" class="outline-3">
-<h3 id="orgb02ee00"><span class="section-number-3">1.7</span> Equations</h3>
+<div id="outline-container-org8fb1244" class="outline-3">
+<h3 id="org8fb1244"><span class="section-number-3">1.7</span> Equations</h3>
 <div class="outline-text-3" id="text-1-7">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2484,8 +3014,8 @@ is sliced differently.
 </div>
 </div>
 
-<div id="outline-container-org41ec0a1" class="outline-3">
-<h3 id="org41ec0a1"><span class="section-number-3">1.8</span> Blas</h3>
+<div id="outline-container-orgc210d72" class="outline-3">
+<h3 id="orgc210d72"><span class="section-number-3">1.8</span> Blas</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 The main matrix-matrix multiplication method used in this algorithm
@@ -2518,8 +3048,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org59350d5" class="outline-3">
-<h3 id="org59350d5"><span class="section-number-3">1.9</span> Atrip</h3>
+<div id="outline-container-orge4c9ce6" class="outline-3">
+<h3 id="orge4c9ce6"><span class="section-number-3">1.9</span> Atrip</h3>
 <div class="outline-text-3" id="text-1-9">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2574,8 +3104,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org8f21b2c" class="outline-4">
-<h4 id="org8f21b2c"><span class="section-number-4">1.9.1</span> Main</h4>
+<div id="outline-container-org598e5f5" class="outline-4">
+<h4 id="org598e5f5"><span class="section-number-4">1.9.1</span> Main</h4>
 <div class="outline-text-4" id="text-1-9-1">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iomanip&gt;</span>
@@ -3126,8 +3656,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 
 
-<div id="outline-container-org8471613" class="outline-3">
-<h3 id="org8471613"><span class="section-number-3">1.10</span> Debug</h3>
+<div id="outline-container-org8cd139a" class="outline-3">
+<h3 id="org8cd139a"><span class="section-number-3">1.10</span> Debug</h3>
 <div class="outline-text-3" id="text-1-10">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3193,8 +3723,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org2c6753c" class="outline-3">
-<h3 id="org2c6753c"><span class="section-number-3">1.11</span> Include header</h3>
+<div id="outline-container-org1749762" class="outline-3">
+<h3 id="org1749762"><span class="section-number-3">1.11</span> Include header</h3>
 <div class="outline-text-3" id="text-1-11">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3208,7 +3738,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-10-15 Fri 17:07</p>
+<p class="date">Created: 2021-10-15 Fri 17:27</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

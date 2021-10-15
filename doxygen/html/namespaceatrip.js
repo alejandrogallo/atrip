@@ -1,5 +1,6 @@
 var namespaceatrip =
 [
+    [ "group_and_sort", "namespaceatrip_1_1group__and__sort.html", "namespaceatrip_1_1group__and__sort" ],
     [ "ABHH", "structatrip_1_1ABHH.html", "structatrip_1_1ABHH" ],
     [ "ABPH", "structatrip_1_1ABPH.html", "structatrip_1_1ABPH" ],
     [ "Atrip", "structatrip_1_1Atrip.html", "structatrip_1_1Atrip" ],
