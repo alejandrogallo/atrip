@@ -102,70 +102,73 @@ $(document).ready(function(){initNavTree('Tuples_8hpp_source.html',''); initResi
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">   15</a></span>&#160;<span class="keyword">using</span> <a class="code" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> = std::array&lt;size_t, 3&gt;;</div>
 <div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b">   16</a></span>&#160;<span class="keyword">using</span> <a class="code" href="namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b">PartialTuple</a> = std::array&lt;size_t, 2&gt;;</div>
 <div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">   17</a></span>&#160;<span class="keyword">using</span> <a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> = std::vector&lt;ABCTuple&gt;;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// Tuples types:1 ends here</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// [[file:../../atrip.org::*Naive list][Naive list:1]]</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">   21</a></span>&#160;<a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> <a class="code" href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">getTuplesList</a>(<span class="keywordtype">size_t</span> Nv) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">size_t</span> n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> result(n);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keywordtype">size_t</span> u(0);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> a(0); a &lt; Nv; a++)</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> b(a); b &lt; Nv; b++)</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> c(b); c &lt; Nv; c++){</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordflow">if</span> ( a == b &amp;&amp; b == c ) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    result[u++] = {a, b, c};</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  }</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a341e9614e55178a8e9537898f42ac636">   19</a></span>&#160;constexpr <a class="code" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> <a class="code" href="namespaceatrip.html#a341e9614e55178a8e9537898f42ac636">FAKE_TUPLE</a> = {0, 0, 0};</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// Tuples types:1 ends here</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// [[file:../../atrip.org::*Naive list][Naive list:1]]</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">   23</a></span>&#160;<a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> <a class="code" href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">getTuplesList</a>(<span class="keywordtype">size_t</span> Nv) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">size_t</span> n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> result(n);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">size_t</span> u(0);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> a(0); a &lt; Nv; a++)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> b(a); b &lt; Nv; b++)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> c(b); c &lt; Nv; c++){</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> ( a == b &amp;&amp; b == c ) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    result[u++] = {a, b, c};</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  }</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">// Naive list:1 ends here</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">// [[file:../../atrip.org::*Naive list][Naive list:2]]</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;std::pair&lt;size_t, size_t&gt;</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">   40</a></span>&#160;<a class="code" href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">getABCRange</a>(<span class="keywordtype">size_t</span> np, <span class="keywordtype">size_t</span> rank, <a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> <span class="keyword">const</span>&amp; tuplesList) {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  std::vector&lt;size_t&gt; n_tuples_per_rank(np, tuplesList.size()/np);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">size_t</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;      <span class="comment">// how many valid tuples should we still verteilen to nodes</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      <span class="comment">// since the number of tuples is not divisible by the number of nodes</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      nRoundRobin = tuplesList.size() % np</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;      <span class="comment">// every node must have the sanme amount of tuples in order for the</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <span class="comment">// other nodes to receive and send somewhere, therefore</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="comment">// some nodes will get extra tuples but that are dummy tuples</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    , nExtraInvalid = (np - nRoundRobin) % np</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    ;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keywordflow">if</span> (nRoundRobin) <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; np; i++) n_tuples_per_rank[i]++;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">// Naive list:1 ends here</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">// [[file:../../atrip.org::*Naive list][Naive list:2]]</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;std::pair&lt;size_t, size_t&gt;</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">   42</a></span>&#160;<a class="code" href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">getABCRange</a>(<span class="keywordtype">size_t</span> np, <span class="keywordtype">size_t</span> rank, <a class="code" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> <span class="keyword">const</span>&amp; tuplesList) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  std::vector&lt;size_t&gt; n_tuples_per_rank(np, tuplesList.size()/np);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">size_t</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <span class="comment">// how many valid tuples should we still verteilen to nodes</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;      <span class="comment">// since the number of tuples is not divisible by the number of nodes</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      nRoundRobin = tuplesList.size() % np</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="comment">// every node must have the sanme amount of tuples in order for the</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="comment">// other nodes to receive and send somewhere, therefore</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="comment">// some nodes will get extra tuples but that are dummy tuples</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    , nExtraInvalid = (np - nRoundRobin) % np</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    ;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;nRoundRobin = &quot;</span> &lt;&lt; nRoundRobin &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;nExtraInvalid = &quot;</span> &lt;&lt; nExtraInvalid &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;ntuples = &quot;</span> &lt;&lt; n_tuples_per_rank[rank] &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">auto</span> <span class="keyword">const</span>&amp; it = n_tuples_per_rank.begin();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keywordflow">if</span> (nRoundRobin) <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; np; i++) n_tuples_per_rank[i]++;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;nRoundRobin = &quot;</span> &lt;&lt; nRoundRobin &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;nExtraInvalid = &quot;</span> &lt;&lt; nExtraInvalid &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <a class="code" href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a> &lt;&lt; <span class="stringliteral">&quot;ntuples = &quot;</span> &lt;&lt; n_tuples_per_rank[rank] &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keywordflow">return</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    { std::accumulate(it, it + rank    , 0)</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    , std::accumulate(it, it + rank + 1, 0)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">// Naive list:2 ends here</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// [[file:../../atrip.org::*Epilog][Epilog:1]]</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">// Epilog:1 ends here</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keyword">auto</span> <span class="keyword">const</span>&amp; it = n_tuples_per_rank.begin();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    { std::accumulate(it, it + rank    , 0)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    , std::accumulate(it, it + rank + 1, 0)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// Naive list:2 ends here</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">// [[file:../../atrip.org::*Epilog][Epilog:1]]</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">// Epilog:1 ends here</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespaceatrip_html_a42323fc6890662eefe0e071ada4748ea"><div class="ttname"><a href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">atrip::ABCTuples</a></div><div class="ttdeci">std::vector&lt; ABCTuple &gt; ABCTuples</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:17</div></div>
+<div class="ttc" id="anamespaceatrip_html_a341e9614e55178a8e9537898f42ac636"><div class="ttname"><a href="namespaceatrip.html#a341e9614e55178a8e9537898f42ac636">atrip::FAKE_TUPLE</a></div><div class="ttdeci">constexpr ABCTuple FAKE_TUPLE</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:19</div></div>
 <div class="ttc" id="anamespaceatrip_html_a8b97b58a2469967c1a6da53511879c7b"><div class="ttname"><a href="namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b">atrip::PartialTuple</a></div><div class="ttdeci">std::array&lt; size_t, 2 &gt; PartialTuple</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:16</div></div>
 <div class="ttc" id="aDebug_8hpp_html_a3f86e6b81edd7297ee6f9fd44cba3149"><div class="ttname"><a href="Debug_8hpp.html#a3f86e6b81edd7297ee6f9fd44cba3149">WITH_RANK</a></div><div class="ttdeci">#define WITH_RANK</div><div class="ttdef"><b>Definition:</b> Debug.hpp:53</div></div>
 <div class="ttc" id="aUtils_8hpp_html"><div class="ttname"><a href="Utils_8hpp.html">Utils.hpp</a></div></div>
 <div class="ttc" id="anamespaceatrip_html"><div class="ttname"><a href="namespaceatrip.html">atrip</a></div><div class="ttdef"><b>Definition:</b> Atrip.hpp:10</div></div>
-<div class="ttc" id="anamespaceatrip_html_ad43da4975bb32dad5c14bb4238380a02"><div class="ttname"><a href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">atrip::getABCRange</a></div><div class="ttdeci">std::pair&lt; size_t, size_t &gt; getABCRange(size_t np, size_t rank, ABCTuples const &amp;tuplesList)</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:40</div></div>
+<div class="ttc" id="anamespaceatrip_html_ad43da4975bb32dad5c14bb4238380a02"><div class="ttname"><a href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">atrip::getABCRange</a></div><div class="ttdeci">std::pair&lt; size_t, size_t &gt; getABCRange(size_t np, size_t rank, ABCTuples const &amp;tuplesList)</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:42</div></div>
 <div class="ttc" id="anamespaceatrip_html_a28915c100861c4b2a8c868a4b8f1f233"><div class="ttname"><a href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">atrip::ABCTuple</a></div><div class="ttdeci">std::array&lt; size_t, 3 &gt; ABCTuple</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:15</div></div>
-<div class="ttc" id="anamespaceatrip_html_a15a86ce2b735dd01f666470e0d81127d"><div class="ttname"><a href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">atrip::getTuplesList</a></div><div class="ttdeci">ABCTuples getTuplesList(size_t Nv)</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:21</div></div>
+<div class="ttc" id="anamespaceatrip_html_a15a86ce2b735dd01f666470e0d81127d"><div class="ttname"><a href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">atrip::getTuplesList</a></div><div class="ttdeci">ABCTuples getTuplesList(size_t Nv)</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:23</div></div>
 <div class="ttc" id="aDebug_8hpp_html"><div class="ttname"><a href="Debug_8hpp.html">Debug.hpp</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
