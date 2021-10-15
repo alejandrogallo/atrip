@@ -15,6 +15,8 @@ namespace atrip {
 using ABCTuple = std::array<size_t, 3>;
 using PartialTuple = std::array<size_t, 2>;
 using ABCTuples = std::vector<ABCTuple>;
+
+constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 // Tuples types:1 ends here
 
 // [[file:../../atrip.org::*Naive list][Naive list:1]]

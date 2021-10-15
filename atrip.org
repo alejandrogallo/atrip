@@ -1416,6 +1416,8 @@ whereas a partial tuple is a two dimensional subset of these three.
 using ABCTuple = std::array<size_t, 3>;
 using PartialTuple = std::array<size_t, 2>;
 using ABCTuples = std::vector<ABCTuple>;
+
+constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 #+end_src
 
 *** Naive list
