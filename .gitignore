@@ -1,6 +1,10 @@
 .emacs
+
 doc/doxygen/
 extern
 lib
 *.o
 *.d
+a.out
+*~
+config.mk
