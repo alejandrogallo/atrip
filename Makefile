@@ -99,3 +99,7 @@ HTML_MAIN = $(patsubst %.org,%.html,$(ORG_MAIN))
 html: $(HTML_MAIN)
 %.html: %.org
 	$(EMACS_HTML) $< --eval "(org-html-export-to-html)"
+
+.PHONY: dbg
+dbg: include/dbg.h
+	wget https://raw.githubusercontent.com/sharkdp/dbg-macro/master/dbg.h -O $<

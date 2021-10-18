@@ -1,5 +1,6 @@
 .emacs
 
+include/dbg.h
 doc/doxygen/
 extern
 lib
