@@ -1,7 +1,10 @@
 var Tuples_8hpp =
 [
+    [ "TuplesDistribution", "structatrip_1_1TuplesDistribution.html", "structatrip_1_1TuplesDistribution" ],
+    [ "NaiveDistribution", "structatrip_1_1NaiveDistribution.html", "structatrip_1_1NaiveDistribution" ],
     [ "RankInfo", "structatrip_1_1group__and__sort_1_1RankInfo.html", "structatrip_1_1group__and__sort_1_1RankInfo" ],
     [ "Info", "structatrip_1_1group__and__sort_1_1Info.html", "structatrip_1_1group__and__sort_1_1Info" ],
+    [ "Distribution", "structatrip_1_1group__and__sort_1_1Distribution.html", "structatrip_1_1group__and__sort_1_1Distribution" ],
     [ "ABCTuple", "Tuples_8hpp.html#a28915c100861c4b2a8c868a4b8f1f233", null ],
     [ "ABCTuples", "Tuples_8hpp.html#a42323fc6890662eefe0e071ada4748ea", null ],
     [ "PartialTuple", "Tuples_8hpp.html#a8b97b58a2469967c1a6da53511879c7b", null ],

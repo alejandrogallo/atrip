@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['slice_200',['Slice',['../structatrip_1_1Slice.html',1,'atrip']]],
-  ['sliceunion_201',['SliceUnion',['../structatrip_1_1SliceUnion.html',1,'atrip']]]
+  ['output_204',['Output',['../structatrip_1_1Atrip_1_1Output.html',1,'atrip::Atrip']]]
 ];

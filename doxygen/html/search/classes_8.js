@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['tabhh_202',['TABHH',['../structatrip_1_1TABHH.html',1,'atrip']]],
-  ['taphh_203',['TAPHH',['../structatrip_1_1TAPHH.html',1,'atrip']]],
-  ['timer_204',['Timer',['../structatrip_1_1Timer.html',1,'atrip']]]
+  ['rankinfo_205',['RankInfo',['../structatrip_1_1group__and__sort_1_1RankInfo.html',1,'atrip::group_and_sort']]],
+  ['rankmap_206',['RankMap',['../structatrip_1_1RankMap.html',1,'atrip']]]
 ];
