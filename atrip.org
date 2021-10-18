@@ -1430,6 +1430,24 @@ using ABCTuples = std::vector<ABCTuple>;
 constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 #+end_src
 
+*** Distributing the tuples
+
+In general it is our task to distribute all the tuples
+\( (a,b,c) \) among the ranks. Every distribution should
+make sure to allocate the same amount of tuples to every rank,
+padding the list with =FAKE_TUPLE= elements as necessary.
+
+The interface that we propose for this is simplye
+
+#+begin_src c++ :tangle (atrip-tuples-h)
+struct TuplesDistribution {
+  virtual ABCTuples getTuples(size_t Nv, MPI_Comm universe) = 0;
+  virtual bool tupleIsFake(ABCTuple const& t) { return t == FAKE_TUPLE; }
+};
+#+end_src
+
+
+
 *** Naive list
 
 The naive implementation of the global tuples list is simple
@@ -1499,6 +1517,28 @@ getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
 
 }
 #+end_src
+
+With these two last functions we can easily define a tuple distribution like
+
+#+begin_src c++ :tangle (atrip-tuples-h)
+struct NaiveDistribution : public TuplesDistribution {
+  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
+    int rank, np;
+    MPI_Comm_rank(universe, &rank);
+    MPI_Comm_size(universe, &np);
+    auto const all = getTuplesList(Nv);
+    auto const range = getABCRange((size_t)np, (size_t)rank, all);
+    std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
+    std::copy(all.begin() + range.first,
+              range.second >= all.size()
+              ? all.end()
+              : all.begin() + range.first + range.second,
+              result.begin());
+    return result;
+  }
+};
+#+end_src
+
 
 *** Group and sort list
 
@@ -1986,10 +2026,22 @@ inserting fake tuples where needed
 }
 #+end_src
 
+**** Interface
+
+The distribution interface will then simply be
+
+#+begin_src c++ :tangle (atrip-tuples-h)
+struct Distribution : public TuplesDistribution {
+  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
+    return main(universe, Nv);
+  }
+};
+#+end_src
+
 
 **** Epilog                                                        :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
-}
+} // namespace group_and_sort
 #+end_src
 
 

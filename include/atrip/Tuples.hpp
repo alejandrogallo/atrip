@@ -29,6 +29,13 @@ using ABCTuples = std::vector<ABCTuple>;
 constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 // Tuples types:1 ends here
 
+// [[file:../../atrip.org::*Distributing the tuples][Distributing the tuples:1]]
+struct TuplesDistribution {
+  virtual ABCTuples getTuples(size_t Nv, MPI_Comm universe) = 0;
+  virtual bool tupleIsFake(ABCTuple const& t) { return t == FAKE_TUPLE; }
+};
+// Distributing the tuples:1 ends here
+
 // [[file:../../atrip.org::*Naive list][Naive list:1]]
 ABCTuples getTuplesList(size_t Nv) {
   const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
@@ -77,6 +84,25 @@ getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
 
 }
 // Naive list:2 ends here
+
+// [[file:../../atrip.org::*Naive list][Naive list:3]]
+struct NaiveDistribution : public TuplesDistribution {
+  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
+    int rank, np;
+    MPI_Comm_rank(universe, &rank);
+    MPI_Comm_size(universe, &np);
+    auto const all = getTuplesList(Nv);
+    auto const range = getABCRange((size_t)np, (size_t)rank, all);
+    std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
+    std::copy(all.begin() + range.first,
+              range.second >= all.size()
+              ? all.end()
+              : all.begin() + range.first + range.second,
+              result.begin());
+    return result;
+  }
+};
+// Naive list:3 ends here
 
 // [[file:../../atrip.org::*Prolog][Prolog:1]]
 namespace group_and_sort {
@@ -467,8 +493,16 @@ result.insert(result.end(),
 }
 // Main:5 ends here
 
+// [[file:../../atrip.org::*Interface][Interface:1]]
+struct Distribution : public TuplesDistribution {
+  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
+    return main(universe, Nv);
+  }
+};
+// Interface:1 ends here
+
 // [[file:../../atrip.org::*Epilog][Epilog:1]]
-}
+} // namespace group_and_sort
 // Epilog:1 ends here
 
 // [[file:../../atrip.org::*Epilog][Epilog:1]]
