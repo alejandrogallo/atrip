@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['selfsufficient_380',['SelfSufficient',['../structatrip_1_1Slice.html#ade9f7c874828268e1cc03d5da85734a0a8224fe344bd7076b2083964ac1f1a6cb',1,'atrip::Slice']]]
+  ['naive_368',['NAIVE',['../structatrip_1_1Atrip_1_1Input.html#a4a4349822442475c3ef3eadc9f1d9e58a819a64e4ccc4fecd3362c3bef75d021d',1,'atrip::Atrip::Input']]]
 ];

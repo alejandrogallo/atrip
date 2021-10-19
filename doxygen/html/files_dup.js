@@ -2,11 +2,7 @@ var files_dup =
 [
     [ "Atrip.cxx", "Atrip_8cxx.html", null ],
     [ "Atrip.d", "Atrip_8d.html", null ],
-    [ "Atrip.hpp", "Atrip_8hpp.html", [
-      [ "Atrip", "structatrip_1_1Atrip.html", "structatrip_1_1Atrip" ],
-      [ "Input", "structatrip_1_1Atrip_1_1Input.html", "structatrip_1_1Atrip_1_1Input" ],
-      [ "Output", "structatrip_1_1Atrip_1_1Output.html", "structatrip_1_1Atrip_1_1Output" ]
-    ] ],
+    [ "Atrip.hpp", "Atrip_8hpp.html", "Atrip_8hpp" ],
     [ "atrip.hpp", "atrip_8hpp.html", null ],
     [ "Blas.hpp", "Blas_8hpp.html", "Blas_8hpp" ],
     [ "Debug.hpp", "Debug_8hpp.html", "Debug_8hpp" ],

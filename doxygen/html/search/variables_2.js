@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['chrono_309',['chrono',['../structatrip_1_1Atrip_1_1Input.html#aea0b59c2c4df5ee2e5a48b9f3414679b',1,'atrip::Atrip::Input']]]
+  ['ea_302',['ea',['../structatrip_1_1Atrip_1_1Input.html#a849c4ef9544a5778bdbaf1d3fc2f80e1',1,'atrip::Atrip::Input']]],
+  ['ei_303',['ei',['../structatrip_1_1Atrip_1_1Input.html#a441685230239157725aaadc5167d2b1c',1,'atrip::Atrip::Input']]],
+  ['energy_304',['energy',['../structatrip_1_1Atrip_1_1Output.html#a4079f1fe4f534017ef2ec7fe661a1067',1,'atrip::Atrip::Output']]]
 ];

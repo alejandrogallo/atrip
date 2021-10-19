@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-18 Mon 09:06 -->
+<!-- 2021-10-19 Tue 11:59 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATRIP: An MPI-asynchronous implementation of CCSD(T)</title>
@@ -244,57 +244,57 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org7b1c3dd">1. Implementation</a>
+<li><a href="#org4aa11ee">1. Implementation</a>
 <ul>
-<li><a href="#orgfc74176">1.1. The slice</a>
+<li><a href="#org41d07d0">1.1. The slice</a>
 <ul>
-<li><a href="#org9159b1f">1.1.1. Introduction</a></li>
-<li><a href="#orgc455d56">1.1.2. Location</a></li>
-<li><a href="#org93cb348">1.1.3. Type</a></li>
-<li><a href="#org00734ce">1.1.4. State</a></li>
-<li><a href="#org11d5ddd">1.1.5. The Info structure</a></li>
-<li><a href="#org51fa05c">1.1.6. Name</a></li>
-<li><a href="#orgbab2d2f">1.1.7. Database</a></li>
-<li><a href="#orgae31c74">1.1.8. MPI Types</a></li>
-<li><a href="#orgfd42601">1.1.9. Static utilities</a></li>
-<li><a href="#org92c71ba">1.1.10. Attributes</a></li>
-<li><a href="#org82d497e">1.1.11. Member functions</a></li>
+<li><a href="#org91b2859">1.1.1. Introduction</a></li>
+<li><a href="#org728a8ce">1.1.2. Location</a></li>
+<li><a href="#org4219509">1.1.3. Type</a></li>
+<li><a href="#orgf86c184">1.1.4. State</a></li>
+<li><a href="#org3778048">1.1.5. The Info structure</a></li>
+<li><a href="#orgef92056">1.1.6. Name</a></li>
+<li><a href="#org0b3477d">1.1.7. Database</a></li>
+<li><a href="#org8652c53">1.1.8. MPI Types</a></li>
+<li><a href="#orgacf7da0">1.1.9. Static utilities</a></li>
+<li><a href="#orgddebbe6">1.1.10. Attributes</a></li>
+<li><a href="#org75ba315">1.1.11. Member functions</a></li>
 </ul>
 </li>
-<li><a href="#orgfd41fbc">1.2. Utils</a>
+<li><a href="#org576f8eb">1.2. Utils</a>
 <ul>
-<li><a href="#org9982edc">1.2.1. Pretty printing</a></li>
-<li><a href="#orgbdb9da5">1.2.2. Chrono</a></li>
+<li><a href="#orgde1b3af">1.2.1. Pretty printing</a></li>
+<li><a href="#org7bbb3f6">1.2.2. Chrono</a></li>
 </ul>
 </li>
-<li><a href="#org0108cba">1.3. The rank mapping</a></li>
-<li><a href="#org1a4b976">1.4. The slice union</a></li>
-<li><a href="#orgc4fabe7">1.5. Tuples</a>
+<li><a href="#org198cde1">1.3. The rank mapping</a></li>
+<li><a href="#orge444033">1.4. The slice union</a></li>
+<li><a href="#org64da6a7">1.5. Tuples</a>
 <ul>
-<li><a href="#org34f7ba3">1.5.1. Tuples types</a></li>
-<li><a href="#org0b4fe0b">1.5.2. Distributing the tuples</a></li>
-<li><a href="#org788de16">1.5.3. Naive list</a></li>
-<li><a href="#org018ea04">1.5.4. Group and sort list</a></li>
+<li><a href="#org9263cf7">1.5.1. Tuples types</a></li>
+<li><a href="#orgf0f9939">1.5.2. Distributing the tuples</a></li>
+<li><a href="#org2ccc818">1.5.3. Naive list</a></li>
+<li><a href="#orgeb84b0a">1.5.4. Group and sort list</a></li>
 </ul>
 </li>
-<li><a href="#orgf6283b0">1.6. Unions</a></li>
-<li><a href="#orge3cee09">1.7. Equations</a></li>
-<li><a href="#orgc59241b">1.8. Blas</a></li>
-<li><a href="#orgac6a185">1.9. Atrip</a>
+<li><a href="#org1d7f1d3">1.6. Unions</a></li>
+<li><a href="#org520b3f9">1.7. Equations</a></li>
+<li><a href="#orgc59fc55">1.8. Blas</a></li>
+<li><a href="#org9eb80c1">1.9. Atrip</a>
 <ul>
-<li><a href="#org4766c26">1.9.1. Main</a></li>
+<li><a href="#orga021960">1.9.1. Main</a></li>
 </ul>
 </li>
-<li><a href="#orgee601bb">1.10. Debug</a></li>
-<li><a href="#orgb6faa10">1.11. Include header</a></li>
+<li><a href="#orgc20bb21">1.10. Debug</a></li>
+<li><a href="#orgb442140">1.11. Include header</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org7b1c3dd" class="outline-2">
-<h2 id="org7b1c3dd"><span class="section-number-2">1</span> Implementation</h2>
+<div id="outline-container-org4aa11ee" class="outline-2">
+<h2 id="org4aa11ee"><span class="section-number-2">1</span> Implementation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The algorithm uses two main data types, the <code>Slice</code> and the
@@ -302,16 +302,16 @@ The algorithm uses two main data types, the <code>Slice</code> and the
 </p>
 </div>
 
-<div id="outline-container-orgfc74176" class="outline-3">
-<h3 id="orgfc74176"><span class="section-number-3">1.1</span> The slice</h3>
+<div id="outline-container-org41d07d0" class="outline-3">
+<h3 id="org41d07d0"><span class="section-number-3">1.1</span> The slice</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 The following section introduces the idea of a slice.
 </p>
 </div>
 
-<div id="outline-container-org9159b1f" class="outline-4">
-<h4 id="org9159b1f"><span class="section-number-4">1.1.1</span> Introduction</h4>
+<div id="outline-container-org91b2859" class="outline-4">
+<h4 id="org91b2859"><span class="section-number-4">1.1.1</span> Introduction</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 A slice is the concept of a subset of values of a given tensor.
@@ -327,8 +327,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-orgc455d56" class="outline-4">
-<h4 id="orgc455d56"><span class="section-number-4">1.1.2</span> Location</h4>
+<div id="outline-container-org728a8ce" class="outline-4">
+<h4 id="org728a8ce"><span class="section-number-4">1.1.2</span> Location</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Every slice set, for instance,
@@ -359,8 +359,8 @@ is therefore a simple structure:
 </div>
 </div>
 
-<div id="outline-container-org93cb348" class="outline-4">
-<h4 id="org93cb348"><span class="section-number-4">1.1.3</span> Type</h4>
+<div id="outline-container-org4219509" class="outline-4">
+<h4 id="org4219509"><span class="section-number-4">1.1.3</span> Type</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 Due to the permutation operators in the equations
@@ -421,8 +421,8 @@ a type which denotes which permutation it is.
 </div>
 </div>
 
-<div id="outline-container-org00734ce" class="outline-4">
-<h4 id="org00734ce"><span class="section-number-4">1.1.4</span> State</h4>
+<div id="outline-container-orgf86c184" class="outline-4">
+<h4 id="orgf86c184"><span class="section-number-4">1.1.4</span> State</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 Every slice can be in different states and every state
@@ -475,8 +475,8 @@ Again the implementation is a simple enum type.
 </div>
 </div>
 
-<div id="outline-container-org11d5ddd" class="outline-4">
-<h4 id="org11d5ddd"><span class="section-number-4">1.1.5</span> The Info structure</h4>
+<div id="outline-container-org3778048" class="outline-4">
+<h4 id="org3778048"><span class="section-number-4">1.1.5</span> The Info structure</h4>
 <div class="outline-text-4" id="text-1-1-5">
 <p>
 Every slice has an information structure associated with it
@@ -510,8 +510,8 @@ that keeps track of the <b><b>variable</b></b> type, state and so on.
 </div>
 </div>
 
-<div id="outline-container-org51fa05c" class="outline-4">
-<h4 id="org51fa05c"><span class="section-number-4">1.1.6</span> Name</h4>
+<div id="outline-container-orgef92056" class="outline-4">
+<h4 id="orgef92056"><span class="section-number-4">1.1.6</span> Name</h4>
 <div class="outline-text-4" id="text-1-1-6">
 <p>
 CCSD(T) needs in this algorithm 5 types of tensor slices,
@@ -540,8 +540,8 @@ and through two parameters for the hole contribution.
 </div>
 </div>
 
-<div id="outline-container-orgbab2d2f" class="outline-4">
-<h4 id="orgbab2d2f"><span class="section-number-4">1.1.7</span> Database</h4>
+<div id="outline-container-org0b3477d" class="outline-4">
+<h4 id="org0b3477d"><span class="section-number-4">1.1.7</span> Database</h4>
 <div class="outline-text-4" id="text-1-1-7">
 <p>
 The database is a simple representation of the slices of a slice union.
@@ -570,8 +570,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orgae31c74" class="outline-4">
-<h4 id="orgae31c74"><span class="section-number-4">1.1.8</span> MPI Types</h4>
+<div id="outline-container-org8652c53" class="outline-4">
+<h4 id="org8652c53"><span class="section-number-4">1.1.8</span> MPI Types</h4>
 <div class="outline-text-4" id="text-1-1-8">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
@@ -666,8 +666,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-orgfd42601" class="outline-4">
-<h4 id="orgfd42601"><span class="section-number-4">1.1.9</span> Static utilities</h4>
+<div id="outline-container-orgacf7da0" class="outline-4">
+<h4 id="orgacf7da0"><span class="section-number-4">1.1.9</span> Static utilities</h4>
 <div class="outline-text-4" id="text-1-1-9">
 <p>
 This section presents some functions which are useful to work with
@@ -857,8 +857,8 @@ given slice could not be found.
 </div>
 </div>
 
-<div id="outline-container-org92c71ba" class="outline-4">
-<h4 id="org92c71ba"><span class="section-number-4">1.1.10</span> Attributes</h4>
+<div id="outline-container-orgddebbe6" class="outline-4">
+<h4 id="orgddebbe6"><span class="section-number-4">1.1.10</span> Attributes</h4>
 <div class="outline-text-4" id="text-1-1-10">
 <p>
 A slice object does not own data, it is just a container
@@ -904,8 +904,8 @@ For practical purposes in MPI calls, the number of elements in <code>data</code>
 </div>
 </div>
 
-<div id="outline-container-org82d497e" class="outline-4">
-<h4 id="org82d497e"><span class="section-number-4">1.1.11</span> Member functions</h4>
+<div id="outline-container-org75ba315" class="outline-4">
+<h4 id="org75ba315"><span class="section-number-4">1.1.11</span> Member functions</h4>
 <div class="outline-text-4" id="text-1-1-11">
 <p>
 It is important to note that a ready slice should not be recycled from
@@ -1088,15 +1088,15 @@ can be unwrapped through MPI.</li>
 </div>
 </div>
 
-<div id="outline-container-orgfd41fbc" class="outline-3">
-<h3 id="orgfd41fbc"><span class="section-number-3">1.2</span> Utils</h3>
+<div id="outline-container-org576f8eb" class="outline-3">
+<h3 id="org576f8eb"><span class="section-number-3">1.2</span> Utils</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 This section presents some utilities
 </p>
 </div>
-<div id="outline-container-org9982edc" class="outline-4">
-<h4 id="org9982edc"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
+<div id="outline-container-orgde1b3af" class="outline-4">
+<h4 id="orgde1b3af"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-macro</a> package.
@@ -1117,8 +1117,8 @@ The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-
 </div>
 </div>
 
-<div id="outline-container-orgbdb9da5" class="outline-4">
-<h4 id="orgbdb9da5"><span class="section-number-4">1.2.2</span> Chrono</h4>
+<div id="outline-container-org7bbb3f6" class="outline-4">
+<h4 id="org7bbb3f6"><span class="section-number-4">1.2.2</span> Chrono</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 The chrono is just a simple wrapper for a high resolution clock
@@ -1149,8 +1149,8 @@ that can be found in the <code>std::chrono</code> namespace of the standard libr
 </div>
 </div>
 
-<div id="outline-container-org0108cba" class="outline-3">
-<h3 id="org0108cba"><span class="section-number-3">1.3</span> The rank mapping</h3>
+<div id="outline-container-org198cde1" class="outline-3">
+<h3 id="org198cde1"><span class="section-number-3">1.3</span> The rank mapping</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 This section introduces the concept of rank mapping,
@@ -1223,8 +1223,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-org1a4b976" class="outline-3">
-<h3 id="org1a4b976"><span class="section-number-3">1.4</span> The slice union</h3>
+<div id="outline-container-orge444033" class="outline-3">
+<h3 id="orge444033"><span class="section-number-3">1.4</span> The slice union</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1774,8 +1774,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-orgc4fabe7" class="outline-3">
-<h3 id="orgc4fabe7"><span class="section-number-3">1.5</span> Tuples</h3>
+<div id="outline-container-org64da6a7" class="outline-3">
+<h3 id="org64da6a7"><span class="section-number-3">1.5</span> Tuples</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 This section introduces the types for tuples \( (a,b,c) \)
@@ -1784,8 +1784,8 @@ as well as their distribution to nodes and cores.
 </div>
 
 
-<div id="outline-container-org34f7ba3" class="outline-4">
-<h4 id="org34f7ba3"><span class="section-number-4">1.5.1</span> Tuples types</h4>
+<div id="outline-container-org9263cf7" class="outline-4">
+<h4 id="org9263cf7"><span class="section-number-4">1.5.1</span> Tuples types</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <p>
 The main tuple types are simple type aliases for finite-size arrays.
@@ -1804,8 +1804,8 @@ whereas a partial tuple is a two dimensional subset of these three.
 </div>
 </div>
 
-<div id="outline-container-org0b4fe0b" class="outline-4">
-<h4 id="org0b4fe0b"><span class="section-number-4">1.5.2</span> Distributing the tuples</h4>
+<div id="outline-container-orgf0f9939" class="outline-4">
+<h4 id="orgf0f9939"><span class="section-number-4">1.5.2</span> Distributing the tuples</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <p>
 In general it is our task to distribute all the tuples
@@ -1830,8 +1830,8 @@ The interface that we propose for this is simplye
 
 
 
-<div id="outline-container-org788de16" class="outline-4">
-<h4 id="org788de16"><span class="section-number-4">1.5.3</span> Naive list</h4>
+<div id="outline-container-org2ccc818" class="outline-4">
+<h4 id="org2ccc818"><span class="section-number-4">1.5.3</span> Naive list</h4>
 <div class="outline-text-4" id="text-1-5-3">
 <p>
 The naive implementation of the global tuples list is simple
@@ -1902,10 +1902,16 @@ global list are given by the following function.
 
   <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">it</span> = n_tuples_per_rank.begin();
 
-  <span style="color: #a626a4;">return</span>
-    { <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank    , 0)
-    , <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank + 1, 0)
-    };
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="color: #c18401;">size_t</span>&gt; <span style="color: #a626a4;">const</span>
+    <span style="color: #8b4513;">range</span> = { <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank    , 0)
+            , <span style="font-weight: bold; text-decoration: underline;">std</span>::accumulate(it, it + rank + 1, 0) - 1
+            };
+
+  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"range = "</span>
+            &lt;&lt; range.first &lt;&lt; <span style="color: #50a14f;">" -&gt; "</span> &lt;&lt; range.second
+            &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
+
+  <span style="color: #a626a4;">return</span> range;
 
 }
 </pre>
@@ -1922,12 +1928,23 @@ With these two last functions we can easily define a tuple distribution like
     MPI_Comm_rank(universe, &amp;rank);
     MPI_Comm_size(universe, &amp;np);
     <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">all</span> = getTuplesList(Nv);
-    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">range</span> = getABCRange((<span style="color: #c18401;">size_t</span>)np, (<span style="color: #c18401;">size_t</span>)rank, all);
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span>
+      <span style="color: #8b4513;">tuplesPerRank</span>
+        = all.size() / np
+        + size_t(all.size() % np != 0)
+        ;
+    <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">auto const range = getABCRange((size_t)np, (size_t)rank, all);</span>
+
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">pair</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="color: #c18401;">size_t</span>&gt; <span style="color: #a626a4;">const</span>
+      <span style="color: #8b4513;">range</span> = { tuplesPerRank * rank
+              , tuplesPerRank * (rank + 1) - 1
+              };
+
     <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #8b4513;">result</span>(range.second - range.first, FAKE_TUPLE);
     <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(all.begin() + range.first,
               range.second &gt;= all.size()
-              ? all.end()
-              : all.begin() + range.first + range.second,
+                ? all.end()
+                : all.begin() + range.first + range.second,
               result.begin());
     <span style="color: #a626a4;">return</span> result;
   }
@@ -1938,12 +1955,12 @@ With these two last functions we can easily define a tuple distribution like
 </div>
 
 
-<div id="outline-container-org018ea04" class="outline-4">
-<h4 id="org018ea04"><span class="section-number-4">1.5.4</span> Group and sort list</h4>
+<div id="outline-container-orgeb84b0a" class="outline-4">
+<h4 id="orgeb84b0a"><span class="section-number-4">1.5.4</span> Group and sort list</h4>
 <div class="outline-text-4" id="text-1-5-4">
 </div>
 <ol class="org-ol">
-<li><a id="org6f18b65"></a>Node information<br />
+<li><a id="org6dff662"></a>Node information<br />
 <div class="outline-text-5" id="text-1-5-4-1">
 <dl class="org-dl">
 <dt>nodeList</dt><dd>List of hostnames of size \( N_n \)</dd>
@@ -2045,7 +2062,7 @@ number of nodes.
 </div>
 </li>
 
-<li><a id="org2cca789"></a>Utils<br />
+<li><a id="org5a3075f"></a>Utils<br />
 <div class="outline-text-5" id="text-1-5-4-2">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Provides the node on which the slice-element is found</span>
@@ -2081,7 +2098,7 @@ number of nodes.
 </div>
 </li>
 
-<li><a id="org2aa4ff2"></a>Distribution<br />
+<li><a id="org8316f9b"></a>Distribution<br />
 <div class="outline-text-5" id="text-1-5-4-3">
 <p>
 wording: home element = element which is located on the given node
@@ -2100,7 +2117,6 @@ wording: home element = element which is located on the given node
   <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nNodes</span>(info.nNodes);
   <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">np</span>(info.np);
   <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">N</span>(allTuples.size());
-  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">tuplePerNode</span>( ceil( ((<span style="color: #c18401;">double</span>)N) / nNodes) );
 
   <span style="color: #a0a1a7; font-weight: bold;">//      </span><span style="color: #a0a1a7;">nodeid          tuple list</span>
   <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">map</span>&lt;<span style="color: #c18401;">size_t</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; &gt; <span style="color: #8b4513;">container1d</span>;
@@ -2237,7 +2253,7 @@ wording: home element = element which is located on the given node
 </div>
 </li>
 
-<li><a id="org8aad689"></a>Main<br />
+<li><a id="org37d322a"></a>Main<br />
 <div class="outline-text-5" id="text-1-5-4-4">
 <p>
 The main routine should return the list of tuples to be handled by the current rank.
@@ -2252,7 +2268,7 @@ Let \( N_n \) be the number of nodes or sockets.
 Then we have the following
 </p>
 
-<pre class="example" id="org6240105">
+<pre class="example" id="org405d9a4">
 Global rank | 0 1 2 3 4 5 6 7 8
 nodeId      | 0 1 0 1 1 0 2 2 2
 Local rank  | 0 0 1 1 2 2 0 1 2
@@ -2470,7 +2486,7 @@ inserting fake tuples where needed
 </div>
 </li>
 
-<li><a id="orgc273900"></a>Interface<br />
+<li><a id="orgcb5d6aa"></a>Interface<br />
 <div class="outline-text-5" id="text-1-5-4-5">
 <p>
 The distribution interface will then simply be
@@ -2490,8 +2506,8 @@ The distribution interface will then simply be
 </div>
 </div>
 
-<div id="outline-container-orgf6283b0" class="outline-3">
-<h3 id="orgf6283b0"><span class="section-number-3">1.6</span> Unions</h3>
+<div id="outline-container-org1d7f1d3" class="outline-3">
+<h3 id="org1d7f1d3"><span class="section-number-3">1.6</span> Unions</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 Every slice pertaining to every different tensor
@@ -2739,8 +2755,8 @@ is sliced differently.
 </div>
 
 
-<div id="outline-container-orge3cee09" class="outline-3">
-<h3 id="orge3cee09"><span class="section-number-3">1.7</span> Equations</h3>
+<div id="outline-container-org520b3f9" class="outline-3">
+<h3 id="org520b3f9"><span class="section-number-3">1.7</span> Equations</h3>
 <div class="outline-text-3" id="text-1-7">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3083,8 +3099,8 @@ is sliced differently.
 </div>
 </div>
 
-<div id="outline-container-orgc59241b" class="outline-3">
-<h3 id="orgc59241b"><span class="section-number-3">1.8</span> Blas</h3>
+<div id="outline-container-orgc59fc55" class="outline-3">
+<h3 id="orgc59fc55"><span class="section-number-3">1.8</span> Blas</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 The main matrix-matrix multiplication method used in this algorithm
@@ -3117,8 +3133,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-orgac6a185" class="outline-3">
-<h3 id="orgac6a185"><span class="section-number-3">1.9</span> Atrip</h3>
+<div id="outline-container-org9eb80c1" class="outline-3">
+<h3 id="org9eb80c1"><span class="section-number-3">1.9</span> Atrip</h3>
 <div class="outline-text-3" id="text-1-9">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3128,6 +3144,13 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 <span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;chrono&gt;</span>
 
 <span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;ctf.hpp&gt;</span>
+
+<span style="color: #e44649;">#define</span> <span style="color: #0184bc;">ADD_ATTRIBUTE</span>(<span style="color: #8b4513;">_type</span>, <span style="color: #8b4513;">_name</span>, <span style="color: #8b4513;">_default</span>)   \
+  <span style="color: #c18401;">_type</span> <span style="color: #8b4513;">_name</span> = _default;                       \
+  <span style="color: #c18401;">Input</span>&amp; <span style="color: #8b4513;">with_</span> ## _name(<span style="color: #c18401;">_type</span> <span style="color: #8b4513;">i</span>) {              \
+    _name = i;                                  \
+    <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>;                               \
+  }
 
 <span style="color: #a626a4;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">atrip</span> {
 
@@ -3146,9 +3169,6 @@ is mainly using the <code>DGEMM</code> function, which we declare as
                         , *<span style="color: #8b4513;">Vhhhp</span> = <span style="font-weight: bold; text-decoration: underline;">nullptr</span>
                         , *<span style="color: #8b4513;">Vppph</span> = <span style="font-weight: bold; text-decoration: underline;">nullptr</span>
                         ;
-      <span style="color: #c18401;">int</span> <span style="color: #8b4513;">maxIterations</span> = 0, <span style="color: #8b4513;">iterationMod</span> = -1;
-      <span style="color: #c18401;">bool</span> <span style="color: #8b4513;">barrier</span> = <span style="font-weight: bold; text-decoration: underline;">false</span>;
-      <span style="color: #c18401;">bool</span> <span style="color: #8b4513;">chrono</span> = <span style="font-weight: bold; text-decoration: underline;">false</span>;
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_epsilon_i</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { ei = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_epsilon_a</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { ea = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_Tai</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { Tph = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
@@ -3156,10 +3176,19 @@ is mainly using the <code>DGEMM</code> function, which we declare as
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_Vabij</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { Vpphh = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_Vijka</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { Vhhhp = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
       <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_Vabci</span>(<span style="font-weight: bold; text-decoration: underline;">CTF</span>::<span style="color: #c18401;">Tensor</span>&lt;<span style="color: #c18401;">double</span>&gt; * <span style="color: #8b4513;">t</span>) { Vppph = t; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
-      <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_maxIterations</span>(<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span>) { maxIterations = i; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
-      <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_iterationMod</span>(<span style="color: #c18401;">int</span> <span style="color: #8b4513;">i</span>) { iterationMod = i; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
-      <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_barrier</span>(<span style="color: #c18401;">bool</span> <span style="color: #8b4513;">i</span>) { barrier = i; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
-      <span style="color: #c18401;">Input</span>&amp; <span style="color: #0184bc;">with_chrono</span>(<span style="color: #c18401;">bool</span> <span style="color: #8b4513;">i</span>) { chrono = i; <span style="color: #a626a4;">return</span> *<span style="color: #a626a4;">this</span>; }
+
+      <span style="color: #a626a4;">enum</span> <span style="color: #c18401;">TuplesDistribution</span> {
+        <span style="color: #8b4513;">NAIVE</span>,
+        <span style="color: #8b4513;">GROUP_AND_SORT</span>,
+      };
+
+      ADD_ATTRIBUTE(<span style="color: #c18401;">bool</span>, chrono, <span style="font-weight: bold; text-decoration: underline;">false</span>)
+      ADD_ATTRIBUTE(<span style="color: #c18401;">bool</span>, barrier, <span style="font-weight: bold; text-decoration: underline;">false</span>)
+      ADD_ATTRIBUTE(<span style="color: #c18401;">int</span>, maxIterations, 0)
+      ADD_ATTRIBUTE(<span style="color: #c18401;">int</span>, iterationMod, -1)
+      ADD_ATTRIBUTE(<span style="color: #c18401;">TuplesDistribution</span>, tuplesDistribution, NAIVE)
+
+
     };
 
     <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Output</span> {
@@ -3169,12 +3198,14 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   };
 
 }
+
+<span style="color: #e44649;">#undef</span> ADD_ATTRIBUTE
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org4766c26" class="outline-4">
-<h4 id="org4766c26"><span class="section-number-4">1.9.1</span> Main</h4>
+<div id="outline-container-orga021960" class="outline-4">
+<h4 id="orga021960"><span class="section-number-4">1.9.1</span> Main</h4>
 <div class="outline-text-4" id="text-1-9-1">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iomanip&gt;</span>
@@ -3261,36 +3292,36 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">all tensors</span>
   <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt; <span style="color: #c18401;">SliceUnion</span>* &gt; <span style="color: #8b4513;">unions</span> = {&amp;taphh, &amp;hhha, &amp;abph, &amp;abhh, &amp;tabhh};
 
-  <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">CONSTRUCT TUPLE LIST ==============================================={{{1</span>
-  LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILD TUPLE LIST\n"</span>;
-  <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">tuplesList</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::move(getTuplesList(Nv));
-  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"tupList.size() = "</span> &lt;&lt; tuplesList.size() &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">get tuples for the current rank</span>
+  <span style="color: #c18401;">TuplesDistribution</span> *<span style="color: #8b4513;">distribution</span>;
 
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">GET ABC INDEX RANGE FOR RANK ======================================{{{1</span>
-  <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">abcIndex</span> = getABCRange(np, rank, tuplesList);
-  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nIterations</span> = abcIndex.second - abcIndex.first;
-
-<span style="color: #e44649;">#ifdef</span> ATRIP_BENCHMARK
-  { <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">maxIterations</span> = in.maxIterations;
-    <span style="color: #a626a4;">if</span> (maxIterations != 0) {
-      abcIndex.second = abcIndex.first + maxIterations % (nIterations + 1);
-      nIterations = maxIterations % (nIterations + 1);
-    }
+  <span style="color: #a626a4;">if</span> (in.tuplesDistribution == <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::<span style="font-weight: bold; text-decoration: underline;">Input</span>::<span style="font-weight: bold; text-decoration: underline;">TuplesDistribution</span>::NAIVE) {
+    LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"Using the naive distribution\n"</span>;
+    distribution = <span style="color: #a626a4;">new</span> <span style="color: #c18401;">NaiveDistribution</span>();
+  } <span style="color: #a626a4;">else</span> {
+    LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"Using the group-and-sort distribution\n"</span>;
+    distribution = <span style="color: #a626a4;">new</span> <span style="font-weight: bold; text-decoration: underline;">group_and_sort</span>::<span style="color: #c18401;">Distribution</span>();
   }
-<span style="color: #e44649;">#endif</span>
 
-  WITH_RANK &lt;&lt; <span style="color: #50a14f;">"abcIndex = "</span> &lt;&lt; pretty_print(abcIndex) &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-  LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"#iterations: "</span> &lt;&lt; nIterations &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">first abc</span>
-  <span style="color: #a626a4;">const</span> <span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">firstAbc</span> = tuplesList[abcIndex.first];
-
-
-  <span style="color: #c18401;">double</span> <span style="color: #8b4513;">energy</span>(0.);
+  LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILDING TUPLE LIST\n"</span>;
+  WITH_CHRONO(chrono[<span style="color: #50a14f;">"tuples:build"</span>],
+    <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">tuplesList</span> = distribution-&gt;getTuples(Nv, universe);
+    )
+  <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nIterations</span> = tuplesList.size();
+  {
+    <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">_all_tuples</span> = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+    LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"#iterations: "</span>
+                  &lt;&lt; nIterations
+                  &lt;&lt; <span style="color: #50a14f;">"/"</span>
+                  &lt;&lt; _all_tuples
+                  &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+  }
 
 
   <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">isFakeTuple</span>
-    = [&amp;<span style="color: #8b4513;">tuplesList</span>](<span style="color: #c18401;">size_t</span> <span style="color: #a626a4;">const</span> <span style="color: #8b4513;">i</span>) { <span style="color: #a626a4;">return</span> i &gt;= tuplesList.size(); };
+    = [&amp;<span style="color: #8b4513;">tuplesList</span>, <span style="font-weight: bold; text-decoration: underline;">distribution</span>](<span style="color: #c18401;">size_t</span> <span style="color: #a626a4;">const</span> <span style="color: #8b4513;">i</span>) {
+      <span style="color: #a626a4;">return</span> distribution-&gt;tupleIsFake(tuplesList[i]);
+    };
 
 
   <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">communicateDatabase</span>
@@ -3433,10 +3464,10 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">START MAIN LOOP ======================================================{{{1</span>
 
-  <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Database</span> <span style="color: #8b4513;">db</span>;
+  <span style="color: #c18401;">double</span> <span style="color: #8b4513;">energy</span>(0.);
 
-  <span style="color: #a626a4;">for</span> ( <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = abcIndex.first, <span style="color: #8b4513;">iteration</span> = 1
-      ; i &lt; abcIndex.second
+  <span style="color: #a626a4;">for</span> ( <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 0, <span style="color: #8b4513;">iteration</span> = 1
+      ; i &lt; tuplesList.size()
       ; i++, iteration++
       ) {
     chrono[<span style="color: #50a14f;">"iterations"</span>].start();
@@ -3445,13 +3476,10 @@ is mainly using the <code>DGEMM</code> function, which we declare as
     chrono[<span style="color: #50a14f;">"start:stop"</span>].start(); chrono[<span style="color: #50a14f;">"start:stop"</span>].stop();
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">check overhead of doing a barrier at the beginning</span>
-    chrono[<span style="color: #50a14f;">"oneshot-mpi:barrier"</span>].start();
-    chrono[<span style="color: #50a14f;">"mpi:barrier"</span>].start();
-    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TODO: REMOVE</span>
-    <span style="color: #a626a4;">if</span> (in.barrier == 1)
-    MPI_Barrier(universe);
-    chrono[<span style="color: #50a14f;">"mpi:barrier"</span>].stop();
-    chrono[<span style="color: #50a14f;">"oneshot-mpi:barrier"</span>].stop();
+    WITH_CHRONO(chrono[<span style="color: #50a14f;">"oneshot-mpi:barrier"</span>],
+    WITH_CHRONO(chrono[<span style="color: #50a14f;">"mpi:barrier"</span>],
+      <span style="color: #a626a4;">if</span> (in.barrier) MPI_Barrier(universe);
+    ))
 
     <span style="color: #a626a4;">if</span> (iteration % in.iterationMod == 0) {
       LOG(0,<span style="color: #50a14f;">"Atrip"</span>)
@@ -3475,7 +3503,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
     <span style="color: #a626a4;">const</span> <span style="color: #c18401;">ABCTuple</span> <span style="color: #8b4513;">abc</span> = isFakeTuple(i)
                        ? tuplesList[tuplesList.size() - 1]
                        : tuplesList[i]
-                 , *<span style="color: #8b4513;">abcNext</span> = i == (abcIndex.second - 1)
+                 , *<span style="color: #8b4513;">abcNext</span> = i == (tuplesList.size() - 1)
                             ? <span style="font-weight: bold; text-decoration: underline;">nullptr</span>
                             : isFakeTuple(i + 1)
                             ? &amp;tuplesList[tuplesList.size() - 1]
@@ -3492,12 +3520,12 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">COMM FIRST DATABASE ================================================{{{1</span>
-    <span style="color: #a626a4;">if</span> (i == abcIndex.first) {
+    <span style="color: #a626a4;">if</span> (i == 0) {
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__:first database ............ \n"</span>;
-      <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">__db</span> = communicateDatabase(abc, universe);
+      <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">db</span> = communicateDatabase(abc, universe);
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__:first database communicated \n"</span>;
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__:first database io phase \n"</span>;
-      doIOPhase(__db);
+      doIOPhase(db);
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__:first database io phase DONE\n"</span>;
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__::::Unwrapping all slices for first database\n"</span>;
       <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">u</span>: unions) u-&gt;unwrapAll(abc);
@@ -3509,8 +3537,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
     <span style="color: #a626a4;">if</span> (abcNext) {
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__comm__:"</span> &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"th communicating database\n"</span>;
       chrono[<span style="color: #50a14f;">"db:comm"</span>].start();
-      <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">const auto db = communicateDatabase(*abcNext, universe);</span>
-      db = communicateDatabase(*abcNext, universe);
+      <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">db</span> = communicateDatabase(*abcNext, universe);
       chrono[<span style="color: #50a14f;">"db:comm"</span>].stop();
       chrono[<span style="color: #50a14f;">"db:io"</span>].start();
       doIOPhase(db);
@@ -3725,19 +3752,24 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 
 
-<div id="outline-container-orgee601bb" class="outline-3">
-<h3 id="orgee601bb"><span class="section-number-3">1.10</span> Debug</h3>
+<div id="outline-container-orgc20bb21" class="outline-3">
+<h3 id="orgc20bb21"><span class="section-number-3">1.10</span> Debug</h3>
 <div class="outline-text-3" id="text-1-10">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
 <span style="color: #e44649;">#define</span> <span style="color: #8b4513;">ATRIP_BENCHMARK</span>
 <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">#define ATRIP_DONT_SLICE</span>
-<span style="color: #e44649;">#define</span> <span style="color: #8b4513;">ATRIP_DEBUG</span> 1
 <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">#define ATRIP_WORKLOAD_DUMP</span>
 <span style="color: #e44649;">#define</span> <span style="color: #8b4513;">ATRIP_USE_DGEMM</span>
 <span style="color: #a0a1a7; font-weight: bold;">//</span><span style="color: #a0a1a7;">#define ATRIP_PRINT_TUPLES</span>
 
+<span style="color: #e44649;">#if</span><span style="color: #e44649; font-weight: bold;">n</span><span style="color: #e44649;">def</span> ATRIP_DEBUG
+<span style="color: #e44649;">#define</span> <span style="color: #8b4513;">ATRIP_DEBUG</span> 1
+<span style="color: #e44649;">#endif</span>
+
+<span style="color: #e44649;">#if</span><span style="color: #e44649; font-weight: bold;">n</span><span style="color: #e44649;">def</span> LOG
 <span style="color: #e44649;">#define</span> <span style="color: #0184bc;">LOG</span>(<span style="color: #8b4513;">level</span>, <span style="color: #8b4513;">name</span>) <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank == 0) <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; name &lt;&lt; <span style="color: #50a14f;">": "</span>
+<span style="color: #e44649;">#endif</span>
 
 <span style="color: #e44649;">#if</span> ATRIP_DEBUG == 4
 <span style="color: #e44649;">#  pragma</span> message(<span style="color: #50a14f;">"WARNING: You have OCD debugging ABC triples "</span>\
@@ -3775,7 +3807,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_CRAZY_DEBUG</span> <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">false</span>)
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_DBG</span>
 <span style="color: #e44649;">#  define</span> <span style="color: #0184bc;">DBG</span>(...) dbg(__VA_ARGS__)
-<span style="color: #e44649;">#elif</span> ATRIP_DEBUG == 1
+<span style="color: #e44649;">#else</span>
 <span style="color: #e44649;">#  define</span> <span style="color: #0184bc;">OCD_Barrier</span>(<span style="color: #8b4513;">com</span>)
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_OCD</span> <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">false</span>)
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_ROOT</span> <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">false</span>)
@@ -3784,16 +3816,14 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_DBG</span> <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">false</span>)
 <span style="color: #e44649;">#  define</span> <span style="color: #8b4513;">WITH_CRAZY_DEBUG</span> <span style="color: #a626a4;">if</span> (<span style="font-weight: bold; text-decoration: underline;">false</span>)
 <span style="color: #e44649;">#  define</span> <span style="color: #0184bc;">DBG</span>(...)
-<span style="color: #e44649;">#else</span>
-<span style="color: #e44649;">#  error</span>(<span style="color: #50a14f;">"ATRIP_DEBUG is not defined!"</span>)
 <span style="color: #e44649;">#endif</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgb6faa10" class="outline-3">
-<h3 id="orgb6faa10"><span class="section-number-3">1.11</span> Include header</h3>
+<div id="outline-container-orgb442140" class="outline-3">
+<h3 id="orgb442140"><span class="section-number-3">1.11</span> Include header</h3>
 <div class="outline-text-3" id="text-1-11">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3807,7 +3837,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-10-18 Mon 09:06</p>
+<p class="date">Created: 2021-10-19 Tue 11:59</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

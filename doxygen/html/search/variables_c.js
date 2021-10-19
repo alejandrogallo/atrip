@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['size_334',['size',['../structatrip_1_1RankMap.html#a8b5898d4f8f5a5519ed13d8e631ccf07',1,'atrip::RankMap::size()'],['../structatrip_1_1Slice.html#a176a598e21988241c97b3739aad77711',1,'atrip::Slice::size()']]],
-  ['slicebuffers_335',['sliceBuffers',['../structatrip_1_1SliceUnion.html#ad420685484d6037ae189093d4d5a5b05',1,'atrip::SliceUnion']]],
-  ['slicelength_336',['sliceLength',['../structatrip_1_1SliceUnion.html#a218f0eb3998f0b3520c69e82f5fa34c8',1,'atrip::SliceUnion']]],
-  ['slices_337',['slices',['../structatrip_1_1SliceUnion.html#a1033b20f6aba196cc398f46067d4054b',1,'atrip::SliceUnion']]],
-  ['slicetypes_338',['sliceTypes',['../structatrip_1_1SliceUnion.html#afb29c3508657ef38173589050857c9ec',1,'atrip::SliceUnion']]],
-  ['source_339',['source',['../structatrip_1_1Slice_1_1Location.html#a21d64c651b21553ac6b2fa572e531d66',1,'atrip::Slice::Location']]],
-  ['sources_340',['sources',['../structatrip_1_1SliceUnion.html#a3c6f6d15a63e78907a52505538c4c416',1,'atrip::SliceUnion']]],
-  ['state_341',['state',['../structatrip_1_1Slice_1_1Info.html#a00c2cbc2af5f8e46fbfd92d99a3e48ed',1,'atrip::Slice::Info']]]
+  ['vhhhp_335',['Vhhhp',['../structatrip_1_1Atrip_1_1Input.html#a62185620c33376a94cc4a886410280a0',1,'atrip::Atrip::Input']]],
+  ['vpphh_336',['Vpphh',['../structatrip_1_1Atrip_1_1Input.html#a6560a5bcfb838c626f78c1ce5f37f5a4',1,'atrip::Atrip::Input']]],
+  ['vppph_337',['Vppph',['../structatrip_1_1Atrip_1_1Input.html#a3b13e1e3a2ddd935c8cf0d1cc1a8a948',1,'atrip::Atrip::Input']]]
 ];

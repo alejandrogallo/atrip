@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('Atrip_8hpp.html',''); initResizable();
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">Atrip.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -109,7 +110,52 @@ Classes</h2></td></tr>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceatrip"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html">atrip</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a7c54062058578cbb65a776629621b5cb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Atrip_8hpp.html#a7c54062058578cbb65a776629621b5cb">ADD_ATTRIBUTE</a>(_type,  _name,  _default)</td></tr>
+<tr class="separator:a7c54062058578cbb65a776629621b5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a7c54062058578cbb65a776629621b5cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c54062058578cbb65a776629621b5cb">&#9670;&nbsp;</a></span>ADD_ATTRIBUTE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADD_ATTRIBUTE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_type, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_default&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  _type _name = _default;                       \</div>
+<div class="line">  Input&amp; with_ ## _name(_type i) {              \</div>
+<div class="line">    _name = i;                                  \</div>
+<div class="line">    return *<span class="keyword">this</span>;                               \</div>
+<div class="line">  }</div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
