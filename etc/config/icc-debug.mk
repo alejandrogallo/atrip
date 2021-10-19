@@ -6,13 +6,14 @@ bench: static
 
 CTF_CONFIG_FLAGS = CXX=$(CXX) \
                    CXXFLAGS="-O3" \
+                   LIBS="-lmkl" \
                    --no-dynamic
 
 CXXFLAGS += -I$(ATRIP_ROOT)/include
 
 CXXFLAGS += -I$(CTF_INCLUDE_PATH)
 CXXFLAGS += -fPIC
-CXXFLAGS += -O3
+CXXFLAGS += -g -O0
 
 MKL_LIB = -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64
 LDFLAGS += -qopenmp -mkl

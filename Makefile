@@ -64,7 +64,11 @@ clean-emacs:
 
 clean: CLEANING=yes
 clean:
-	-rm -v $(OBJ_FILES) $(DEP_FILES)
+	-rm -v \
+		$(OBJ_FILES) \
+		$(DEP_FILES) \
+		$(ATRIP_SHARED_LIBRARY) \
+		$(ATRIP_STATIC_LIBRARY)
 
 clean-all: CLEANING=yes
 clean-all: bench-clean clean-emacs clean clean-extern
@@ -102,4 +106,5 @@ html: $(HTML_MAIN)
 
 .PHONY: dbg
 dbg: include/dbg.h
-	wget https://raw.githubusercontent.com/sharkdp/dbg-macro/master/dbg.h -O $<
+include/dbg.h:
+	wget -O $@ "https://raw.githubusercontent.com/sharkdp/dbg-macro/master/dbg.h"
