@@ -1,7 +1,7 @@
 #include <iostream>
 #include <atrip.hpp>
 #include <ctf.hpp>
-#include <bench/hauta.h>
+#include <bench/CLI11.hpp>
 
 #define _print_size(what, size)                 \
   if (rank == 0) {                              \
@@ -14,20 +14,25 @@
 
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
+
+  int no(10), nv(10), itMod(100);
+  bool nochrono(false), barrier(false);
+  std::string tuplesDistributionString = "naive";
+
+  CLI::App app{"Main bench for atrip"};
+  app.add_option("--no", no, "Occupied orbitals");
+  app.add_option("--nv", nv, "Virtual orbitals");
+  app.add_flag("--nochrono", nochrono, "Do not print chrono");
+  app.add_flag("--barrier", barrier, "Use the first barrier");
+  app.add_option("--dist", tuplesDistributionString, "Which distribution");
+
+  CLI11_PARSE(app, argc, argv);
+
   CTF::World world(argc, argv);
   int rank;
   MPI_Comm_rank(world.comm, &rank);
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
-  const int no(hauta::option<int>(argc, argv, "--no"))
-          , nv(hauta::option<int>(argc, argv, "--nv"))
-          , itMod(hauta::option<int>(argc, argv, "--mod", 100))
-          ;
 
-  const bool nochrono(hauta::option<bool>(argc, argv, "--nochrono", false))
-           , barrier(hauta::option<bool>(argc, argv, "--barrier", false))
-           ;
-  const std::string tuplesDistributionString
-    = hauta::option<std::string>(argc, argv, "--dist", "naive");
 
   atrip::Atrip::Input::TuplesDistribution tuplesDistribution;
   { using atrip::Atrip;
