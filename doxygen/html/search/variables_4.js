@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['globalrank_308',['globalRank',['../structatrip_1_1group__and__sort_1_1RankInfo.html#af48657fadac71c11a341fba3a74596d8',1,'atrip::group_and_sort::RankInfo']]]
+  ['fake_5ftuple_307',['FAKE_TUPLE',['../namespaceatrip.html#a341e9614e55178a8e9537898f42ac636',1,'atrip']]],
+  ['freepointers_308',['freePointers',['../structatrip_1_1SliceUnion.html#ac43ec4851707ab5634e4aa884b304e3c',1,'atrip::SliceUnion']]],
+  ['from_309',['from',['../structatrip_1_1Slice_1_1Info.html#a906035d29bf27d99bfe45c6ce71428b8',1,'atrip::Slice::Info']]]
 ];

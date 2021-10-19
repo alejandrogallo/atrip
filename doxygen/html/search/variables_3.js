@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['fake_5ftuple_305',['FAKE_TUPLE',['../namespaceatrip.html#a341e9614e55178a8e9537898f42ac636',1,'atrip']]],
-  ['freepointers_306',['freePointers',['../structatrip_1_1SliceUnion.html#ac43ec4851707ab5634e4aa884b304e3c',1,'atrip::SliceUnion']]],
-  ['from_307',['from',['../structatrip_1_1Slice_1_1Info.html#a906035d29bf27d99bfe45c6ce71428b8',1,'atrip::Slice::Info']]]
+  ['ea_304',['ea',['../structatrip_1_1Atrip_1_1Input.html#a849c4ef9544a5778bdbaf1d3fc2f80e1',1,'atrip::Atrip::Input']]],
+  ['ei_305',['ei',['../structatrip_1_1Atrip_1_1Input.html#a441685230239157725aaadc5167d2b1c',1,'atrip::Atrip::Input']]],
+  ['energy_306',['energy',['../structatrip_1_1Atrip_1_1Output.html#a4079f1fe4f534017ef2ec7fe661a1067',1,'atrip::Atrip::Output']]]
 ];

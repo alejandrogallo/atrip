@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['lengths_310',['lengths',['../structatrip_1_1RankMap.html#ac66b2d259ab7cf899f66772f2d54cea3',1,'atrip::RankMap']]],
-  ['localrank_311',['localRank',['../structatrip_1_1group__and__sort_1_1RankInfo.html#a16c22cbabd0f29c80d965df5e1276a7f',1,'atrip::group_and_sort::RankInfo']]]
+  ['info_311',['info',['../structatrip_1_1Slice_1_1LocalDatabaseElement.html#a598e830b2a3e87823b9861fb5ae45ac6',1,'atrip::Slice::LocalDatabaseElement::info()'],['../structatrip_1_1Slice.html#ad3e724a8e6040f1b4423da1da754d5cb',1,'atrip::Slice::info()']]]
 ];
