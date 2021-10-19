@@ -20,8 +20,26 @@ int main(int argc, char** argv) {
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
   const int no(hauta::option<int>(argc, argv, "--no"))
           , nv(hauta::option<int>(argc, argv, "--nv"))
+          , itMod(hauta::option<int>(argc, argv, "--mod", 100))
           ;
 
+  const bool nochrono(hauta::option<bool>(argc, argv, "--nochrono", false))
+           , barrier(hauta::option<bool>(argc, argv, "--barrier", false))
+           ;
+  const std::string tuplesDistributionString
+    = hauta::option<std::string>(argc, argv, "--dist", "naive");
+
+  atrip::Atrip::Input::TuplesDistribution tuplesDistribution;
+  { using atrip::Atrip;
+    if (tuplesDistributionString == "naive") {
+      tuplesDistribution = Atrip::Input::TuplesDistribution::NAIVE;
+    } else if (tuplesDistributionString == "group") {
+      tuplesDistribution = Atrip::Input::TuplesDistribution::GROUP_AND_SORT;
+    } else {
+      std::cout << "--dist should be either naive or group\n";
+      exit(1);
+    }
+  }
 
   std::vector<int> symmetries(4, NS)
                  , vo({nv, no})
@@ -53,9 +71,7 @@ int main(int argc, char** argv) {
   Vppph.fill_random(0, 1);
 
   atrip::Atrip::init();
-  atrip::Atrip::Input in;
-
-  in
+  const auto in = atrip::Atrip::Input()
     // Tensors
     .with_epsilon_i(&ei)
     .with_epsilon_a(&ea)
@@ -65,8 +81,10 @@ int main(int argc, char** argv) {
     .with_Vijka(&Vhhhp)
     .with_Vabci(&Vppph)
     // some options
-    .with_barrier(false)
-    .with_iterationMod(100)
+    .with_barrier(barrier)
+    .with_chrono(!nochrono)
+    .with_iterationMod(itMod)
+    .with_tuplesDistribution(tuplesDistribution)
     ;
 
   auto out = atrip::Atrip::run(in);

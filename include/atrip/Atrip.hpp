@@ -7,6 +7,13 @@
 
 #include <ctf.hpp>
 
+#define ADD_ATTRIBUTE(_type, _name, _default)   \
+  _type _name = _default;                       \
+  Input& with_ ## _name(_type i) {              \
+    _name = i;                                  \
+    return *this;                               \
+  }
+
 namespace atrip {
 
   struct Atrip {
@@ -24,9 +31,6 @@ namespace atrip {
                         , *Vhhhp = nullptr
                         , *Vppph = nullptr
                         ;
-      int maxIterations = 0, iterationMod = -1;
-      bool barrier = false;
-      bool chrono = false;
       Input& with_epsilon_i(CTF::Tensor<double> * t) { ei = t; return *this; }
       Input& with_epsilon_a(CTF::Tensor<double> * t) { ea = t; return *this; }
       Input& with_Tai(CTF::Tensor<double> * t) { Tph = t; return *this; }
@@ -34,10 +38,19 @@ namespace atrip {
       Input& with_Vabij(CTF::Tensor<double> * t) { Vpphh = t; return *this; }
       Input& with_Vijka(CTF::Tensor<double> * t) { Vhhhp = t; return *this; }
       Input& with_Vabci(CTF::Tensor<double> * t) { Vppph = t; return *this; }
-      Input& with_maxIterations(int i) { maxIterations = i; return *this; }
-      Input& with_iterationMod(int i) { iterationMod = i; return *this; }
-      Input& with_barrier(bool i) { barrier = i; return *this; }
-      Input& with_chrono(bool i) { chrono = i; return *this; }
+
+      enum TuplesDistribution {
+        NAIVE,
+        GROUP_AND_SORT,
+      };
+
+      ADD_ATTRIBUTE(bool, chrono, false)
+      ADD_ATTRIBUTE(bool, barrier, false)
+      ADD_ATTRIBUTE(int, maxIterations, 0)
+      ADD_ATTRIBUTE(int, iterationMod, -1)
+      ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
+
+
     };
 
     struct Output {
@@ -47,4 +60,6 @@ namespace atrip {
   };
 
 }
+
+#undef ADD_ATTRIBUTE
 // Atrip:1 ends here

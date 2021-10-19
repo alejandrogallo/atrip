@@ -2,12 +2,17 @@
 #pragma once
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
-#define ATRIP_DEBUG 1
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM
 //#define ATRIP_PRINT_TUPLES
 
+#ifndef ATRIP_DEBUG
+#define ATRIP_DEBUG 1
+#endif
+
+#ifndef LOG
 #define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
+#endif
 
 #if ATRIP_DEBUG == 4
 #  pragma message("WARNING: You have OCD debugging ABC triples "\
@@ -45,7 +50,7 @@
 #  define WITH_CRAZY_DEBUG if (false)
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
-#elif ATRIP_DEBUG == 1
+#else
 #  define OCD_Barrier(com)
 #  define WITH_OCD if (false)
 #  define WITH_ROOT if (false)
@@ -54,7 +59,5 @@
 #  define WITH_DBG if (false)
 #  define WITH_CRAZY_DEBUG if (false)
 #  define DBG(...)
-#else
-#  error("ATRIP_DEBUG is not defined!")
 #endif
 // Debug:1 ends here

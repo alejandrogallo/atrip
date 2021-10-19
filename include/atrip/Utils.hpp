@@ -6,6 +6,7 @@
 #include <chrono>
 
 #include <ctf.hpp>
+#include <atrip/Debug.hpp>
 
 namespace atrip {
 // Prolog:1 ends here

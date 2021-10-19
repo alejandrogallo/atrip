@@ -77,10 +77,16 @@ getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
 
   auto const& it = n_tuples_per_rank.begin();
 
-  return
-    { std::accumulate(it, it + rank    , 0)
-    , std::accumulate(it, it + rank + 1, 0)
-    };
+  std::pair<size_t, size_t> const
+    range = { std::accumulate(it, it + rank    , 0)
+            , std::accumulate(it, it + rank + 1, 0) - 1
+            };
+
+  WITH_RANK << "range = "
+            << range.first << " -> " << range.second
+            << std::endl;
+
+  return range;
 
 }
 // Naive list:2 ends here
@@ -92,12 +98,23 @@ struct NaiveDistribution : public TuplesDistribution {
     MPI_Comm_rank(universe, &rank);
     MPI_Comm_size(universe, &np);
     auto const all = getTuplesList(Nv);
-    auto const range = getABCRange((size_t)np, (size_t)rank, all);
+    const size_t
+      tuplesPerRank
+        = all.size() / np
+        + size_t(all.size() % np != 0)
+        ;
+    //auto const range = getABCRange((size_t)np, (size_t)rank, all);
+
+    std::pair<size_t, size_t> const
+      range = { tuplesPerRank * rank
+              , tuplesPerRank * (rank + 1) - 1
+              };
+
     std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
     std::copy(all.begin() + range.first,
               range.second >= all.size()
-              ? all.end()
-              : all.begin() + range.first + range.second,
+                ? all.end()
+                : all.begin() + range.first + range.second,
               result.begin());
     return result;
   }
@@ -226,7 +243,6 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
   size_t nNodes(info.nNodes);
   size_t np(info.np);
   size_t N(allTuples.size());
-  size_t tuplePerNode( ceil( ((double)N) / nNodes) );
 
   //      nodeid          tuple list
   std::map<size_t, std::vector<ABCTuple> > container1d;

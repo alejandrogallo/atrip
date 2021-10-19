@@ -83,36 +83,36 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   // all tensors
   std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
-  //CONSTRUCT TUPLE LIST ==============================================={{{1
-  LOG(0,"Atrip") << "BUILD TUPLE LIST\n";
-  const auto tuplesList = std::move(getTuplesList(Nv));
-  WITH_RANK << "tupList.size() = " << tuplesList.size() << "\n";
+  // get tuples for the current rank
+  TuplesDistribution *distribution;
 
-  // GET ABC INDEX RANGE FOR RANK ======================================{{{1
-  auto abcIndex = getABCRange(np, rank, tuplesList);
-  size_t nIterations = abcIndex.second - abcIndex.first;
-
-#ifdef ATRIP_BENCHMARK
-  { const size_t maxIterations = in.maxIterations;
-    if (maxIterations != 0) {
-      abcIndex.second = abcIndex.first + maxIterations % (nIterations + 1);
-      nIterations = maxIterations % (nIterations + 1);
-    }
+  if (in.tuplesDistribution == Atrip::Input::TuplesDistribution::NAIVE) {
+    LOG(0,"Atrip") << "Using the naive distribution\n";
+    distribution = new NaiveDistribution();
+  } else {
+    LOG(0,"Atrip") << "Using the group-and-sort distribution\n";
+    distribution = new group_and_sort::Distribution();
   }
-#endif
 
-  WITH_RANK << "abcIndex = " << pretty_print(abcIndex) << "\n";
-  LOG(0,"Atrip") << "#iterations: " << nIterations << "\n";
-
-  // first abc
-  const ABCTuple firstAbc = tuplesList[abcIndex.first];
-
-
-  double energy(0.);
+  LOG(0,"Atrip") << "BUILDING TUPLE LIST\n";
+  WITH_CHRONO(chrono["tuples:build"],
+    auto const tuplesList = distribution->getTuples(Nv, universe);
+    )
+  size_t nIterations = tuplesList.size();
+  {
+    const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+    LOG(0,"Atrip") << "#iterations: "
+                  << nIterations
+                  << "/"
+                  << _all_tuples
+                  << "\n";
+  }
 
 
   auto const isFakeTuple
-    = [&tuplesList](size_t const i) { return i >= tuplesList.size(); };
+    = [&tuplesList, distribution](size_t const i) {
+      return distribution->tupleIsFake(tuplesList[i]);
+    };
 
 
   auto communicateDatabase
@@ -255,10 +255,10 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   // START MAIN LOOP ======================================================{{{1
 
-  Slice::Database db;
+  double energy(0.);
 
-  for ( size_t i = abcIndex.first, iteration = 1
-      ; i < abcIndex.second
+  for ( size_t i = 0, iteration = 1
+      ; i < tuplesList.size()
       ; i++, iteration++
       ) {
     chrono["iterations"].start();
@@ -267,13 +267,10 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     chrono["start:stop"].start(); chrono["start:stop"].stop();
 
     // check overhead of doing a barrier at the beginning
-    chrono["oneshot-mpi:barrier"].start();
-    chrono["mpi:barrier"].start();
-    // TODO: REMOVE
-    if (in.barrier == 1)
-    MPI_Barrier(universe);
-    chrono["mpi:barrier"].stop();
-    chrono["oneshot-mpi:barrier"].stop();
+    WITH_CHRONO(chrono["oneshot-mpi:barrier"],
+    WITH_CHRONO(chrono["mpi:barrier"],
+      if (in.barrier) MPI_Barrier(universe);
+    ))
 
     if (iteration % in.iterationMod == 0) {
       LOG(0,"Atrip")
@@ -297,7 +294,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     const ABCTuple abc = isFakeTuple(i)
                        ? tuplesList[tuplesList.size() - 1]
                        : tuplesList[i]
-                 , *abcNext = i == (abcIndex.second - 1)
+                 , *abcNext = i == (tuplesList.size() - 1)
                             ? nullptr
                             : isFakeTuple(i + 1)
                             ? &tuplesList[tuplesList.size() - 1]
@@ -314,12 +311,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
 
     // COMM FIRST DATABASE ================================================{{{1
-    if (i == abcIndex.first) {
+    if (i == 0) {
       WITH_RANK << "__first__:first database ............ \n";
-      const auto __db = communicateDatabase(abc, universe);
+      const auto db = communicateDatabase(abc, universe);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
-      doIOPhase(__db);
+      doIOPhase(db);
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto& u: unions) u->unwrapAll(abc);
@@ -331,8 +328,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     if (abcNext) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       chrono["db:comm"].start();
-      //const auto db = communicateDatabase(*abcNext, universe);
-      db = communicateDatabase(*abcNext, universe);
+      const auto db = communicateDatabase(*abcNext, universe);
       chrono["db:comm"].stop();
       chrono["db:io"].start();
       doIOPhase(db);
