@@ -407,7 +407,7 @@ static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
                       });
     WITH_CRAZY_DEBUG
     WITH_RANK
-      << "\t__ looking for " << type << "\n";
+      << "__slice__:find:looking for " << type << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error("Slice by type not found!");
     return *sliceIt;
@@ -1546,6 +1546,10 @@ struct NaiveDistribution : public TuplesDistribution {
               , tuplesPerRank * (rank + 1) - 1
               };
 
+    WITH_RANK << "range = "
+              << range.first << " -> " << range.second
+              << std::endl;
+
     std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
     std::copy(all.begin() + range.first,
               range.second >= all.size()
@@ -2682,9 +2686,10 @@ namespace atrip {
 #include <sstream>
 #include <string>
 #include <map>
-#include <chrono>
 
 #include <ctf.hpp>
+
+#include <atrip/Utils.hpp>
 
 #define ADD_ATTRIBUTE(_type, _name, _default)   \
   _type _name = _default;                       \
@@ -2699,6 +2704,7 @@ namespace atrip {
 
     static int rank;
     static int np;
+    static Timings chrono;
     static void init();
 
     struct Input {
@@ -2758,6 +2764,7 @@ using namespace atrip;
 
 int Atrip::rank;
 int Atrip::np;
+Timings Atrip::chrono;
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);

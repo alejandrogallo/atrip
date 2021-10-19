@@ -229,7 +229,7 @@ static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
                       });
     WITH_CRAZY_DEBUG
     WITH_RANK
-      << "\t__ looking for " << type << "\n";
+      << "__slice__:find:looking for " << type << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error("Slice by type not found!");
     return *sliceIt;

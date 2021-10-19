@@ -3,9 +3,10 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include <chrono>
 
 #include <ctf.hpp>
+
+#include <atrip/Utils.hpp>
 
 #define ADD_ATTRIBUTE(_type, _name, _default)   \
   _type _name = _default;                       \
@@ -20,6 +21,7 @@ namespace atrip {
 
     static int rank;
     static int np;
+    static Timings chrono;
     static void init();
 
     struct Input {

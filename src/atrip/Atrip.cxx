@@ -11,6 +11,7 @@ using namespace atrip;
 
 int Atrip::rank;
 int Atrip::np;
+Timings Atrip::chrono;
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);

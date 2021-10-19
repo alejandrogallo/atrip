@@ -110,6 +110,10 @@ struct NaiveDistribution : public TuplesDistribution {
               , tuplesPerRank * (rank + 1) - 1
               };
 
+    WITH_RANK << "range = "
+              << range.first << " -> " << range.second
+              << std::endl;
+
     std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
     std::copy(all.begin() + range.first,
               range.second >= all.size()

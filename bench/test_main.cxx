@@ -1,6 +1,11 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvla"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#include <ctf.hpp>
+#pragma GCC diagnostic pop
+
 #include <iostream>
 #include <atrip.hpp>
-#include <ctf.hpp>
 #include <bench/CLI11.hpp>
 
 #define _print_size(what, size)                 \
@@ -22,6 +27,7 @@ int main(int argc, char** argv) {
   CLI::App app{"Main bench for atrip"};
   app.add_option("--no", no, "Occupied orbitals");
   app.add_option("--nv", nv, "Virtual orbitals");
+  app.add_option("--mod", itMod, "Iteration modifier");
   app.add_flag("--nochrono", nochrono, "Do not print chrono");
   app.add_flag("--barrier", barrier, "Use the first barrier");
   app.add_option("--dist", tuplesDistributionString, "Which distribution");
