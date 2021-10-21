@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 #include <iostream>
 #include <algorithm>
@@ -16,11 +16,11 @@ struct Slice {
   using F = double;
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::*Location][Location:1]]
+// [[file:~/atrip/atrip.org::*Location][Location:1]]
 struct Location { size_t rank; size_t source; };
 // Location:1 ends here
 
-// [[file:../../atrip.org::*Type][Type:1]]
+// [[file:~/atrip/atrip.org::*Type][Type:1]]
 enum Type
   { A = 10
   , B
@@ -38,7 +38,7 @@ enum Type
   };
 // Type:1 ends here
 
-// [[file:../../atrip.org::*State][State:1]]
+// [[file:~/atrip/atrip.org::*State][State:1]]
 enum State {
   Fetch = 0,
   Dispatched = 2,
@@ -49,7 +49,7 @@ enum State {
 };
 // State:1 ends here
 
-// [[file:../../atrip.org::*The Info structure][The Info structure:1]]
+// [[file:~/atrip/atrip.org::*The%20Info%20structure][The Info structure:1]]
 struct Info {
   // which part of a,b,c the slice holds
   PartialTuple tuple;
@@ -73,7 +73,7 @@ struct Info {
 using Ty_x_Tu = std::pair< Type, PartialTuple >;
 // The Info structure:1 ends here
 
-// [[file:../../atrip.org::*Name][Name:1]]
+// [[file:~/atrip/atrip.org::*Name][Name:1]]
 enum Name
   { TA    = 100
   , VIJKA = 101
@@ -83,19 +83,19 @@ enum Name
   };
 // Name:1 ends here
 
-// [[file:../../atrip.org::*Database][Database:1]]
+// [[file:~/atrip/atrip.org::*Database][Database:1]]
 struct LocalDatabaseElement {
   Slice::Name name;
   Slice::Info info;
 };
 // Database:1 ends here
 
-// [[file:../../atrip.org::*Database][Database:2]]
+// [[file:~/atrip/atrip.org::*Database][Database:2]]
 using LocalDatabase = std::vector<LocalDatabaseElement>;
 using Database = LocalDatabase;
 // Database:2 ends here
 
-// [[file:../../atrip.org::*MPI Types][MPI Types:1]]
+// [[file:~/atrip/atrip.org::*MPI%20Types][MPI Types:1]]
 struct mpi {
 
   static MPI_Datatype vector(size_t n, MPI_Datatype const& DT) {
@@ -185,7 +185,7 @@ struct mpi {
 };
 // MPI Types:1 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:1]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:1]]
 static
 PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType) {
   switch (sliceType) {
@@ -203,7 +203,7 @@ PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType) {
 }
 // Static utilities:1 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:2]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:2]]
 static std::vector<Slice*> hasRecycledReferencingToIt
   ( std::vector<Slice> &slices
   , Info const& info
@@ -220,7 +220,7 @@ static std::vector<Slice*> hasRecycledReferencingToIt
 }
 // Static utilities:2 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:3]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:3]]
 static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
     const auto sliceIt
       = std::find_if(slices.begin(), slices.end(),
@@ -236,7 +236,7 @@ static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
 }
 // Static utilities:3 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:4]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:4]]
 static Slice&
 findRecycledSource (std::vector<Slice> &slices, Slice::Info info) {
   const auto sliceIt
@@ -262,7 +262,7 @@ findRecycledSource (std::vector<Slice> &slices, Slice::Info info) {
 }
 // Static utilities:4 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:5]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:5]]
 static Slice& findByTypeAbc
   ( std::vector<Slice> &slices
   , Slice::Type type
@@ -292,7 +292,7 @@ static Slice& findByTypeAbc
 }
 // Static utilities:5 ends here
 
-// [[file:../../atrip.org::*Static utilities][Static utilities:6]]
+// [[file:~/atrip/atrip.org::*Static%20utilities][Static utilities:6]]
 static Slice& findByInfo(std::vector<Slice> &slices,
                          Slice::Info const& info) {
   const auto sliceIt
@@ -315,30 +315,30 @@ static Slice& findByInfo(std::vector<Slice> &slices,
 }
 // Static utilities:6 ends here
 
-// [[file:../../atrip.org::*Attributes][Attributes:1]]
+// [[file:~/atrip/atrip.org::*Attributes][Attributes:1]]
 Info info;
 // Attributes:1 ends here
 
-// [[file:../../atrip.org::*Attributes][Attributes:2]]
+// [[file:~/atrip/atrip.org::*Attributes][Attributes:2]]
 F  *data;
 // Attributes:2 ends here
 
-// [[file:../../atrip.org::*Attributes][Attributes:3]]
+// [[file:~/atrip/atrip.org::*Attributes][Attributes:3]]
 MPI_Request request;
 // Attributes:3 ends here
 
-// [[file:../../atrip.org::*Attributes][Attributes:4]]
+// [[file:~/atrip/atrip.org::*Attributes][Attributes:4]]
 const size_t size;
 // Attributes:4 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:1]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:1]]
 void markReady() noexcept {
   info.state = Ready;
   info.recycling = Blank;
 }
 // Member functions:1 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:2]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:2]]
 bool isUnwrapped() const noexcept {
   return info.state == Ready
       || info.state == SelfSufficient
@@ -346,7 +346,7 @@ bool isUnwrapped() const noexcept {
 }
 // Member functions:2 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:3]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:3]]
 bool isUnwrappable() const noexcept {
   return isUnwrapped()
       || info.state == Recycled
@@ -379,7 +379,7 @@ inline bool isFree() const noexcept {
 }
 // Member functions:3 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:4]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:4]]
 inline bool isRecyclable() const noexcept {
   return (  info.state == Dispatched
          || info.state == Ready
@@ -390,7 +390,7 @@ inline bool isRecyclable() const noexcept {
 }
 // Member functions:4 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:5]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:5]]
 inline bool hasValidDataPointer() const noexcept {
   return data       != nullptr
       && info.state != Acceptor
@@ -399,7 +399,7 @@ inline bool hasValidDataPointer() const noexcept {
 }
 // Member functions:5 ends here
 
-// [[file:../../atrip.org::*Member functions][Member functions:6]]
+// [[file:~/atrip/atrip.org::*Member%20functions][Member functions:6]]
 void unwrapAndMarkReady() {
       if (info.state == Ready) return;
       if (info.state != Dispatched)
@@ -431,7 +431,7 @@ void unwrapAndMarkReady() {
     }
 // Member functions:6 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/atrip/atrip.org::*Epilog][Epilog:1]]
 Slice(size_t size_)
     : info({})
     , data(nullptr)
@@ -442,7 +442,7 @@ Slice(size_t size_)
 }; // struct Slice
 // Epilog:1 ends here
 
-// [[file:../../atrip.org::*Debug][Debug:1]]
+// [[file:~/atrip/atrip.org::*Debug][Debug:1]]
 std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
   // TODO: remove me
   out << "{.r(" << v.rank << "), .s(" << v.source << ")};";

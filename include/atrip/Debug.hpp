@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Debug][Debug:1]]
+// [[file:~/atrip/atrip.org::*Debug][Debug:1]]
 #pragma once
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE

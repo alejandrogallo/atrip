@@ -748,10 +748,10 @@ The chrono is just a simple wrapper for a high resolution clock
 that can be found in the =std::chrono= namespace of the standard library.
 
 #+begin_src c++ :tangle (atrip-utils-h)
-#define WITH_CHRONO(__chrono, ...)              \
-  __chrono.start();                             \
+#define WITH_CHRONO(__chrono_name, ...)         \
+  Atrip::chrono[__chrono_name].start();         \
   __VA_ARGS__                                   \
-  __chrono.stop();
+  Atrip::chrono[__chrono_name].stop();
 
 struct Timer {
   using Clock = std::chrono::high_resolution_clock;
@@ -1549,12 +1549,18 @@ struct NaiveDistribution : public TuplesDistribution {
     WITH_RANK << "range = "
               << range.first << " -> " << range.second
               << std::endl;
+    std::vector<ABCTuple> result(range.second - range.first + 1, FAKE_TUPLE);
+    WITH_RANK << "number of global tuples = " << all.size() << std::endl;
+    WITH_RANK << "number of local tuples  = " << result.size() << std::endl;
 
-    std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
-    std::copy(all.begin() + range.first,
+    std::copy(range.first >= all.size()
+              ? all.end()
+              : all.begin() + range.first,
+              // --
               range.second >= all.size()
-                ? all.end()
-                : all.begin() + range.first + range.second,
+              ? all.end()
+              : all.begin() + range.first + range.second,
+              // --
               result.begin());
     return result;
   }
@@ -2467,54 +2473,51 @@ namespace atrip {
     , double const* TBChh
     // -- TIJK
     , double *Tijk
-    , atrip::Timings& chrono
     ) {
 
-    auto& t_reorder = chrono["doubles:reorder"];
     const size_t a = abc[0], b = abc[1], c = abc[2]
               , NoNo = No*No, NoNv = No*Nv
               ;
 
-  #if defined(ATRIP_USE_DGEMM)
-  #define _IJK_(i, j, k) i + j*No + k*NoNo
-  #define REORDER(__II, __JJ, __KK)                                 \
-    t_reorder.start();                                              \
-    for (size_t k = 0; k < No; k++)                                 \
-    for (size_t j = 0; j < No; j++)                                 \
-    for (size_t i = 0; i < No; i++) {                               \
-      Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
-    }                                                               \
-    t_reorder.stop();
-  #define DGEMM_PARTICLES(__A, __B)    \
-    atrip::dgemm_( "T"                 \
-                , "N"                 \
-                , (int const*)&NoNo   \
-                , (int const*)&No     \
-                , (int const*)&Nv     \
-                , &one                \
-                , __A                 \
-                , (int const*)&Nv     \
-                , __B                 \
-                , (int const*)&Nv     \
-                , &zero               \
-                , _t_buffer.data()    \
-                , (int const*)&NoNo   \
-                );
-  #define DGEMM_HOLES(__A, __B, __TRANSB)  \
-    atrip::dgemm_( "N"                     \
-                , __TRANSB                \
-                , (int const*)&NoNo       \
-                , (int const*)&No         \
-                , (int const*)&No         \
-                , &m_one                  \
-                , __A                     \
-                , (int const*)&NoNo       \
-                , __B                     \
-                , (int const*)&No         \
-                , &zero                   \
-                , _t_buffer.data()        \
-                , (int const*)&NoNo       \
-                );
+#if defined(ATRIP_USE_DGEMM)
+#define _IJK_(i, j, k) i + j*No + k*NoNo
+#define REORDER(__II, __JJ, __KK)                           \
+  WITH_CHRONO("double:reorder",                             \
+              for (size_t k = 0; k < No; k++)               \
+                for (size_t j = 0; j < No; j++)             \
+                  for (size_t i = 0; i < No; i++) {         \
+                    Tijk[_IJK_(i, j, k)]                    \
+                    += _t_buffer[_IJK_(__II, __JJ, __KK)];  \
+                  }                                         \
+              )
+#define DGEMM_PARTICLES(__A, __B)               \
+  atrip::dgemm_("T",                            \
+                "N",                            \
+                (int const*)&NoNo,              \
+                (int const*)&No,                \
+                (int const*)&Nv,                \
+                &one,                           \
+                __A,                            \
+                (int const*)&Nv,                \
+                __B,                            \
+                (int const*)&Nv,                \
+                &zero,                          \
+                _t_buffer.data(),               \
+                (int const*)&NoNo);
+#define DGEMM_HOLES(__A, __B, __TRANSB)         \
+  atrip::dgemm_("N",                            \
+                __TRANSB,                       \
+                (int const*)&NoNo,              \
+                (int const*)&No,                \
+                (int const*)&No,                \
+                &m_one,                         \
+                __A,                            \
+                (int const*)&NoNo,              \
+                __B,                            \
+                (int const*)&No,                \
+                &zero,                          \
+                _t_buffer.data(),               \
+                (int const*)&NoNo);
 
     using F = double;
     const size_t NoNoNo = No*NoNo;
@@ -2522,88 +2525,86 @@ namespace atrip {
     _t_buffer.reserve(NoNoNo);
     F one{1.0}, m_one{-1.0}, zero{0.0};
 
-    t_reorder.start();
-    for (size_t k = 0; k < NoNoNo; k++) {
-      // zero the Tijk
-      Tijk[k] = 0.0;
-    }
-    t_reorder.stop();
+    WITH_CHRONO("double:reorder",
+      for (size_t k = 0; k < NoNoNo; k++) {
+         Tijk[k] = 0.0;
+       })
 
-    chrono["doubles:holes"].start();
-    { // Holes part ============================================================
-      // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
-      chrono["doubles:holes:1"].start();
-      DGEMM_HOLES(VhhhC, TABhh, "N")
-      REORDER(i, k, j)
-      chrono["doubles:holes:1"].stop();
-      // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
-      chrono["doubles:holes:2"].start();
-      DGEMM_HOLES(VhhhC, TABhh, "T")
-      REORDER(j, k, i)
-      chrono["doubles:holes:2"].stop();
-      // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
-      chrono["doubles:holes:3"].start();
-      DGEMM_HOLES(VhhhB, TAChh, "N")
-      REORDER(i, j, k)
-      chrono["doubles:holes:3"].stop();
-      // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
-      chrono["doubles:holes:4"].start();
-      DGEMM_HOLES(VhhhB, TAChh, "T")
-      REORDER(k, j, i)
-      chrono["doubles:holes:4"].stop();
-      // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
-      chrono["doubles:holes:5"].start();
-      DGEMM_HOLES(VhhhA, TBChh, "N")
-      REORDER(j, i, k)
-      chrono["doubles:holes:5"].stop();
-      // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
-      chrono["doubles:holes:6"].start();
-      DGEMM_HOLES(VhhhA, TBChh, "T")
-      REORDER(k, i, j)
-      chrono["doubles:holes:6"].stop();
-    }
-    chrono["doubles:holes"].stop();
+    WITH_CHRONO("doubles:holes",
+                { // Holes part ================================================
+                  // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
+                  WITH_CHRONO("doubles:holes:1",
+                              DGEMM_HOLES(VhhhC, TABhh, "N")
+                              REORDER(i, k, j)
+                              )
+                  // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
+                  WITH_CHRONO("doubles:holes:2",
+                              DGEMM_HOLES(VhhhC, TABhh, "T")
+                              REORDER(j, k, i)
+                              )
+                  // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
+                  WITH_CHRONO("doubles:holes:3",
+                              DGEMM_HOLES(VhhhB, TAChh, "N")
+                              REORDER(i, j, k)
+                              )
+                  // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
+                  WITH_CHRONO("doubles:holes:4",
+                              DGEMM_HOLES(VhhhB, TAChh, "T")
+                              REORDER(k, j, i)
+                              )
+                  // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
+                  WITH_CHRONO("doubles:holes:5",
+                              DGEMM_HOLES(VhhhA, TBChh, "N")
+                              REORDER(j, i, k)
+                              )
+                  // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
+                  WITH_CHRONO("doubles:holes:6",
+                              DGEMM_HOLES(VhhhA, TBChh, "T")
+                              REORDER(k, i, j)
+                              )
+                }
+                )
 
-    chrono["doubles:particles"].start();
-    { // Particle part =========================================================
-      // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-      chrono["doubles:particles:1"].start();
-      DGEMM_PARTICLES(TAphh, VBCph)
-      REORDER(i, j, k)
-      chrono["doubles:particles:1"].stop();
-      // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-      chrono["doubles:particles:2"].start();
-      DGEMM_PARTICLES(TAphh, VCBph)
-      REORDER(i, k, j)
-      chrono["doubles:particles:2"].stop();
-      // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-      chrono["doubles:particles:3"].start();
-      DGEMM_PARTICLES(TCphh, VABph)
-      REORDER(k, i, j)
-      chrono["doubles:particles:3"].stop();
-      // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-      chrono["doubles:particles:4"].start();
-      DGEMM_PARTICLES(TCphh, VBAph)
-      REORDER(k, j, i)
-      chrono["doubles:particles:4"].stop();
-      // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-      chrono["doubles:particles:5"].start();
-      DGEMM_PARTICLES(TBphh, VACph)
-      REORDER(j, i, k)
-      chrono["doubles:particles:5"].stop();
-      // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-      chrono["doubles:particles:6"].start();
-      DGEMM_PARTICLES(TBphh, VCAph)
-      REORDER(j, k, i)
-      chrono["doubles:particles:6"].stop();
-    }
-    chrono["doubles:particles"].stop();
+      WITH_CHRONO("doubles:particles",
+                  { // Particle part ===========================================
+                    // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
+                    WITH_CHRONO("doubles:particles:1",
+                                DGEMM_PARTICLES(TAphh, VBCph)
+                                REORDER(i, j, k)
+                                )
+                    // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
+                    WITH_CHRONO("doubles:particles:2",
+                                DGEMM_PARTICLES(TAphh, VCBph)
+                                REORDER(i, k, j)
+                                )
+                    // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
+                    WITH_CHRONO("doubles:particles:3",
+                                DGEMM_PARTICLES(TCphh, VABph)
+                                REORDER(k, i, j)
+                                )
+                    // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
+                    WITH_CHRONO("doubles:particles:4",
+                                DGEMM_PARTICLES(TCphh, VBAph)
+                                REORDER(k, j, i)
+                                )
+                    // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
+                    WITH_CHRONO("doubles:particles:5",
+                                DGEMM_PARTICLES(TBphh, VACph)
+                                REORDER(j, i, k)
+                                )
+                    // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
+                    WITH_CHRONO("doubles:particles:6",
+                                DGEMM_PARTICLES(TBphh, VCAph)
+                                REORDER(j, k, i)
+                                )
+                  }
+                  )
 
-  #undef REORDER
-  #undef DGEMM_HOLES
-  #undef DGEMM_PARTICLES
-  #undef _IJK_
-  #else
+#undef REORDER
+#undef DGEMM_HOLES
+#undef DGEMM_PARTICLES
+#undef _IJK_
+#else
     for (size_t k = 0; k < No; k++)
     for (size_t j = 0; j < No; j++)
     for (size_t i = 0; i < No; i++){
@@ -2647,7 +2648,7 @@ namespace atrip {
       }
 
     }
-  #endif
+#endif
   }
 
 }
@@ -2777,9 +2778,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   const int rank = Atrip::rank;
   MPI_Comm universe = in.ei->wrld->comm;
 
-  // Timings in seconds ================================================{{{1
-  Timings chrono{};
-
   const size_t No = in.ei->lens[0];
   const size_t Nv = in.ea->lens[0];
   LOG(0,"Atrip") << "No: " << No << "\n";
@@ -2819,20 +2817,20 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   }
 
 
-  chrono["nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
-  LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-  TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  chrono["nv-slices"].stop();
+  WITH_CHRONO("nv-slices",
+    LOG(0,"Atrip") << "BUILD NV-SLICES\n";
+    TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  )
 
-  chrono["nv-nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
-  LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
-  ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  chrono["nv-nv-slices"].stop();
+  WITH_CHRONO("nv-nv-slices",
+    LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
+    ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  )
 
   // all tensors
   std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
@@ -2849,7 +2847,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   }
 
   LOG(0,"Atrip") << "BUILDING TUPLE LIST\n";
-  WITH_CHRONO(chrono["tuples:build"],
+  WITH_CHRONO("tuples:build",
     auto const tuplesList = distribution->getTuples(Nv, universe);
     )
   size_t nIterations = tuplesList.size();
@@ -2872,45 +2870,42 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   auto communicateDatabase
     = [ &unions
       , np
-      , &chrono
       ] (ABCTuple const& abc, MPI_Comm const& c) -> Slice::Database {
 
-        chrono["db:comm:type:do"].start();
-        auto MPI_LDB_ELEMENT = Slice::mpi::localDatabaseElement();
-        chrono["db:comm:type:do"].stop();
+        WITH_CHRONO("db:comm:type:do",
+          auto MPI_LDB_ELEMENT = Slice::mpi::localDatabaseElement();
+        )
 
-        chrono["db:comm:ldb"].start();
-        Slice::LocalDatabase ldb;
-
-        for (auto const& tensor: unions) {
-          auto const& tensorDb = tensor->buildLocalDatabase(abc);
-          ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
-        }
-        chrono["db:comm:ldb"].stop();
+        WITH_CHRONO("db:comm:ldb",
+          Slice::LocalDatabase ldb;
+          for (auto const& tensor: unions) {
+            auto const& tensorDb = tensor->buildLocalDatabase(abc);
+            ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+          }
+        )
 
         Slice::Database db(np * ldb.size(), ldb[0]);
 
-        chrono["oneshot-db:comm:allgather"].start();
-        chrono["db:comm:allgather"].start();
-        MPI_Allgather( ldb.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , db.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , c);
-        chrono["db:comm:allgather"].stop();
-        chrono["oneshot-db:comm:allgather"].stop();
+        WITH_CHRONO("oneshot-db:comm:allgather",
+        WITH_CHRONO("db:comm:allgather",
+          MPI_Allgather( ldb.data()
+                      , ldb.size()
+                      , MPI_LDB_ELEMENT
+                      , db.data()
+                      , ldb.size()
+                      , MPI_LDB_ELEMENT
+                      , c);
+        ))
 
-        chrono["db:comm:type:free"].start();
-        MPI_Type_free(&MPI_LDB_ELEMENT);
-        chrono["db:comm:type:free"].stop();
+        WITH_CHRONO("db:comm:type:free",
+          MPI_Type_free(&MPI_LDB_ELEMENT);
+        )
 
         return db;
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe, &chrono] (Slice::Database const& db) {
+    = [&unions, &rank, &np, &universe] (Slice::Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -2946,9 +2941,9 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
           << "\n"
           ;
 
-        chrono["db:io:recv"].start();
-        u.receive(el.info, recvTag);
-        chrono["db:io:recv"].stop();
+        WITH_CHRONO("db:io:recv",
+          u.receive(el.info, recvTag);
+        )
 
       } // recv
     }
@@ -2982,9 +2977,9 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
           << "\n"
           ;
 
-        chrono["db:io:send"].start();
-        u.send(otherRank, el.info, sendTag);
-        chrono["db:io:send"].stop();
+        WITH_CHRONO("db:io:send",
+          u.send(otherRank, el.info, sendTag);
+        )
 
       } // send phase
 
@@ -3015,14 +3010,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       ; i < tuplesList.size()
       ; i++, iteration++
       ) {
-    chrono["iterations"].start();
+    Atrip::chrono["iterations"].start();
 
     // check overhead from chrono over all iterations
-    chrono["start:stop"].start(); chrono["start:stop"].stop();
+    WITH_CHRONO("start:stop", {})
 
     // check overhead of doing a barrier at the beginning
-    WITH_CHRONO(chrono["oneshot-mpi:barrier"],
-    WITH_CHRONO(chrono["mpi:barrier"],
+    WITH_CHRONO("oneshot-mpi:barrier",
+    WITH_CHRONO("mpi:barrier",
       if (in.barrier) MPI_Barrier(universe);
     ))
 
@@ -3030,15 +3025,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
-        << " (" << doublesFlops * iteration / chrono["doubles"].count()
+        << " (" << doublesFlops * iteration / Atrip::chrono["doubles"].count()
         << "GF)"
-        << " (" << doublesFlops * iteration / chrono["iterations"].count()
+        << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
         << " ===========================\n";
 
       // PRINT TIMINGS
       if (in.chrono)
-      for (auto const& pair: chrono)
+      for (auto const& pair: Atrip::chrono)
         LOG(1, " ") << pair.first << " :: "
                     << pair.second.count()
                     << std::endl;
@@ -3055,13 +3050,13 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                             : &tuplesList[i + 1]
                  ;
 
-    chrono["with_rank"].start();
-    WITH_RANK << " :it " << iteration
-              << " :abc " << pretty_print(abc)
-              << " :abcN "
-              << (abcNext ? pretty_print(*abcNext) : "None")
-              << "\n";
-    chrono["with_rank"].stop();
+    WITH_CHRONO("with_rank",
+      WITH_RANK << " :it " << iteration
+                << " :abc " << pretty_print(abc)
+                << " :abcN "
+                << (abcNext ? pretty_print(*abcNext) : "None")
+                << "\n";
+    )
 
 
     // COMM FIRST DATABASE ================================================{{{1
@@ -3074,19 +3069,19 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto& u: unions) u->unwrapAll(abc);
-      WITH_RANK << "__first__::::Unwrapping all slices for first database DONE\n";
+      WITH_RANK << "__first__::::Unwrapping slices for first database DONE\n";
       MPI_Barrier(universe);
     }
 
     // COMM NEXT DATABASE ================================================={{{1
     if (abcNext) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
-      chrono["db:comm"].start();
-      const auto db = communicateDatabase(*abcNext, universe);
-      chrono["db:comm"].stop();
-      chrono["db:io"].start();
-      doIOPhase(db);
-      chrono["db:io"].stop();
+      WITH_CHRONO("db:comm",
+        const auto db = communicateDatabase(*abcNext, universe);
+      )
+      WITH_CHRONO("db:io",
+        doIOPhase(db);
+      )
       WITH_RANK << "__comm__:" <<  iteration << "th database io phase DONE\n";
     }
 
@@ -3094,63 +3089,61 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
       WITH_RANK << iteration << "-th doubles\n";
-      WITH_CHRONO(chrono["oneshot-unwrap"],
-      WITH_CHRONO(chrono["unwrap"],
-      WITH_CHRONO(chrono["unwrap:doubles"],
+      WITH_CHRONO("oneshot-unwrap",
+      WITH_CHRONO("unwrap",
+      WITH_CHRONO("unwrap:doubles",
         for (auto& u: decltype(unions){&abph, &hhha, &taphh, &tabhh}) {
           u->unwrapAll(abc);
         }
       )))
-      chrono["oneshot-doubles"].start();
-      chrono["doubles"].start();
-      doublesContribution( abc, (size_t)No, (size_t)Nv
-                         // -- VABCI
-                         , abph.unwrapSlice(Slice::AB, abc)
-                         , abph.unwrapSlice(Slice::AC, abc)
-                         , abph.unwrapSlice(Slice::BC, abc)
-                         , abph.unwrapSlice(Slice::BA, abc)
-                         , abph.unwrapSlice(Slice::CA, abc)
-                         , abph.unwrapSlice(Slice::CB, abc)
-                         // -- VHHHA
-                         , hhha.unwrapSlice(Slice::A, abc)
-                         , hhha.unwrapSlice(Slice::B, abc)
-                         , hhha.unwrapSlice(Slice::C, abc)
-                         // -- TA
-                         , taphh.unwrapSlice(Slice::A, abc)
-                         , taphh.unwrapSlice(Slice::B, abc)
-                         , taphh.unwrapSlice(Slice::C, abc)
-                         // -- TABIJ
-                         , tabhh.unwrapSlice(Slice::AB, abc)
-                         , tabhh.unwrapSlice(Slice::AC, abc)
-                         , tabhh.unwrapSlice(Slice::BC, abc)
-                         // -- TIJK
-                         , Tijk.data()
-                         , chrono
-                         );
-      WITH_RANK << iteration << "-th doubles done\n";
-      chrono["doubles"].stop();
-      chrono["oneshot-doubles"].stop();
+      WITH_CHRONO("oneshot-doubles",
+      WITH_CHRONO("doubles",
+        doublesContribution( abc, (size_t)No, (size_t)Nv
+                          // -- VABCI
+                          , abph.unwrapSlice(Slice::AB, abc)
+                          , abph.unwrapSlice(Slice::AC, abc)
+                          , abph.unwrapSlice(Slice::BC, abc)
+                          , abph.unwrapSlice(Slice::BA, abc)
+                          , abph.unwrapSlice(Slice::CA, abc)
+                          , abph.unwrapSlice(Slice::CB, abc)
+                          // -- VHHHA
+                          , hhha.unwrapSlice(Slice::A, abc)
+                          , hhha.unwrapSlice(Slice::B, abc)
+                          , hhha.unwrapSlice(Slice::C, abc)
+                          // -- TA
+                          , taphh.unwrapSlice(Slice::A, abc)
+                          , taphh.unwrapSlice(Slice::B, abc)
+                          , taphh.unwrapSlice(Slice::C, abc)
+                          // -- TABIJ
+                          , tabhh.unwrapSlice(Slice::AB, abc)
+                          , tabhh.unwrapSlice(Slice::AC, abc)
+                          , tabhh.unwrapSlice(Slice::BC, abc)
+                          // -- TIJK
+                          , Tijk.data()
+                          );
+        WITH_RANK << iteration << "-th doubles done\n";
+      ))
     }
 
     // COMPUTE SINGLES =================================================== {{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
-      WITH_CHRONO(chrono["oneshot-unwrap"],
-      WITH_CHRONO(chrono["unwrap"],
-      WITH_CHRONO(chrono["unwrap:singles"],
+      WITH_CHRONO("oneshot-unwrap",
+      WITH_CHRONO("unwrap",
+      WITH_CHRONO("unwrap:singles",
         abhh.unwrapAll(abc);
       )))
-      chrono["reorder"].start();
-      for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
-      chrono["reorder"].stop();
-      chrono["singles"].start();
-      singlesContribution( No, Nv, abc
-                         , Tai.data()
-                         , abhh.unwrapSlice(Slice::AB, abc)
-                         , abhh.unwrapSlice(Slice::AC, abc)
-                         , abhh.unwrapSlice(Slice::BC, abc)
-                         , Zijk.data());
-      chrono["singles"].stop();
+      WITH_CHRONO("reorder",
+        for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
+      )
+      WITH_CHRONO("singles",
+        singlesContribution( No, Nv, abc
+                          , Tai.data()
+                          , abhh.unwrapSlice(Slice::AB, abc)
+                          , abhh.unwrapSlice(Slice::AC, abc)
+                          , abhh.unwrapSlice(Slice::BC, abc)
+                          , Zijk.data());
+      )
     }
 
 
@@ -3163,12 +3156,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       if (abc[1] == abc[2]) distinct--;
       const double epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
-      chrono["energy"].start();
-      if ( distinct == 0)
-        tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
-      else
-        tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
-      chrono["energy"].stop();
+      WITH_CHRONO("energy",
+        if ( distinct == 0)
+          tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
+        else
+          tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
+      )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
       tupleEnergies[abc] = tupleEnergy;
@@ -3199,7 +3192,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     // CLEANUP UNIONS ===================================================={{{1
     OCD_Barrier(universe);
     if (abcNext) {
-      chrono["gc"].start();
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
       for (auto& u: unions) {
 
@@ -3233,12 +3225,11 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
 
       }
-      chrono["gc"].stop();
     }
 
       WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
-    chrono["iterations"].stop();
+    Atrip::chrono["iterations"].stop();
     // ITERATION END ====================================================={{{1
 
   }
@@ -3276,15 +3267,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   // PRINT TIMINGS {{{1
   if (in.chrono)
-  for (auto const& pair: chrono)
+  for (auto const& pair: Atrip::chrono)
     LOG(0,"atrip:chrono") << pair.first << " "
                           << pair.second.count() << std::endl;
 
 
   LOG(0, "atrip:flops(doubles)")
-    << nIterations * doublesFlops / chrono["doubles"].count() << "\n";
+    << nIterations * doublesFlops / Atrip::chrono["doubles"].count() << "\n";
   LOG(0, "atrip:flops(iterations)")
-    << nIterations * doublesFlops / chrono["iterations"].count() << "\n";
+    << nIterations * doublesFlops / Atrip::chrono["iterations"].count() << "\n";
 
   // TODO: change the sign in  the getEnergy routines
   return { - globalEnergy };

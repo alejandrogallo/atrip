@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Equations][Equations:1]]
+// [[file:~/atrip/atrip.org::*Equations][Equations:1]]
 #pragma once
 
 #include<atrip/Slice.hpp>
@@ -150,54 +150,51 @@ namespace atrip {
     , double const* TBChh
     // -- TIJK
     , double *Tijk
-    , atrip::Timings& chrono
     ) {
 
-    auto& t_reorder = chrono["doubles:reorder"];
     const size_t a = abc[0], b = abc[1], c = abc[2]
               , NoNo = No*No, NoNv = No*Nv
               ;
 
-  #if defined(ATRIP_USE_DGEMM)
-  #define _IJK_(i, j, k) i + j*No + k*NoNo
-  #define REORDER(__II, __JJ, __KK)                                 \
-    t_reorder.start();                                              \
-    for (size_t k = 0; k < No; k++)                                 \
-    for (size_t j = 0; j < No; j++)                                 \
-    for (size_t i = 0; i < No; i++) {                               \
-      Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
-    }                                                               \
-    t_reorder.stop();
-  #define DGEMM_PARTICLES(__A, __B)    \
-    atrip::dgemm_( "T"                 \
-                , "N"                 \
-                , (int const*)&NoNo   \
-                , (int const*)&No     \
-                , (int const*)&Nv     \
-                , &one                \
-                , __A                 \
-                , (int const*)&Nv     \
-                , __B                 \
-                , (int const*)&Nv     \
-                , &zero               \
-                , _t_buffer.data()    \
-                , (int const*)&NoNo   \
-                );
-  #define DGEMM_HOLES(__A, __B, __TRANSB)  \
-    atrip::dgemm_( "N"                     \
-                , __TRANSB                \
-                , (int const*)&NoNo       \
-                , (int const*)&No         \
-                , (int const*)&No         \
-                , &m_one                  \
-                , __A                     \
-                , (int const*)&NoNo       \
-                , __B                     \
-                , (int const*)&No         \
-                , &zero                   \
-                , _t_buffer.data()        \
-                , (int const*)&NoNo       \
-                );
+#if defined(ATRIP_USE_DGEMM)
+#define _IJK_(i, j, k) i + j*No + k*NoNo
+#define REORDER(__II, __JJ, __KK)                           \
+  WITH_CHRONO("double:reorder",                             \
+              for (size_t k = 0; k < No; k++)               \
+                for (size_t j = 0; j < No; j++)             \
+                  for (size_t i = 0; i < No; i++) {         \
+                    Tijk[_IJK_(i, j, k)]                    \
+                    += _t_buffer[_IJK_(__II, __JJ, __KK)];  \
+                  }                                         \
+              )
+#define DGEMM_PARTICLES(__A, __B)               \
+  atrip::dgemm_("T",                            \
+                "N",                            \
+                (int const*)&NoNo,              \
+                (int const*)&No,                \
+                (int const*)&Nv,                \
+                &one,                           \
+                __A,                            \
+                (int const*)&Nv,                \
+                __B,                            \
+                (int const*)&Nv,                \
+                &zero,                          \
+                _t_buffer.data(),               \
+                (int const*)&NoNo);
+#define DGEMM_HOLES(__A, __B, __TRANSB)         \
+  atrip::dgemm_("N",                            \
+                __TRANSB,                       \
+                (int const*)&NoNo,              \
+                (int const*)&No,                \
+                (int const*)&No,                \
+                &m_one,                         \
+                __A,                            \
+                (int const*)&NoNo,              \
+                __B,                            \
+                (int const*)&No,                \
+                &zero,                          \
+                _t_buffer.data(),               \
+                (int const*)&NoNo);
 
     using F = double;
     const size_t NoNoNo = No*NoNo;
@@ -205,88 +202,86 @@ namespace atrip {
     _t_buffer.reserve(NoNoNo);
     F one{1.0}, m_one{-1.0}, zero{0.0};
 
-    t_reorder.start();
-    for (size_t k = 0; k < NoNoNo; k++) {
-      // zero the Tijk
-      Tijk[k] = 0.0;
-    }
-    t_reorder.stop();
+    WITH_CHRONO("double:reorder",
+      for (size_t k = 0; k < NoNoNo; k++) {
+         Tijk[k] = 0.0;
+       })
 
-    chrono["doubles:holes"].start();
-    { // Holes part ============================================================
-      // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
-      chrono["doubles:holes:1"].start();
-      DGEMM_HOLES(VhhhC, TABhh, "N")
-      REORDER(i, k, j)
-      chrono["doubles:holes:1"].stop();
-      // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
-      chrono["doubles:holes:2"].start();
-      DGEMM_HOLES(VhhhC, TABhh, "T")
-      REORDER(j, k, i)
-      chrono["doubles:holes:2"].stop();
-      // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
-      chrono["doubles:holes:3"].start();
-      DGEMM_HOLES(VhhhB, TAChh, "N")
-      REORDER(i, j, k)
-      chrono["doubles:holes:3"].stop();
-      // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
-      chrono["doubles:holes:4"].start();
-      DGEMM_HOLES(VhhhB, TAChh, "T")
-      REORDER(k, j, i)
-      chrono["doubles:holes:4"].stop();
-      // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
-      chrono["doubles:holes:5"].start();
-      DGEMM_HOLES(VhhhA, TBChh, "N")
-      REORDER(j, i, k)
-      chrono["doubles:holes:5"].stop();
-      // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
-      chrono["doubles:holes:6"].start();
-      DGEMM_HOLES(VhhhA, TBChh, "T")
-      REORDER(k, i, j)
-      chrono["doubles:holes:6"].stop();
-    }
-    chrono["doubles:holes"].stop();
+    WITH_CHRONO("doubles:holes",
+                { // Holes part ================================================
+                  // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
+                  WITH_CHRONO("doubles:holes:1",
+                              DGEMM_HOLES(VhhhC, TABhh, "N")
+                              REORDER(i, k, j)
+                              )
+                  // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
+                  WITH_CHRONO("doubles:holes:2",
+                              DGEMM_HOLES(VhhhC, TABhh, "T")
+                              REORDER(j, k, i)
+                              )
+                  // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
+                  WITH_CHRONO("doubles:holes:3",
+                              DGEMM_HOLES(VhhhB, TAChh, "N")
+                              REORDER(i, j, k)
+                              )
+                  // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
+                  WITH_CHRONO("doubles:holes:4",
+                              DGEMM_HOLES(VhhhB, TAChh, "T")
+                              REORDER(k, j, i)
+                              )
+                  // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
+                  WITH_CHRONO("doubles:holes:5",
+                              DGEMM_HOLES(VhhhA, TBChh, "N")
+                              REORDER(j, i, k)
+                              )
+                  // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
+                  WITH_CHRONO("doubles:holes:6",
+                              DGEMM_HOLES(VhhhA, TBChh, "T")
+                              REORDER(k, i, j)
+                              )
+                }
+                )
 
-    chrono["doubles:particles"].start();
-    { // Particle part =========================================================
-      // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-      chrono["doubles:particles:1"].start();
-      DGEMM_PARTICLES(TAphh, VBCph)
-      REORDER(i, j, k)
-      chrono["doubles:particles:1"].stop();
-      // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-      chrono["doubles:particles:2"].start();
-      DGEMM_PARTICLES(TAphh, VCBph)
-      REORDER(i, k, j)
-      chrono["doubles:particles:2"].stop();
-      // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-      chrono["doubles:particles:3"].start();
-      DGEMM_PARTICLES(TCphh, VABph)
-      REORDER(k, i, j)
-      chrono["doubles:particles:3"].stop();
-      // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-      chrono["doubles:particles:4"].start();
-      DGEMM_PARTICLES(TCphh, VBAph)
-      REORDER(k, j, i)
-      chrono["doubles:particles:4"].stop();
-      // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-      chrono["doubles:particles:5"].start();
-      DGEMM_PARTICLES(TBphh, VACph)
-      REORDER(j, i, k)
-      chrono["doubles:particles:5"].stop();
-      // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-      chrono["doubles:particles:6"].start();
-      DGEMM_PARTICLES(TBphh, VCAph)
-      REORDER(j, k, i)
-      chrono["doubles:particles:6"].stop();
-    }
-    chrono["doubles:particles"].stop();
+      WITH_CHRONO("doubles:particles",
+                  { // Particle part ===========================================
+                    // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
+                    WITH_CHRONO("doubles:particles:1",
+                                DGEMM_PARTICLES(TAphh, VBCph)
+                                REORDER(i, j, k)
+                                )
+                    // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
+                    WITH_CHRONO("doubles:particles:2",
+                                DGEMM_PARTICLES(TAphh, VCBph)
+                                REORDER(i, k, j)
+                                )
+                    // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
+                    WITH_CHRONO("doubles:particles:3",
+                                DGEMM_PARTICLES(TCphh, VABph)
+                                REORDER(k, i, j)
+                                )
+                    // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
+                    WITH_CHRONO("doubles:particles:4",
+                                DGEMM_PARTICLES(TCphh, VBAph)
+                                REORDER(k, j, i)
+                                )
+                    // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
+                    WITH_CHRONO("doubles:particles:5",
+                                DGEMM_PARTICLES(TBphh, VACph)
+                                REORDER(j, i, k)
+                                )
+                    // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
+                    WITH_CHRONO("doubles:particles:6",
+                                DGEMM_PARTICLES(TBphh, VCAph)
+                                REORDER(j, k, i)
+                                )
+                  }
+                  )
 
-  #undef REORDER
-  #undef DGEMM_HOLES
-  #undef DGEMM_PARTICLES
-  #undef _IJK_
-  #else
+#undef REORDER
+#undef DGEMM_HOLES
+#undef DGEMM_PARTICLES
+#undef _IJK_
+#else
     for (size_t k = 0; k < No; k++)
     for (size_t j = 0; j < No; j++)
     for (size_t i = 0; i < No; i++){
@@ -330,7 +325,7 @@ namespace atrip {
       }
 
     }
-  #endif
+#endif
   }
 
 }

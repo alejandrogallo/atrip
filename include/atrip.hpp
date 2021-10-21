@@ -1,4 +1,4 @@
-// [[file:../atrip.org::*Include header][Include header:1]]
+// [[file:~/atrip/atrip.org::*Include%20header][Include header:1]]
 #pragma once
 
 #include <atrip/Atrip.hpp>

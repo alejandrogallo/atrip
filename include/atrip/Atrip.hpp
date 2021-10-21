@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Atrip][Atrip:1]]
+// [[file:~/atrip/atrip.org::*Atrip][Atrip:1]]
 #pragma once
 #include <sstream>
 #include <string>

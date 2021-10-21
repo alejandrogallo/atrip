@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Blas][Blas:1]]
+// [[file:~/atrip/atrip.org::*Blas][Blas:1]]
 #pragma once
 namespace atrip {
   extern "C" {

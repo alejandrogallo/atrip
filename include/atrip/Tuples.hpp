@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 
 #include <vector>
@@ -21,7 +21,7 @@
 namespace atrip {
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::*Tuples types][Tuples types:1]]
+// [[file:~/atrip/atrip.org::*Tuples%20types][Tuples types:1]]
 using ABCTuple = std::array<size_t, 3>;
 using PartialTuple = std::array<size_t, 2>;
 using ABCTuples = std::vector<ABCTuple>;
@@ -29,14 +29,14 @@ using ABCTuples = std::vector<ABCTuple>;
 constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 // Tuples types:1 ends here
 
-// [[file:../../atrip.org::*Distributing the tuples][Distributing the tuples:1]]
+// [[file:~/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the tuples:1]]
 struct TuplesDistribution {
   virtual ABCTuples getTuples(size_t Nv, MPI_Comm universe) = 0;
   virtual bool tupleIsFake(ABCTuple const& t) { return t == FAKE_TUPLE; }
 };
 // Distributing the tuples:1 ends here
 
-// [[file:../../atrip.org::*Naive list][Naive list:1]]
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:1]]
 ABCTuples getTuplesList(size_t Nv) {
   const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
   ABCTuples result(n);
@@ -54,7 +54,7 @@ ABCTuples getTuplesList(size_t Nv) {
 }
 // Naive list:1 ends here
 
-// [[file:../../atrip.org::*Naive list][Naive list:2]]
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:2]]
 std::pair<size_t, size_t>
 getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
 
@@ -91,7 +91,7 @@ getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
 }
 // Naive list:2 ends here
 
-// [[file:../../atrip.org::*Naive list][Naive list:3]]
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:3]]
 struct NaiveDistribution : public TuplesDistribution {
   ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
     int rank, np;
@@ -113,23 +113,29 @@ struct NaiveDistribution : public TuplesDistribution {
     WITH_RANK << "range = "
               << range.first << " -> " << range.second
               << std::endl;
+    std::vector<ABCTuple> result(range.second - range.first + 1, FAKE_TUPLE);
+    WITH_RANK << "number of global tuples = " << all.size() << std::endl;
+    WITH_RANK << "number of local tuples  = " << result.size() << std::endl;
 
-    std::vector<ABCTuple> result(range.second - range.first, FAKE_TUPLE);
-    std::copy(all.begin() + range.first,
+    std::copy(range.first >= all.size()
+              ? all.end()
+              : all.begin() + range.first,
+              // --
               range.second >= all.size()
-                ? all.end()
-                : all.begin() + range.first + range.second,
+              ? all.end()
+              : all.begin() + range.first + range.second,
+              // --
               result.begin());
     return result;
   }
 };
 // Naive list:3 ends here
 
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
 namespace group_and_sort {
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::*Node information][Node information:1]]
+// [[file:~/atrip/atrip.org::*Node%20information][Node information:1]]
 std::vector<std::string> getNodeNames(MPI_Comm comm){
   int rank, np;
   MPI_Comm_rank(comm, &rank);
@@ -169,7 +175,7 @@ std::vector<std::string> getNodeNames(MPI_Comm comm){
 }
 // Node information:1 ends here
 
-// [[file:../../atrip.org::*Node information][Node information:2]]
+// [[file:~/atrip/atrip.org::*Node%20information][Node information:2]]
 struct RankInfo {
   const std::string name;
   const size_t nodeId;
@@ -208,7 +214,7 @@ getNodeInfos(std::vector<string> const& nodeNames) {
 }
 // Node information:2 ends here
 
-// [[file:../../atrip.org::*Utils][Utils:1]]
+// [[file:~/atrip/atrip.org::*Utils][Utils:1]]
 // Provides the node on which the slice-element is found
 // Right now we distribute the slices in a round robin fashion
 // over the different nodes (NOTE: not mpi ranks but nodes)
@@ -239,7 +245,7 @@ std::vector<size_t> getTupleNodes(ABCTuple t, size_t nNodes) {
 }
 // Utils:1 ends here
 
-// [[file:../../atrip.org::*Distribution][Distribution:1]]
+// [[file:~/atrip/atrip.org::*Distribution][Distribution:1]]
 std::vector<ABCTuple>
 specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
 
@@ -380,7 +386,7 @@ std::vector<size_t> fetchElement(ABCTuple cur, ABCTuple suc){
 }
 // Distribution:1 ends here
 
-// [[file:../../atrip.org::*Main][Main:1]]
+// [[file:~/atrip/atrip.org::*Main][Main:1]]
 std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   int rank, np;
@@ -432,7 +438,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
   MPI_Comm_split(universe, color, key, &INTRA_COMM);
 // Main:1 ends here
 
-// [[file:../../atrip.org::*Main][Main:2]]
+// [[file:~/atrip/atrip.org::*Main][Main:2]]
 const size_t
   tuplesPerRankLocal
      = nodeTuples.size() / nodeInfos[rank].ranksPerNode
@@ -456,7 +462,7 @@ MPI_Bcast(&tuplesPerRankGlobal,
           universe);
 // Main:2 ends here
 
-// [[file:../../atrip.org::*Main][Main:3]]
+// [[file:~/atrip/atrip.org::*Main][Main:3]]
 size_t const totalTuplesLocal
   = tuplesPerRankLocal
   * nodeInfos[rank].ranksPerNode;
@@ -467,7 +473,7 @@ if (makeDistribution)
                     FAKE_TUPLE);
 // Main:3 ends here
 
-// [[file:../../atrip.org::*Main][Main:4]]
+// [[file:~/atrip/atrip.org::*Main][Main:4]]
 {
   std::vector<int> const
     sendCounts(nodeInfos[rank].ranksPerNode, tuplesPerRankLocal);
@@ -503,7 +509,7 @@ if (makeDistribution)
 }
 // Main:4 ends here
 
-// [[file:../../atrip.org::*Main][Main:5]]
+// [[file:~/atrip/atrip.org::*Main][Main:5]]
 result.insert(result.end(),
                 tuplesPerRankGlobal - result.size(),
                 FAKE_TUPLE);
@@ -513,7 +519,7 @@ result.insert(result.end(),
 }
 // Main:5 ends here
 
-// [[file:../../atrip.org::*Interface][Interface:1]]
+// [[file:~/atrip/atrip.org::*Interface][Interface:1]]
 struct Distribution : public TuplesDistribution {
   ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
     return main(universe, Nv);
@@ -521,10 +527,10 @@ struct Distribution : public TuplesDistribution {
 };
 // Interface:1 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/atrip/atrip.org::*Epilog][Epilog:1]]
 } // namespace group_and_sort
 // Epilog:1 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/atrip/atrip.org::*Epilog][Epilog:1]]
 }
 // Epilog:1 ends here

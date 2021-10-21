@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Unions][Unions:1]]
+// [[file:~/atrip/atrip.org::*Unions][Unions:1]]
 #pragma once
 #include <atrip/SliceUnion.hpp>
 

@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 #include <sstream>
 #include <string>
@@ -11,7 +11,7 @@
 namespace atrip {
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::*Pretty printing][Pretty printing:1]]
+// [[file:~/atrip/atrip.org::*Pretty%20printing][Pretty printing:1]]
 template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
@@ -22,11 +22,11 @@ template <typename T>
   }
 // Pretty printing:1 ends here
 
-// [[file:../../atrip.org::*Chrono][Chrono:1]]
-#define WITH_CHRONO(__chrono, ...)              \
-  __chrono.start();                             \
+// [[file:~/atrip/atrip.org::*Chrono][Chrono:1]]
+#define WITH_CHRONO(__chrono_name, ...)         \
+  Atrip::chrono[__chrono_name].start();         \
   __VA_ARGS__                                   \
-  __chrono.stop();
+  Atrip::chrono[__chrono_name].stop();
 
 struct Timer {
   using Clock = std::chrono::high_resolution_clock;
@@ -41,6 +41,6 @@ struct Timer {
 using Timings = std::map<std::string, Timer>;
 // Chrono:1 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/atrip/atrip.org::*Epilog][Epilog:1]]
 }
 // Epilog:1 ends here
