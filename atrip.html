@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-19 Tue 15:47 -->
+<!-- 2021-10-21 Thu 13:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATRIP: An MPI-asynchronous implementation of CCSD(T)</title>
@@ -244,57 +244,57 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga513105">1. Implementation</a>
+<li><a href="#org8c92e3e">1. Implementation</a>
 <ul>
-<li><a href="#org6de51c2">1.1. The slice</a>
+<li><a href="#org44a623d">1.1. The slice</a>
 <ul>
-<li><a href="#org2ac0bf0">1.1.1. Introduction</a></li>
-<li><a href="#org4d9fe39">1.1.2. Location</a></li>
-<li><a href="#org6e26b23">1.1.3. Type</a></li>
-<li><a href="#org7d7d94d">1.1.4. State</a></li>
-<li><a href="#orga73df88">1.1.5. The Info structure</a></li>
-<li><a href="#org5a4c770">1.1.6. Name</a></li>
-<li><a href="#orged2b8b6">1.1.7. Database</a></li>
-<li><a href="#org57b29eb">1.1.8. MPI Types</a></li>
-<li><a href="#org5fe2736">1.1.9. Static utilities</a></li>
-<li><a href="#org1a18007">1.1.10. Attributes</a></li>
-<li><a href="#orgbb0fe21">1.1.11. Member functions</a></li>
+<li><a href="#orgeb0bad5">1.1.1. Introduction</a></li>
+<li><a href="#org5b765f1">1.1.2. Location</a></li>
+<li><a href="#orgf2c41ac">1.1.3. Type</a></li>
+<li><a href="#org938cadb">1.1.4. State</a></li>
+<li><a href="#org1860620">1.1.5. The Info structure</a></li>
+<li><a href="#orgd9ed4c4">1.1.6. Name</a></li>
+<li><a href="#org71d7af4">1.1.7. Database</a></li>
+<li><a href="#orgf9da194">1.1.8. MPI Types</a></li>
+<li><a href="#org056577f">1.1.9. Static utilities</a></li>
+<li><a href="#org1304338">1.1.10. Attributes</a></li>
+<li><a href="#org0b90f9f">1.1.11. Member functions</a></li>
 </ul>
 </li>
-<li><a href="#orgbe44951">1.2. Utils</a>
+<li><a href="#org47b89f9">1.2. Utils</a>
 <ul>
-<li><a href="#org3e8d46e">1.2.1. Pretty printing</a></li>
-<li><a href="#org95564ad">1.2.2. Chrono</a></li>
+<li><a href="#orgb12c4ac">1.2.1. Pretty printing</a></li>
+<li><a href="#orgf18d10e">1.2.2. Chrono</a></li>
 </ul>
 </li>
-<li><a href="#org53defc3">1.3. The rank mapping</a></li>
-<li><a href="#org392a7c1">1.4. The slice union</a></li>
-<li><a href="#orgf0fe7c7">1.5. Tuples</a>
+<li><a href="#orgf9cc1d8">1.3. The rank mapping</a></li>
+<li><a href="#org0993010">1.4. The slice union</a></li>
+<li><a href="#org250a9ce">1.5. Tuples</a>
 <ul>
-<li><a href="#org08de539">1.5.1. Tuples types</a></li>
-<li><a href="#org8e695a9">1.5.2. Distributing the tuples</a></li>
-<li><a href="#orge424d7b">1.5.3. Naive list</a></li>
-<li><a href="#orge63ddcb">1.5.4. Group and sort list</a></li>
+<li><a href="#org287a48f">1.5.1. Tuples types</a></li>
+<li><a href="#org760697a">1.5.2. Distributing the tuples</a></li>
+<li><a href="#orgd007cc8">1.5.3. Naive list</a></li>
+<li><a href="#org37a4ad5">1.5.4. Group and sort list</a></li>
 </ul>
 </li>
-<li><a href="#org1a4cc48">1.6. Unions</a></li>
-<li><a href="#org56f371f">1.7. Equations</a></li>
-<li><a href="#org5062289">1.8. Blas</a></li>
-<li><a href="#org5081a6b">1.9. Atrip</a>
+<li><a href="#org51117dc">1.6. Unions</a></li>
+<li><a href="#orgef34c8a">1.7. Equations</a></li>
+<li><a href="#org2d1b47b">1.8. Blas</a></li>
+<li><a href="#orga05fafe">1.9. Atrip</a>
 <ul>
-<li><a href="#orgb16acdc">1.9.1. Main</a></li>
+<li><a href="#org08a7258">1.9.1. Main</a></li>
 </ul>
 </li>
-<li><a href="#org5810f1f">1.10. Debug</a></li>
-<li><a href="#org8c51be9">1.11. Include header</a></li>
+<li><a href="#org1b157af">1.10. Debug</a></li>
+<li><a href="#orga78f19b">1.11. Include header</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orga513105" class="outline-2">
-<h2 id="orga513105"><span class="section-number-2">1</span> Implementation</h2>
+<div id="outline-container-org8c92e3e" class="outline-2">
+<h2 id="org8c92e3e"><span class="section-number-2">1</span> Implementation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The algorithm uses two main data types, the <code>Slice</code> and the
@@ -302,16 +302,16 @@ The algorithm uses two main data types, the <code>Slice</code> and the
 </p>
 </div>
 
-<div id="outline-container-org6de51c2" class="outline-3">
-<h3 id="org6de51c2"><span class="section-number-3">1.1</span> The slice</h3>
+<div id="outline-container-org44a623d" class="outline-3">
+<h3 id="org44a623d"><span class="section-number-3">1.1</span> The slice</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 The following section introduces the idea of a slice.
 </p>
 </div>
 
-<div id="outline-container-org2ac0bf0" class="outline-4">
-<h4 id="org2ac0bf0"><span class="section-number-4">1.1.1</span> Introduction</h4>
+<div id="outline-container-orgeb0bad5" class="outline-4">
+<h4 id="orgeb0bad5"><span class="section-number-4">1.1.1</span> Introduction</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 A slice is the concept of a subset of values of a given tensor.
@@ -327,8 +327,8 @@ corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).</li>
 </div>
 </div>
 
-<div id="outline-container-org4d9fe39" class="outline-4">
-<h4 id="org4d9fe39"><span class="section-number-4">1.1.2</span> Location</h4>
+<div id="outline-container-org5b765f1" class="outline-4">
+<h4 id="org5b765f1"><span class="section-number-4">1.1.2</span> Location</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Every slice set, for instance,
@@ -359,8 +359,8 @@ is therefore a simple structure:
 </div>
 </div>
 
-<div id="outline-container-org6e26b23" class="outline-4">
-<h4 id="org6e26b23"><span class="section-number-4">1.1.3</span> Type</h4>
+<div id="outline-container-orgf2c41ac" class="outline-4">
+<h4 id="orgf2c41ac"><span class="section-number-4">1.1.3</span> Type</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 Due to the permutation operators in the equations
@@ -421,8 +421,8 @@ a type which denotes which permutation it is.
 </div>
 </div>
 
-<div id="outline-container-org7d7d94d" class="outline-4">
-<h4 id="org7d7d94d"><span class="section-number-4">1.1.4</span> State</h4>
+<div id="outline-container-org938cadb" class="outline-4">
+<h4 id="org938cadb"><span class="section-number-4">1.1.4</span> State</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 Every slice can be in different states and every state
@@ -475,8 +475,8 @@ Again the implementation is a simple enum type.
 </div>
 </div>
 
-<div id="outline-container-orga73df88" class="outline-4">
-<h4 id="orga73df88"><span class="section-number-4">1.1.5</span> The Info structure</h4>
+<div id="outline-container-org1860620" class="outline-4">
+<h4 id="org1860620"><span class="section-number-4">1.1.5</span> The Info structure</h4>
 <div class="outline-text-4" id="text-1-1-5">
 <p>
 Every slice has an information structure associated with it
@@ -510,8 +510,8 @@ that keeps track of the <b><b>variable</b></b> type, state and so on.
 </div>
 </div>
 
-<div id="outline-container-org5a4c770" class="outline-4">
-<h4 id="org5a4c770"><span class="section-number-4">1.1.6</span> Name</h4>
+<div id="outline-container-orgd9ed4c4" class="outline-4">
+<h4 id="orgd9ed4c4"><span class="section-number-4">1.1.6</span> Name</h4>
 <div class="outline-text-4" id="text-1-1-6">
 <p>
 CCSD(T) needs in this algorithm 5 types of tensor slices,
@@ -540,8 +540,8 @@ and through two parameters for the hole contribution.
 </div>
 </div>
 
-<div id="outline-container-orged2b8b6" class="outline-4">
-<h4 id="orged2b8b6"><span class="section-number-4">1.1.7</span> Database</h4>
+<div id="outline-container-org71d7af4" class="outline-4">
+<h4 id="org71d7af4"><span class="section-number-4">1.1.7</span> Database</h4>
 <div class="outline-text-4" id="text-1-1-7">
 <p>
 The database is a simple representation of the slices of a slice union.
@@ -570,8 +570,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-org57b29eb" class="outline-4">
-<h4 id="org57b29eb"><span class="section-number-4">1.1.8</span> MPI Types</h4>
+<div id="outline-container-orgf9da194" class="outline-4">
+<h4 id="orgf9da194"><span class="section-number-4">1.1.8</span> MPI Types</h4>
 <div class="outline-text-4" id="text-1-1-8">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a626a4;">struct</span> <span style="color: #c18401;">mpi</span> {
@@ -666,8 +666,8 @@ a vector of these elements.
 </div>
 </div>
 
-<div id="outline-container-org5fe2736" class="outline-4">
-<h4 id="org5fe2736"><span class="section-number-4">1.1.9</span> Static utilities</h4>
+<div id="outline-container-org056577f" class="outline-4">
+<h4 id="org056577f"><span class="section-number-4">1.1.9</span> Static utilities</h4>
 <div class="outline-text-4" id="text-1-1-9">
 <p>
 This section presents some functions which are useful to work with
@@ -857,8 +857,8 @@ given slice could not be found.
 </div>
 </div>
 
-<div id="outline-container-org1a18007" class="outline-4">
-<h4 id="org1a18007"><span class="section-number-4">1.1.10</span> Attributes</h4>
+<div id="outline-container-org1304338" class="outline-4">
+<h4 id="org1304338"><span class="section-number-4">1.1.10</span> Attributes</h4>
 <div class="outline-text-4" id="text-1-1-10">
 <p>
 A slice object does not own data, it is just a container
@@ -904,8 +904,8 @@ For practical purposes in MPI calls, the number of elements in <code>data</code>
 </div>
 </div>
 
-<div id="outline-container-orgbb0fe21" class="outline-4">
-<h4 id="orgbb0fe21"><span class="section-number-4">1.1.11</span> Member functions</h4>
+<div id="outline-container-org0b90f9f" class="outline-4">
+<h4 id="org0b90f9f"><span class="section-number-4">1.1.11</span> Member functions</h4>
 <div class="outline-text-4" id="text-1-1-11">
 <p>
 It is important to note that a ready slice should not be recycled from
@@ -1088,15 +1088,15 @@ can be unwrapped through MPI.</li>
 </div>
 </div>
 
-<div id="outline-container-orgbe44951" class="outline-3">
-<h3 id="orgbe44951"><span class="section-number-3">1.2</span> Utils</h3>
+<div id="outline-container-org47b89f9" class="outline-3">
+<h3 id="org47b89f9"><span class="section-number-3">1.2</span> Utils</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 This section presents some utilities
 </p>
 </div>
-<div id="outline-container-org3e8d46e" class="outline-4">
-<h4 id="org3e8d46e"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
+<div id="outline-container-orgb12c4ac" class="outline-4">
+<h4 id="orgb12c4ac"><span class="section-number-4">1.2.1</span> Pretty printing</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-macro</a> package.
@@ -1117,8 +1117,8 @@ The pretty printing uses the <a href="https://github.com/sharkdp/dbg-macro">dbg-
 </div>
 </div>
 
-<div id="outline-container-org95564ad" class="outline-4">
-<h4 id="org95564ad"><span class="section-number-4">1.2.2</span> Chrono</h4>
+<div id="outline-container-orgf18d10e" class="outline-4">
+<h4 id="orgf18d10e"><span class="section-number-4">1.2.2</span> Chrono</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 The chrono is just a simple wrapper for a high resolution clock
@@ -1126,10 +1126,10 @@ that can be found in the <code>std::chrono</code> namespace of the standard libr
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c++"><span style="color: #e44649;">#define</span> <span style="color: #0184bc;">WITH_CHRONO</span>(<span style="color: #8b4513;">__chrono</span>, ...)              \
-  __chrono.start();                             \
+<pre class="src src-c++"><span style="color: #e44649;">#define</span> <span style="color: #0184bc;">WITH_CHRONO</span>(<span style="color: #8b4513;">__chrono_name</span>, ...)         \
+  <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[__chrono_name].start();         \
   <span style="color: #c18401;">__VA_ARGS__</span>                                   \
-  <span style="color: #8b4513;">__chrono</span>.stop();
+  <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::<span style="color: #8b4513;">chrono</span>[__chrono_name].stop();
 
 <span style="color: #a626a4;">struct</span> <span style="color: #c18401;">Timer</span> {
   <span style="color: #a626a4;">using</span> <span style="color: #c18401;">Clock</span> = <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">chrono</span>::high_resolution_clock;
@@ -1149,8 +1149,8 @@ that can be found in the <code>std::chrono</code> namespace of the standard libr
 </div>
 </div>
 
-<div id="outline-container-org53defc3" class="outline-3">
-<h3 id="org53defc3"><span class="section-number-3">1.3</span> The rank mapping</h3>
+<div id="outline-container-orgf9cc1d8" class="outline-3">
+<h3 id="orgf9cc1d8"><span class="section-number-3">1.3</span> The rank mapping</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 This section introduces the concept of rank mapping,
@@ -1223,8 +1223,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-org392a7c1" class="outline-3">
-<h3 id="org392a7c1"><span class="section-number-3">1.4</span> The slice union</h3>
+<div id="outline-container-org0993010" class="outline-3">
+<h3 id="org0993010"><span class="section-number-3">1.4</span> The slice union</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -1774,8 +1774,8 @@ rank.
 </div>
 </div>
 
-<div id="outline-container-orgf0fe7c7" class="outline-3">
-<h3 id="orgf0fe7c7"><span class="section-number-3">1.5</span> Tuples</h3>
+<div id="outline-container-org250a9ce" class="outline-3">
+<h3 id="org250a9ce"><span class="section-number-3">1.5</span> Tuples</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 This section introduces the types for tuples \( (a,b,c) \)
@@ -1784,8 +1784,8 @@ as well as their distribution to nodes and cores.
 </div>
 
 
-<div id="outline-container-org08de539" class="outline-4">
-<h4 id="org08de539"><span class="section-number-4">1.5.1</span> Tuples types</h4>
+<div id="outline-container-org287a48f" class="outline-4">
+<h4 id="org287a48f"><span class="section-number-4">1.5.1</span> Tuples types</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <p>
 The main tuple types are simple type aliases for finite-size arrays.
@@ -1804,8 +1804,8 @@ whereas a partial tuple is a two dimensional subset of these three.
 </div>
 </div>
 
-<div id="outline-container-org8e695a9" class="outline-4">
-<h4 id="org8e695a9"><span class="section-number-4">1.5.2</span> Distributing the tuples</h4>
+<div id="outline-container-org760697a" class="outline-4">
+<h4 id="org760697a"><span class="section-number-4">1.5.2</span> Distributing the tuples</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <p>
 In general it is our task to distribute all the tuples
@@ -1830,8 +1830,8 @@ The interface that we propose for this is simplye
 
 
 
-<div id="outline-container-orge424d7b" class="outline-4">
-<h4 id="orge424d7b"><span class="section-number-4">1.5.3</span> Naive list</h4>
+<div id="outline-container-orgd007cc8" class="outline-4">
+<h4 id="orgd007cc8"><span class="section-number-4">1.5.3</span> Naive list</h4>
 <div class="outline-text-4" id="text-1-5-3">
 <p>
 The naive implementation of the global tuples list is simple
@@ -1943,12 +1943,18 @@ With these two last functions we can easily define a tuple distribution like
     WITH_RANK &lt;&lt; <span style="color: #50a14f;">"range = "</span>
               &lt;&lt; range.first &lt;&lt; <span style="color: #50a14f;">" -&gt; "</span> &lt;&lt; range.second
               &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #8b4513;">result</span>(range.second - range.first + 1, FAKE_TUPLE);
+    WITH_RANK &lt;&lt; <span style="color: #50a14f;">"number of global tuples = "</span> &lt;&lt; all.size() &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
+    WITH_RANK &lt;&lt; <span style="color: #50a14f;">"number of local tuples  = "</span> &lt;&lt; result.size() &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
 
-    <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt;ABCTuple&gt; <span style="color: #8b4513;">result</span>(range.second - range.first, FAKE_TUPLE);
-    <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(all.begin() + range.first,
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::copy(range.first &gt;= all.size()
+              ? all.end()
+              : all.begin() + range.first,
+              <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">--</span>
               range.second &gt;= all.size()
-                ? all.end()
-                : all.begin() + range.first + range.second,
+              ? all.end()
+              : all.begin() + range.first + range.second,
+              <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">--</span>
               result.begin());
     <span style="color: #a626a4;">return</span> result;
   }
@@ -1959,12 +1965,12 @@ With these two last functions we can easily define a tuple distribution like
 </div>
 
 
-<div id="outline-container-orge63ddcb" class="outline-4">
-<h4 id="orge63ddcb"><span class="section-number-4">1.5.4</span> Group and sort list</h4>
+<div id="outline-container-org37a4ad5" class="outline-4">
+<h4 id="org37a4ad5"><span class="section-number-4">1.5.4</span> Group and sort list</h4>
 <div class="outline-text-4" id="text-1-5-4">
 </div>
 <ol class="org-ol">
-<li><a id="orge8ef706"></a>Node information<br />
+<li><a id="orgd1e6811"></a>Node information<br />
 <div class="outline-text-5" id="text-1-5-4-1">
 <dl class="org-dl">
 <dt>nodeList</dt><dd>List of hostnames of size \( N_n \)</dd>
@@ -2066,7 +2072,7 @@ number of nodes.
 </div>
 </li>
 
-<li><a id="org3532803"></a>Utils<br />
+<li><a id="org25a8cd4"></a>Utils<br />
 <div class="outline-text-5" id="text-1-5-4-2">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Provides the node on which the slice-element is found</span>
@@ -2102,7 +2108,7 @@ number of nodes.
 </div>
 </li>
 
-<li><a id="orgef42051"></a>Distribution<br />
+<li><a id="org8cbf69e"></a>Distribution<br />
 <div class="outline-text-5" id="text-1-5-4-3">
 <p>
 wording: home element = element which is located on the given node
@@ -2257,7 +2263,7 @@ wording: home element = element which is located on the given node
 </div>
 </li>
 
-<li><a id="org58ebe68"></a>Main<br />
+<li><a id="org17044e5"></a>Main<br />
 <div class="outline-text-5" id="text-1-5-4-4">
 <p>
 The main routine should return the list of tuples to be handled by the current rank.
@@ -2272,7 +2278,7 @@ Let \( N_n \) be the number of nodes or sockets.
 Then we have the following
 </p>
 
-<pre class="example" id="orgae4aad2">
+<pre class="example" id="orga8ed8e5">
 Global rank | 0 1 2 3 4 5 6 7 8
 nodeId      | 0 1 0 1 1 0 2 2 2
 Local rank  | 0 0 1 1 2 2 0 1 2
@@ -2490,7 +2496,7 @@ inserting fake tuples where needed
 </div>
 </li>
 
-<li><a id="orga637836"></a>Interface<br />
+<li><a id="org6ce4814"></a>Interface<br />
 <div class="outline-text-5" id="text-1-5-4-5">
 <p>
 The distribution interface will then simply be
@@ -2510,8 +2516,8 @@ The distribution interface will then simply be
 </div>
 </div>
 
-<div id="outline-container-org1a4cc48" class="outline-3">
-<h3 id="org1a4cc48"><span class="section-number-3">1.6</span> Unions</h3>
+<div id="outline-container-org51117dc" class="outline-3">
+<h3 id="org51117dc"><span class="section-number-3">1.6</span> Unions</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 Every slice pertaining to every different tensor
@@ -2759,8 +2765,8 @@ is sliced differently.
 </div>
 
 
-<div id="outline-container-org56f371f" class="outline-3">
-<h3 id="org56f371f"><span class="section-number-3">1.7</span> Equations</h3>
+<div id="outline-container-orgef34c8a" class="outline-3">
+<h3 id="orgef34c8a"><span class="section-number-3">1.7</span> Equations</h3>
 <div class="outline-text-3" id="text-1-7">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -2914,54 +2920,51 @@ is sliced differently.
     , <span style="color: #c18401;">double</span> <span style="color: #a626a4;">const</span>* <span style="color: #8b4513;">TBChh</span>
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TIJK</span>
     , <span style="color: #c18401;">double</span> *<span style="color: #8b4513;">Tijk</span>
-    , <span style="font-weight: bold; text-decoration: underline;">atrip</span>::<span style="color: #c18401;">Timings</span>&amp; <span style="color: #8b4513;">chrono</span>
     ) {
 
-    <span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">t_reorder</span> = chrono[<span style="color: #50a14f;">"doubles:reorder"</span>];
     <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">a</span> = abc[0], <span style="color: #8b4513;">b</span> = abc[1], <span style="color: #8b4513;">c</span> = abc[2]
               , <span style="color: #8b4513;">NoNo</span> = No*No, <span style="color: #8b4513;">NoNv</span> = No*Nv
               ;
 
-<span style="color: #e44649;">  #if</span> <span style="color: #e44649;">defined</span>(ATRIP_USE_DGEMM)
-<span style="color: #e44649;">  #define</span> <span style="color: #0184bc;">_IJK_</span>(<span style="color: #8b4513;">i</span>, <span style="color: #8b4513;">j</span>, <span style="color: #8b4513;">k</span>) i + j*No + k*NoNo
-<span style="color: #e44649;">  #define</span> <span style="color: #0184bc;">REORDER</span>(<span style="color: #8b4513;">__II</span>, <span style="color: #8b4513;">__JJ</span>, <span style="color: #8b4513;">__KK</span>)                                 \
-    t_reorder.start();                                              \
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">k</span> = 0; k &lt; No; k++)                                 \
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0; j &lt; No; j++)                                 \
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 0; i &lt; No; i++) {                               \
-      Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
-    }                                                               \
-    t_reorder.stop();
-<span style="color: #e44649;">  #define</span> <span style="color: #0184bc;">DGEMM_PARTICLES</span>(<span style="color: #8b4513;">__A</span>, <span style="color: #8b4513;">__B</span>)    \
-    <span style="font-weight: bold; text-decoration: underline;">atrip</span>::dgemm_( <span style="color: #50a14f;">"T"</span>                 \
-                , <span style="color: #50a14f;">"N"</span>                 \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo   \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No     \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv     \
-                , &amp;one                \
-                , __A                 \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv     \
-                , __B                 \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv     \
-                , &amp;zero               \
-                , _t_buffer.data()    \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo   \
-                );
-<span style="color: #e44649;">  #define</span> <span style="color: #0184bc;">DGEMM_HOLES</span>(<span style="color: #8b4513;">__A</span>, <span style="color: #8b4513;">__B</span>, <span style="color: #8b4513;">__TRANSB</span>)  \
-    <span style="font-weight: bold; text-decoration: underline;">atrip</span>::dgemm_( <span style="color: #50a14f;">"N"</span>                     \
-                , __TRANSB                \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo       \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No         \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No         \
-                , &amp;m_one                  \
-                , __A                     \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo       \
-                , __B                     \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No         \
-                , &amp;zero                   \
-                , _t_buffer.data()        \
-                , (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo       \
-                );
+<span style="color: #e44649;">#if</span> <span style="color: #e44649;">defined</span>(ATRIP_USE_DGEMM)
+<span style="color: #e44649;">#define</span> <span style="color: #0184bc;">_IJK_</span>(<span style="color: #8b4513;">i</span>, <span style="color: #8b4513;">j</span>, <span style="color: #8b4513;">k</span>) i + j*No + k*NoNo
+<span style="color: #e44649;">#define</span> <span style="color: #0184bc;">REORDER</span>(<span style="color: #8b4513;">__II</span>, <span style="color: #8b4513;">__JJ</span>, <span style="color: #8b4513;">__KK</span>)                           \
+  WITH_CHRONO(<span style="color: #50a14f;">"double:reorder"</span>,                             \
+              <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">k</span> = 0; k &lt; No; k++)               \
+                <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0; j &lt; No; j++)             \
+                  <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 0; i &lt; No; i++) {         \
+                    Tijk[_IJK_(i, j, k)]                    \
+                    += _t_buffer[_IJK_(__II, __JJ, __KK)];  \
+                  }                                         \
+              )
+<span style="color: #e44649;">#define</span> <span style="color: #0184bc;">DGEMM_PARTICLES</span>(<span style="color: #8b4513;">__A</span>, <span style="color: #8b4513;">__B</span>)               \
+  <span style="font-weight: bold; text-decoration: underline;">atrip</span>::dgemm_(<span style="color: #50a14f;">"T"</span>,                            \
+                <span style="color: #50a14f;">"N"</span>,                            \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo,              \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No,                \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv,                \
+                &amp;one,                           \
+                __A,                            \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv,                \
+                __B,                            \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;Nv,                \
+                &amp;zero,                          \
+                _t_buffer.data(),               \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo);
+<span style="color: #e44649;">#define</span> <span style="color: #0184bc;">DGEMM_HOLES</span>(<span style="color: #8b4513;">__A</span>, <span style="color: #8b4513;">__B</span>, <span style="color: #8b4513;">__TRANSB</span>)         \
+  <span style="font-weight: bold; text-decoration: underline;">atrip</span>::dgemm_(<span style="color: #50a14f;">"N"</span>,                            \
+                __TRANSB,                       \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo,              \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No,                \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No,                \
+                &amp;m_one,                         \
+                __A,                            \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo,              \
+                __B,                            \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;No,                \
+                &amp;zero,                          \
+                _t_buffer.data(),               \
+                (<span style="color: #c18401;">int</span> <span style="color: #a626a4;">const</span>*)&amp;NoNo);
 
     <span style="color: #a626a4;">using</span> <span style="color: #c18401;">F</span> = <span style="color: #c18401;">double</span>;
     <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">NoNoNo</span> = No*NoNo;
@@ -2969,88 +2972,86 @@ is sliced differently.
     _t_buffer.reserve(NoNoNo);
     <span style="color: #c18401;">F</span> <span style="color: #8b4513;">one</span>{1.0}, <span style="color: #8b4513;">m_one</span>{-1.0}, <span style="color: #8b4513;">zero</span>{0.0};
 
-    t_reorder.start();
-    <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">k</span> = 0; k &lt; NoNoNo; k++) {
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">zero the Tijk</span>
-      Tijk[k] = 0.0;
-    }
-    t_reorder.stop();
+    WITH_CHRONO(<span style="color: #50a14f;">"double:reorder"</span>,
+      <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">k</span> = 0; k &lt; NoNoNo; k++) {
+         Tijk[k] = 0.0;
+       })
 
-    chrono[<span style="color: #50a14f;">"doubles:holes"</span>].start();
-    { <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Holes part ============================================================</span>
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:1"</span>].start();
-      DGEMM_HOLES(VhhhC, TABhh, <span style="color: #50a14f;">"N"</span>)
-      REORDER(i, k, j)
-      chrono[<span style="color: #50a14f;">"doubles:holes:1"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:2"</span>].start();
-      DGEMM_HOLES(VhhhC, TABhh, <span style="color: #50a14f;">"T"</span>)
-      REORDER(j, k, i)
-      chrono[<span style="color: #50a14f;">"doubles:holes:2"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:3"</span>].start();
-      DGEMM_HOLES(VhhhB, TAChh, <span style="color: #50a14f;">"N"</span>)
-      REORDER(i, j, k)
-      chrono[<span style="color: #50a14f;">"doubles:holes:3"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:4"</span>].start();
-      DGEMM_HOLES(VhhhB, TAChh, <span style="color: #50a14f;">"T"</span>)
-      REORDER(k, j, i)
-      chrono[<span style="color: #50a14f;">"doubles:holes:4"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:5"</span>].start();
-      DGEMM_HOLES(VhhhA, TBChh, <span style="color: #50a14f;">"N"</span>)
-      REORDER(j, i, k)
-      chrono[<span style="color: #50a14f;">"doubles:holes:5"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4</span>
-      chrono[<span style="color: #50a14f;">"doubles:holes:6"</span>].start();
-      DGEMM_HOLES(VhhhA, TBChh, <span style="color: #50a14f;">"T"</span>)
-      REORDER(k, i, j)
-      chrono[<span style="color: #50a14f;">"doubles:holes:6"</span>].stop();
-    }
-    chrono[<span style="color: #50a14f;">"doubles:holes"</span>].stop();
+    WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes"</span>,
+                { <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Holes part ================================================</span>
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:1"</span>,
+                              DGEMM_HOLES(VhhhC, TABhh, <span style="color: #50a14f;">"N"</span>)
+                              REORDER(i, k, j)
+                              )
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:2"</span>,
+                              DGEMM_HOLES(VhhhC, TABhh, <span style="color: #50a14f;">"T"</span>)
+                              REORDER(j, k, i)
+                              )
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:3"</span>,
+                              DGEMM_HOLES(VhhhB, TAChh, <span style="color: #50a14f;">"N"</span>)
+                              REORDER(i, j, k)
+                              )
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:4"</span>,
+                              DGEMM_HOLES(VhhhB, TAChh, <span style="color: #50a14f;">"T"</span>)
+                              REORDER(k, j, i)
+                              )
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:5"</span>,
+                              DGEMM_HOLES(VhhhA, TBChh, <span style="color: #50a14f;">"N"</span>)
+                              REORDER(j, i, k)
+                              )
+                  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4</span>
+                  WITH_CHRONO(<span style="color: #50a14f;">"doubles:holes:6"</span>,
+                              DGEMM_HOLES(VhhhA, TBChh, <span style="color: #50a14f;">"T"</span>)
+                              REORDER(k, i, j)
+                              )
+                }
+                )
 
-    chrono[<span style="color: #50a14f;">"doubles:particles"</span>].start();
-    { <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Particle part =========================================================</span>
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:1"</span>].start();
-      DGEMM_PARTICLES(TAphh, VBCph)
-      REORDER(i, j, k)
-      chrono[<span style="color: #50a14f;">"doubles:particles:1"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:2"</span>].start();
-      DGEMM_PARTICLES(TAphh, VCBph)
-      REORDER(i, k, j)
-      chrono[<span style="color: #50a14f;">"doubles:particles:2"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:3"</span>].start();
-      DGEMM_PARTICLES(TCphh, VABph)
-      REORDER(k, i, j)
-      chrono[<span style="color: #50a14f;">"doubles:particles:3"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:4"</span>].start();
-      DGEMM_PARTICLES(TCphh, VBAph)
-      REORDER(k, j, i)
-      chrono[<span style="color: #50a14f;">"doubles:particles:4"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:5"</span>].start();
-      DGEMM_PARTICLES(TBphh, VACph)
-      REORDER(j, i, k)
-      chrono[<span style="color: #50a14f;">"doubles:particles:5"</span>].stop();
-      <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4</span>
-      chrono[<span style="color: #50a14f;">"doubles:particles:6"</span>].start();
-      DGEMM_PARTICLES(TBphh, VCAph)
-      REORDER(j, k, i)
-      chrono[<span style="color: #50a14f;">"doubles:particles:6"</span>].stop();
-    }
-    chrono[<span style="color: #50a14f;">"doubles:particles"</span>].stop();
+      WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles"</span>,
+                  { <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Particle part ===========================================</span>
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:1"</span>,
+                                DGEMM_PARTICLES(TAphh, VBCph)
+                                REORDER(i, j, k)
+                                )
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:2"</span>,
+                                DGEMM_PARTICLES(TAphh, VCBph)
+                                REORDER(i, k, j)
+                                )
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:3"</span>,
+                                DGEMM_PARTICLES(TCphh, VABph)
+                                REORDER(k, i, j)
+                                )
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:4"</span>,
+                                DGEMM_PARTICLES(TCphh, VBAph)
+                                REORDER(k, j, i)
+                                )
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:5"</span>,
+                                DGEMM_PARTICLES(TBphh, VACph)
+                                REORDER(j, i, k)
+                                )
+                    <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4</span>
+                    WITH_CHRONO(<span style="color: #50a14f;">"doubles:particles:6"</span>,
+                                DGEMM_PARTICLES(TBphh, VCAph)
+                                REORDER(j, k, i)
+                                )
+                  }
+                  )
 
-<span style="color: #e44649;">  #undef</span> REORDER
-<span style="color: #e44649;">  #undef</span> DGEMM_HOLES
-<span style="color: #e44649;">  #undef</span> DGEMM_PARTICLES
-<span style="color: #e44649;">  #undef</span> _IJK_
-<span style="color: #e44649;">  #else</span>
+<span style="color: #e44649;">#undef</span> REORDER
+<span style="color: #e44649;">#undef</span> DGEMM_HOLES
+<span style="color: #e44649;">#undef</span> DGEMM_PARTICLES
+<span style="color: #e44649;">#undef</span> _IJK_
+<span style="color: #e44649;">#else</span>
     <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">k</span> = 0; k &lt; No; k++)
     <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">j</span> = 0; j &lt; No; j++)
     <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">i</span> = 0; i &lt; No; i++){
@@ -3094,7 +3095,7 @@ is sliced differently.
       }
 
     }
-<span style="color: #e44649;">  #endif</span>
+<span style="color: #e44649;">#endif</span>
   }
 
 }
@@ -3103,8 +3104,8 @@ is sliced differently.
 </div>
 </div>
 
-<div id="outline-container-org5062289" class="outline-3">
-<h3 id="org5062289"><span class="section-number-3">1.8</span> Blas</h3>
+<div id="outline-container-org2d1b47b" class="outline-3">
+<h3 id="org2d1b47b"><span class="section-number-3">1.8</span> Blas</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 The main matrix-matrix multiplication method used in this algorithm
@@ -3137,8 +3138,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org5081a6b" class="outline-3">
-<h3 id="org5081a6b"><span class="section-number-3">1.9</span> Atrip</h3>
+<div id="outline-container-orga05fafe" class="outline-3">
+<h3 id="orga05fafe"><span class="section-number-3">1.9</span> Atrip</h3>
 <div class="outline-text-3" id="text-1-9">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3210,8 +3211,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-orgb16acdc" class="outline-4">
-<h4 id="orgb16acdc"><span class="section-number-4">1.9.1</span> Main</h4>
+<div id="outline-container-org08a7258" class="outline-4">
+<h4 id="org08a7258"><span class="section-number-4">1.9.1</span> Main</h4>
 <div class="outline-text-4" id="text-1-9-1">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#include</span> <span style="color: #50a14f;">&lt;iomanip&gt;</span>
@@ -3238,9 +3239,6 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   <span style="color: #a626a4;">const</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">np</span> = <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::np;
   <span style="color: #a626a4;">const</span> <span style="color: #c18401;">int</span> <span style="color: #8b4513;">rank</span> = <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::rank;
   <span style="color: #c18401;">MPI_Comm</span> <span style="color: #8b4513;">universe</span> = in.ei-&gt;wrld-&gt;comm;
-
-  <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">Timings in seconds ================================================{{{1</span>
-  <span style="color: #c18401;">Timings</span> <span style="color: #8b4513;">chrono</span>{};
 
   <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">No</span> = in.ei-&gt;lens[0];
   <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">Nv</span> = in.ea-&gt;lens[0];
@@ -3281,20 +3279,20 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   }
 
 
-  chrono[<span style="color: #50a14f;">"nv-slices"</span>].start();
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">BUILD SLICES PARAMETRIZED BY NV ==================================={{{1</span>
-  LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILD NV-SLICES\n"</span>;
-  <span style="color: #c18401;">TAPHH</span> <span style="color: #8b4513;">taphh</span>(*in.Tpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
-  <span style="color: #c18401;">HHHA</span>  <span style="color: #8b4513;">hhha</span>(*in.Vhhhp, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
-  chrono[<span style="color: #50a14f;">"nv-slices"</span>].stop();
+  WITH_CHRONO(<span style="color: #50a14f;">"nv-slices"</span>,
+    LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILD NV-SLICES\n"</span>;
+    <span style="color: #c18401;">TAPHH</span> <span style="color: #8b4513;">taphh</span>(*in.Tpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
+    <span style="color: #c18401;">HHHA</span>  <span style="color: #8b4513;">hhha</span>(*in.Vhhhp, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
+  )
 
-  chrono[<span style="color: #50a14f;">"nv-nv-slices"</span>].start();
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1</span>
-  LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILD NV x NV-SLICES\n"</span>;
-  <span style="color: #c18401;">ABPH</span> <span style="color: #8b4513;">abph</span>(*in.Vppph, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
-  <span style="color: #c18401;">ABHH</span> <span style="color: #8b4513;">abhh</span>(*in.Vpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
-  <span style="color: #c18401;">TABHH</span> <span style="color: #8b4513;">tabhh</span>(*in.Tpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
-  chrono[<span style="color: #50a14f;">"nv-nv-slices"</span>].stop();
+  WITH_CHRONO(<span style="color: #50a14f;">"nv-nv-slices"</span>,
+    LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILD NV x NV-SLICES\n"</span>;
+    <span style="color: #c18401;">ABPH</span> <span style="color: #8b4513;">abph</span>(*in.Vppph, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
+    <span style="color: #c18401;">ABHH</span> <span style="color: #8b4513;">abhh</span>(*in.Vpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
+    <span style="color: #c18401;">TABHH</span> <span style="color: #8b4513;">tabhh</span>(*in.Tpphh, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv, (<span style="color: #c18401;">size_t</span>)np, child_comm, universe);
+  )
 
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">all tensors</span>
   <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="color: #c18401;">vector</span>&lt; <span style="color: #c18401;">SliceUnion</span>* &gt; <span style="color: #8b4513;">unions</span> = {&amp;taphh, &amp;hhha, &amp;abph, &amp;abhh, &amp;tabhh};
@@ -3311,7 +3309,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   }
 
   LOG(0,<span style="color: #50a14f;">"Atrip"</span>) &lt;&lt; <span style="color: #50a14f;">"BUILDING TUPLE LIST\n"</span>;
-  WITH_CHRONO(chrono[<span style="color: #50a14f;">"tuples:build"</span>],
+  WITH_CHRONO(<span style="color: #50a14f;">"tuples:build"</span>,
     <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span> <span style="color: #c18401;">tuplesList</span> = distribution-&gt;getTuples(Nv, universe);
     )
   <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">nIterations</span> = tuplesList.size();
@@ -3334,45 +3332,42 @@ is mainly using the <code>DGEMM</code> function, which we declare as
   <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">communicateDatabase</span>
     = [ &amp;<span style="color: #8b4513;">unions</span>
       , <span style="font-weight: bold; text-decoration: underline;">np</span>
-      , &amp;<span style="color: #8b4513;">chrono</span>
       ] (<span style="color: #c18401;">ABCTuple</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">abc</span>, <span style="color: #c18401;">MPI_Comm</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">c</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">Slice</span>::Database {
 
-        chrono[<span style="color: #50a14f;">"db:comm:type:do"</span>].start();
-        <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">MPI_LDB_ELEMENT</span> = <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="font-weight: bold; text-decoration: underline;">mpi</span>::localDatabaseElement();
-        chrono[<span style="color: #50a14f;">"db:comm:type:do"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"db:comm:type:do"</span>,
+          <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">MPI_LDB_ELEMENT</span> = <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="font-weight: bold; text-decoration: underline;">mpi</span>::localDatabaseElement();
+        )
 
-        chrono[<span style="color: #50a14f;">"db:comm:ldb"</span>].start();
-        <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">LocalDatabase</span> <span style="color: #8b4513;">ldb</span>;
-
-        <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tensor</span>: unions) {
-          <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tensorDb</span> = tensor-&gt;buildLocalDatabase(abc);
-          ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
-        }
-        chrono[<span style="color: #50a14f;">"db:comm:ldb"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"db:comm:ldb"</span>,
+          <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">LocalDatabase</span> <span style="color: #8b4513;">ldb</span>;
+          <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tensor</span>: unions) {
+            <span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">tensorDb</span> = tensor-&gt;buildLocalDatabase(abc);
+            ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+          }
+        )
 
         <span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Database</span> <span style="color: #8b4513;">db</span>(np * ldb.size(), ldb[0]);
 
-        chrono[<span style="color: #50a14f;">"oneshot-db:comm:allgather"</span>].start();
-        chrono[<span style="color: #50a14f;">"db:comm:allgather"</span>].start();
-        MPI_Allgather( ldb.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , db.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , c);
-        chrono[<span style="color: #50a14f;">"db:comm:allgather"</span>].stop();
-        chrono[<span style="color: #50a14f;">"oneshot-db:comm:allgather"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"oneshot-db:comm:allgather"</span>,
+        WITH_CHRONO(<span style="color: #50a14f;">"db:comm:allgather"</span>,
+          MPI_Allgather( ldb.data()
+                      , ldb.size()
+                      , MPI_LDB_ELEMENT
+                      , db.data()
+                      , ldb.size()
+                      , MPI_LDB_ELEMENT
+                      , c);
+        ))
 
-        chrono[<span style="color: #50a14f;">"db:comm:type:free"</span>].start();
-        MPI_Type_free(&amp;MPI_LDB_ELEMENT);
-        chrono[<span style="color: #50a14f;">"db:comm:type:free"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"db:comm:type:free"</span>,
+          MPI_Type_free(&amp;MPI_LDB_ELEMENT);
+        )
 
         <span style="color: #a626a4;">return</span> db;
       };
 
   <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">doIOPhase</span>
-    = [&amp;<span style="color: #8b4513;">unions</span>, &amp;<span style="color: #8b4513;">rank</span>, &amp;<span style="color: #8b4513;">np</span>, &amp;<span style="color: #8b4513;">universe</span>, &amp;<span style="color: #8b4513;">chrono</span>] (<span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Database</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">db</span>) {
+    = [&amp;<span style="color: #8b4513;">unions</span>, &amp;<span style="color: #8b4513;">rank</span>, &amp;<span style="color: #8b4513;">np</span>, &amp;<span style="color: #8b4513;">universe</span>] (<span style="font-weight: bold; text-decoration: underline;">Slice</span>::<span style="color: #c18401;">Database</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">db</span>) {
 
     <span style="color: #a626a4;">const</span> <span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">localDBLength</span> = db.size() / np;
 
@@ -3408,9 +3403,9 @@ is mainly using the <code>DGEMM</code> function, which we declare as
           &lt;&lt; <span style="color: #50a14f;">"\n"</span>
           ;
 
-        chrono[<span style="color: #50a14f;">"db:io:recv"</span>].start();
-        u.receive(el.info, recvTag);
-        chrono[<span style="color: #50a14f;">"db:io:recv"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"db:io:recv"</span>,
+          u.receive(el.info, recvTag);
+        )
 
       } <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">recv</span>
     }
@@ -3444,9 +3439,9 @@ is mainly using the <code>DGEMM</code> function, which we declare as
           &lt;&lt; <span style="color: #50a14f;">"\n"</span>
           ;
 
-        chrono[<span style="color: #50a14f;">"db:io:send"</span>].start();
-        u.send(otherRank, el.info, sendTag);
-        chrono[<span style="color: #50a14f;">"db:io:send"</span>].stop();
+        WITH_CHRONO(<span style="color: #50a14f;">"db:io:send"</span>,
+          u.send(otherRank, el.info, sendTag);
+        )
 
       } <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">send phase</span>
 
@@ -3477,14 +3472,14 @@ is mainly using the <code>DGEMM</code> function, which we declare as
       ; i &lt; tuplesList.size()
       ; i++, iteration++
       ) {
-    chrono[<span style="color: #50a14f;">"iterations"</span>].start();
+    <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"iterations"</span>].start();
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">check overhead from chrono over all iterations</span>
-    chrono[<span style="color: #50a14f;">"start:stop"</span>].start(); chrono[<span style="color: #50a14f;">"start:stop"</span>].stop();
+    WITH_CHRONO(<span style="color: #50a14f;">"start:stop"</span>, {})
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">check overhead of doing a barrier at the beginning</span>
-    WITH_CHRONO(chrono[<span style="color: #50a14f;">"oneshot-mpi:barrier"</span>],
-    WITH_CHRONO(chrono[<span style="color: #50a14f;">"mpi:barrier"</span>],
+    WITH_CHRONO(<span style="color: #50a14f;">"oneshot-mpi:barrier"</span>,
+    WITH_CHRONO(<span style="color: #50a14f;">"mpi:barrier"</span>,
       <span style="color: #a626a4;">if</span> (in.barrier) MPI_Barrier(universe);
     ))
 
@@ -3492,15 +3487,15 @@ is mainly using the <code>DGEMM</code> function, which we declare as
       LOG(0,<span style="color: #50a14f;">"Atrip"</span>)
         &lt;&lt; <span style="color: #50a14f;">"iteration "</span> &lt;&lt; iteration
         &lt;&lt; <span style="color: #50a14f;">" ["</span> &lt;&lt; 100 * iteration / nIterations &lt;&lt; <span style="color: #50a14f;">"%]"</span>
-        &lt;&lt; <span style="color: #50a14f;">" ("</span> &lt;&lt; doublesFlops * iteration / chrono[<span style="color: #50a14f;">"doubles"</span>].count()
+        &lt;&lt; <span style="color: #50a14f;">" ("</span> &lt;&lt; doublesFlops * iteration / <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"doubles"</span>].count()
         &lt;&lt; <span style="color: #50a14f;">"GF)"</span>
-        &lt;&lt; <span style="color: #50a14f;">" ("</span> &lt;&lt; doublesFlops * iteration / chrono[<span style="color: #50a14f;">"iterations"</span>].count()
+        &lt;&lt; <span style="color: #50a14f;">" ("</span> &lt;&lt; doublesFlops * iteration / <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"iterations"</span>].count()
         &lt;&lt; <span style="color: #50a14f;">"GF)"</span>
         &lt;&lt; <span style="color: #50a14f;">" ===========================\n"</span>;
 
       <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">PRINT TIMINGS</span>
       <span style="color: #a626a4;">if</span> (in.chrono)
-      <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">pair</span>: chrono)
+      <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">pair</span>: <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono)
         LOG(1, <span style="color: #50a14f;">" "</span>) &lt;&lt; pair.first &lt;&lt; <span style="color: #50a14f;">" :: "</span>
                     &lt;&lt; pair.second.count()
                     &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
@@ -3517,13 +3512,13 @@ is mainly using the <code>DGEMM</code> function, which we declare as
                             : &amp;tuplesList[i + 1]
                  ;
 
-    chrono[<span style="color: #50a14f;">"with_rank"</span>].start();
-    WITH_RANK &lt;&lt; <span style="color: #50a14f;">" :it "</span> &lt;&lt; iteration
-              &lt;&lt; <span style="color: #50a14f;">" :abc "</span> &lt;&lt; pretty_print(abc)
-              &lt;&lt; <span style="color: #50a14f;">" :abcN "</span>
-              &lt;&lt; (abcNext ? pretty_print(*abcNext) : <span style="color: #50a14f;">"None"</span>)
-              &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
-    chrono[<span style="color: #50a14f;">"with_rank"</span>].stop();
+    WITH_CHRONO(<span style="color: #50a14f;">"with_rank"</span>,
+      WITH_RANK &lt;&lt; <span style="color: #50a14f;">" :it "</span> &lt;&lt; iteration
+                &lt;&lt; <span style="color: #50a14f;">" :abc "</span> &lt;&lt; pretty_print(abc)
+                &lt;&lt; <span style="color: #50a14f;">" :abcN "</span>
+                &lt;&lt; (abcNext ? pretty_print(*abcNext) : <span style="color: #50a14f;">"None"</span>)
+                &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+    )
 
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">COMM FIRST DATABASE ================================================{{{1</span>
@@ -3536,19 +3531,19 @@ is mainly using the <code>DGEMM</code> function, which we declare as
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__:first database io phase DONE\n"</span>;
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__::::Unwrapping all slices for first database\n"</span>;
       <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">u</span>: unions) u-&gt;unwrapAll(abc);
-      WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__::::Unwrapping all slices for first database DONE\n"</span>;
+      WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__first__::::Unwrapping slices for first database DONE\n"</span>;
       MPI_Barrier(universe);
     }
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">COMM NEXT DATABASE ================================================={{{1</span>
     <span style="color: #a626a4;">if</span> (abcNext) {
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__comm__:"</span> &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"th communicating database\n"</span>;
-      chrono[<span style="color: #50a14f;">"db:comm"</span>].start();
-      <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">db</span> = communicateDatabase(*abcNext, universe);
-      chrono[<span style="color: #50a14f;">"db:comm"</span>].stop();
-      chrono[<span style="color: #50a14f;">"db:io"</span>].start();
-      doIOPhase(db);
-      chrono[<span style="color: #50a14f;">"db:io"</span>].stop();
+      WITH_CHRONO(<span style="color: #50a14f;">"db:comm"</span>,
+        <span style="color: #a626a4;">const</span> <span style="color: #a626a4;">auto</span> <span style="color: #8b4513;">db</span> = communicateDatabase(*abcNext, universe);
+      )
+      WITH_CHRONO(<span style="color: #50a14f;">"db:io"</span>,
+        doIOPhase(db);
+      )
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__comm__:"</span> &lt;&lt;  iteration &lt;&lt; <span style="color: #50a14f;">"th database io phase DONE\n"</span>;
     }
 
@@ -3556,63 +3551,61 @@ is mainly using the <code>DGEMM</code> function, which we declare as
     OCD_Barrier(universe);
     <span style="color: #a626a4;">if</span> (<span style="font-weight: bold;">!</span>isFakeTuple(i)) {
       WITH_RANK &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"-th doubles\n"</span>;
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"oneshot-unwrap"</span>],
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"unwrap"</span>],
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"unwrap:doubles"</span>],
+      WITH_CHRONO(<span style="color: #50a14f;">"oneshot-unwrap"</span>,
+      WITH_CHRONO(<span style="color: #50a14f;">"unwrap"</span>,
+      WITH_CHRONO(<span style="color: #50a14f;">"unwrap:doubles"</span>,
         <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">u</span>: <span style="color: #a626a4;">decltype</span>(unions){&amp;abph, &amp;hhha, &amp;taphh, &amp;tabhh}) {
           u-&gt;unwrapAll(abc);
         }
       )))
-      chrono[<span style="color: #50a14f;">"oneshot-doubles"</span>].start();
-      chrono[<span style="color: #50a14f;">"doubles"</span>].start();
-      doublesContribution( abc, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv
-                         <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- VABCI</span>
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BA, abc)
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::CA, abc)
-                         , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::CB, abc)
-                         <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- VHHHA</span>
-                         , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::A, abc)
-                         , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::B, abc)
-                         , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::C, abc)
-                         <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TA</span>
-                         , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::A, abc)
-                         , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::B, abc)
-                         , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::C, abc)
-                         <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TABIJ</span>
-                         , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
-                         , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
-                         , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
-                         <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TIJK</span>
-                         , Tijk.data()
-                         , chrono
-                         );
-      WITH_RANK &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"-th doubles done\n"</span>;
-      chrono[<span style="color: #50a14f;">"doubles"</span>].stop();
-      chrono[<span style="color: #50a14f;">"oneshot-doubles"</span>].stop();
+      WITH_CHRONO(<span style="color: #50a14f;">"oneshot-doubles"</span>,
+      WITH_CHRONO(<span style="color: #50a14f;">"doubles"</span>,
+        doublesContribution( abc, (<span style="color: #c18401;">size_t</span>)No, (<span style="color: #c18401;">size_t</span>)Nv
+                          <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- VABCI</span>
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BA, abc)
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::CA, abc)
+                          , abph.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::CB, abc)
+                          <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- VHHHA</span>
+                          , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::A, abc)
+                          , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::B, abc)
+                          , hhha.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::C, abc)
+                          <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TA</span>
+                          , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::A, abc)
+                          , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::B, abc)
+                          , taphh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::C, abc)
+                          <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TABIJ</span>
+                          , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
+                          , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
+                          , tabhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
+                          <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">-- TIJK</span>
+                          , Tijk.data()
+                          );
+        WITH_RANK &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"-th doubles done\n"</span>;
+      ))
     }
 
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">COMPUTE SINGLES =================================================== {{{1</span>
     OCD_Barrier(universe);
     <span style="color: #a626a4;">if</span> (<span style="font-weight: bold;">!</span>isFakeTuple(i)) {
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"oneshot-unwrap"</span>],
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"unwrap"</span>],
-      WITH_CHRONO(chrono[<span style="color: #50a14f;">"unwrap:singles"</span>],
+      WITH_CHRONO(<span style="color: #50a14f;">"oneshot-unwrap"</span>,
+      WITH_CHRONO(<span style="color: #50a14f;">"unwrap"</span>,
+      WITH_CHRONO(<span style="color: #50a14f;">"unwrap:singles"</span>,
         abhh.unwrapAll(abc);
       )))
-      chrono[<span style="color: #50a14f;">"reorder"</span>].start();
-      <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">I</span>(0); I &lt; Zijk.size(); I++) Zijk[I] = Tijk[I];
-      chrono[<span style="color: #50a14f;">"reorder"</span>].stop();
-      chrono[<span style="color: #50a14f;">"singles"</span>].start();
-      singlesContribution( No, Nv, abc
-                         , Tai.data()
-                         , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
-                         , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
-                         , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
-                         , Zijk.data());
-      chrono[<span style="color: #50a14f;">"singles"</span>].stop();
+      WITH_CHRONO(<span style="color: #50a14f;">"reorder"</span>,
+        <span style="color: #a626a4;">for</span> (<span style="color: #c18401;">size_t</span> <span style="color: #8b4513;">I</span>(0); I &lt; Zijk.size(); I++) Zijk[I] = Tijk[I];
+      )
+      WITH_CHRONO(<span style="color: #50a14f;">"singles"</span>,
+        singlesContribution( No, Nv, abc
+                          , Tai.data()
+                          , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AB, abc)
+                          , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::AC, abc)
+                          , abhh.unwrapSlice(<span style="font-weight: bold; text-decoration: underline;">Slice</span>::BC, abc)
+                          , Zijk.data());
+      )
     }
 
 
@@ -3625,12 +3618,12 @@ is mainly using the <code>DGEMM</code> function, which we declare as
       <span style="color: #a626a4;">if</span> (abc[1] == abc[2]) distinct--;
       <span style="color: #a626a4;">const</span> <span style="color: #c18401;">double</span> <span style="color: #8b4513;">epsabc</span>(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
-      chrono[<span style="color: #50a14f;">"energy"</span>].start();
-      <span style="color: #a626a4;">if</span> ( distinct == 0)
-        tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
-      <span style="color: #a626a4;">else</span>
-        tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
-      chrono[<span style="color: #50a14f;">"energy"</span>].stop();
+      WITH_CHRONO(<span style="color: #50a14f;">"energy"</span>,
+        <span style="color: #a626a4;">if</span> ( distinct == 0)
+          tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
+        <span style="color: #a626a4;">else</span>
+          tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
+      )
 
 <span style="color: #e44649;">#if</span> <span style="color: #e44649;">defined</span>(HAVE_OCD) || <span style="color: #e44649;">defined</span>(ATRIP_PRINT_TUPLES)
       tupleEnergies[abc] = tupleEnergy;
@@ -3661,7 +3654,6 @@ is mainly using the <code>DGEMM</code> function, which we declare as
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">CLEANUP UNIONS ===================================================={{{1</span>
     OCD_Barrier(universe);
     <span style="color: #a626a4;">if</span> (abcNext) {
-      chrono[<span style="color: #50a14f;">"gc"</span>].start();
       WITH_RANK &lt;&lt; <span style="color: #50a14f;">"__gc__:"</span> &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"-th cleaning up.......\n"</span>;
       <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span>&amp; <span style="color: #8b4513;">u</span>: unions) {
 
@@ -3695,12 +3687,11 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 
 
       }
-      chrono[<span style="color: #50a14f;">"gc"</span>].stop();
     }
 
       WITH_RANK &lt;&lt; iteration &lt;&lt; <span style="color: #50a14f;">"-th cleaning up....... DONE\n"</span>;
 
-    chrono[<span style="color: #50a14f;">"iterations"</span>].stop();
+    <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"iterations"</span>].stop();
     <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">ITERATION END ====================================================={{{1</span>
 
   }
@@ -3738,15 +3729,15 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">PRINT TIMINGS {{{1</span>
   <span style="color: #a626a4;">if</span> (in.chrono)
-  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">pair</span>: chrono)
+  <span style="color: #a626a4;">for</span> (<span style="color: #a626a4;">auto</span> <span style="color: #a626a4;">const</span>&amp; <span style="color: #8b4513;">pair</span>: <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono)
     LOG(0,<span style="color: #50a14f;">"atrip:chrono"</span>) &lt;&lt; pair.first &lt;&lt; <span style="color: #50a14f;">" "</span>
                           &lt;&lt; pair.second.count() &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">std</span>::endl;
 
 
   LOG(0, <span style="color: #50a14f;">"atrip:flops(doubles)"</span>)
-    &lt;&lt; nIterations * doublesFlops / chrono[<span style="color: #50a14f;">"doubles"</span>].count() &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+    &lt;&lt; nIterations * doublesFlops / <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"doubles"</span>].count() &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
   LOG(0, <span style="color: #50a14f;">"atrip:flops(iterations)"</span>)
-    &lt;&lt; nIterations * doublesFlops / chrono[<span style="color: #50a14f;">"iterations"</span>].count() &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
+    &lt;&lt; nIterations * doublesFlops / <span style="font-weight: bold; text-decoration: underline;">Atrip</span>::chrono[<span style="color: #50a14f;">"iterations"</span>].count() &lt;&lt; <span style="color: #50a14f;">"\n"</span>;
 
   <span style="color: #a0a1a7; font-weight: bold;">// </span><span style="color: #a0a1a7;">TODO: change the sign in  the getEnergy routines</span>
   <span style="color: #a626a4;">return</span> { - globalEnergy };
@@ -3759,8 +3750,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 
 
-<div id="outline-container-org5810f1f" class="outline-3">
-<h3 id="org5810f1f"><span class="section-number-3">1.10</span> Debug</h3>
+<div id="outline-container-org1b157af" class="outline-3">
+<h3 id="org1b157af"><span class="section-number-3">1.10</span> Debug</h3>
 <div class="outline-text-3" id="text-1-10">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3829,8 +3820,8 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 
-<div id="outline-container-org8c51be9" class="outline-3">
-<h3 id="org8c51be9"><span class="section-number-3">1.11</span> Include header</h3>
+<div id="outline-container-orga78f19b" class="outline-3">
+<h3 id="orga78f19b"><span class="section-number-3">1.11</span> Include header</h3>
 <div class="outline-text-3" id="text-1-11">
 <div class="org-src-container">
 <pre class="src src-c++"><span style="color: #e44649;">#pragma</span> once
@@ -3844,7 +3835,7 @@ is mainly using the <code>DGEMM</code> function, which we declare as
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-10-19 Tue 15:47</p>
+<p class="date">Created: 2021-10-21 Thu 13:39</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

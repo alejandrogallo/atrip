@@ -112,8 +112,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a24065984cc1b2c3574c80e1dd49e257c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utils_8hpp.html#a24065984cc1b2c3574c80e1dd49e257c">WITH_CHRONO</a>(__chrono, ...)</td></tr>
-<tr class="separator:a24065984cc1b2c3574c80e1dd49e257c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a684c98edc7c431d9fa25c1d75ae42f83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(__chrono_name, ...)</td></tr>
+<tr class="separator:a684c98edc7c431d9fa25c1d75ae42f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -127,8 +127,8 @@ Functions</h2></td></tr>
 <tr class="separator:a3178eea10b83bd01a95ca222be291c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a24065984cc1b2c3574c80e1dd49e257c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24065984cc1b2c3574c80e1dd49e257c">&#9670;&nbsp;</a></span>WITH_CHRONO</h2>
+<a id="a684c98edc7c431d9fa25c1d75ae42f83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a684c98edc7c431d9fa25c1d75ae42f83">&#9670;&nbsp;</a></span>WITH_CHRONO</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,7 +137,7 @@ Functions</h2></td></tr>
           <td class="memname">#define WITH_CHRONO</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">__chrono, </td>
+          <td class="paramname">__chrono_name, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -152,9 +152,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">  __chrono.start();                             \</div>
+<b>Value:</b><div class="fragment"><div class="line">  Atrip::chrono[__chrono_name].start();         \</div>
 <div class="line">  __VA_ARGS__                                   \</div>
-<div class="line">  __chrono.stop();</div>
+<div class="line">  Atrip::chrono[__chrono_name].stop();</div>
 </div><!-- fragment -->
 </div>
 </div>

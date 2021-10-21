@@ -85,7 +85,7 @@ $(document).ready(function(){initNavTree('Equations_8hpp_source.html',''); initR
 <div class="title">Equations.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="Equations_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// [[file:../../atrip.org::*Equations][Equations:1]]</span></div>
+<a href="Equations_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// [[file:~/atrip/atrip.org::*Equations][Equations:1]]</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include&lt;<a class="code" href="Slice_8hpp.html">atrip/Slice.hpp</a>&gt;</span></div>
@@ -212,7 +212,7 @@ $(document).ready(function(){initNavTree('Equations_8hpp_source.html',''); initR
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  }</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a63aa44728146147d1d45352277c605a2">  128</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespaceatrip.html#a63aa44728146147d1d45352277c605a2">doublesContribution</a></div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="namespaceatrip.html#a09dfc7f6543b9793c9a85eff8f107dff">  128</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespaceatrip.html#a09dfc7f6543b9793c9a85eff8f107dff">doublesContribution</a></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    ( <span class="keyword">const</span> <a class="code" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> &amp;abc</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    , <span class="keywordtype">size_t</span> <span class="keyword">const</span> No</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    , <span class="keywordtype">size_t</span> <span class="keyword">const</span> Nv</div>
@@ -237,205 +237,201 @@ $(document).ready(function(){initNavTree('Equations_8hpp_source.html',''); initR
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    , <span class="keywordtype">double</span> <span class="keyword">const</span>* TBChh</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">// -- TIJK</span></div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    , <span class="keywordtype">double</span> *Tijk</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    , <a class="code" href="namespaceatrip.html#aec2fd4244568d19e92eb8d89425f1376">atrip::Timings</a>&amp; chrono</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    ) {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">auto</span>&amp; t_reorder = chrono[<span class="stringliteral">&quot;doubles:reorder&quot;</span>];</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> a = abc[0], b = abc[1], c = abc[2]</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;              , NoNo = No*No, NoNv = No*Nv</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;              ;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">  #if defined(ATRIP_USE_DGEMM)</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">  #define _IJK_(i, j, k) i + j*No + k*NoNo</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">  #define REORDER(__II, __JJ, __KK)                                 \</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">    t_reorder.start();                                              \</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">    for (size_t k = 0; k &lt; No; k++)                                 \</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">    for (size_t j = 0; j &lt; No; j++)                                 \</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">    for (size_t i = 0; i &lt; No; i++) {                               \</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">      Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">    }                                                               \</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">    t_reorder.stop();</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">  #define DGEMM_PARTICLES(__A, __B)    \</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">    atrip::dgemm_( &quot;T&quot;                 \</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="preprocessor">                , &quot;N&quot;                 \</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">                , (int const*)&amp;NoNo   \</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor">                , (int const*)&amp;No     \</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">                , (int const*)&amp;Nv     \</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="preprocessor">                , &amp;one                \</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor">                , __A                 \</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">                , (int const*)&amp;Nv     \</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor">                , __B                 \</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">                , (int const*)&amp;Nv     \</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="preprocessor">                , &amp;zero               \</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="preprocessor">                , _t_buffer.data()    \</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="preprocessor">                , (int const*)&amp;NoNo   \</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">                );</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">  #define DGEMM_HOLES(__A, __B, __TRANSB)  \</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">    atrip::dgemm_( &quot;N&quot;                     \</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">                , __TRANSB                \</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">                , (int const*)&amp;NoNo       \</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">                , (int const*)&amp;No         \</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="preprocessor">                , (int const*)&amp;No         \</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="preprocessor">                , &amp;m_one                  \</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">                , __A                     \</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="preprocessor">                , (int const*)&amp;NoNo       \</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="preprocessor">                , __B                     \</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="preprocessor">                , (int const*)&amp;No         \</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="preprocessor">                , &amp;zero                   \</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="preprocessor">                , _t_buffer.data()        \</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="preprocessor">                , (int const*)&amp;NoNo       \</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">                );</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="keyword">using</span> F = double;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> NoNoNo = No*NoNo;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    std::vector&lt;double&gt; _t_buffer;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    _t_buffer.reserve(NoNoNo);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    F one{1.0}, m_one{-1.0}, zero{0.0};</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    t_reorder.start();</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; NoNoNo; k++) {</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <span class="comment">// zero the Tijk</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      Tijk[k] = 0.0;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    t_reorder.stop();</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    chrono[<span class="stringliteral">&quot;doubles:holes&quot;</span>].start();</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    { <span class="comment">// Holes part ============================================================</span></div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      <span class="comment">// VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1</span></div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:1&quot;</span>].start();</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhC, TABhh, <span class="stringliteral">&quot;N&quot;</span>)</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, k, j)</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:1&quot;</span>].stop();</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <span class="comment">// VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0</span></div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:2&quot;</span>].start();</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhC, TABhh, <span class="stringliteral">&quot;T&quot;</span>)</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, k, i)</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:2&quot;</span>].stop();</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="comment">// VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:3&quot;</span>].start();</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhB, TAChh, <span class="stringliteral">&quot;N&quot;</span>)</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, j, k)</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:3&quot;</span>].stop();</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="comment">// VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:4&quot;</span>].start();</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhB, TAChh, <span class="stringliteral">&quot;T&quot;</span>)</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, j, i)</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:4&quot;</span>].stop();</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="comment">// VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:5&quot;</span>].start();</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhA, TBChh, <span class="stringliteral">&quot;N&quot;</span>)</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, i, k)</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:5&quot;</span>].stop();</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;      <span class="comment">// VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:6&quot;</span>].start();</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;      <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhA, TBChh, <span class="stringliteral">&quot;T&quot;</span>)</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, i, j)</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:holes:6&quot;</span>].stop();</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    }</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    chrono[<span class="stringliteral">&quot;doubles:holes&quot;</span>].stop();</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    chrono[<span class="stringliteral">&quot;doubles:particles&quot;</span>].start();</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    { <span class="comment">// Particle part =========================================================</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;      <span class="comment">// TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:1&quot;</span>].start();</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TAphh, VBCph)</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, j, k)</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:1&quot;</span>].stop();</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;      <span class="comment">// TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:2&quot;</span>].start();</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TAphh, VCBph)</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, k, j)</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:2&quot;</span>].stop();</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;      <span class="comment">// TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:3&quot;</span>].start();</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TCphh, VABph)</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, i, j)</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:3&quot;</span>].stop();</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;      <span class="comment">// TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:4&quot;</span>].start();</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TCphh, VBAph)</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, j, i)</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:4&quot;</span>].stop();</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      <span class="comment">// TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:5&quot;</span>].start();</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TBphh, VACph)</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, i, k)</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:5&quot;</span>].stop();</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;      <span class="comment">// TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:6&quot;</span>].start();</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TBphh, VCAph)</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, k, i)</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      chrono[<span class="stringliteral">&quot;doubles:particles:6&quot;</span>].stop();</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    chrono[<span class="stringliteral">&quot;doubles:particles&quot;</span>].stop();</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">  #undef REORDER</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">  #undef DGEMM_HOLES</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor">  #undef DGEMM_PARTICLES</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="preprocessor">  #undef _IJK_</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="preprocessor">  #else</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; No; k++)</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; No; j++)</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; No; i++){</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">size_t</span> ijk = i + j*No + k*NoNo</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                ,  jk = j + k*No</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                ;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      Tijk[ijk] = 0.0; <span class="comment">// :important</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      <span class="comment">// HOLE DIAGRAMS: TABHH and VHHHA</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> L = 0; L &lt; No; L++){</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="comment">// t[abLj] * V[Lcik]        H1</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="comment">// t[baLi] * V[Lcjk]        H0      TODO: conjugate T for complex</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        Tijk[ijk] -= TABhh[L + j*No] * VhhhC[i + k*No + L*NoNo];</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        Tijk[ijk] -= TABhh[i + L*No] * VhhhC[j + k*No + L*NoNo];</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    ) {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> a = abc[0], b = abc[1], c = abc[2]</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;              , NoNo = No*No, NoNv = No*Nv</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;              ;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">#if defined(ATRIP_USE_DGEMM)</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#define _IJK_(i, j, k) i + j*No + k*NoNo</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#define REORDER(__II, __JJ, __KK)                           \</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">  WITH_CHRONO(&quot;double:reorder&quot;,                             \</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">              for (size_t k = 0; k &lt; No; k++)               \</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">                for (size_t j = 0; j &lt; No; j++)             \</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">                  for (size_t i = 0; i &lt; No; i++) {         \</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">                    Tijk[_IJK_(i, j, k)]                    \</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">                    += _t_buffer[_IJK_(__II, __JJ, __KK)];  \</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">                  }                                         \</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">              )</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">#define DGEMM_PARTICLES(__A, __B)               \</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">  atrip::dgemm_(&quot;T&quot;,                            \</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">                &quot;N&quot;,                            \</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="preprocessor">                (int const*)&amp;NoNo,              \</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">                (int const*)&amp;No,                \</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor">                (int const*)&amp;Nv,                \</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">                &amp;one,                           \</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="preprocessor">                __A,                            \</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor">                (int const*)&amp;Nv,                \</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">                __B,                            \</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor">                (int const*)&amp;Nv,                \</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">                &amp;zero,                          \</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="preprocessor">                _t_buffer.data(),               \</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="preprocessor">                (int const*)&amp;NoNo);</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="preprocessor">#define DGEMM_HOLES(__A, __B, __TRANSB)         \</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">  atrip::dgemm_(&quot;N&quot;,                            \</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">                __TRANSB,                       \</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">                (int const*)&amp;NoNo,              \</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">                (int const*)&amp;No,                \</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">                (int const*)&amp;No,                \</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">                &amp;m_one,                         \</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="preprocessor">                __A,                            \</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="preprocessor">                (int const*)&amp;NoNo,              \</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">                __B,                            \</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="preprocessor">                (int const*)&amp;No,                \</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="preprocessor">                &amp;zero,                          \</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="preprocessor">                _t_buffer.data(),               \</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="preprocessor">                (int const*)&amp;NoNo);</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">using</span> F = double;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> NoNoNo = No*NoNo;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    std::vector&lt;double&gt; _t_buffer;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    _t_buffer.reserve(NoNoNo);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    F one{1.0}, m_one{-1.0}, zero{0.0};</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;double:reorder&quot;</span>,</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; NoNoNo; k++) {</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;         Tijk[k] = 0.0;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;       })</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes&quot;</span>,</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                { <span class="comment">// Holes part ================================================</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                  <span class="comment">// VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:1&quot;</span>,</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhC, TABhh, <span class="stringliteral">&quot;N&quot;</span>)</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, k, j)</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                              )</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                  <span class="comment">// VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:2&quot;</span>,</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhC, TABhh, <span class="stringliteral">&quot;T&quot;</span>)</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, k, i)</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                              )</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                  <span class="comment">// VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:3&quot;</span>,</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhB, TAChh, <span class="stringliteral">&quot;N&quot;</span>)</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, j, k)</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                              )</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                  <span class="comment">// VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:4&quot;</span>,</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhB, TAChh, <span class="stringliteral">&quot;T&quot;</span>)</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, j, i)</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                              )</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                  <span class="comment">// VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:5&quot;</span>,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhA, TBChh, <span class="stringliteral">&quot;N&quot;</span>)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, i, k)</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                              )</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                  <span class="comment">// VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                  <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:holes:6&quot;</span>,</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                              <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(VhhhA, TBChh, <span class="stringliteral">&quot;T&quot;</span>)</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                              <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, i, j)</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                              )</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                }</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                )</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles&quot;</span>,</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                  { <span class="comment">// Particle part ===========================================</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                    <span class="comment">// TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:1&quot;</span>,</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TAphh, VBCph)</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, j, k)</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                                )</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                    <span class="comment">// TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:2&quot;</span>,</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TAphh, VCBph)</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(i, k, j)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                                )</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                    <span class="comment">// TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:3&quot;</span>,</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TCphh, VABph)</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, i, j)</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                                )</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                    <span class="comment">// TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:4&quot;</span>,</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TCphh, VBAph)</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(k, j, i)</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                                )</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                    <span class="comment">// TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:5&quot;</span>,</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TBphh, VACph)</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, i, k)</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                                )</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                    <span class="comment">// TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                    <a class="code" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:particles:6&quot;</span>,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                                <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(TBphh, VCAph)</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                                <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(j, k, i)</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                )</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                  }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                  )</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;#undef <a class="code" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;#undef <a class="code" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;#undef <a class="code" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;#undef <a class="code" href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;#<span class="keywordflow">else</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; No; k++)</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; No; j++)</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; No; i++){</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">size_t</span> ijk = i + j*No + k*NoNo</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                ,  jk = j + k*No</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                ;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      Tijk[ijk] = 0.0; <span class="comment">// :important</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;      <span class="comment">// HOLE DIAGRAMS: TABHH and VHHHA</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> L = 0; L &lt; No; L++){</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="comment">// t[abLj] * V[Lcik]        H1</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="comment">// t[baLi] * V[Lcjk]        H0      TODO: conjugate T for complex</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        Tijk[ijk] -= TABhh[L + j*No] * VhhhC[i + k*No + L*NoNo];</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        Tijk[ijk] -= TABhh[i + L*No] * VhhhC[j + k*No + L*NoNo];</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="comment">// t[acLk] * V[Lbij]        H5</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="comment">// t[caLi] * V[Lbkj]        H3</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        Tijk[ijk] -= TAChh[L + k*No] * VhhhB[i + j*No + L*NoNo];</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        Tijk[ijk] -= TAChh[i + L*No] * VhhhB[k + j*No + L*NoNo];</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="comment">// t[acLk] * V[Lbij]        H5</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="comment">// t[caLi] * V[Lbkj]        H3</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        Tijk[ijk] -= TAChh[L + k*No] * VhhhB[i + j*No + L*NoNo];</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        Tijk[ijk] -= TAChh[i + L*No] * VhhhB[k + j*No + L*NoNo];</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="comment">// t[bcLk] * V[Laji]        H2</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="comment">// t[cbLj] * V[Laki]        H4</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        Tijk[ijk] -= TBChh[L + k*No] * VhhhA[j + i*No + L*NoNo];</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        Tijk[ijk] -= TBChh[j + L*No] * VhhhA[k + i*No + L*NoNo];</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      }</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      <span class="comment">// PARTILCE DIAGRAMS: TAPHH and VABPH</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> E = 0; E &lt; Nv; E++) {</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="comment">// t[aEij] * V[bcEk]        P0</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="comment">// t[aEik] * V[cbEj]        P3 // TODO: CHECK THIS ONE, I DONT KNOW</span></div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        Tijk[ijk] += TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv];</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        Tijk[ijk] += TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv];</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="comment">// t[bcLk] * V[Laji]        H2</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="comment">// t[cbLj] * V[Laki]        H4</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        Tijk[ijk] -= TBChh[L + k*No] * VhhhA[j + i*No + L*NoNo];</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        Tijk[ijk] -= TBChh[j + L*No] * VhhhA[k + i*No + L*NoNo];</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      }</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <span class="comment">// PARTILCE DIAGRAMS: TAPHH and VABPH</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> E = 0; E &lt; Nv; E++) {</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="comment">// t[aEij] * V[bcEk]        P0</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="comment">// t[aEik] * V[cbEj]        P3 // TODO: CHECK THIS ONE, I DONT KNOW</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        Tijk[ijk] += TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv];</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        Tijk[ijk] += TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv];</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="comment">// t[cEki] * V[abEj]        P5</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="comment">// t[cEkj] * V[baEi]        P2</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        Tijk[ijk] += TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv];</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        Tijk[ijk] += TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv];</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="comment">// t[cEki] * V[abEj]        P5</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="comment">// t[cEkj] * V[baEi]        P2</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        Tijk[ijk] += TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv];</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        Tijk[ijk] += TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv];</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="comment">// t[bEji] * V[acEk]        P1</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="comment">// t[bEjk] * V[caEi]        P4</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        Tijk[ijk] += TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv];</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        Tijk[ijk] += TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv];</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;      }</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">  #endif</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;  }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;}</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="comment">// Equations:1 ends here</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="comment">// t[bEji] * V[acEk]        P1</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="comment">// t[bEjk] * V[caEi]        P4</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        Tijk[ijk] += TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv];</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        Tijk[ijk] += TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv];</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;      }</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;  }</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;}</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="comment">// Equations:1 ends here</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aUtils_8hpp_html_a684c98edc7c431d9fa25c1d75ae42f83"><div class="ttname"><a href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a></div><div class="ttdeci">#define WITH_CHRONO(__chrono_name,...)</div><div class="ttdef"><b>Definition:</b> Utils.hpp:26</div></div>
+<div class="ttc" id="aEquations_8hpp_html_a395c02ccca573561c1c6e5a2145c496b"><div class="ttname"><a href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a></div><div class="ttdeci">#define _IJK_(i, j, k)</div></div>
 <div class="ttc" id="aEquations_8hpp_html_a178706b091c61817a72573aea44e95fa"><div class="ttname"><a href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a></div><div class="ttdeci">#define DGEMM_HOLES(__A, __B, __TRANSB)</div></div>
 <div class="ttc" id="anamespaceatrip_html_a58909ffd308915d7ff289c4379bca9dc"><div class="ttname"><a href="namespaceatrip.html#a58909ffd308915d7ff289c4379bca9dc">atrip::getEnergyDistinct</a></div><div class="ttdeci">double getEnergyDistinct(const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</div><div class="ttdef"><b>Definition:</b> Equations.hpp:10</div></div>
 <div class="ttc" id="aEquations_8hpp_html_aaa57263b7876787581e36f91522c81e7"><div class="ttname"><a href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a></div><div class="ttdeci">#define DGEMM_PARTICLES(__A, __B)</div></div>
 <div class="ttc" id="anamespaceatrip_html"><div class="ttname"><a href="namespaceatrip.html">atrip</a></div><div class="ttdef"><b>Definition:</b> Atrip.hpp:18</div></div>
 <div class="ttc" id="anamespaceatrip_html_a28915c100861c4b2a8c868a4b8f1f233"><div class="ttname"><a href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">atrip::ABCTuple</a></div><div class="ttdeci">std::array&lt; size_t, 3 &gt; ABCTuple</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:25</div></div>
-<div class="ttc" id="anamespaceatrip_html_a63aa44728146147d1d45352277c605a2"><div class="ttname"><a href="namespaceatrip.html#a63aa44728146147d1d45352277c605a2">atrip::doublesContribution</a></div><div class="ttdeci">void doublesContribution(const ABCTuple &amp;abc, size_t const No, size_t const Nv, double const *VABph, double const *VACph, double const *VBCph, double const *VBAph, double const *VCAph, double const *VCBph, double const *VhhhA, double const *VhhhB, double const *VhhhC, double const *TAphh, double const *TBphh, double const *TCphh, double const *TABhh, double const *TAChh, double const *TBChh, double *Tijk, atrip::Timings &amp;chrono)</div><div class="ttdef"><b>Definition:</b> Equations.hpp:129</div></div>
 <div class="ttc" id="aEquations_8hpp_html_a8e804de074eaa56f17a152fb93eaae00"><div class="ttname"><a href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a></div><div class="ttdeci">#define REORDER(__II, __JJ, __KK)</div></div>
+<div class="ttc" id="anamespaceatrip_html_a09dfc7f6543b9793c9a85eff8f107dff"><div class="ttname"><a href="namespaceatrip.html#a09dfc7f6543b9793c9a85eff8f107dff">atrip::doublesContribution</a></div><div class="ttdeci">void doublesContribution(const ABCTuple &amp;abc, size_t const No, size_t const Nv, double const *VABph, double const *VACph, double const *VBCph, double const *VBAph, double const *VCAph, double const *VCBph, double const *VhhhA, double const *VhhhB, double const *VhhhC, double const *TAphh, double const *TBphh, double const *TCphh, double const *TABhh, double const *TAChh, double const *TBChh, double *Tijk)</div><div class="ttdef"><b>Definition:</b> Equations.hpp:129</div></div>
 <div class="ttc" id="anamespaceatrip_html_a4e4f317ce66d446aaf87530d03876c28"><div class="ttname"><a href="namespaceatrip.html#a4e4f317ce66d446aaf87530d03876c28">atrip::singlesContribution</a></div><div class="ttdeci">void singlesContribution(size_t No, size_t Nv, const ABCTuple &amp;abc, double const *Tph, double const *VABij, double const *VACij, double const *VBCij, double *Zijk)</div><div class="ttdef"><b>Definition:</b> Equations.hpp:106</div></div>
 <div class="ttc" id="aBlas_8hpp_html"><div class="ttname"><a href="Blas_8hpp.html">Blas.hpp</a></div></div>
 <div class="ttc" id="aSlice_8hpp_html"><div class="ttname"><a href="Slice_8hpp.html">Slice.hpp</a></div></div>
 <div class="ttc" id="anamespaceatrip_html_a1374b8d65a9d0253f76a8bbe27da92d5"><div class="ttname"><a href="namespaceatrip.html#a1374b8d65a9d0253f76a8bbe27da92d5">atrip::getEnergySame</a></div><div class="ttdeci">double getEnergySame(const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</div><div class="ttdef"><b>Definition:</b> Equations.hpp:63</div></div>
-<div class="ttc" id="anamespaceatrip_html_aec2fd4244568d19e92eb8d89425f1376"><div class="ttname"><a href="namespaceatrip.html#aec2fd4244568d19e92eb8d89425f1376">atrip::Timings</a></div><div class="ttdeci">std::map&lt; std::string, Timer &gt; Timings</div><div class="ttdef"><b>Definition:</b> Utils.hpp:41</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
