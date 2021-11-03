@@ -233,6 +233,8 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
       container3d[nt[0] + nNodes*nt[1] + nNodes*nNodes*nt[2]].push_back(t);
   }
 
+  if (info.nodeId == 0)
+    std::cout << "\tBuilding 1-d containers\n";
   // DISTRIBUTE 1-d containers
   // every tuple which is only located at one node belongs to this node
   {
@@ -241,6 +243,8 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
     std::copy(tuplesVec.begin(), tuplesVec.end(), nodeTuples.begin());
   }
 
+  if (info.nodeId == 0)
+    std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
   for (auto &m: container2d) {
@@ -270,6 +274,8 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
 
   }
 
+  if (info.nodeId == 0)
+    std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
   // similar game for the tuples which belong to three different nodes
   for (auto m: container3d){
@@ -304,6 +310,8 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
   }
 
 
+  if (info.nodeId == 0)
+    std::cout << "\tsorting...\n";
   // sort part of group-and-sort algorithm
   // every tuple on a given node is sorted in a way that
   // the 'home elements' are the fastest index.
@@ -324,28 +332,17 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
       }
     }
   }
+
+  if (info.nodeId == 0) std::cout << "\tsorting list of tuples...\n";
   //now we sort the list of tuples
   std::sort(nodeTuples.begin(), nodeTuples.end());
+
+  if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
   // we bring the tuples abc back in the order a<b<c
   for (auto &t: nodeTuples)  std::sort(t.begin(), t.end());
 
   return nodeTuples;
 
-}
-
-//determine which element has to be fetched from sources for the next iteration
-std::vector<size_t> fetchElement(ABCTuple cur, ABCTuple suc){
-  std::vector<size_t> result;
-  ABCTuple inter;
-  std::sort(cur.begin(), cur.end());
-  std::sort(suc.begin(), suc.end());
-  std::array<size_t,3>::iterator rit, cit, sit;
-  cit = std::unique(cur.begin(), cur.end());
-  sit = std::unique(suc.begin(), suc.end());
-  rit = std::set_difference(suc.begin(), sit, cur.begin(), cit, inter.begin());
-  result.resize(rit - inter.begin());
-  std::copy(inter.begin(), rit, result.begin());
-  return result;
 }
 // Distribution:1 ends here
 
@@ -371,11 +368,8 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   // We want to construct a communicator which only contains of one
   // element per node
-  bool makeDistribution
-    = nodeInfos[rank].localRank == 0
-    ? true
-    : false
-    ;
+  bool const makeDistribution
+    = nodeInfos[rank].localRank == 0;
 
   std::vector<ABCTuple>
     nodeTuples = makeDistribution
@@ -388,6 +382,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
                : std::vector<ABCTuple>()
                ;
 
+  LOG(1,"Atrip") << "got nodeTuples\n";
 
   // now we have to send the data from **one** rank on each node
   // to all others ranks of this node
@@ -423,64 +418,60 @@ MPI_Bcast(&tuplesPerRankGlobal,
           MPI_UINT64_T,
           0,
           universe);
+
+LOG(1,"Atrip") << "Tuples per rank: " << tuplesPerRankGlobal << "\n";
+LOG(1,"Atrip") << "ranks per node " << nodeInfos[rank].ranksPerNode << "\n";
+LOG(1,"Atrip") << "#nodes " << nNodes << "\n";
 // Main:2 ends here
 
 // [[file:~/atrip/atrip.org::*Main][Main:3]]
-size_t const totalTuplesLocal
-  = tuplesPerRankLocal
-  * nodeInfos[rank].ranksPerNode;
+size_t const totalTuples
+  = tuplesPerRankGlobal * nodeInfos[rank].ranksPerNode;
 
-if (makeDistribution)
+if (makeDistribution) {
   nodeTuples.insert(nodeTuples.end(),
-                    totalTuplesLocal - nodeTuples.size(),
+                    totalTuples - nodeTuples.size(),
                     FAKE_TUPLE);
+}
 // Main:3 ends here
 
 // [[file:~/atrip/atrip.org::*Main][Main:4]]
 {
-  std::vector<int> const
-    sendCounts(nodeInfos[rank].ranksPerNode, tuplesPerRankLocal);
-
-  std::vector<int>
-    displacements(nodeInfos[rank].ranksPerNode);
-
-  std::iota(displacements.begin(),
-            displacements.end(),
-            tuplesPerRankLocal);
-
-  // important!
-  result.resize(tuplesPerRankLocal);
-
   // construct mpi type for abctuple
   MPI_Datatype MPI_ABCTUPLE;
   MPI_Type_vector(nodeTuples[0].size(), 1, 1, MPI_UINT64_T, &MPI_ABCTUPLE);
   MPI_Type_commit(&MPI_ABCTUPLE);
 
-  MPI_Scatterv(nodeTuples.data(),
-              sendCounts.data(),
-              displacements.data(),
+  LOG(1,"Atrip") << "scattering tuples \n";
+
+  result.resize(tuplesPerRankGlobal);
+  MPI_Scatter(nodeTuples.data(),
+              tuplesPerRankGlobal,
               MPI_ABCTUPLE,
               result.data(),
-              tuplesPerRankLocal,
+              tuplesPerRankGlobal,
               MPI_ABCTUPLE,
               0,
               INTRA_COMM);
 
-  // free type
   MPI_Type_free(&MPI_ABCTUPLE);
 
 }
 // Main:4 ends here
 
-// [[file:~/atrip/atrip.org::*Main][Main:5]]
-result.insert(result.end(),
+// [[file:~/atrip/atrip.org::*Main][Main:6]]
+/*
+  result.insert(result.end(),
                 tuplesPerRankGlobal - result.size(),
                 FAKE_TUPLE);
+*/
+
+  LOG(1,"Atrip") << "scattering tuples \n";
 
   return result;
 
 }
-// Main:5 ends here
+// Main:6 ends here
 
 // [[file:~/atrip/atrip.org::*Interface][Interface:1]]
 struct Distribution : public TuplesDistribution {
