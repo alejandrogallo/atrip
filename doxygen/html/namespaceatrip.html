@@ -153,10 +153,10 @@ Functions</h2></td></tr>
 <tr class="separator:ad8c48fcc88885968b4dcc221aef819dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca2c3acb290384ce5419a2f6c7e62555"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aca2c3acb290384ce5419a2f6c7e62555">unionByName</a> (std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> * &gt; const &amp;unions, <a class="el" href="structatrip_1_1Slice.html#ab62f723a61f7d96ff457aa0980a50806">Slice::Name</a> name)</td></tr>
 <tr class="separator:aca2c3acb290384ce5419a2f6c7e62555"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15a86ce2b735dd01f666470e0d81127d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a15a86ce2b735dd01f666470e0d81127d">getTuplesList</a> (size_t Nv)</td></tr>
-<tr class="separator:a15a86ce2b735dd01f666470e0d81127d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad43da4975bb32dad5c14bb4238380a02"><td class="memItemLeft" align="right" valign="top">std::pair&lt; size_t, size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad43da4975bb32dad5c14bb4238380a02">getABCRange</a> (size_t np, size_t rank, <a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> const &amp;tuplesList)</td></tr>
-<tr class="separator:ad43da4975bb32dad5c14bb4238380a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d24cef8b67603413dfae0002a083b95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a6d24cef8b67603413dfae0002a083b95">getTuplesList</a> (size_t Nv, size_t rank, size_t np)</td></tr>
+<tr class="separator:a6d24cef8b67603413dfae0002a083b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b">getAllTuplesList</a> (const size_t Nv)</td></tr>
+<tr class="separator:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0b348ba8361d5e9015dc652413cb323"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad0b348ba8361d5e9015dc652413cb323">sliceIntoVector</a> (std::vector&lt; double &gt; &amp;v, CTF::Tensor&lt; double &gt; &amp;toSlice, std::vector&lt; int64_t &gt; const low, std::vector&lt; int64_t &gt; const up, CTF::Tensor&lt; double &gt; const &amp;origin, std::vector&lt; int64_t &gt; const originLow, std::vector&lt; int64_t &gt; const originUp)</td></tr>
 <tr class="separator:ad0b348ba8361d5e9015dc652413cb323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3178eea10b83bd01a95ca222be291c1f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -450,34 +450,18 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ad43da4975bb32dad5c14bb4238380a02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad43da4975bb32dad5c14bb4238380a02">&#9670;&nbsp;</a></span>getABCRange()</h2>
+<a id="ad3b6dffd6ea5627cfb04fbc5653d0e3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b6dffd6ea5627cfb04fbc5653d0e3b">&#9670;&nbsp;</a></span>getAllTuplesList()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;size_t, size_t&gt; atrip::getABCRange </td>
+          <td class="memname"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> atrip::getAllTuplesList </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>np</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>Nv</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>rank</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> const &amp;&#160;</td>
-          <td class="paramname"><em>tuplesList</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -564,8 +548,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a15a86ce2b735dd01f666470e0d81127d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15a86ce2b735dd01f666470e0d81127d">&#9670;&nbsp;</a></span>getTuplesList()</h2>
+<a id="a6d24cef8b67603413dfae0002a083b95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d24cef8b67603413dfae0002a083b95">&#9670;&nbsp;</a></span>getTuplesList()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -574,8 +558,24 @@ Variables</h2></td></tr>
           <td class="memname"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a> atrip::getTuplesList </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>Nv</em></td><td>)</td>
+          <td class="paramname"><em>Nv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>rank</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
