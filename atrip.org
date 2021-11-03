@@ -1467,16 +1467,29 @@ This means,
 
 
 #+begin_src c++ :tangle (atrip-tuples-h)
-ABCTuples getTuplesList(size_t Nv) {
-  const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
-  ABCTuples result(n);
-  size_t u(0);
+ABCTuples getTuplesList(size_t Nv, size_t rank, size_t np) {
 
-  for (size_t a(0); a < Nv; a++)
+  const size_t
+    // total number of tuples for the problem
+       n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv
+
+    // all ranks should have the same number of tuples_per_rank
+    , tuples_per_rank = n / np + size_t(n % np != 0)
+
+    // start index for the global tuples list
+    , start = tuples_per_rank * rank
+
+    // end index for the global tuples list
+    , end = tuples_per_rank * (rank + 1)
+    ;
+
+  ABCTuples result(tuples_per_rank, FAKE_TUPLE);
+
+  for (size_t a(0), r(0), g(0); a < Nv; a++)
   for (size_t b(a); b < Nv; b++)
-  for (size_t c(b); c < Nv; c++){
+  for (size_t c(b); c < Nv; c++, g++){
     if ( a == b && b == c ) continue;
-    result[u++] = {a, b, c};
+    if ( g > start && g <= end) result[r++] = {a, b, c};
   }
 
   return result;
@@ -1484,48 +1497,26 @@ ABCTuples getTuplesList(size_t Nv) {
 }
 #+end_src
 
-Once the list of tuples is built, every rank will only go through
-a section of the list, the start and end indices in the original
-global list are given by the following function.
+and all tuples would simply be
 
 #+begin_src c++ :tangle (atrip-tuples-h)
-std::pair<size_t, size_t>
-getABCRange(size_t np, size_t rank, ABCTuples const& tuplesList) {
+ABCTuples getAllTuplesList(const size_t Nv) {
+  const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+  ABCTuples result(n);
 
-  std::vector<size_t> n_tuples_per_rank(np, tuplesList.size()/np);
-  const size_t
-      // how many valid tuples should we still verteilen to nodes
-      // since the number of tuples is not divisible by the number of nodes
-      nRoundRobin = tuplesList.size() % np
-      // every node must have the sanme amount of tuples in order for the
-      // other nodes to receive and send somewhere, therefore
-      // some nodes will get extra tuples but that are dummy tuples
-    , nExtraInvalid = (np - nRoundRobin) % np
-    ;
+  for (size_t a(0), u(0); a < Nv; a++)
+  for (size_t b(a); b < Nv; b++)
+  for (size_t c(b); c < Nv; c++){
+    if ( a == b && b == c ) continue;
+    result[u++] = {a, b, c};
+  }
 
-  if (nRoundRobin) for (int i = 0; i < np; i++) n_tuples_per_rank[i]++;
-
-  WITH_RANK << "nRoundRobin = " << nRoundRobin << "\n";
-  WITH_RANK << "nExtraInvalid = " << nExtraInvalid << "\n";
-  WITH_RANK << "ntuples = " << n_tuples_per_rank[rank] << "\n";
-
-  auto const& it = n_tuples_per_rank.begin();
-
-  std::pair<size_t, size_t> const
-    range = { std::accumulate(it, it + rank    , 0)
-            , std::accumulate(it, it + rank + 1, 0) - 1
-            };
-
-  WITH_RANK << "range = "
-            << range.first << " -> " << range.second
-            << std::endl;
-
-  return range;
-
+  return result;
 }
 #+end_src
 
-With these two last functions we can easily define a tuple distribution like
+
+With =getTupleList= we can easily define a tuple distribution like
 
 #+begin_src c++ :tangle (atrip-tuples-h)
 struct NaiveDistribution : public TuplesDistribution {
@@ -1533,43 +1524,13 @@ struct NaiveDistribution : public TuplesDistribution {
     int rank, np;
     MPI_Comm_rank(universe, &rank);
     MPI_Comm_size(universe, &np);
-    auto const all = getTuplesList(Nv);
-    const size_t
-      tuplesPerRank
-        = all.size() / np
-        + size_t(all.size() % np != 0)
-        ;
-    //auto const range = getABCRange((size_t)np, (size_t)rank, all);
-
-    std::pair<size_t, size_t> const
-      range = { tuplesPerRank * rank
-              , tuplesPerRank * (rank + 1) - 1
-              };
-
-    WITH_RANK << "range = "
-              << range.first << " -> " << range.second
-              << std::endl;
-    std::vector<ABCTuple> result(range.second - range.first + 1, FAKE_TUPLE);
-    WITH_RANK << "number of global tuples = " << all.size() << std::endl;
-    WITH_RANK << "number of local tuples  = " << result.size() << std::endl;
-
-    std::copy(range.first >= all.size()
-              ? all.end()
-              : all.begin() + range.first,
-              // --
-              range.second >= all.size()
-              ? all.end()
-              : all.begin() + range.first + range.second,
-              // --
-              result.begin());
-    return result;
+    return getTuplesList(Nv, (size_t)rank, (size_t)np);
   }
 };
 #+end_src
 
 
 *** Group and sort list
-
 **** Prolog                                                        :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 namespace group_and_sort {
@@ -1905,7 +1866,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
                                          , np
                                          , nodeInfos[rank].nodeId
                                          },
-                                      getTuplesList(Nv))
+                                      getAllTuplesList(Nv))
                : std::vector<ABCTuple>()
                ;
 
