@@ -102,7 +102,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     LOG(0,"Atrip") << "#iterations: "
                   << nIterations
                   << "/"
-                  << _all_tuples
+                  << nIterations * np
                   << "\n";
   }
 
@@ -291,8 +291,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                        : tuplesList[i]
                  , *abcNext = i == (tuplesList.size() - 1)
                             ? nullptr
-                            : isFakeTuple(i + 1)
-                            ? &tuplesList[tuplesList.size() - 1]
                             : &tuplesList[i + 1]
                  ;
 

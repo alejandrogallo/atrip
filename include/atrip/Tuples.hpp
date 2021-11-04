@@ -36,68 +36,6 @@ struct TuplesDistribution {
 };
 // Distributing the tuples:1 ends here
 
-// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:1]]
-ABCTuples getTuplesList(size_t Nv, size_t rank, size_t np) {
-
-  const size_t
-    // total number of tuples for the problem
-       n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv
-
-    // all ranks should have the same number of tuples_per_rank
-    , tuples_per_rank = n / np + size_t(n % np != 0)
-
-    // start index for the global tuples list
-    , start = tuples_per_rank * rank
-
-    // end index for the global tuples list
-    , end = tuples_per_rank * (rank + 1)
-    ;
-
-  ABCTuples result(tuples_per_rank, FAKE_TUPLE);
-
-  for (size_t a(0), r(0), g(0); a < Nv; a++)
-  for (size_t b(a); b < Nv; b++)
-  for (size_t c(b); c < Nv; c++, g++){
-    if ( a == b && b == c ) continue;
-    if ( g > start && g <= end) result[r++] = {a, b, c};
-  }
-
-  return result;
-
-}
-// Naive list:1 ends here
-
-// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:2]]
-ABCTuples getAllTuplesList(const size_t Nv) {
-  const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
-  ABCTuples result(n);
-
-  for (size_t a(0), u(0); a < Nv; a++)
-  for (size_t b(a); b < Nv; b++)
-  for (size_t c(b); c < Nv; c++){
-    if ( a == b && b == c ) continue;
-    result[u++] = {a, b, c};
-  }
-
-  return result;
-}
-// Naive list:2 ends here
-
-// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:3]]
-struct NaiveDistribution : public TuplesDistribution {
-  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
-    int rank, np;
-    MPI_Comm_rank(universe, &rank);
-    MPI_Comm_size(universe, &np);
-    return getTuplesList(Nv, (size_t)rank, (size_t)np);
-  }
-};
-// Naive list:3 ends here
-
-// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
-namespace group_and_sort {
-// Prolog:1 ends here
-
 // [[file:~/atrip/atrip.org::*Node%20information][Node information:1]]
 std::vector<std::string> getNodeNames(MPI_Comm comm){
   int rank, np;
@@ -176,6 +114,71 @@ getNodeInfos(std::vector<string> const& nodeNames) {
   return result;
 }
 // Node information:2 ends here
+
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:1]]
+ABCTuples getTuplesList(size_t Nv, size_t rank, size_t np) {
+
+  const size_t
+    // total number of tuples for the problem
+       n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv
+
+    // all ranks should have the same number of tuples_per_rank
+    , tuples_per_rank = n / np + size_t(n % np != 0)
+
+    // start index for the global tuples list
+    , start = tuples_per_rank * rank
+
+    // end index for the global tuples list
+    , end = tuples_per_rank * (rank + 1)
+    ;
+
+  LOG(1,"Atrip") << "tuples_per_rank = " << tuples_per_rank << "\n";
+  WITH_RANK << "start, end = " << start << ", " << end << "\n";
+  ABCTuples result(tuples_per_rank, FAKE_TUPLE);
+
+  for (size_t a(0), r(0), g(0); a < Nv; a++)
+  for (size_t b(a);             b < Nv; b++)
+  for (size_t c(b);             c < Nv; c++){
+    if ( a == b && b == c ) continue;
+    if ( start <= g && g < end) result[r++] = {a, b, c};
+    g++;
+  }
+
+  return result;
+
+}
+// Naive list:1 ends here
+
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:2]]
+ABCTuples getAllTuplesList(const size_t Nv) {
+  const size_t n = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+  ABCTuples result(n);
+
+  for (size_t a(0), u(0); a < Nv; a++)
+  for (size_t b(a); b < Nv; b++)
+  for (size_t c(b); c < Nv; c++){
+    if ( a == b && b == c ) continue;
+    result[u++] = {a, b, c};
+  }
+
+  return result;
+}
+// Naive list:2 ends here
+
+// [[file:~/atrip/atrip.org::*Naive%20list][Naive list:3]]
+struct NaiveDistribution : public TuplesDistribution {
+  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override {
+    int rank, np;
+    MPI_Comm_rank(universe, &rank);
+    MPI_Comm_size(universe, &np);
+    return getTuplesList(Nv, (size_t)rank, (size_t)np);
+  }
+};
+// Naive list:3 ends here
+
+// [[file:~/atrip/atrip.org::*Prolog][Prolog:1]]
+namespace group_and_sort {
+// Prolog:1 ends here
 
 // [[file:~/atrip/atrip.org::*Utils][Utils:1]]
 // Provides the node on which the slice-element is found
@@ -460,13 +463,7 @@ if (makeDistribution) {
 // Main:4 ends here
 
 // [[file:~/atrip/atrip.org::*Main][Main:6]]
-/*
-  result.insert(result.end(),
-                tuplesPerRankGlobal - result.size(),
-                FAKE_TUPLE);
-*/
-
-  LOG(1,"Atrip") << "scattering tuples \n";
+LOG(1,"Atrip") << "scattering tuples \n";
 
   return result;
 
