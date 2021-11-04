@@ -109,6 +109,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1NaiveDistribution.html">NaiveDistribution</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html">RankMap</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1Slice.html">Slice</a></td></tr>
@@ -153,6 +155,10 @@ Functions</h2></td></tr>
 <tr class="separator:ad8c48fcc88885968b4dcc221aef819dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca2c3acb290384ce5419a2f6c7e62555"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aca2c3acb290384ce5419a2f6c7e62555">unionByName</a> (std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> * &gt; const &amp;unions, <a class="el" href="structatrip_1_1Slice.html#ab62f723a61f7d96ff457aa0980a50806">Slice::Name</a> name)</td></tr>
 <tr class="separator:aca2c3acb290384ce5419a2f6c7e62555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b9bff51847e234f5357dfa5adc5a59"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a61b9bff51847e234f5357dfa5adc5a59">getNodeNames</a> (MPI_Comm comm)</td></tr>
+<tr class="separator:a61b9bff51847e234f5357dfa5adc5a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d282a028b26de5e1ea7d74e4e7f880b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a5d282a028b26de5e1ea7d74e4e7f880b">getNodeInfos</a> (std::vector&lt; string &gt; const &amp;nodeNames)</td></tr>
+<tr class="separator:a5d282a028b26de5e1ea7d74e4e7f880b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d24cef8b67603413dfae0002a083b95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a6d24cef8b67603413dfae0002a083b95">getTuplesList</a> (size_t Nv, size_t rank, size_t np)</td></tr>
 <tr class="separator:a6d24cef8b67603413dfae0002a083b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b">getAllTuplesList</a> (const size_t Nv)</td></tr>
@@ -542,6 +548,42 @@ Variables</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d282a028b26de5e1ea7d74e4e7f880b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d282a028b26de5e1ea7d74e4e7f880b">&#9670;&nbsp;</a></span>getNodeInfos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a>&gt; atrip::getNodeInfos </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; string &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>nodeNames</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61b9bff51847e234f5357dfa5adc5a59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61b9bff51847e234f5357dfa5adc5a59">&#9670;&nbsp;</a></span>getNodeNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; atrip::getNodeNames </td>
+          <td>(</td>
+          <td class="paramtype">MPI_Comm&#160;</td>
+          <td class="paramname"><em>comm</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

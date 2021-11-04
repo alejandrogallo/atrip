@@ -6,6 +6,7 @@ var namespaceatrip =
     [ "Atrip", "structatrip_1_1Atrip.html", "structatrip_1_1Atrip" ],
     [ "HHHA", "structatrip_1_1HHHA.html", "structatrip_1_1HHHA" ],
     [ "NaiveDistribution", "structatrip_1_1NaiveDistribution.html", "structatrip_1_1NaiveDistribution" ],
+    [ "RankInfo", "structatrip_1_1RankInfo.html", "structatrip_1_1RankInfo" ],
     [ "RankMap", "structatrip_1_1RankMap.html", "structatrip_1_1RankMap" ],
     [ "Slice", "structatrip_1_1Slice.html", "structatrip_1_1Slice" ],
     [ "SliceUnion", "structatrip_1_1SliceUnion.html", "structatrip_1_1SliceUnion" ],

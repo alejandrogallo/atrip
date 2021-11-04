@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['globalrank_308',['globalRank',['../structatrip_1_1group__and__sort_1_1RankInfo.html#af48657fadac71c11a341fba3a74596d8',1,'atrip::group_and_sort::RankInfo']]]
+  ['globalrank_308',['globalRank',['../structatrip_1_1RankInfo.html#a3247711bc8708d20cb2bd62d371de92d',1,'atrip::RankInfo']]]
 ];

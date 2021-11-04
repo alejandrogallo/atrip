@@ -8,7 +8,7 @@ var hierarchy =
     [ "atrip::Slice::Location", "structatrip_1_1Slice_1_1Location.html", null ],
     [ "atrip::Slice::mpi", "structatrip_1_1Slice_1_1mpi.html", null ],
     [ "atrip::Atrip::Output", "structatrip_1_1Atrip_1_1Output.html", null ],
-    [ "atrip::group_and_sort::RankInfo", "structatrip_1_1group__and__sort_1_1RankInfo.html", null ],
+    [ "atrip::RankInfo", "structatrip_1_1RankInfo.html", null ],
     [ "atrip::RankMap", "structatrip_1_1RankMap.html", null ],
     [ "atrip::Slice", "structatrip_1_1Slice.html", null ],
     [ "atrip::SliceUnion", "structatrip_1_1SliceUnion.html", [
