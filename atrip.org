@@ -869,20 +869,21 @@ namespace atrip {
           , localSource = s_n / clusterInfo.ranksPerNode
           ;
 
-        source = localSource;
         // find the localRank-th entry in clusterInfo
         auto const& it =
           std::find_if(clusterInfo.rankInfos.begin(),
-                      clusterInfo.rankInfos.end(),
-                      [nodeId, localRank](RankInfo const& ri) {
-                        return ri.nodeId == nodeId
-                            && ri.localRank == localRank
-                            ;
-                      });
+                       clusterInfo.rankInfos.end(),
+                       [nodeId, localRank](RankInfo const& ri) {
+                         return ri.nodeId == nodeId
+                             && ri.localRank == localRank
+                             ;
+                       });
         if (it == clusterInfo.rankInfos.end()) {
           throw "FATAL! Error in node distribution of the slices";
         }
-        rank = std::distance(clusterInfo.rankInfos.begin(), it);
+
+        rank = (*it).globalRank;
+        source = localSource;
 
       }
 
@@ -1325,15 +1326,26 @@ namespace atrip {
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
-             , Slice::Info const& info
+             , Slice::LocalDatabaseElement const& el
              , size_t tag) const noexcept {
       MPI_Request request;
       bool sendData_p = false;
+      auto const& info = el.info;
 
       if (info.state == Slice::Fetch) sendData_p = true;
       // TODO: remove this because I have SelfSufficient
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
+
+      switch (el.name) {
+        case Slice::Name::TA:
+        case Slice::Name::VIJKA:
+          if (otherRank / 48 == Atrip::rank / 48) {
+            Atrip::localSend++;
+          } else {
+            Atrip::networkSend++;
+          }
+      }
 
       MPI_Isend( sources[info.from.source].data()
                , sources[info.from.source].size()
@@ -1587,24 +1599,18 @@ std::vector<A> unique(std::vector<A> const &xs) {
 std::vector<RankInfo>
 getNodeInfos(std::vector<string> const& nodeNames) {
   std::vector<RankInfo> result;
-  // TODO: replace it with unique call
-  auto uniqueNames = nodeNames;
-  {
-    std::sort(uniqueNames.begin(), uniqueNames.end());
-    auto const& last = std::unique(uniqueNames.begin(), uniqueNames.end());
-    uniqueNames.erase(last, uniqueNames.end());
-  }
-  const auto index = [&uniqueNames](std::string const& s) {
+  auto const uniqueNames = unique(nodeNames);
+  auto const index = [&uniqueNames](std::string const& s) {
     auto const& it = std::find(uniqueNames.begin(), uniqueNames.end(), s);
     return std::distance(uniqueNames.begin(), it);
   };
   std::vector<size_t> localRanks(uniqueNames.size(), 0);
-  size_t rank = 0;
+  size_t globalRank = 0;
   for (auto const& name: nodeNames) {
     const size_t nodeId = index(name);
     result.push_back({name,
                       nodeId,
-                      rank++,
+                      globalRank++,
                       localRanks[nodeId]++,
                       std::count(nodeNames.begin(),
                                  nodeNames.end(),
@@ -2196,7 +2202,7 @@ namespace atrip {
                        , child_world
                        , global_world
                        , Slice::TA
-                       , 4) {
+                       , 5) {
            init(sourceTensor);
          }
 
@@ -2233,7 +2239,7 @@ namespace atrip {
                       , child_world
                       , global_world
                       , Slice::VIJKA
-                      , 4) {
+                      , 5) {
            init(sourceTensor);
          }
 
@@ -2760,6 +2766,8 @@ namespace atrip {
     static int rank;
     static int np;
     static Timings chrono;
+    static size_t networkSend;
+    static size_t localSend;
     static void init();
 
     struct Input {
@@ -2822,10 +2830,14 @@ bool RankMap::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
 Timings Atrip::chrono;
+size_t Atrip::networkSend;
+size_t Atrip::localSend;
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
+  Atrip::networkSend = 0;
+  Atrip::localSend = 0;
 }
 
 Atrip::Output Atrip::run(Atrip::Input const& in) {
@@ -3043,7 +3055,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
           ;
 
         WITH_CHRONO("db:io:send",
-          u.send(otherRank, el.info, sendTag);
+          u.send(otherRank, el, sendTag);
         )
 
       } // send phase
@@ -3087,6 +3099,25 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     ))
 
     if (iteration % in.iterationMod == 0) {
+
+      size_t networkSend;
+      MPI_Reduce(&Atrip::networkSend,
+                 &networkSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
+      size_t localSend;
+      MPI_Reduce(&Atrip::localSend,
+                 &localSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
@@ -3094,7 +3125,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         << "GF)"
         << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
-        << " ===========================\n";
+        << " :net " << networkSend
+        << " :loc " << localSend
+        << " :loc/net " << (double(localSend) / double(networkSend))
+        //<< " ===========================\n"
+        << "\n";
+
 
       // PRINT TIMINGS
       if (in.chrono)
@@ -3234,6 +3270,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
     }
 
+    // TODO: remove this
     if (isFakeTuple(i)) {
       // fake iterations should also unwrap whatever they got
       WITH_RANK << iteration
