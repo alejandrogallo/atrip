@@ -1930,24 +1930,6 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
 #+end_src
 
 
-TODO: ERASE THIS CODE BLOCK
-#+begin_src c++
-//determine which element has to be fetched from sources for the next iteration
-std::vector<size_t> fetchElement(ABCTuple cur, ABCTuple suc){
-  std::vector<size_t> result;
-  ABCTuple inter;
-  std::sort(cur.begin(), cur.end());
-  std::sort(suc.begin(), suc.end());
-  std::array<size_t,3>::iterator rit, cit, sit;
-  cit = std::unique(cur.begin(), cur.end());
-  sit = std::unique(suc.begin(), suc.end());
-  rit = std::set_difference(suc.begin(), sit, cur.begin(), cit, inter.begin());
-  result.resize(rit - inter.begin());
-  std::copy(inter.begin(), rit, result.begin());
-  return result;
-}
-#+end_src
-
 **** Main
 
 The main routine should return the list of tuples to be handled by the current rank.
