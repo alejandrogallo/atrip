@@ -85,26 +85,30 @@ struct RankInfo {
   const size_t ranksPerNode;
 };
 
+template <typename A>
+std::vector<A> unique(std::vector<A> const &xs) {
+  auto result = xs;
+  std::sort(result.begin(), result.end());
+  auto const& last = std::unique(result.begin(), result.end());
+  result.erase(last, result.end());
+  return result;
+}
+
 std::vector<RankInfo>
 getNodeInfos(std::vector<string> const& nodeNames) {
   std::vector<RankInfo> result;
-  auto uniqueNames = nodeNames;
-  {
-    std::sort(uniqueNames.begin(), uniqueNames.end());
-    auto const& last = std::unique(uniqueNames.begin(), uniqueNames.end());
-    uniqueNames.erase(last, uniqueNames.end());
-  }
-  const auto index = [&uniqueNames](std::string const& s) {
+  auto const uniqueNames = unique(nodeNames);
+  auto const index = [&uniqueNames](std::string const& s) {
     auto const& it = std::find(uniqueNames.begin(), uniqueNames.end(), s);
     return std::distance(uniqueNames.begin(), it);
   };
   std::vector<size_t> localRanks(uniqueNames.size(), 0);
-  size_t rank = 0;
+  size_t globalRank = 0;
   for (auto const& name: nodeNames) {
     const size_t nodeId = index(name);
     result.push_back({name,
                       nodeId,
-                      rank++,
+                      globalRank++,
                       localRanks[nodeId]++,
                       std::count(nodeNames.begin(),
                                  nodeNames.end(),
@@ -112,6 +116,25 @@ getNodeInfos(std::vector<string> const& nodeNames) {
                       });
   }
   return result;
+}
+
+struct ClusterInfo {
+  const size_t nNodes, np, ranksPerNode;
+  const std::vector<RankInfo> rankInfos;
+};
+
+ClusterInfo
+getClusterInfo(MPI_Comm comm) {
+  auto const names = getNodeNames(comm);
+  auto const rankInfos = getNodeInfos(names);
+
+  return ClusterInfo {
+    unique(names).size(),
+    names.size(),
+    rankInfos[0].ranksPerNode,
+    rankInfos
+  };
+
 }
 // Node information:2 ends here
 
@@ -189,8 +212,6 @@ size_t isOnNode(size_t tuple, size_t nodes) { return tuple % nodes; }
 
 struct Info {
   size_t nNodes;
-  size_t Nv;
-  size_t np;
   size_t nodeId;
 };
 
@@ -212,28 +233,33 @@ std::vector<size_t> getTupleNodes(ABCTuple t, size_t nNodes) {
 // Utils:1 ends here
 
 // [[file:~/atrip/atrip.org::*Distribution][Distribution:1]]
-std::vector<ABCTuple>
-specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
+ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
-  std::vector<ABCTuple> nodeTuples;
-  size_t nNodes(info.nNodes);
-  size_t np(info.np);
-  size_t N(allTuples.size());
+  ABCTuples nodeTuples;
+  size_t const nNodes(info.nNodes);
 
-  //      nodeid          tuple list
-  std::map<size_t, std::vector<ABCTuple> > container1d;
-  std::map<size_t, std::vector<ABCTuple> > container2d;
-  std::map<size_t, std::vector<ABCTuple> > container3d;
+  std::map< size_t /* nodeId */, ABCTuples >
+    container1d, container2d, container3d;
 
   // build container-n-d's
-  for (auto t: allTuples) {
+  for (auto const& t: allTuples) {
     // one which node(s) are the tuple elements located...
     // put them into the right container
-    auto nt = getTupleNodes(t, nNodes);
-    if ( nt.size() == 1) container1d[nt[0]].push_back(t);
-    if ( nt.size() == 2) container2d[nt[0] + nNodes*nt[1]].push_back(t);
-    if ( nt.size() == 3)
-      container3d[nt[0] + nNodes*nt[1] + nNodes*nNodes*nt[2]].push_back(t);
+    auto const _nodes = getTupleNodes(t, nNodes);
+    switch (_nodes.size()) {
+      case 1:
+        container1d[_nodes[0]].push_back(t);
+      case 2:
+        container2d[ _nodes[0]
+                   + nNodes * _nodes[1]
+                   ].push_back(t);
+      case 3:
+        container3d[ _nodes[0]
+                   + nNodes * _nodes[1]
+                   + nNodes * nNodes * _nodes[2]
+                   ].push_back(t);
+
+    }
   }
 
   if (info.nodeId == 0)
@@ -241,97 +267,114 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
   // DISTRIBUTE 1-d containers
   // every tuple which is only located at one node belongs to this node
   {
-    auto const& tuplesVec = container1d[info.nodeId];
-    nodeTuples.resize(tuplesVec.size());
-    std::copy(tuplesVec.begin(), tuplesVec.end(), nodeTuples.begin());
+    auto const& _tuplesVec = container1d[info.nodeId];
+    nodeTuples.resize(_tuplesVec.size());
+    std::copy(_tuplesVec.begin(), _tuplesVec.end(), nodeTuples.begin());
   }
 
   if (info.nodeId == 0)
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
-  for (auto &m: container2d) {
-    size_t idx = m.first%nNodes;
-    size_t idy = m.first/nNodes;
-    size_t myNode = idx;
+  for (auto const& m: container2d) {
 
-    // either idx or idy is my node
-    if (idx != info.nodeId && idy != info.nodeId) continue;
-    if (idy == info.nodeId) myNode = idy;
+    auto const& _tuplesVec = m.second;
+      const
+    size_t idx = m.first % nNodes
+         // remeber: m.first = idy * nNodes + idx
+         , idy = m.first / nNodes
+         , n_half = _tuplesVec.size() / 2
+         , size = nodeTuples.size()
+         ;
 
-    auto tuplesVec = m.second;
-    auto n = tuplesVec.size() / 2;
-    auto size = nodeTuples.size();
-    if (myNode == idx) {
-      nodeTuples.resize(size + n);
-      std::copy(tuplesVec.begin(),
-                tuplesVec.begin() + n,
-                nodeTuples.begin() + size);
+    size_t nextra, nbegin, nend;
+    if (info.nodeId == idx) {
+      nextra = n_half;
+      nbegin = 0 * n_half;
+      nend   = n_half;
+    } else if (info.nodeId == idy) {
+      nextra = _tuplesVec.size() - n_half;
+      nbegin = 1 * n_half;
+      nend   = _tuplesVec.size();
     } else {
-      auto ny = tuplesVec.size() - n;
-      nodeTuples.resize(size + ny);
-      std::copy(tuplesVec.begin() + n,
-                tuplesVec.end(),
-                nodeTuples.begin() + size);
+      // either idx or idy is my node
+      continue;
     }
+
+    nodeTuples.resize(size + nextra);
+    std::copy(_tuplesVec.begin() + nbegin,
+              _tuplesVec.begin() + nend,
+              nodeTuples.begin() + size);
 
   }
 
   if (info.nodeId == 0)
     std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
-  // similar game for the tuples which belong to three different nodes
-  for (auto m: container3d){
-    auto tuplesVec = m.second;
-    auto idx = m.first%nNodes;
-    auto idy = (m.first/nNodes)%nNodes;
-    auto idz = m.first/nNodes/nNodes;
-    if (idx != info.nodeId && idy != info.nodeId && idz != info.nodeId) continue;
+  for (auto const& m: container3d){
+    auto const& _tuplesVec = m.second;
 
-    size_t nx = tuplesVec.size() / 3;
-    size_t n, nbegin, nend;
+      const
+    size_t idx = m.first % nNodes
+         , idy = (m.first / nNodes) % nNodes
+         // remember: m.first = idx + idy * nNodes + idz * nNodes^2
+         , idz = m.first / nNodes / nNodes
+         , n_third = _tuplesVec.size() / 3
+         , size = nodeTuples.size()
+         ;
+
+    size_t nextra, nbegin, nend;
     if (info.nodeId == idx) {
-      n = nx;
-      nbegin = 0;
-      nend = n;
+      nextra = n_third;
+      nbegin = 0 * n_third;
+      nend   = nextra;
     } else if (info.nodeId == idy) {
-      n = nx;
-      nbegin = n;
-      nend = n + n;
+      nextra = n_third;
+      nbegin = 1 * n_third;
+      nend   = 2 * nextra;
+    } else if (info.nodeId == idz) {
+      nextra = _tuplesVec.size() - 2 * n_third;
+      nbegin = 2 * n_third;
+      nend   = _tuplesVec.size();
     } else {
-      n = tuplesVec.size() - 2 * nx;
-      nbegin = 2 * nx;
-      nend = 2 * nx + n;
+      // either idx or idy or idz is my node
+      continue;
     }
 
-    auto size = nodeTuples.size();
-    nodeTuples.resize(size + n);
-    std::copy(tuplesVec.begin() + nbegin,
-              tuplesVec.begin() + nend,
+    nodeTuples.resize(size + nextra);
+    std::copy(_tuplesVec.begin() + nbegin,
+              _tuplesVec.begin() + nend,
               nodeTuples.begin() + size);
 
   }
 
 
-  if (info.nodeId == 0)
-    std::cout << "\tsorting...\n";
-  // sort part of group-and-sort algorithm
-  // every tuple on a given node is sorted in a way that
-  // the 'home elements' are the fastest index.
-  // 1:yyy 2:yyn(x) 3:yny(x) 4:ynn(x) 5:nyy 6:nyn(x) 7:nny 8:nnn
-  size_t n = info.nodeId;
+  if (info.nodeId == 0) std::cout << "\tswapping tuples...\n";
+  /*
+   *  sort part of group-and-sort algorithm
+   *  every tuple on a given node is sorted in a way that
+   *  the 'home elements' are the fastest index.
+   *  1:yyy 2:yyn(x) 3:yny(x) 4:ynn(x) 5:nyy 6:nyn(x) 7:nny 8:nnn
+   */
   for (auto &nt: nodeTuples){
-    if ( isOnNode(nt[0], nNodes) == n ){ // 1234
-      if ( isOnNode(nt[2], nNodes) != n ){ // 24
-        size_t x(nt[0]); nt[0] = nt[2]; nt[2] = x; // switch first and last
+    if ( isOnNode(nt[0], nNodes) == info.nodeId ){ // 1234
+      if ( isOnNode(nt[2], nNodes) != info.nodeId ){ // 24
+        size_t const x(nt[0]);
+        nt[0] = nt[2];         // switch first and last
+        nt[2] = x;
       }
-      else if ( isOnNode(nt[1], nNodes) != n){ // 3
-        size_t x(nt[0]); nt[0] = nt[1]; nt[1] = x; // switch first two
+      else if ( isOnNode(nt[1], nNodes) != info.nodeId){ // 3
+        size_t const x(nt[0]);
+        nt[0] = nt[1];         // switch first two
+        nt[1] = x;
       }
     } else {
-      if ( isOnNode(nt[1], nNodes) == n   // 56
-        && isOnNode(nt[2], nNodes) != n){ // 6
-        size_t x(nt[1]); nt[1] = nt[2]; nt[2] = x; // switch last two
+      if ( isOnNode(nt[1], nNodes) == info.nodeId   // 56
+        && isOnNode(nt[2], nNodes) != info.nodeId
+        ) { // 6
+        size_t const x(nt[1]);
+        nt[1] = nt[2];         // switch last two
+        nt[2] = x;
       }
     }
   }
@@ -358,32 +401,22 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   std::vector<ABCTuple> result;
 
-  const auto nodeNames(getNodeNames(universe));
-  auto nodeNamesUnique(nodeNames);
-  {
-    const auto& last = std::unique(nodeNamesUnique.begin(),
-                                   nodeNamesUnique.end());
-    nodeNamesUnique.erase(last, nodeNamesUnique.end());
-  }
-  // we pick one rank from every node
+  auto const nodeNames(getNodeNames(universe));
+  size_t const nNodes = unique(nodeNames).size();
   auto const nodeInfos = getNodeInfos(nodeNames);
-  size_t const nNodes = nodeNamesUnique.size();
 
   // We want to construct a communicator which only contains of one
   // element per node
-  bool const makeDistribution
+  bool const computeDistribution
     = nodeInfos[rank].localRank == 0;
 
   std::vector<ABCTuple>
-    nodeTuples = makeDistribution
-               ? specialDistribution(Info{ nNodes
-                                         , Nv
-                                         , np
-                                         , nodeInfos[rank].nodeId
-                                         },
-                                      getAllTuplesList(Nv))
-               : std::vector<ABCTuple>()
-               ;
+    nodeTuples
+      = computeDistribution
+      ? specialDistribution(Info{nNodes, nodeInfos[rank].nodeId},
+                            getAllTuplesList(Nv))
+      : std::vector<ABCTuple>()
+      ;
 
   LOG(1,"Atrip") << "got nodeTuples\n";
 
@@ -400,7 +433,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 // Main:1 ends here
 
 // [[file:~/atrip/atrip.org::*Main][Main:2]]
-const size_t
+size_t const
   tuplesPerRankLocal
      = nodeTuples.size() / nodeInfos[rank].ranksPerNode
      + size_t(nodeTuples.size() % nodeInfos[rank].ranksPerNode != 0)
@@ -431,7 +464,8 @@ LOG(1,"Atrip") << "#nodes " << nNodes << "\n";
 size_t const totalTuples
   = tuplesPerRankGlobal * nodeInfos[rank].ranksPerNode;
 
-if (makeDistribution) {
+if (computeDistribution) {
+  // pad with FAKE_TUPLEs
   nodeTuples.insert(nodeTuples.end(),
                     totalTuples - nodeTuples.size(),
                     FAKE_TUPLE);
@@ -462,13 +496,13 @@ if (makeDistribution) {
 }
 // Main:4 ends here
 
-// [[file:~/atrip/atrip.org::*Main][Main:6]]
+// [[file:~/atrip/atrip.org::*Main][Main:5]]
 LOG(1,"Atrip") << "scattering tuples \n";
 
   return result;
 
 }
-// Main:6 ends here
+// Main:5 ends here
 
 // [[file:~/atrip/atrip.org::*Interface][Interface:1]]
 struct Distribution : public TuplesDistribution {

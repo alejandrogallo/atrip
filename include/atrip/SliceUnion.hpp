@@ -178,8 +178,14 @@ namespace atrip {
           if (blank.info.state == Slice::SelfSufficient) {
             blank.data = sources[from.source].data();
           } else {
-            if (freePointers.size() == 0)
-              throw std::domain_error("No more free pointers!");
+            if (freePointers.size() == 0) {
+              std::stringstream stream;
+              stream << "No more free pointers "
+                     << "for type " << type
+                     << " and name " << name
+                      ;
+              throw std::domain_error(stream.str());
+            }
             auto dataPointer = freePointers.begin();
             freePointers.erase(dataPointer);
             blank.data = *dataPointer;
@@ -332,7 +338,7 @@ namespace atrip {
               , Slice::Name name_
               , size_t nSliceBuffers = 4
               )
-              : rankMap(paramLength, np)
+              : rankMap(paramLength, np, global_world)
               , world(child_world)
               , universe(global_world)
               , sliceLength(sliceLength_)
@@ -419,15 +425,26 @@ namespace atrip {
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
-             , Slice::Info const& info
+             , Slice::LocalDatabaseElement const& el
              , size_t tag) const noexcept {
       MPI_Request request;
       bool sendData_p = false;
+      auto const& info = el.info;
 
       if (info.state == Slice::Fetch) sendData_p = true;
       // TODO: remove this because I have SelfSufficient
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
+
+      switch (el.name) {
+        case Slice::Name::TA:
+        case Slice::Name::VIJKA:
+          if (otherRank / 48 == Atrip::rank / 48) {
+            Atrip::localSend++;
+          } else {
+            Atrip::networkSend++;
+          }
+      }
 
       MPI_Isend( sources[info.from.source].data()
                , sources[info.from.source].size()

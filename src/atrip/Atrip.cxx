@@ -9,13 +9,18 @@
 
 using namespace atrip;
 
+bool RankMap::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
 Timings Atrip::chrono;
+size_t Atrip::networkSend;
+size_t Atrip::localSend;
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
+  Atrip::networkSend = 0;
+  Atrip::localSend = 0;
 }
 
 Atrip::Output Atrip::run(Atrip::Input const& in) {
@@ -42,6 +47,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   in.ei->read_all(epsi.data());
   in.ea->read_all(epsa.data());
   in.Tph->read_all(Tai.data());
+
+  RankMap::RANK_ROUND_ROBIN = in.rankRoundRobin;
+  if (RankMap::RANK_ROUND_ROBIN) {
+    LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
+  } else {
+    LOG(0,"Atrip")
+      << "Doing node > local rank round robin slices distribution" << "\n";
+  }
+
 
   // COMMUNICATOR CONSTRUCTION ========================================={{{1
   //
@@ -224,7 +238,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
           ;
 
         WITH_CHRONO("db:io:send",
-          u.send(otherRank, el.info, sendTag);
+          u.send(otherRank, el, sendTag);
         )
 
       } // send phase
@@ -268,6 +282,25 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     ))
 
     if (iteration % in.iterationMod == 0) {
+
+      size_t networkSend;
+      MPI_Reduce(&Atrip::networkSend,
+                 &networkSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
+      size_t localSend;
+      MPI_Reduce(&Atrip::localSend,
+                 &localSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
@@ -275,7 +308,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         << "GF)"
         << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
-        << " ===========================\n";
+        << " :net " << networkSend
+        << " :loc " << localSend
+        << " :loc/net " << (double(localSend) / double(networkSend))
+        //<< " ===========================\n"
+        << "\n";
+
 
       // PRINT TIMINGS
       if (in.chrono)
@@ -415,6 +453,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
     }
 
+    // TODO: remove this
     if (isFakeTuple(i)) {
       // fake iterations should also unwrap whatever they got
       WITH_RANK << iteration

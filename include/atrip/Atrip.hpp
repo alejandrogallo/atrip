@@ -22,6 +22,8 @@ namespace atrip {
     static int rank;
     static int np;
     static Timings chrono;
+    static size_t networkSend;
+    static size_t localSend;
     static void init();
 
     struct Input {
@@ -46,6 +48,7 @@ namespace atrip {
         GROUP_AND_SORT,
       };
 
+      ADD_ATTRIBUTE(bool, rankRoundRobin, false)
       ADD_ATTRIBUTE(bool, chrono, false)
       ADD_ATTRIBUTE(bool, barrier, false)
       ADD_ATTRIBUTE(int, maxIterations, 0)
