@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
   int no(10), nv(10), itMod(100);
-  bool nochrono(false), barrier(false);
+  bool nochrono(false), barrier(false), rankRoundRobin(false);
   std::string tuplesDistributionString = "naive";
 
   CLI::App app{"Main bench for atrip"};
@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
   app.add_option("--nv", nv, "Virtual orbitals");
   app.add_option("--mod", itMod, "Iteration modifier");
   app.add_flag("--nochrono", nochrono, "Do not print chrono");
+  app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
   app.add_flag("--barrier", barrier, "Use the first barrier");
   app.add_option("--dist", tuplesDistributionString, "Which distribution");
 
@@ -94,6 +95,7 @@ int main(int argc, char** argv) {
     // some options
     .with_barrier(barrier)
     .with_chrono(!nochrono)
+    .with_rankRoundRobin(rankRoundRobin)
     .with_iterationMod(itMod)
     .with_tuplesDistribution(tuplesDistribution)
     ;
