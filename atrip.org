@@ -1735,8 +1735,6 @@ size_t isOnNode(size_t tuple, size_t nodes) { return tuple % nodes; }
 
 struct Info {
   size_t nNodes;
-  size_t Nv;
-  size_t np;
   size_t nodeId;
 };
 
@@ -1758,30 +1756,27 @@ std::vector<size_t> getTupleNodes(ABCTuple t, size_t nNodes) {
 #+end_src
 
 **** Distribution
+
 wording: home element = element which is located on the given node
 1. we distribute the tuples such that each tuple has at least one 'home element'
 2. we sort each tuple in a way that the 'home element' are the fastest indices
 3. we sort the list of tuples on every node
 4. we resort the tuples that for every tuple abc the following holds: a<b<c
+
 #+begin_src c++ :tangle (atrip-tuples-h)
-std::vector<ABCTuple>
-specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
+ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
-  std::vector<ABCTuple> nodeTuples;
-  size_t nNodes(info.nNodes);
-  size_t np(info.np);
-  size_t N(allTuples.size());
+  ABCTuples nodeTuples;
+  size_t const nNodes(info.nNodes);
 
-  //      nodeid          tuple list
-  std::map<size_t, std::vector<ABCTuple> > container1d;
-  std::map<size_t, std::vector<ABCTuple> > container2d;
-  std::map<size_t, std::vector<ABCTuple> > container3d;
+  std::map< size_t /* nodeId */, ABCTuples >
+    container1d, container2d, container3d;
 
   // build container-n-d's
   for (auto const& t: allTuples) {
     // one which node(s) are the tuple elements located...
     // put them into the right container
-    auto _nodes = getTupleNodes(t, nNodes);
+    auto const _nodes = getTupleNodes(t, nNodes);
     switch (_nodes.size()) {
       case 1:
         container1d[_nodes[0]].push_back(t);
@@ -1812,7 +1807,7 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
-  for (auto &m: container2d) {
+  for (auto const& m: container2d) {
 
     auto const& _tuplesVec = m.second;
       const
@@ -1892,22 +1887,21 @@ specialDistribution(Info info, std::vector<ABCTuple> const& allTuples) {
    *  the 'home elements' are the fastest index.
    *  1:yyy 2:yyn(x) 3:yny(x) 4:ynn(x) 5:nyy 6:nyn(x) 7:nny 8:nnn
    */
-  size_t myNode = info.nodeId;
   for (auto &nt: nodeTuples){
-    if ( isOnNode(nt[0], nNodes) == myNode ){ // 1234
-      if ( isOnNode(nt[2], nNodes) != myNode ){ // 24
+    if ( isOnNode(nt[0], nNodes) == info.nodeId ){ // 1234
+      if ( isOnNode(nt[2], nNodes) != info.nodeId ){ // 24
         size_t const x(nt[0]);
         nt[0] = nt[2];         // switch first and last
         nt[2] = x;
       }
-      else if ( isOnNode(nt[1], nNodes) != myNode){ // 3
+      else if ( isOnNode(nt[1], nNodes) != info.nodeId){ // 3
         size_t const x(nt[0]);
         nt[0] = nt[1];         // switch first two
         nt[1] = x;
       }
     } else {
-      if ( isOnNode(nt[1], nNodes) == myNode   // 56
-        && isOnNode(nt[2], nNodes) != myNode
+      if ( isOnNode(nt[1], nNodes) == info.nodeId   // 56
+        && isOnNode(nt[2], nNodes) != info.nodeId
         ) { // 6
         size_t const x(nt[1]);
         nt[1] = nt[2];         // switch last two
@@ -1960,32 +1954,22 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   std::vector<ABCTuple> result;
 
-  const auto nodeNames(getNodeNames(universe));
-  auto nodeNamesUnique(nodeNames);
-  {
-    const auto& last = std::unique(nodeNamesUnique.begin(),
-                                   nodeNamesUnique.end());
-    nodeNamesUnique.erase(last, nodeNamesUnique.end());
-  }
-  // we pick one rank from every node
+  auto const nodeNames(getNodeNames(universe));
+  size_t const nNodes = unique(nodeNames).size();
   auto const nodeInfos = getNodeInfos(nodeNames);
-  size_t const nNodes = nodeNamesUnique.size();
 
   // We want to construct a communicator which only contains of one
   // element per node
-  bool const makeDistribution
+  bool const computeDistribution
     = nodeInfos[rank].localRank == 0;
 
   std::vector<ABCTuple>
-    nodeTuples = makeDistribution
-               ? specialDistribution(Info { nNodes
-                                          , Nv
-                                          , np
-                                          , nodeInfos[rank].nodeId
-                                          },
-                                      getAllTuplesList(Nv))
-               : std::vector<ABCTuple>()
-               ;
+    nodeTuples
+      = computeDistribution
+      ? specialDistribution(Info{nNodes, nodeInfos[rank].nodeId},
+                            getAllTuplesList(Nv))
+      : std::vector<ABCTuple>()
+      ;
 
   LOG(1,"Atrip") << "got nodeTuples\n";
 
@@ -2009,7 +1993,7 @@ We have to communicate this quantity among all nodes.
 
 #+begin_src c++ :tangle (atrip-tuples-h)
 
-  const size_t
+  size_t const
     tuplesPerRankLocal
        = nodeTuples.size() / nodeInfos[rank].ranksPerNode
        + size_t(nodeTuples.size() % nodeInfos[rank].ranksPerNode != 0)
@@ -2056,7 +2040,8 @@ and add some fake tuples at the end as padding.
 size_t const totalTuples
   = tuplesPerRankGlobal * nodeInfos[rank].ranksPerNode;
 
-if (makeDistribution) {
+if (computeDistribution) {
+  // pad with FAKE_TUPLEs
   nodeTuples.insert(nodeTuples.end(),
                     totalTuples - nodeTuples.size(),
                     FAKE_TUPLE);
@@ -2112,48 +2097,6 @@ Therefore, the =displacements= are simply the vector
 
 and the =sendCounts= vector is simply the constant vector
 =tuplesPerRankLocal= of size =ranksPerNode=.
-
-TODO: Remove
-#+begin_src c++
-{
-  std::vector<int> const
-    sendCounts(nodeInfos[rank].ranksPerNode, tuplesPerRankLocal);
-
-  std::vector<int>
-    displacements(nodeInfos[rank].ranksPerNode);
-
-  std::iota(displacements.begin(),
-            displacements.end(),
-            tuplesPerRankLocal);
-
-  // important!
-  result.resize(tuplesPerRankLocal);
-
-  // construct mpi type for abctuple
-  MPI_Datatype MPI_ABCTUPLE;
-  MPI_Type_vector(nodeTuples[0].size(), 1, 1, MPI_UINT64_T, &MPI_ABCTUPLE);
-  MPI_Type_commit(&MPI_ABCTUPLE);
-
-  LOG(1,"Atrip") << "scattering tuples \n";
-  MPI_Scatterv(nodeTuples.data(),
-              sendCounts.data(),
-              displacements.data(),
-              MPI_ABCTUPLE,
-              result.data(),
-              tuplesPerRankLocal,
-              MPI_ABCTUPLE,
-              0,
-              INTRA_COMM);
-
-  // free type
-  MPI_Type_free(&MPI_ABCTUPLE);
-
-}
-#+end_src
-
-and now we have to make sure that the size of the result
-is the same with every rank in the universe communicator,
-inserting fake tuples where needed
 
 #+begin_src c++ :tangle (atrip-tuples-h)
 
