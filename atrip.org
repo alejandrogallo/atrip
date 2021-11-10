@@ -1772,8 +1772,16 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   ABCTuples nodeTuples;
   size_t const nNodes(info.nNodes);
 
-  std::map< size_t /* nodeId */, ABCTuples >
-    container1d, container2d, container3d;
+  std::vector<ABCTuples>
+      container1d(nNodes)
+    , container2d(nNodes * nNodes)
+    , container3d(nNodes * nNodes * nNodes)
+    ;
+
+  if (info.nodeId == 0)
+    std::cout << "\tGoing through all "
+              << allTuples.size()
+              << " tuples\n";
 
   // build container-n-d's
   for (auto const& t: allTuples) {
@@ -1785,12 +1793,12 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
         container1d[_nodes[0]].push_back(t);
       case 2:
         container2d[ _nodes[0]
-                   + nNodes * _nodes[1]
+                   + _nodes[1] * nNodes
                    ].push_back(t);
       case 3:
         container3d[ _nodes[0]
-                   + nNodes * _nodes[1]
-                   + nNodes * nNodes * _nodes[2]
+                   + _nodes[1] * nNodes
+                   + _nodes[2] * nNodes * nNodes
                    ].push_back(t);
 
     }
@@ -1810,33 +1818,32 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
-  for (auto const& m: container2d) {
+  for (size_t yx = 0; yx < container2d.size(); yx++) {
 
-    auto const& _tuplesVec = m.second;
+    auto const& _tuplesVec = container2d[yx];
       const
-    size_t idx = m.first % nNodes
-         // remeber: m.first = idy * nNodes + idx
-         , idy = m.first / nNodes
+    size_t idx = yx % nNodes
+         // remeber: yx = idy * nNodes + idx
+         , idy = yx / nNodes
          , n_half = _tuplesVec.size() / 2
          , size = nodeTuples.size()
          ;
 
-    size_t nextra, nbegin, nend;
+    size_t nbeg, nend;
     if (info.nodeId == idx) {
-      nextra = n_half;
-      nbegin = 0 * n_half;
-      nend   = n_half;
+      nbeg = 0 * n_half;
+      nend = n_half;
     } else if (info.nodeId == idy) {
-      nextra = _tuplesVec.size() - n_half;
-      nbegin = 1 * n_half;
-      nend   = _tuplesVec.size();
+      nbeg = 1 * n_half;
+      nend = _tuplesVec.size();
     } else {
       // either idx or idy is my node
       continue;
     }
 
+    size_t const nextra = nend - nbeg;
     nodeTuples.resize(size + nextra);
-    std::copy(_tuplesVec.begin() + nbegin,
+    std::copy(_tuplesVec.begin() + nbeg,
               _tuplesVec.begin() + nend,
               nodeTuples.begin() + size);
 
@@ -1845,38 +1852,36 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   if (info.nodeId == 0)
     std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
-  for (auto const& m: container3d){
-    auto const& _tuplesVec = m.second;
+  for (size_t zyx = 0; zyx < container3d.size(); zyx++) {
+    auto const& _tuplesVec = container3d[zyx];
 
       const
-    size_t idx = m.first % nNodes
-         , idy = (m.first / nNodes) % nNodes
-         // remember: m.first = idx + idy * nNodes + idz * nNodes^2
-         , idz = m.first / nNodes / nNodes
+    size_t idx = zyx % nNodes
+         , idy = (zyx / nNodes) % nNodes
+         // remember: zyx = idx + idy * nNodes + idz * nNodes^2
+         , idz = zyx / nNodes / nNodes
          , n_third = _tuplesVec.size() / 3
          , size = nodeTuples.size()
          ;
 
-    size_t nextra, nbegin, nend;
+    size_t nbeg, nend;
     if (info.nodeId == idx) {
-      nextra = n_third;
-      nbegin = 0 * n_third;
-      nend   = nextra;
+      nbeg = 0 * n_third;
+      nend = 1 * n_third;
     } else if (info.nodeId == idy) {
-      nextra = n_third;
-      nbegin = 1 * n_third;
-      nend   = 2 * nextra;
+      nbeg = 1 * n_third;
+      nend = 2 * nextra;
     } else if (info.nodeId == idz) {
-      nextra = _tuplesVec.size() - 2 * n_third;
-      nbegin = 2 * n_third;
-      nend   = _tuplesVec.size();
+      nbeg = 2 * n_third;
+      nend = _tuplesVec.size();
     } else {
       // either idx or idy or idz is my node
       continue;
     }
 
+    size_t const nextra = nend - nbeg;
     nodeTuples.resize(size + nextra);
-    std::copy(_tuplesVec.begin() + nbegin,
+    std::copy(_tuplesVec.begin() + nbeg,
               _tuplesVec.begin() + nend,
               nodeTuples.begin() + size);
 
@@ -2102,8 +2107,6 @@ and the =sendCounts= vector is simply the constant vector
 =tuplesPerRankLocal= of size =ranksPerNode=.
 
 #+begin_src c++ :tangle (atrip-tuples-h)
-
-  LOG(1,"Atrip") << "scattering tuples \n";
 
   return result;
 
