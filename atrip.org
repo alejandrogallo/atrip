@@ -1749,16 +1749,12 @@ struct Info {
 // return the node (or all nodes) where the elements of this
 // tuple are located
 std::vector<size_t> getTupleNodes(ABCTuple t, size_t nNodes) {
-  std::vector<size_t> result;
-  ABCTuple nTuple = { isOnNode(t[0], nNodes)
-                    , isOnNode(t[1], nNodes)
-                    , isOnNode(t[2], nNodes)
-                    };
-  std::sort(nTuple.begin(), nTuple.end());
-  ABCTuple::iterator it = std::unique(nTuple.begin(), nTuple.end());
-  result.resize(it - nTuple.begin());
-  std::copy(nTuple.begin(), it, result.begin());
-  return result;
+  std::vector<size_t>
+    nTuple = { isOnNode(t[0], nNodes)
+             , isOnNode(t[1], nNodes)
+             , isOnNode(t[2], nNodes)
+             };
+  return unique(nTuple);
 }
 #+end_src
 
