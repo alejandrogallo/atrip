@@ -1588,11 +1588,11 @@ struct RankInfo {
 };
 
 template <typename A>
-std::vector<A> unique(std::vector<A> const &xs) {
+A unique(A const &xs) {
   auto result = xs;
-  std::sort(result.begin(), result.end());
-  auto const& last = std::unique(result.begin(), result.end());
-  result.erase(last, result.end());
+  std::sort(std::begin(result), std::end(result));
+  auto const& last = std::unique(std::begin(result), std::end(result));
+  result.erase(last, std::end(result));
   return result;
 }
 
@@ -1736,6 +1736,7 @@ namespace group_and_sort {
 // Provides the node on which the slice-element is found
 // Right now we distribute the slices in a round robin fashion
 // over the different nodes (NOTE: not mpi ranks but nodes)
+inline
 size_t isOnNode(size_t tuple, size_t nodes) { return tuple % nodes; }
 
 
