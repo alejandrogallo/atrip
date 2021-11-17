@@ -27,6 +27,7 @@ using PartialTuple = std::array<size_t, 2>;
 using ABCTuples = std::vector<ABCTuple>;
 
 constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
+constexpr ABCTuple INVALID_TUPLE = {1, 1, 1};
 // Tuples types:1 ends here
 
 // [[file:~/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the tuples:1]]
@@ -86,11 +87,11 @@ struct RankInfo {
 };
 
 template <typename A>
-std::vector<A> unique(std::vector<A> const &xs) {
+A unique(A const &xs) {
   auto result = xs;
-  std::sort(result.begin(), result.end());
-  auto const& last = std::unique(result.begin(), result.end());
-  result.erase(last, result.end());
+  std::sort(std::begin(result), std::end(result));
+  auto const& last = std::unique(std::begin(result), std::end(result));
+  result.erase(last, std::end(result));
   return result;
 }
 
@@ -207,29 +208,25 @@ namespace group_and_sort {
 // Provides the node on which the slice-element is found
 // Right now we distribute the slices in a round robin fashion
 // over the different nodes (NOTE: not mpi ranks but nodes)
-size_t isOnNode(size_t tuple, size_t nodes) { return tuple % nodes; }
+inline
+size_t isOnNode(size_t tuple, size_t nNodes) { return tuple % nNodes; }
 
+
+// return the node (or all nodes) where the elements of this
+// tuple are located
+std::vector<size_t> getTupleNodes(ABCTuple const& t, size_t nNodes) {
+  std::vector<size_t>
+    nTuple = { isOnNode(t[0], nNodes)
+             , isOnNode(t[1], nNodes)
+             , isOnNode(t[2], nNodes)
+             };
+  return unique(nTuple);
+}
 
 struct Info {
   size_t nNodes;
   size_t nodeId;
 };
-
-
-// return the node (or all nodes) where the elements of this
-// tuple are located
-std::vector<size_t> getTupleNodes(ABCTuple t, size_t nNodes) {
-  std::vector<size_t> result;
-  ABCTuple nTuple = { isOnNode(t[0], nNodes)
-                    , isOnNode(t[1], nNodes)
-                    , isOnNode(t[2], nNodes)
-                    };
-  std::sort(nTuple.begin(), nTuple.end());
-  ABCTuple::iterator it = std::unique(nTuple.begin(), nTuple.end());
-  result.resize(it - nTuple.begin());
-  std::copy(nTuple.begin(), it, result.begin());
-  return result;
-}
 // Utils:1 ends here
 
 // [[file:~/atrip/atrip.org::*Distribution][Distribution:1]]
@@ -238,28 +235,42 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   ABCTuples nodeTuples;
   size_t const nNodes(info.nNodes);
 
-  std::map< size_t /* nodeId */, ABCTuples >
-    container1d, container2d, container3d;
+  std::vector<ABCTuples>
+      container1d(nNodes)
+    , container2d(nNodes * nNodes)
+    , container3d(nNodes * nNodes * nNodes)
+    ;
+
+  if (info.nodeId == 0)
+    std::cout << "\tGoing through all "
+              << allTuples.size()
+              << " tuples in "
+              << nNodes
+              << " nodes\n";
 
   // build container-n-d's
   for (auto const& t: allTuples) {
     // one which node(s) are the tuple elements located...
     // put them into the right container
     auto const _nodes = getTupleNodes(t, nNodes);
+
     switch (_nodes.size()) {
       case 1:
         container1d[_nodes[0]].push_back(t);
+        break;
       case 2:
         container2d[ _nodes[0]
-                   + nNodes * _nodes[1]
+                   + _nodes[1] * nNodes
                    ].push_back(t);
+        break;
       case 3:
         container3d[ _nodes[0]
-                   + nNodes * _nodes[1]
-                   + nNodes * nNodes * _nodes[2]
+                   + _nodes[1] * nNodes
+                   + _nodes[2] * nNodes * nNodes
                    ].push_back(t);
-
+        break;
     }
+
   }
 
   if (info.nodeId == 0)
@@ -267,43 +278,42 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   // DISTRIBUTE 1-d containers
   // every tuple which is only located at one node belongs to this node
   {
-    auto const& _tuplesVec = container1d[info.nodeId];
-    nodeTuples.resize(_tuplesVec.size());
-    std::copy(_tuplesVec.begin(), _tuplesVec.end(), nodeTuples.begin());
+    auto const& _tuples = container1d[info.nodeId];
+    nodeTuples.resize(_tuples.size(), INVALID_TUPLE);
+    std::copy(_tuples.begin(), _tuples.end(), nodeTuples.begin());
   }
 
   if (info.nodeId == 0)
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
-  for (auto const& m: container2d) {
+  for (size_t yx = 0; yx < container2d.size(); yx++) {
 
-    auto const& _tuplesVec = m.second;
+    auto const& _tuples = container2d[yx];
       const
-    size_t idx = m.first % nNodes
-         // remeber: m.first = idy * nNodes + idx
-         , idy = m.first / nNodes
-         , n_half = _tuplesVec.size() / 2
+    size_t idx = yx % nNodes
+         // remeber: yx = idy * nNodes + idx
+         , idy = yx / nNodes
+         , n_half = _tuples.size() / 2
          , size = nodeTuples.size()
          ;
 
-    size_t nextra, nbegin, nend;
+    size_t nbeg, nend;
     if (info.nodeId == idx) {
-      nextra = n_half;
-      nbegin = 0 * n_half;
-      nend   = n_half;
+      nbeg = 0 * n_half;
+      nend = n_half;
     } else if (info.nodeId == idy) {
-      nextra = _tuplesVec.size() - n_half;
-      nbegin = 1 * n_half;
-      nend   = _tuplesVec.size();
+      nbeg = 1 * n_half;
+      nend = _tuples.size();
     } else {
       // either idx or idy is my node
       continue;
     }
 
-    nodeTuples.resize(size + nextra);
-    std::copy(_tuplesVec.begin() + nbegin,
-              _tuplesVec.begin() + nend,
+    size_t const nextra = nend - nbeg;
+    nodeTuples.resize(size + nextra, INVALID_TUPLE);
+    std::copy(_tuples.begin() + nbeg,
+              _tuples.begin() + nend,
               nodeTuples.begin() + size);
 
   }
@@ -311,39 +321,37 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   if (info.nodeId == 0)
     std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
-  for (auto const& m: container3d){
-    auto const& _tuplesVec = m.second;
+  for (size_t zyx = 0; zyx < container3d.size(); zyx++) {
+    auto const& _tuples = container3d[zyx];
 
       const
-    size_t idx = m.first % nNodes
-         , idy = (m.first / nNodes) % nNodes
-         // remember: m.first = idx + idy * nNodes + idz * nNodes^2
-         , idz = m.first / nNodes / nNodes
-         , n_third = _tuplesVec.size() / 3
+    size_t idx = zyx % nNodes
+         , idy = (zyx / nNodes) % nNodes
+         // remember: zyx = idx + idy * nNodes + idz * nNodes^2
+         , idz = zyx / nNodes / nNodes
+         , n_third = _tuples.size() / 3
          , size = nodeTuples.size()
          ;
 
-    size_t nextra, nbegin, nend;
+    size_t nbeg, nend;
     if (info.nodeId == idx) {
-      nextra = n_third;
-      nbegin = 0 * n_third;
-      nend   = nextra;
+      nbeg = 0 * n_third;
+      nend = 1 * n_third;
     } else if (info.nodeId == idy) {
-      nextra = n_third;
-      nbegin = 1 * n_third;
-      nend   = 2 * nextra;
+      nbeg = 1 * n_third;
+      nend = 2 * n_third;
     } else if (info.nodeId == idz) {
-      nextra = _tuplesVec.size() - 2 * n_third;
-      nbegin = 2 * n_third;
-      nend   = _tuplesVec.size();
+      nbeg = 2 * n_third;
+      nend = _tuples.size();
     } else {
       // either idx or idy or idz is my node
       continue;
     }
 
-    nodeTuples.resize(size + nextra);
-    std::copy(_tuplesVec.begin() + nbegin,
-              _tuplesVec.begin() + nend,
+    size_t const nextra = nend - nbeg;
+    nodeTuples.resize(size + nextra, INVALID_TUPLE);
+    std::copy(_tuples.begin() + nbeg,
+              _tuples.begin() + nend,
               nodeTuples.begin() + size);
 
   }
@@ -386,6 +394,16 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
   // we bring the tuples abc back in the order a<b<c
   for (auto &t: nodeTuples)  std::sort(t.begin(), t.end());
+
+#if ATRIP_DEBUG > 1
+  if (info.nodeId == 0)
+  std::cout << "checking for validity of " << nodeTuples.size() << std::endl;
+  const bool anyInvalid
+    = std::any_of(nodeTuples.begin(),
+                  nodeTuples.end(),
+                  [](ABCTuple const& t) { return t == INVALID_TUPLE; });
+  if (anyInvalid) throw "Some tuple is invalid in group-and-sort algorithm";
+#endif
 
   return nodeTuples;
 
@@ -497,9 +515,7 @@ if (computeDistribution) {
 // Main:4 ends here
 
 // [[file:~/atrip/atrip.org::*Main][Main:5]]
-LOG(1,"Atrip") << "scattering tuples \n";
-
-  return result;
+return result;
 
 }
 // Main:5 ends here

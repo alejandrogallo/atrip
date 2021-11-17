@@ -33,6 +33,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   const size_t Nv = in.ea->lens[0];
   LOG(0,"Atrip") << "No: " << No << "\n";
   LOG(0,"Atrip") << "Nv: " << Nv << "\n";
+  LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
   std::vector<double> Tijk(No*No*No) // doubles only (see piecuch)
