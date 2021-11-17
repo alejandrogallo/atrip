@@ -113,6 +113,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankInfo.html">atrip::RankInfo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1ClusterInfo.html">atrip::ClusterInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1NaiveDistribution.html">atrip::NaiveDistribution</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1group__and__sort_1_1Info.html">atrip::group_and_sort::Info</a></td></tr>
@@ -140,18 +142,23 @@ Typedefs</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a61b9bff51847e234f5357dfa5adc5a59"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a61b9bff51847e234f5357dfa5adc5a59">atrip::getNodeNames</a> (MPI_Comm comm)</td></tr>
 <tr class="separator:a61b9bff51847e234f5357dfa5adc5a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97dd69bc4fe50212652f17f2e6bd04fb"><td class="memTemplParams" colspan="2">template&lt;typename A &gt; </td></tr>
+<tr class="memitem:a97dd69bc4fe50212652f17f2e6bd04fb"><td class="memTemplItemLeft" align="right" valign="top">A&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a97dd69bc4fe50212652f17f2e6bd04fb">atrip::unique</a> (A const &amp;xs)</td></tr>
+<tr class="separator:a97dd69bc4fe50212652f17f2e6bd04fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d282a028b26de5e1ea7d74e4e7f880b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; RankInfo &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a5d282a028b26de5e1ea7d74e4e7f880b">atrip::getNodeInfos</a> (std::vector&lt; string &gt; const &amp;nodeNames)</td></tr>
 <tr class="separator:a5d282a028b26de5e1ea7d74e4e7f880b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9fd13d6ed4a11730462a362543d6e26"><td class="memItemLeft" align="right" valign="top">ClusterInfo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26">atrip::getClusterInfo</a> (MPI_Comm comm)</td></tr>
+<tr class="separator:af9fd13d6ed4a11730462a362543d6e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d24cef8b67603413dfae0002a083b95"><td class="memItemLeft" align="right" valign="top">ABCTuples&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a6d24cef8b67603413dfae0002a083b95">atrip::getTuplesList</a> (size_t Nv, size_t rank, size_t np)</td></tr>
 <tr class="separator:a6d24cef8b67603413dfae0002a083b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memItemLeft" align="right" valign="top">ABCTuples&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b">atrip::getAllTuplesList</a> (const size_t Nv)</td></tr>
 <tr class="separator:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afee04d8b65243b4c52b29e30caa00614"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#afee04d8b65243b4c52b29e30caa00614">atrip::group_and_sort::isOnNode</a> (size_t tuple, size_t nodes)</td></tr>
-<tr class="separator:afee04d8b65243b4c52b29e30caa00614"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae560c45b60016cdff5f490eace74c12f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#ae560c45b60016cdff5f490eace74c12f">atrip::group_and_sort::getTupleNodes</a> (ABCTuple t, size_t nNodes)</td></tr>
-<tr class="separator:ae560c45b60016cdff5f490eace74c12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c110fe629c89d8d98347b66011bf25b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ABCTuple &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#a7c110fe629c89d8d98347b66011bf25b">atrip::group_and_sort::specialDistribution</a> (Info info, std::vector&lt; ABCTuple &gt; const &amp;allTuples)</td></tr>
-<tr class="separator:a7c110fe629c89d8d98347b66011bf25b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5835bdc1344efcd309e8d74a9a796299"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#a5835bdc1344efcd309e8d74a9a796299">atrip::group_and_sort::isOnNode</a> (size_t tuple, size_t nNodes)</td></tr>
+<tr class="separator:a5835bdc1344efcd309e8d74a9a796299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01df5c4f70883f728f55a19f0979e60"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#aa01df5c4f70883f728f55a19f0979e60">atrip::group_and_sort::getTupleNodes</a> (ABCTuple const &amp;t, size_t nNodes)</td></tr>
+<tr class="separator:aa01df5c4f70883f728f55a19f0979e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9285b4e63c38f7c586f8ba185e5fa2e9"><td class="memItemLeft" align="right" valign="top">ABCTuples&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#a9285b4e63c38f7c586f8ba185e5fa2e9">atrip::group_and_sort::specialDistribution</a> (Info const &amp;info, ABCTuples const &amp;allTuples)</td></tr>
+<tr class="separator:a9285b4e63c38f7c586f8ba185e5fa2e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31c2426ba83d4e87098657d78750dcf4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ABCTuple &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html#a31c2426ba83d4e87098657d78750dcf4">atrip::group_and_sort::main</a> (MPI_Comm universe, size_t Nv)</td></tr>
 <tr class="separator:a31c2426ba83d4e87098657d78750dcf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -159,6 +166,8 @@ Functions</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:a341e9614e55178a8e9537898f42ac636"><td class="memItemLeft" align="right" valign="top">constexpr ABCTuple&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a341e9614e55178a8e9537898f42ac636">atrip::FAKE_TUPLE</a> = {0, 0, 0}</td></tr>
 <tr class="separator:a341e9614e55178a8e9537898f42ac636"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eb1a1b9186ce3cd1fae39cd044aaf29"><td class="memItemLeft" align="right" valign="top">constexpr ABCTuple&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a4eb1a1b9186ce3cd1fae39cd044aaf29">atrip::INVALID_TUPLE</a> = {1, 1, 1}</td></tr>
+<tr class="separator:a4eb1a1b9186ce3cd1fae39cd044aaf29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['naivedistribution_199',['NaiveDistribution',['../structatrip_1_1NaiveDistribution.html',1,'atrip']]]
+  ['mpi_206',['mpi',['../structatrip_1_1Slice_1_1mpi.html',1,'atrip::Slice']]]
 ];

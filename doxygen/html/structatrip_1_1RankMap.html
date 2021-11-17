@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('structatrip_1_1RankMap.html',''); init
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structatrip_1_1RankMap-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">atrip::RankMap Struct Reference</div>  </div>
@@ -94,8 +95,8 @@ $(document).ready(function(){initNavTree('structatrip_1_1RankMap.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4e5aeee731a58ff2c1c39ce6aaa74920"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a4e5aeee731a58ff2c1c39ce6aaa74920">RankMap</a> (std::vector&lt; size_t &gt; lens, size_t np_)</td></tr>
-<tr class="separator:a4e5aeee731a58ff2c1c39ce6aaa74920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae827788be1f0dab10b36865bb9a65096"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#ae827788be1f0dab10b36865bb9a65096">RankMap</a> (std::vector&lt; size_t &gt; lens, size_t np_, MPI_Comm comm)</td></tr>
+<tr class="separator:ae827788be1f0dab10b36865bb9a65096"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4381c7fd1755c841cf25552c7f540c9"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#ad4381c7fd1755c841cf25552c7f540c9">find</a> (<a class="el" href="structatrip_1_1Slice_1_1Location.html">Slice::Location</a> const &amp;p) const noexcept</td></tr>
 <tr class="separator:ad4381c7fd1755c841cf25552c7f540c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37ae3068f5e47f6723b01d5327205bd9"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a37ae3068f5e47f6723b01d5327205bd9">nSources</a> () const noexcept</td></tr>
@@ -104,8 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7de8ba544e2779f70dec4c65b7663a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a763f5317e17a1a4d4e092ac0c14e30f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a763f5317e17a1a4d4e092ac0c14e30f0">isSourcePadding</a> (size_t rank, size_t source) const noexcept</td></tr>
 <tr class="separator:a763f5317e17a1a4d4e092ac0c14e30f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82f39989a480e9ec29503390b792efa5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1Slice_1_1Location.html">Slice::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a82f39989a480e9ec29503390b792efa5">find</a> (<a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> const &amp;abc, <a class="el" href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">Slice::Type</a> sliceType) const noexcept</td></tr>
-<tr class="separator:a82f39989a480e9ec29503390b792efa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacc36297664e2b33500622f57dd9e39c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1Slice_1_1Location.html">Slice::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#aacc36297664e2b33500622f57dd9e39c">find</a> (<a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> const &amp;abc, <a class="el" href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">Slice::Type</a> sliceType) const</td></tr>
+<tr class="separator:aacc36297664e2b33500622f57dd9e39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -115,10 +116,17 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aedf71eba472b94c6d9f4ff38da814a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b5898d4f8f5a5519ed13d8e631ccf07"><td class="memItemLeft" align="right" valign="top">size_t const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a8b5898d4f8f5a5519ed13d8e631ccf07">size</a></td></tr>
 <tr class="separator:a8b5898d4f8f5a5519ed13d8e631ccf07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d79b6e24666e24f97ab13658945a3ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1ClusterInfo.html">ClusterInfo</a> const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a4d79b6e24666e24f97ab13658945a3ad">clusterInfo</a></td></tr>
+<tr class="separator:a4d79b6e24666e24f97ab13658945a3ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a0ad7b98f40c72848e5c188278713d3ed"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankMap.html#a0ad7b98f40c72848e5c188278713d3ed">RANK_ROUND_ROBIN</a></td></tr>
+<tr class="separator:a0ad7b98f40c72848e5c188278713d3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4e5aeee731a58ff2c1c39ce6aaa74920"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e5aeee731a58ff2c1c39ce6aaa74920">&#9670;&nbsp;</a></span>RankMap()</h2>
+<a id="ae827788be1f0dab10b36865bb9a65096"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae827788be1f0dab10b36865bb9a65096">&#9670;&nbsp;</a></span>RankMap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -136,7 +144,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>np_</em>&#160;</td>
+          <td class="paramname"><em>np_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MPI_Comm&#160;</td>
+          <td class="paramname"><em>comm</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -154,8 +168,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a82f39989a480e9ec29503390b792efa5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82f39989a480e9ec29503390b792efa5">&#9670;&nbsp;</a></span>find() <span class="overload">[1/2]</span></h2>
+<a id="aacc36297664e2b33500622f57dd9e39c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacc36297664e2b33500622f57dd9e39c">&#9670;&nbsp;</a></span>find() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +197,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -304,6 +318,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4d79b6e24666e24f97ab13658945a3ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d79b6e24666e24f97ab13658945a3ad">&#9670;&nbsp;</a></span>clusterInfo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structatrip_1_1ClusterInfo.html">ClusterInfo</a> const atrip::RankMap::clusterInfo</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac66b2d259ab7cf899f66772f2d54cea3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac66b2d259ab7cf899f66772f2d54cea3">&#9670;&nbsp;</a></span>lengths</h2>
 
@@ -332,6 +360,28 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0ad7b98f40c72848e5c188278713d3ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ad7b98f40c72848e5c188278713d3ed">&#9670;&nbsp;</a></span>RANK_ROUND_ROBIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RankMap::RANK_ROUND_ROBIN</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8b5898d4f8f5a5519ed13d8e631ccf07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8b5898d4f8f5a5519ed13d8e631ccf07">&#9670;&nbsp;</a></span>size</h2>
 
@@ -346,8 +396,9 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<hr/>The documentation for this struct was generated from the following files:<ul>
 <li><a class="el" href="RankMap_8hpp_source.html">RankMap.hpp</a></li>
+<li><a class="el" href="Atrip_8cxx.html">Atrip.cxx</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

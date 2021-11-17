@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "atrip::Atrip", "structatrip_1_1Atrip.html", null ],
+    [ "atrip::ClusterInfo", "structatrip_1_1ClusterInfo.html", null ],
     [ "atrip::Slice::Info", "structatrip_1_1Slice_1_1Info.html", null ],
     [ "atrip::group_and_sort::Info", "structatrip_1_1group__and__sort_1_1Info.html", null ],
     [ "atrip::Atrip::Input", "structatrip_1_1Atrip_1_1Input.html", null ],

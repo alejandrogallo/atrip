@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>ATRIP: atrip::group_and_sort::Info Struct Reference</title>
+<title>ATRIP: atrip::ClusterInfo Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,7 +62,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structatrip_1_1group__and__sort_1_1Info.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structatrip_1_1ClusterInfo.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -83,9 +83,9 @@ $(document).ready(function(){initNavTree('structatrip_1_1group__and__sort_1_1Inf
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structatrip_1_1group__and__sort_1_1Info-members.html">List of all members</a>  </div>
+<a href="structatrip_1_1ClusterInfo-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">atrip::group_and_sort::Info Struct Reference</div>  </div>
+<div class="title">atrip::ClusterInfo Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -93,34 +93,66 @@ $(document).ready(function(){initNavTree('structatrip_1_1group__and__sort_1_1Inf
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac66551138125dc11034726633a21d91e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1group__and__sort_1_1Info.html#ac66551138125dc11034726633a21d91e">nNodes</a></td></tr>
-<tr class="separator:ac66551138125dc11034726633a21d91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2449f1b8a24d5695df2037b9edf669b4"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1group__and__sort_1_1Info.html#a2449f1b8a24d5695df2037b9edf669b4">nodeId</a></td></tr>
-<tr class="separator:a2449f1b8a24d5695df2037b9edf669b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237c0bdaac8aff12e5e8c03fc0840177"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">nNodes</a></td></tr>
+<tr class="separator:a237c0bdaac8aff12e5e8c03fc0840177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15b76e199a4ae5335613417b451cacd8"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1ClusterInfo.html#a15b76e199a4ae5335613417b451cacd8">np</a></td></tr>
+<tr class="separator:a15b76e199a4ae5335613417b451cacd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a636df31115df9361e5d787fca0b32817"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">ranksPerNode</a></td></tr>
+<tr class="separator:a636df31115df9361e5d787fca0b32817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ad5fdc3b6e91f33582348725661722b"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a></td></tr>
+<tr class="separator:a6ad5fdc3b6e91f33582348725661722b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac66551138125dc11034726633a21d91e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac66551138125dc11034726633a21d91e">&#9670;&nbsp;</a></span>nNodes</h2>
+<a id="a237c0bdaac8aff12e5e8c03fc0840177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a237c0bdaac8aff12e5e8c03fc0840177">&#9670;&nbsp;</a></span>nNodes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t atrip::group_and_sort::Info::nNodes</td>
+          <td class="memname">const size_t atrip::ClusterInfo::nNodes</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2449f1b8a24d5695df2037b9edf669b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2449f1b8a24d5695df2037b9edf669b4">&#9670;&nbsp;</a></span>nodeId</h2>
+<a id="a15b76e199a4ae5335613417b451cacd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15b76e199a4ae5335613417b451cacd8">&#9670;&nbsp;</a></span>np</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t atrip::group_and_sort::Info::nodeId</td>
+          <td class="memname">const size_t atrip::ClusterInfo::np</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ad5fdc3b6e91f33582348725661722b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ad5fdc3b6e91f33582348725661722b">&#9670;&nbsp;</a></span>rankInfos</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;<a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a>&gt; atrip::ClusterInfo::rankInfos</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a636df31115df9361e5d787fca0b32817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a636df31115df9361e5d787fca0b32817">&#9670;&nbsp;</a></span>ranksPerNode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const size_t atrip::ClusterInfo::ranksPerNode</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -135,7 +167,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespaceatrip.html">atrip</a></li><li class="navelem"><a class="el" href="namespaceatrip_1_1group__and__sort.html">group_and_sort</a></li><li class="navelem"><a class="el" href="structatrip_1_1group__and__sort_1_1Info.html">Info</a></li>
+    <li class="navelem"><a class="el" href="namespaceatrip.html">atrip</a></li><li class="navelem"><a class="el" href="structatrip_1_1ClusterInfo.html">ClusterInfo</a></li>
     <li class="footer">Generated on Tue Jan 1 1980 00:00:00 for ATRIP by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
   </ul>
 </div>

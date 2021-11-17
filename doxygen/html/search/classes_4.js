@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['localdatabaseelement_196',['LocalDatabaseElement',['../structatrip_1_1Slice_1_1LocalDatabaseElement.html',1,'atrip::Slice']]],
-  ['location_197',['Location',['../structatrip_1_1Slice_1_1Location.html',1,'atrip::Slice']]]
+  ['info_202',['Info',['../structatrip_1_1Slice_1_1Info.html',1,'atrip::Slice::Info'],['../structatrip_1_1group__and__sort_1_1Info.html',1,'atrip::group_and_sort::Info']]],
+  ['input_203',['Input',['../structatrip_1_1Atrip_1_1Input.html',1,'atrip::Atrip']]]
 ];

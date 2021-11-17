@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hhha_193',['HHHA',['../structatrip_1_1HHHA.html',1,'atrip']]]
+  ['distribution_200',['Distribution',['../structatrip_1_1group__and__sort_1_1Distribution.html',1,'atrip::group_and_sort']]]
 ];

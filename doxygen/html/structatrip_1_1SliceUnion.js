@@ -9,7 +9,7 @@ var structatrip_1_1SliceUnion =
     [ "init", "structatrip_1_1SliceUnion.html#ab3a87ecd4327e69b81b5dd88adfe562f", null ],
     [ "neededSlices", "structatrip_1_1SliceUnion.html#afb03c3c0b1989a7a9f6cb47707c0b744", null ],
     [ "receive", "structatrip_1_1SliceUnion.html#a6a0dddd9de5b174e970c4de2c19f94c5", null ],
-    [ "send", "structatrip_1_1SliceUnion.html#af9d424ee69a4816d366eb6d5075b4e12", null ],
+    [ "send", "structatrip_1_1SliceUnion.html#aad0c1a8e34672c50abdcf8e28b1c6c06", null ],
     [ "sliceIntoBuffer", "structatrip_1_1SliceUnion.html#a5b4ec7822a31d665c4f96047215dca0b", null ],
     [ "unwrapAll", "structatrip_1_1SliceUnion.html#ab0a9d88fc7675ffef747156443706c3a", null ],
     [ "unwrapSlice", "structatrip_1_1SliceUnion.html#ab3c07a56e4b0000c51d147eaa15718bf", null ],

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['mpi_198',['mpi',['../structatrip_1_1Slice_1_1mpi.html',1,'atrip::Slice']]]
+  ['localdatabaseelement_204',['LocalDatabaseElement',['../structatrip_1_1Slice_1_1LocalDatabaseElement.html',1,'atrip::Slice']]],
+  ['location_205',['Location',['../structatrip_1_1Slice_1_1Location.html',1,'atrip::Slice']]]
 ];

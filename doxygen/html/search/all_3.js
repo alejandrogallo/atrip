@@ -8,5 +8,6 @@ var searchData=
   ['clear_30',['clear',['../structatrip_1_1Timer.html#a5a87a1d2a74e7b70a0f4f11fd211508c',1,'atrip::Timer']]],
   ['clearunusedslicesfornext_31',['clearUnusedSlicesForNext',['../structatrip_1_1SliceUnion.html#a10eace31d33d5935250a1b5e7a1d58a8',1,'atrip::SliceUnion']]],
   ['clock_32',['Clock',['../structatrip_1_1Timer.html#ae15cc0675735926a17176c224976d098',1,'atrip::Timer']]],
-  ['count_33',['count',['../structatrip_1_1Timer.html#acad7c5d85e5f77af899840933b6e4f9e',1,'atrip::Timer']]]
+  ['clusterinfo_33',['ClusterInfo',['../structatrip_1_1ClusterInfo.html',1,'atrip::ClusterInfo'],['../structatrip_1_1RankMap.html#a4d79b6e24666e24f97ab13658945a3ad',1,'atrip::RankMap::clusterInfo()']]],
+  ['count_34',['count',['../structatrip_1_1Timer.html#acad7c5d85e5f77af899840933b6e4f9e',1,'atrip::Timer']]]
 ];
