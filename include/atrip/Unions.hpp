@@ -57,7 +57,7 @@ namespace atrip {
                        , child_world
                        , global_world
                        , Slice::TA
-                       , 5) {
+                       , 6) {
            init(sourceTensor);
          }
 
@@ -94,7 +94,7 @@ namespace atrip {
                       , child_world
                       , global_world
                       , Slice::VIJKA
-                      , 5) {
+                      , 6) {
            init(sourceTensor);
          }
 
