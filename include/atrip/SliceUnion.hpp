@@ -552,8 +552,11 @@ namespace atrip {
                       [&name](SliceUnion const* s) {
                         return name == s->name;
                       });
-      if (sliceUnionIt == unions.end())
-        throw std::domain_error("SliceUnion not found!");
+      if (sliceUnionIt == unions.end()) {
+        std::stringstream stream;
+        stream << "SliceUnion(" << name << ") not found!";
+        throw std::domain_error(stream.str());
+      }
       return **sliceUnionIt;
   }
 
