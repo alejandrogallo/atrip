@@ -24,7 +24,7 @@ namespace atrip {
                         , *Vhhhp = nullptr
                         , *Vppph = nullptr
                         ;
-      int maxIterations = 0, iterationMod = -1;
+      int maxIterations = 0, iterationMod = -1, percentageMod = -1;
       bool barrier = false;
       bool chrono = false;
       Input& with_epsilon_i(CTF::Tensor<double> * t) { ei = t; return *this; }
@@ -36,6 +36,7 @@ namespace atrip {
       Input& with_Vabci(CTF::Tensor<double> * t) { Vppph = t; return *this; }
       Input& with_maxIterations(int i) { maxIterations = i; return *this; }
       Input& with_iterationMod(int i) { iterationMod = i; return *this; }
+      Input& with_percentageMod(int i) { percentageMod = i; return *this; }
       Input& with_barrier(bool i) { barrier = i; return *this; }
       Input& with_chrono(bool i) { chrono = i; return *this; }
     };

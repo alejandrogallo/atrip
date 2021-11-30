@@ -12,6 +12,12 @@ using namespace atrip;
 int Atrip::rank;
 int Atrip::np;
 
+// user printing block
+IterationDescriptor IterationDescription::descriptor;
+void atrip::registerIterationDescriptor(IterationDescriptor d) {
+  IterationDescription::descriptor = d;
+}
+
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
@@ -92,15 +98,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   auto abcIndex = getABCRange(np, rank, tuplesList);
   size_t nIterations = abcIndex.second - abcIndex.first;
 
-#ifdef ATRIP_BENCHMARK
-  { const size_t maxIterations = in.maxIterations;
-    if (maxIterations != 0) {
-      abcIndex.second = abcIndex.first + maxIterations % (nIterations + 1);
-      nIterations = maxIterations % (nIterations + 1);
-    }
-  }
-#endif
-
   WITH_RANK << "abcIndex = " << pretty_print(abcIndex) << "\n";
   LOG(0,"Atrip") << "#iterations: " << nIterations << "\n";
 
@@ -109,6 +106,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
 
   double energy(0.);
+
+  size_t iterationMod
+    = (in.percentageMod > 0)
+    ? nIterations * in.percentageMod / 100
+    : in.iterationMod
+    ;
 
 
   auto const isFakeTuple
@@ -275,7 +278,16 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     chrono["mpi:barrier"].stop();
     chrono["oneshot-mpi:barrier"].stop();
 
-    if (iteration % in.iterationMod == 0) {
+    if (iteration % iterationMod == 0) {
+
+      if (IterationDescription::descriptor) {
+        IterationDescription::descriptor({
+          iteration,
+          nIterations,
+          chrono["iterations"].count()
+        });
+      }
+
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
