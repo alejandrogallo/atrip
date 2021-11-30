@@ -2818,6 +2818,7 @@ namespace atrip {
       ADD_ATTRIBUTE(bool, barrier, false)
       ADD_ATTRIBUTE(int, maxIterations, 0)
       ADD_ATTRIBUTE(int, iterationMod, -1)
+      ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
 
 
@@ -2853,6 +2854,12 @@ int Atrip::np;
 Timings Atrip::chrono;
 size_t Atrip::networkSend;
 size_t Atrip::localSend;
+
+// user printing block
+IterationDescriptor IterationDescription::descriptor;
+void atrip::registerIterationDescriptor(IterationDescriptor d) {
+  IterationDescription::descriptor = d;
+}
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
@@ -2949,7 +2956,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   WITH_CHRONO("tuples:build",
     auto const tuplesList = distribution->getTuples(Nv, universe);
     )
-  size_t nIterations = tuplesList.size();
+  const size_t nIterations = tuplesList.size();
   {
     const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
     LOG(0,"Atrip") << "#iterations: "
@@ -2958,6 +2965,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << nIterations * np
                   << "\n";
   }
+
+  size_t iterationMod
+    = (in.percentageMod > 0)
+    ? nIterations * in.percentageMod / 100
+    : in.iterationMod
+    ;
 
 
   auto const isFakeTuple
@@ -3120,7 +3133,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       if (in.barrier) MPI_Barrier(universe);
     ))
 
-    if (iteration % in.iterationMod == 0) {
+    if (iteration % iterationMod == 0) {
+
+      if (IterationDescription::descriptor) {
+        IterationDescription::descriptor({
+          iteration,
+          nIterations,
+          Atrip::chrono["iterations"].count()
+        });
+      }
 
       size_t networkSend;
       MPI_Reduce(&Atrip::networkSend,
@@ -3406,9 +3427,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #+end_src
 
 
-** Debug
+** Debug and Logging
+*** Macros
+
 #+begin_src c++ :tangle (atrip-debug-h)
 #pragma once
+#include <functional>
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
 //#define ATRIP_WORKLOAD_DUMP
@@ -3419,12 +3443,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #define ATRIP_DEBUG 1
 #endif
 
-#ifndef LOG
-#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
-#endif
-
 #if ATRIP_DEBUG == 4
-#  pragma message("WARNING: You have OCD debugging ABC triples "\
+#  pragma message("WARNING: You have OCD debugging ABC triples "    \
                   "expect GB of output and consult your therapist")
 #  include <dbg.h>
 #  define HAVE_OCD
@@ -3437,7 +3457,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
 #elif ATRIP_DEBUG == 3
-#  pragma message("WARNING: You have crazy debugging ABC triples,"\
+#  pragma message("WARNING: You have crazy debugging ABC triples,"  \
                   " expect GB of output")
 #  include <dbg.h>
 #  define OCD_Barrier(com)
@@ -3469,6 +3489,51 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define WITH_CRAZY_DEBUG if (false)
 #  define DBG(...)
 #endif
+#+end_src
+
+And users of the library can redefine the =LOG= macro
+which in case of not being defined is defined as follows:
+
+#+begin_src c++ :tangle (atrip-debug-h)
+#ifndef LOG
+#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
+#endif
+#+end_src
+
+Furthermore, if you do not wish to see any output from ATRIP, simply
+define =ATRIP_NO_OUTPUT=
+
+
+#+begin_src c++ :tangle (atrip-debug-h)
+#ifdef ATRIP_NO_OUTPUT
+#  undef LOG
+#  define LOG(level, name) if (false) std::cout << name << ": "
+#endif
+#+end_src
+
+*** Iteration informer
+
+In general a code writer will want to write some messages in every iteration.
+A developer then can register a function to be used in this sense.
+The input of the function is an [[IterationDescriptor]] structure and the output
+should be nothing.
+
+#+name: IterationDescriptor
+#+begin_src c++ :tangle (atrip-debug-h)
+namespace atrip {
+
+  struct IterationDescription;
+  using IterationDescriptor = std::function<void(IterationDescription const&)>;
+  struct IterationDescription {
+    static IterationDescriptor descriptor;
+    size_t currentIteration;
+    size_t totalIterations;
+    double currentElapsedTime;
+  };
+
+  void registerIterationDescriptor(IterationDescriptor);
+
+}
 #+end_src
 
 ** Include header
