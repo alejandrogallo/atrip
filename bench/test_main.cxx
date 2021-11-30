@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <atrip.hpp>
+#include <atrip/Debug.hpp>
 #include <bench/CLI11.hpp>
 
 #define _print_size(what, size)                 \
@@ -20,7 +21,7 @@
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
-  int no(10), nv(10), itMod(100);
+  int no(10), nv(10), itMod(-1), percentageMod(10);
   bool nochrono(false), barrier(false), rankRoundRobin(false);
   std::string tuplesDistributionString = "naive";
 
@@ -32,6 +33,7 @@ int main(int argc, char** argv) {
   app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
   app.add_flag("--barrier", barrier, "Use the first barrier");
   app.add_option("--dist", tuplesDistributionString, "Which distribution");
+  app.add_option("-%", percentageMod, "Percentage to be printed");
 
   CLI11_PARSE(app, argc, argv);
 
@@ -39,6 +41,36 @@ int main(int argc, char** argv) {
   int rank;
   MPI_Comm_rank(world.comm, &rank);
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
+
+  const double doublesFlops
+    = double(no)
+    * double(no)
+    * double(no)
+    * (double(no) + double(nv))
+    * 2
+    * 6
+    / 1e9
+    ;
+
+  bool firstHeader = true;
+
+  atrip::registerIterationDescriptor
+    ([doublesFlops, &firstHeader, rank](atrip::IterationDescription const& d) {
+      const char
+        *fmt_header = "%-13s%-10s%-13s",
+        *fmt_nums = "%-13.0f%-10.0f%-13.3f";
+      char out[256];
+      if (firstHeader) {
+        sprintf(out, fmt_header, "Progress(%)", "time(s)", "GLFOP/s");
+        firstHeader = false;
+        if (rank == 0) std::cout << out << "\n";
+      }
+      sprintf(out, fmt_nums,
+              double(d.currentIteration) / double(d.totalIterations) * 100,
+              d.currentElapsedTime,
+              doublesFlops / d.currentElapsedTime);
+      if (rank == 0) std::cout << out << "\n";
+    });
 
 
   atrip::Atrip::Input::TuplesDistribution tuplesDistribution;
@@ -97,6 +129,7 @@ int main(int argc, char** argv) {
     .with_chrono(!nochrono)
     .with_rankRoundRobin(rankRoundRobin)
     .with_iterationMod(itMod)
+    .with_percentageMod(percentageMod)
     .with_tuplesDistribution(tuplesDistribution)
     ;
 
