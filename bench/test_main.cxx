@@ -42,35 +42,35 @@ int main(int argc, char** argv) {
   MPI_Comm_rank(world.comm, &rank);
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
 
-  const double doublesFlops
-    = double(no)
-    * double(no)
-    * double(no)
-    * (double(no) + double(nv))
-    * 2
-    * 6
-    / 1e9
-    ;
-
-  bool firstHeader = true;
-
+  // USER PRINTING TEST BEGIN
+  const double doublesFlops = no * no * no
+                            * (no + nv)
+                            * 2.0
+                            * 6.0
+                            / 1.0e9
+                            ;
+  double lastElapsedTime = 0;
+  bool firstHeaderPrinted = false;
   atrip::registerIterationDescriptor
-    ([doublesFlops, &firstHeader, rank](atrip::IterationDescription const& d) {
+    ([doublesFlops, &firstHeaderPrinted, rank, &lastElapsedTime]
+       (atrip::IterationDescription const& d) {
       const char
         *fmt_header = "%-13s%-10s%-13s",
         *fmt_nums = "%-13.0f%-10.0f%-13.3f";
       char out[256];
-      if (firstHeader) {
-        sprintf(out, fmt_header, "Progress(%)", "time(s)", "GLFOP/s");
-        firstHeader = false;
+      if (!firstHeaderPrinted) {
+        sprintf(out, fmt_header, "Progress(%)", "time(s)", "GFLOP/s");
+        firstHeaderPrinted = true;
         if (rank == 0) std::cout << out << "\n";
       }
       sprintf(out, fmt_nums,
               double(d.currentIteration) / double(d.totalIterations) * 100,
-              d.currentElapsedTime,
-              doublesFlops / d.currentElapsedTime);
+              (d.currentElapsedTime - lastElapsedTime),
+              d.currentIteration * doublesFlops / d.currentElapsedTime);
+      lastElapsedTime = d.currentElapsedTime;
       if (rank == 0) std::cout << out << "\n";
     });
+  // USER PRINTING TEST END
 
 
   atrip::Atrip::Input::TuplesDistribution tuplesDistribution;
