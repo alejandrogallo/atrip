@@ -107,11 +107,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   double energy(0.);
 
-  size_t iterationMod
-    = (in.percentageMod > 0)
-    ? nIterations * in.percentageMod / 100
-    : in.iterationMod
+  const size_t
+      iterationMod = (in.percentageMod > 0)
+                  ? nIterations * in.percentageMod / 100
+                  : in.iterationMod
+
+    , iteration1Percent = nIterations * 0.01
     ;
+
 
 
   auto const isFakeTuple
@@ -278,7 +281,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     chrono["mpi:barrier"].stop();
     chrono["oneshot-mpi:barrier"].stop();
 
-    if (iteration % iterationMod == 0) {
+    if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
       if (IterationDescription::descriptor) {
         IterationDescription::descriptor({
