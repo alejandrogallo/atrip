@@ -2763,6 +2763,7 @@ namespace atrip {
 #+end_src
 
 ** Atrip
+*** Header
 #+begin_src c++ :tangle (atrip-atrip-h)
 #pragma once
 #include <sstream>
@@ -2966,11 +2967,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << "\n";
   }
 
-  size_t iterationMod
-    = (in.percentageMod > 0)
-    ? nIterations * in.percentageMod / 100
-    : in.iterationMod
+  const size_t
+      iterationMod = (in.percentageMod > 0)
+                  ? nIterations * in.percentageMod / 100
+                  : in.iterationMod
+
+    , iteration1Percent = nIterations * 0.01
     ;
+
 
 
   auto const isFakeTuple
@@ -3133,7 +3137,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       if (in.barrier) MPI_Barrier(universe);
     ))
 
-    if (iteration % iterationMod == 0) {
+    if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
       if (IterationDescription::descriptor) {
         IterationDescription::descriptor({
