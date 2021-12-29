@@ -1,16 +1,16 @@
 #+title: ATRIP: An MPI-asynchronous implementation of CCSD(T)
 #+PROPERTY: header-args+ :noweb yes :comments noweb :mkdirp t
 
-* Implementation
+* Introduction
 
 The algorithm uses two main data types, the =Slice= and the
 =SliceUnion= as a container and resource manager of the =Slice=.
 
-** The slice
+* The slice
 
 The following section introduces the idea of a slice.
 
-*** Prolog                                                         :noexport:
+** Prolog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-slice-h)
 #pragma once
 #include <iostream>
@@ -28,7 +28,7 @@ struct Slice {
 
   using F = double;
 #+end_src
-*** Introduction
+** Introduction
 
 A slice is the concept of a subset of values of a given tensor.
 As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds of objects:
@@ -38,7 +38,7 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
 - the object \( \mathsf{T}(a,b)_{ij} \) which for every pair of \( a, b \)
   corresponds the \( N_\mathrm{o}^2 \)-sized tensor \( T^{ab}_{ij} \).
 
-*** Location
+** Location
 
 Every slice set, for instance,
 \( S_k = \left\{
@@ -62,7 +62,7 @@ is therefore a simple structure:
   struct Location { size_t rank; size_t source; };
 #+end_src
 
-*** Type
+** Type
 
 Due to the permutation operators in the equations
 it is noticeable that for every one dimensional
@@ -112,7 +112,7 @@ a type which denotes which permutation it is.
     };
 #+end_src
 
-*** State
+** State
 
 Every slice can be in different states and every state
 denotes which function the slice is going to provide
@@ -162,7 +162,7 @@ Again the implementation is a simple enum type.
   };
 #+end_src
 
-*** The Info structure
+** The Info structure
 
 Every slice has an information structure associated with it
 that keeps track of the **variable** type, state and so on.
@@ -191,7 +191,7 @@ struct Info {
 using Ty_x_Tu = std::pair< Type, PartialTuple >;
 #+end_src
 
-*** Name
+** Name
 
 CCSD(T) needs in this algorithm 5 types of tensor slices,
 namely
@@ -215,7 +215,7 @@ and through two parameters for the hole contribution.
     };
 #+end_src
 
-*** Database
+** Database
 
 The database is a simple representation of the slices of a slice union.
 Every element of the database is given by the name of the tensor it
@@ -236,7 +236,7 @@ a vector of these elements.
   using Database = LocalDatabase;
 #+end_src
 
-*** MPI Types
+** MPI Types
 #+begin_src c++ :tangle (atrip-slice-h)
 struct mpi {
 
@@ -327,7 +327,7 @@ struct mpi {
 };
 #+end_src
 
-*** Static utilities
+** Static utilities
 
 This section presents some functions which are useful to work with
 slices and are inside the namespace created by the slice struct.
@@ -493,7 +493,7 @@ static Slice& findByInfo(std::vector<Slice> &slices,
 }
 #+end_src
 
-*** Attributes
+** Attributes
 
 A slice object does not own data, it is just a container
 or a pointer to data together with additional bookkeeping facilities.
@@ -523,7 +523,7 @@ For practical purposes in MPI calls, the number of elements in =data= is also in
     const size_t size;
 #+end_src
 
-*** Member functions
+** Member functions
 
 It is important to note that a ready slice should not be recycled from
 any other slice, so that it can have access by itself to the data.
@@ -675,7 +675,7 @@ The main behaviour of the function should
     }
 #+end_src
 
-*** Epilog                                                         :noexport:
+** Epilog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-slice-h)
     Slice(size_t size_)
       : info({})
@@ -688,7 +688,7 @@ The main behaviour of the function should
 
 #+end_src
 
-*** Debug                                                          :noexport:
+** Debug                                                           :noexport:
 
 #+begin_src c++ :tangle (atrip-slice-h)
 std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
@@ -709,10 +709,10 @@ std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
 } // namespace atrip
 #+end_src
 
-** Utils
+* Utils
 
 This section presents some utilities
-*** Prolog                                                         :noexport:
+** Prolog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-utils-h)
 #pragma once
 #include <sstream>
@@ -726,7 +726,7 @@ This section presents some utilities
 namespace atrip {
 #+end_src
 
-*** Pretty printing
+** Pretty printing
 
 The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]] package.
 
@@ -742,7 +742,7 @@ The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]]
 
 #+end_src
 
-*** Chrono
+** Chrono
 
 The chrono is just a simple wrapper for a high resolution clock
 that can be found in the =std::chrono= namespace of the standard library.
@@ -768,12 +768,12 @@ using Timings = std::map<std::string, Timer>;
 #+end_src
 
 
-*** Epilog                                                         :noexport:
+** Epilog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-utils-h)
 }
 #+end_src
 
-** The rank mapping
+* The rank mapping
 
 This section introduces the concept of rank mapping,
 which defines how slices will be allocated to every
@@ -898,7 +898,7 @@ namespace atrip {
 }
 #+end_src
 
-** The slice union
+* The slice union
 #+begin_src c++ :tangle (atrip-slice-union-h)
 #pragma once
 #include <atrip/Debug.hpp>
@@ -1464,13 +1464,13 @@ namespace atrip {
 }
 #+end_src
 
-** Tuples
+* Tuples
 
 This section introduces the types for tuples \( (a,b,c) \)
 as well as their distribution to nodes and cores.
 
 
-*** Prolog                                                         :noexport:
+** Prolog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 #pragma once
 
@@ -1494,7 +1494,7 @@ as well as their distribution to nodes and cores.
 namespace atrip {
 #+end_src
 
-*** Tuples types
+** Tuples types
 
 The main tuple types are simple type aliases for finite-size arrays.
 A tuple is thus simply 3 natural numbers \( (a,b,c) \)
@@ -1509,7 +1509,7 @@ constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 constexpr ABCTuple INVALID_TUPLE = {1, 1, 1};
 #+end_src
 
-*** Distributing the tuples
+** Distributing the tuples
 
 In general it is our task to distribute all the tuples
 \( (a,b,c) \) among the ranks. Every distribution should
@@ -1527,7 +1527,7 @@ struct TuplesDistribution {
 
 
 
-*** Node information
+** Node information
 
 - nodeList ::
     List of hostnames of size \( N_n \)
@@ -1644,7 +1644,7 @@ getClusterInfo(MPI_Comm comm) {
 }
 #+end_src
 
-*** Naive list
+** Naive list
 
 The naive implementation of the global tuples list is simple
 three for loops creating tuples of the sort
@@ -1728,13 +1728,13 @@ struct NaiveDistribution : public TuplesDistribution {
 #+end_src
 
 
-*** Group and sort list
-**** Prolog                                                        :noexport:
+** Group and sort list
+*** Prolog                                                         :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 namespace group_and_sort {
 #+end_src
 
-**** Utils
+*** Utils
 
 #+begin_src c++ :tangle (atrip-tuples-h)
 
@@ -1763,7 +1763,7 @@ struct Info {
 
 #+end_src
 
-**** Distribution
+*** Distribution
 
 wording: home element = element which is located on the given node
 1. we distribute the tuples such that each tuple has at least one 'home element'
@@ -1953,7 +1953,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 #+end_src
 
 
-**** Main
+*** Main
 
 The main routine should return the list of tuples to be handled by the current rank.
 
@@ -2134,7 +2134,7 @@ and the =sendCounts= vector is simply the constant vector
 }
 #+end_src
 
-**** Interface
+*** Interface
 
 The distribution interface will then simply be
 
@@ -2147,18 +2147,18 @@ struct Distribution : public TuplesDistribution {
 #+end_src
 
 
-**** Epilog                                                        :noexport:
+*** Epilog                                                         :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 } // namespace group_and_sort
 #+end_src
 
 
-*** Epilog                                                         :noexport:
+** Epilog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 }
 #+end_src
 
-** Unions
+* Unions
 
 Every slice pertaining to every different tensor
 is sliced differently.
@@ -2401,7 +2401,7 @@ namespace atrip {
 #+end_src
 
 
-** Equations
+* Equations
 #+begin_src c++ :tangle (atrip-equations-h)
 #pragma once
 
@@ -2735,7 +2735,7 @@ namespace atrip {
 }
 #+end_src
 
-** Blas
+* Blas
 The main matrix-matrix multiplication method used in this algorithm
 is mainly using the =DGEMM= function, which we declare as
 =extern= since it should be known only at link-time.
@@ -2762,8 +2762,8 @@ namespace atrip {
 }
 #+end_src
 
-** Atrip
-*** Header
+* Atrip
+** Header
 #+begin_src c++ :tangle (atrip-atrip-h)
 #pragma once
 #include <sstream>
@@ -2836,7 +2836,7 @@ namespace atrip {
 #undef ADD_ATTRIBUTE
 #+end_src
 
-*** Main
+** Main
 
 #+begin_src c++ :tangle (atrip-atrip-cxx)
 #include <iomanip>
@@ -3431,8 +3431,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #+end_src
 
 
-** Debug and Logging
-*** Macros
+* Debug and Logging
+** Macros
 
 #+begin_src c++ :tangle (atrip-debug-h)
 #pragma once
@@ -3515,7 +3515,7 @@ define =ATRIP_NO_OUTPUT=
 #endif
 #+end_src
 
-*** Iteration informer
+** Iteration informer
 
 In general a code writer will want to write some messages in every iteration.
 A developer then can register a function to be used in this sense.
@@ -3540,7 +3540,7 @@ namespace atrip {
 }
 #+end_src
 
-** Include header
+* Include header
 
 #+begin_src c++ :tangle (atrip-main-h)
 #pragma once
