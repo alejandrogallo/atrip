@@ -8,7 +8,6 @@ The algorithm uses two main data types, the =Slice= and the
 
 ** The slice
 
-
 #+begin_src c++ :tangle (atrip-slice-h)
 #pragma once
 #include <iostream>
@@ -18,8 +17,19 @@ The algorithm uses two main data types, the =Slice= and the
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/Blas.hpp>
 
 namespace atrip {
+
+namespace traits {
+  template <typename FF> bool isComplex() { return false; };
+  template <> bool isComplex<Complex>() { return true; };
+namespace mpi {
+  template <typename FF> MPI_Datatype datatypeOf(void);
+  template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
+  template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
+}
+}
 
 
 struct Slice {
