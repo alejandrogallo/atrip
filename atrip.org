@@ -2580,7 +2580,9 @@ template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
 #include <functional>
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
-#define ATRIP_DEBUG 1
+#ifndef ATRIP_DEBUG
+#  define ATRIP_DEBUG 1
+#endif
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM
 //#define ATRIP_PRINT_TUPLES
