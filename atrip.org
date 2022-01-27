@@ -2133,7 +2133,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     = [ &unions
       , np
       , &chrono
-      ] (ABCTuple const& abc, MPI_Comm const& c) -> typename Slice<F>::Database {
+      ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
 
         chrono["db:comm:type:do"].start();
         auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
@@ -2148,8 +2148,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         }
         chrono["db:comm:ldb"].stop();
 
-        typename
-        Slice<F>::Database db(np * ldb.size(), ldb[0]);
+        Database db(np * ldb.size(), ldb[0]);
 
         chrono["oneshot-db:comm:allgather"].start();
         chrono["db:comm:allgather"].start();
@@ -2171,7 +2170,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe, &chrono] (typename Slice<F>::Database const& db) {
+    = [&unions, &rank, &np, &universe, &chrono] (Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -2270,13 +2269,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   // START MAIN LOOP ======================================================{{{1
 
-  typename Slice<F>::Database db;
-
   for ( size_t i = abcIndex.first, iteration = 1
       ; i < abcIndex.second
       ; i++, iteration++
       ) {
     chrono["iterations"].start();
+
 
     // check overhead from chrono over all iterations
     chrono["start:stop"].start(); chrono["start:stop"].stop();
@@ -2356,7 +2354,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       chrono["db:comm"].start();
       //const auto db = communicateDatabase(*abcNext, universe);
-      db = communicateDatabase(*abcNext, universe);
+      Database db = communicateDatabase(*abcNext, universe);
       chrono["db:comm"].stop();
       chrono["db:io"].start();
       doIOPhase(db);
@@ -2377,7 +2375,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       )))
       chrono["oneshot-doubles"].start();
       chrono["doubles"].start();
-      LOGREMOVE << "doubles " << iteration << "\n";
       doublesContribution<F>( abc, (size_t)No, (size_t)Nv
                             // -- VABCI
                             , abph.unwrapSlice(Slice<F>::AB, abc)
