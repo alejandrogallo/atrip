@@ -1487,14 +1487,15 @@ namespace atrip {
 
 namespace atrip {
 
+  template <typename F=double>
   double getEnergyDistinct
-    ( const double epsabc
-    , std::vector<double> const& epsi
-    , std::vector<double> const& Tijk_
-    , std::vector<double> const& Zijk_
+    ( const F epsabc
+    , std::vector<F> const& epsi
+    , std::vector<F> const& Tijk_
+    , std::vector<F> const& Zijk_
     ) {
     constexpr size_t blockSize=16;
-    double energy(0.);
+    F energy(0.);
     const size_t No = epsi.size();
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min(No, kk+blockSize) );
@@ -1503,52 +1504,64 @@ namespace atrip {
         for (size_t ii(jj); ii<No; ii+=blockSize){
           const size_t iend( std::min( No, ii+blockSize) );
           for (size_t k(kk); k < kend; k++){
-            const double ek(epsi[k]);
+            const F ek(epsi[k]);
             const size_t jstart = jj > k ? jj : k;
             for (size_t j(jstart); j < jend; j++){
-              const double ej(epsi[j]);
-              double facjk( j == k ? 0.5 : 1.0);
+              F const ej(epsi[j]);
+              F const facjk = j == k ? F(0.5) : F(1.0);
               size_t istart = ii > j ? ii : j;
               for (size_t i(istart); i < iend; i++){
-                const double ei(epsi[i]);
-                double facij ( i==j ? 0.5 : 1.0);
-                double denominator(epsabc - ei - ej - ek);
-                double U(Zijk_[i + No*j + No*No*k]);
-                double V(Zijk_[i + No*k + No*No*j]);
-                double W(Zijk_[j + No*i + No*No*k]);
-                double X(Zijk_[j + No*k + No*No*i]);
-                double Y(Zijk_[k + No*i + No*No*j]);
-                double Z(Zijk_[k + No*j + No*No*i]);
-
-                double A(Tijk_[i + No*j + No*No*k]);
-                double B(Tijk_[i + No*k + No*No*j]);
-                double C(Tijk_[j + No*i + No*No*k]);
-                double D(Tijk_[j + No*k + No*No*i]);
-                double E(Tijk_[k + No*i + No*No*j]);
-                double F(Tijk_[k + No*j + No*No*i]);
-                double value(3.0*(A*U+B*V+C*W+D*X+E*Y+F*Z)
-                            +((U+X+Y)-2.0*(V+W+Z))*(A+D+E)
-                            +((V+W+Z)-2.0*(U+X+Y))*(B+C+F));
-                energy += 2.0*value / denominator * facjk * facij;
+                const F
+                    ei(epsi[i])
+                  , facij = i == j ? F(0.5) : F(1.0)
+                  , denominator(epsabc - ei - ej - ek)
+                  , U(Zijk_[i + No*j + No*No*k])
+                  , V(Zijk_[i + No*k + No*No*j])
+                  , W(Zijk_[j + No*i + No*No*k])
+                  , X(Zijk_[j + No*k + No*No*i])
+                  , Y(Zijk_[k + No*i + No*No*j])
+                  , Z(Zijk_[k + No*j + No*No*i])
+                  , A(std::conj(Tijk_[i + No*j + No*No*k]))
+                  , B(std::conj(Tijk_[i + No*k + No*No*j]))
+                  , C(std::conj(Tijk_[j + No*i + No*No*k]))
+                  , D(std::conj(Tijk_[j + No*k + No*No*i]))
+                  , E(std::conj(Tijk_[k + No*i + No*No*j]))
+                  , F(std::conj(Tijk_[k + No*j + No*No*i]))
+                  , value
+                    = 3.0 * ( A * U
+                              + B * V
+                              + C * W
+                              + D * X
+                              + E * Y
+                              + F * Z )
+                   + ( ( U + X + Y )
+                     - 2.0 * ( V + W + Z )
+                     ) * ( A + D + E )
+                   + ( ( V + W + Z )
+                     - 2.0 * ( U + X + Y )
+                     ) * ( B + C + F )
+                  ;
+                energy += 2.0 * value / denominator * facjk * facij;
               } // i
             } // j
           } // k
         } // ii
       } // jj
     } // kk
-    return energy;
+    return std::real(energy);
   }
 
 
+  template <typename F=double>
   double getEnergySame
-    ( const double epsabc
-    , std::vector<double> const& epsi
-    , std::vector<double> const& Tijk_
-    , std::vector<double> const& Zijk_
+    ( const F epsabc
+    , std::vector<F> const& epsi
+    , std::vector<F> const& Tijk_
+    , std::vector<F> const& Zijk_
     ) {
     constexpr size_t blockSize = 16;
     const size_t No = epsi.size();
-    double energy(0.);
+    F energy = F(0.);
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min( kk+blockSize, No) );
       for (size_t jj(kk); jj<No; jj+=blockSize){
@@ -1556,33 +1569,41 @@ namespace atrip {
         for (size_t ii(jj); ii<No; ii+=blockSize){
           const size_t iend( std::min( ii+blockSize, No) );
           for (size_t k(kk); k < kend; k++){
-            const double ek(epsi[k]);
+            const F ek(epsi[k]);
             const size_t jstart = jj > k ? jj : k;
             for(size_t j(jstart); j < jend; j++){
-              const double facjk( j == k ? 0.5 : 1.0);
-              const double ej(epsi[j]);
+              const F facjk( j == k ? F(0.5) : F(1.0));
+              const F ej(epsi[j]);
               const size_t istart = ii > j ? ii : j;
               for(size_t i(istart); i < iend; i++){
-                double ei(epsi[i]);
-                double facij ( i==j ? 0.5 : 1.0);
-                double denominator(epsabc - ei - ej - ek);
-                double U(Zijk_[i + No*j + No*No*k]);
-                double V(Zijk_[j + No*k + No*No*i]);
-                double W(Zijk_[k + No*i + No*No*j]);
-                double A(Tijk_[i + No*j + No*No*k]);
-                double B(Tijk_[j + No*k + No*No*i]);
-                double C(Tijk_[k + No*i + No*No*j]);
-                double value(3.0*( A*U + B*V + C*W) - (A+B+C)*(U+V+W));
-                energy += 2.0*value / denominator * facjk * facij;
+                const F
+                  ei(epsi[i])
+                , facij ( i==j ? F(0.5) : F(1.0))
+                , denominator(epsabc - ei - ej - ek)
+                , U(Zijk_[i + No*j + No*No*k])
+                , V(Zijk_[j + No*k + No*No*i])
+                , W(Zijk_[k + No*i + No*No*j])
+                , A(std::conj(Tijk_[i + No*j + No*No*k]))
+                , B(std::conj(Tijk_[j + No*k + No*No*i]))
+                , C(std::conj(Tijk_[k + No*i + No*No*j]))
+                , value
+                  = F(3.0) * ( A * U
+                             + B * V
+                             + C * W
+                             )
+                  - ( A + B + C ) * ( U + V + W )
+                ;
+                energy += F(2.0) * value / denominator * facjk * facij;
               } // i
             } // j
           } // k
         } // ii
       } // jj
     } // kk
-    return energy;
+    return std::real(energy);
   }
 
+  template <typename F=double>
   void singlesContribution
     ( size_t No
     , size_t Nv
