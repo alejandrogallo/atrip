@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Main][Main:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*Main][Main:1]]
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
@@ -23,7 +23,8 @@ void Atrip::init()  {
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
 }
 
-Atrip::Output Atrip::run(Atrip::Input const& in) {
+template <typename F>
+Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
@@ -38,14 +39,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   LOG(0,"Atrip") << "Nv: " << Nv << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<double> Tijk(No*No*No) // doubles only (see piecuch)
-                    , Zijk(No*No*No) // singles + doubles (see piecuch)
-                    // we need local copies of the following tensors on every
-                    // rank
-                    , epsi(No)
-                    , epsa(Nv)
-                    , Tai(No * Nv)
-                    ;
+  std::vector<F>   Tijk(No*No*No) // doubles only (see piecuch)
+                 , Zijk(No*No*No) // singles + doubles (see piecuch)
+                 // we need local copies of the following tensors on every
+                 // rank
+                 , epsi(No)
+                 , epsa(Nv)
+                 , Tai(No * Nv)
+                 ;
 
   in.ei->read_all(epsi.data());
   in.ea->read_all(epsa.data());
@@ -74,20 +75,20 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   chrono["nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-  TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   chrono["nv-slices"].stop();
 
   chrono["nv-nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
-  ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   chrono["nv-nv-slices"].stop();
 
   // all tensors
-  std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
+  std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   //CONSTRUCT TUPLE LIST ==============================================={{{1
   LOG(0,"Atrip") << "BUILD TUPLE LIST\n";
@@ -121,18 +122,20 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     = [&tuplesList](size_t const i) { return i >= tuplesList.size(); };
 
 
+  using Database = typename Slice<F>::Database;
+  using LocalDatabase = typename Slice<F>::LocalDatabase;
   auto communicateDatabase
     = [ &unions
       , np
       , &chrono
-      ] (ABCTuple const& abc, MPI_Comm const& c) -> Slice::Database {
+      ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
 
         chrono["db:comm:type:do"].start();
-        auto MPI_LDB_ELEMENT = Slice::mpi::localDatabaseElement();
+        auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
         chrono["db:comm:type:do"].stop();
 
         chrono["db:comm:ldb"].start();
-        Slice::LocalDatabase ldb;
+        LocalDatabase ldb;
 
         for (auto const& tensor: unions) {
           auto const& tensorDb = tensor->buildLocalDatabase(abc);
@@ -140,7 +143,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         }
         chrono["db:comm:ldb"].stop();
 
-        Slice::Database db(np * ldb.size(), ldb[0]);
+        Database db(np * ldb.size(), ldb[0]);
 
         chrono["oneshot-db:comm:allgather"].start();
         chrono["db:comm:allgather"].start();
@@ -162,7 +165,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe, &chrono] (Slice::Database const& db) {
+    = [&unions, &rank, &np, &universe, &chrono] (Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -212,7 +215,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                 ;
       for (auto it = begin; it != end; ++it) {
         sendTag++;
-        Slice::LocalDatabaseElement const& el = *it;
+        typename Slice<F>::LocalDatabaseElement const& el = *it;
 
         if (el.info.from.rank != rank) continue;
 
@@ -261,13 +264,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   // START MAIN LOOP ======================================================{{{1
 
-  Slice::Database db;
-
   for ( size_t i = abcIndex.first, iteration = 1
       ; i < abcIndex.second
       ; i++, iteration++
       ) {
     chrono["iterations"].start();
+
 
     // check overhead from chrono over all iterations
     chrono["start:stop"].start(); chrono["start:stop"].stop();
@@ -347,7 +349,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       chrono["db:comm"].start();
       //const auto db = communicateDatabase(*abcNext, universe);
-      db = communicateDatabase(*abcNext, universe);
+      Database db = communicateDatabase(*abcNext, universe);
       chrono["db:comm"].stop();
       chrono["db:io"].start();
       doIOPhase(db);
@@ -368,30 +370,30 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       )))
       chrono["oneshot-doubles"].start();
       chrono["doubles"].start();
-      doublesContribution( abc, (size_t)No, (size_t)Nv
-                         // -- VABCI
-                         , abph.unwrapSlice(Slice::AB, abc)
-                         , abph.unwrapSlice(Slice::AC, abc)
-                         , abph.unwrapSlice(Slice::BC, abc)
-                         , abph.unwrapSlice(Slice::BA, abc)
-                         , abph.unwrapSlice(Slice::CA, abc)
-                         , abph.unwrapSlice(Slice::CB, abc)
-                         // -- VHHHA
-                         , hhha.unwrapSlice(Slice::A, abc)
-                         , hhha.unwrapSlice(Slice::B, abc)
-                         , hhha.unwrapSlice(Slice::C, abc)
-                         // -- TA
-                         , taphh.unwrapSlice(Slice::A, abc)
-                         , taphh.unwrapSlice(Slice::B, abc)
-                         , taphh.unwrapSlice(Slice::C, abc)
-                         // -- TABIJ
-                         , tabhh.unwrapSlice(Slice::AB, abc)
-                         , tabhh.unwrapSlice(Slice::AC, abc)
-                         , tabhh.unwrapSlice(Slice::BC, abc)
-                         // -- TIJK
-                         , Tijk.data()
-                         , chrono
-                         );
+      doublesContribution<F>( abc, (size_t)No, (size_t)Nv
+                            // -- VABCI
+                            , abph.unwrapSlice(Slice<F>::AB, abc)
+                            , abph.unwrapSlice(Slice<F>::AC, abc)
+                            , abph.unwrapSlice(Slice<F>::BC, abc)
+                            , abph.unwrapSlice(Slice<F>::BA, abc)
+                            , abph.unwrapSlice(Slice<F>::CA, abc)
+                            , abph.unwrapSlice(Slice<F>::CB, abc)
+                            // -- VHHHA
+                            , hhha.unwrapSlice(Slice<F>::A, abc)
+                            , hhha.unwrapSlice(Slice<F>::B, abc)
+                            , hhha.unwrapSlice(Slice<F>::C, abc)
+                            // -- TA
+                            , taphh.unwrapSlice(Slice<F>::A, abc)
+                            , taphh.unwrapSlice(Slice<F>::B, abc)
+                            , taphh.unwrapSlice(Slice<F>::C, abc)
+                            // -- TABIJ
+                            , tabhh.unwrapSlice(Slice<F>::AB, abc)
+                            , tabhh.unwrapSlice(Slice<F>::AC, abc)
+                            , tabhh.unwrapSlice(Slice<F>::BC, abc)
+                            // -- TIJK
+                            , Tijk.data()
+                            , chrono
+                            );
       WITH_RANK << iteration << "-th doubles done\n";
       chrono["doubles"].stop();
       chrono["oneshot-doubles"].stop();
@@ -409,12 +411,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
       chrono["reorder"].stop();
       chrono["singles"].start();
-      singlesContribution( No, Nv, abc
-                         , Tai.data()
-                         , abhh.unwrapSlice(Slice::AB, abc)
-                         , abhh.unwrapSlice(Slice::AC, abc)
-                         , abhh.unwrapSlice(Slice::BC, abc)
-                         , Zijk.data());
+      singlesContribution<F>( No, Nv, abc
+                            , Tai.data()
+                            , abhh.unwrapSlice(Slice<F>::AB, abc)
+                            , abhh.unwrapSlice(Slice<F>::AC, abc)
+                            , abhh.unwrapSlice(Slice<F>::BC, abc)
+                            , Zijk.data());
       chrono["singles"].stop();
     }
 
@@ -426,13 +428,13 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const double epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
+      const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
       chrono["energy"].start();
       if ( distinct == 0)
-        tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
+        tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
       else
-        tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
+        tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
       chrono["energy"].stop();
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
@@ -473,8 +475,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << " :abc " << pretty_print(abc)
                   << " :abcN " << pretty_print(*abcNext)
                   << "\n";
-        for (auto const& slice: u->slices)
-          WITH_RANK << "__gc__:guts:" << slice.info << "\n";
+        // for (auto const& slice: u->slices)
+        //   WITH_RANK << "__gc__:guts:" << slice.info << "\n";
         u->clearUnusedSlicesForNext(*abcNext);
 
         WITH_RANK << "__gc__: checking validity\n";
@@ -482,13 +484,13 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #ifdef HAVE_OCD
         // check for validity of the slices
         for (auto type: u->sliceTypes) {
-          auto tuple = Slice::subtupleBySlice(abc, type);
+          auto tuple = Slice<F>::subtupleBySlice(abc, type);
         for (auto& slice: u->slices) {
           if ( slice.info.type == type
              && slice.info.tuple == tuple
              && slice.isDirectlyFetchable()
              ) {
-            if (slice.info.state == Slice::Dispatched)
+            if (slice.info.state == Slice<F>::Dispatched)
               throw std::domain_error( "This slice should not be undispatched! "
                                      + pretty_print(slice.info));
           }
@@ -555,4 +557,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   return { - globalEnergy };
 
 }
+// instantiate
+template Atrip::Output Atrip::run(Atrip::Input<double> const& in);
+template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
 // Main:1 ends here

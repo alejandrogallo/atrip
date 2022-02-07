@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*The rank mapping][The rank mapping:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*The%20rank%20mapping][The rank mapping:1]]
 #pragma once
 
 #include <vector>
@@ -7,6 +7,8 @@
 #include <atrip/Slice.hpp>
 
 namespace atrip {
+
+  template <typename F=double>
   struct RankMap {
 
     std::vector<size_t> const lengths;
@@ -19,7 +21,7 @@ namespace atrip {
                             1UL, std::multiplies<size_t>()))
     { assert(lengths.size() <= 2); }
 
-    size_t find(Slice::Location const& p) const noexcept {
+    size_t find(typename Slice<F>::Location const& p) const noexcept {
       return p.source * np + p.rank;
     }
 
@@ -39,10 +41,10 @@ namespace atrip {
       return source == nSources() && isPaddingRank(rank);
     }
 
-    Slice::Location
-    find(ABCTuple const& abc, Slice::Type sliceType) const noexcept {
+    typename Slice<F>::Location
+    find(ABCTuple const& abc, typename Slice<F>::Type sliceType) const noexcept {
       // tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB
-      const auto tuple = Slice::subtupleBySlice(abc, sliceType);
+      const auto tuple = Slice<F>::subtupleBySlice(abc, sliceType);
 
       const size_t index
         = tuple[0]

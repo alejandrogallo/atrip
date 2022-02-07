@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*The slice union][The slice union:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*The%20slice%20union][The slice union:1]]
 #pragma once
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>
@@ -6,8 +6,8 @@
 
 namespace atrip {
 
+  template <typename F=double>
   struct SliceUnion {
-    using F = double;
     using Tensor = CTF::Tensor<F>;
 
     virtual void
@@ -20,7 +20,7 @@ namespace atrip {
      * This means that there can be at most one slice with a given Ty_x_Tu.
      */
     void checkForDuplicates() const {
-      std::vector<Slice::Ty_x_Tu> tytus;
+      std::vector<typename Slice<F>::Ty_x_Tu> tytus;
       for (auto const& s: slices) {
         if (s.isFree()) continue;
         tytus.push_back({s.info.type, s.info.tuple});
@@ -33,13 +33,13 @@ namespace atrip {
 
     }
 
-    std::vector<Slice::Ty_x_Tu> neededSlices(ABCTuple const& abc) {
-      std::vector<Slice::Ty_x_Tu> needed(sliceTypes.size());
+    std::vector<typename Slice<F>::Ty_x_Tu> neededSlices(ABCTuple const& abc) {
+      std::vector<typename Slice<F>::Ty_x_Tu> needed(sliceTypes.size());
       // build the needed vector
       std::transform(sliceTypes.begin(), sliceTypes.end(),
                      needed.begin(),
-                     [&abc](Slice::Type const type) {
-                       auto tuple = Slice::subtupleBySlice(abc, type);
+                     [&abc](typename Slice<F>::Type const type) {
+                       auto tuple = Slice<F>::subtupleBySlice(abc, type);
                        return std::make_pair(type, tuple);
                      });
       return needed;
@@ -64,8 +64,9 @@ namespace atrip {
      * slices.
      *
      */
-    Slice::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
-      Slice::LocalDatabase result;
+    typename
+    Slice<F>::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
+      typename Slice<F>::LocalDatabase result;
 
       auto const needed = neededSlices(abc);
 
@@ -95,7 +96,7 @@ namespace atrip {
           // need
           auto const& it
             = std::find_if(slices.begin(), slices.end(),
-                           [&tuple, &type](Slice const& other) {
+                           [&tuple, &type](Slice<F> const& other) {
                              return other.info.tuple == tuple
                                  && other.info.type == type
                                     // we only want another slice when it
@@ -121,7 +122,7 @@ namespace atrip {
         // tuple and that has a valid data pointer.
         auto const& recycleIt
           = std::find_if(slices.begin(), slices.end(),
-                         [&tuple, &type](Slice const& other) {
+                         [&tuple, &type](Slice<F> const& other) {
                            return other.info.tuple == tuple
                                && other.info.type != type
                                && other.isRecyclable()
@@ -132,13 +133,13 @@ namespace atrip {
         // (which should exist by construction :THINK)
         //
         if (recycleIt != slices.end()) {
-          auto& blank = Slice::findOneByType(slices, Slice::Blank);
+          auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
           // TODO: formalize this through a method to copy information
           //       from another slice
           blank.data = recycleIt->data;
           blank.info.type = type;
           blank.info.tuple = tuple;
-          blank.info.state = Slice::Recycled;
+          blank.info.state = Slice<F>::Recycled;
           blank.info.from = from;
           blank.info.recycling = recycleIt->info.type;
           result.push_back({name, blank.info});
@@ -165,17 +166,17 @@ namespace atrip {
                     << " for tuple " << tuple[0] << ", " << tuple[1]
                     << "\n"
                     ;
-          auto& blank = Slice::findOneByType(slices, Slice::Blank);
+          auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
           blank.info.type = type;
           blank.info.tuple = tuple;
           blank.info.from = from;
 
           // Handle self sufficiency
           blank.info.state = Atrip::rank == from.rank
-                           ? Slice::SelfSufficient
-                           : Slice::Fetch
+                           ? Slice<F>::SelfSufficient
+                           : Slice<F>::Fetch
                            ;
-          if (blank.info.state == Slice::SelfSufficient) {
+          if (blank.info.state == Slice<F>::SelfSufficient) {
             blank.data = sources[from.source].data();
           } else {
             if (freePointers.size() == 0)
@@ -219,7 +220,7 @@ namespace atrip {
         // try to find the slice in the needed slices list
         auto const found
           = std::find_if(needed.begin(), needed.end(),
-                         [&slice] (Slice::Ty_x_Tu const& tytu) {
+                         [&slice] (typename Slice<F>::Ty_x_Tu const& tytu) {
                            return slice.info.tuple == tytu.second
                                && slice.info.type == tytu.first
                                ;
@@ -238,7 +239,7 @@ namespace atrip {
 
           // allow to gc unwrapped and recycled, never Fetch,
           // if we have a Fetch slice then something has gone very wrong.
-          if (!slice.isUnwrapped() && slice.info.state != Slice::Recycled)
+          if (!slice.isUnwrapped() && slice.info.state != Slice<F>::Recycled)
             throw
               std::domain_error("Trying to garbage collect "
                                 " a non-unwrapped slice! "
@@ -259,13 +260,13 @@ namespace atrip {
           //  - we should make sure that the data pointer of slice
           //    does not get freed.
           //
-          if (slice.info.state == Slice::Ready) {
+          if (slice.info.state == Slice<F>::Ready) {
             WITH_OCD WITH_RANK
               << "__gc__:" << "checking for data recycled dependencies\n";
             auto recycled
-              = Slice::hasRecycledReferencingToIt(slices, slice.info);
+              = Slice<F>::hasRecycledReferencingToIt(slices, slice.info);
             if (recycled.size()) {
-              Slice* newReady = recycled[0];
+              Slice<F>* newReady = recycled[0];
               WITH_OCD WITH_RANK
                 << "__gc__:" << "swaping recycled "
                 << pretty_print(newReady->info)
@@ -290,8 +291,8 @@ namespace atrip {
 
           // if the slice is self sufficient, do not dare touching the
           // pointer, since it is a pointer to our sources in our rank.
-          if (  slice.info.state == Slice::SelfSufficient
-             || slice.info.state == Slice::Recycled
+          if (  slice.info.state == Slice<F>::SelfSufficient
+             || slice.info.state == Slice<F>::Recycled
              ) {
             freeSlicePointer = false;
           }
@@ -313,7 +314,8 @@ namespace atrip {
           // at this point, let us blank the slice
           WITH_RANK << "~~~:cl(" << name << ")"
                     << " freeing up slice "
-                    << " info " << slice.info
+                    // TODO: make this possible
+                    // << " info " << slice.info
                     << "\n";
           slice.free();
         }
@@ -323,13 +325,13 @@ namespace atrip {
 
     // CONSTRUCTOR
     SliceUnion( Tensor const& sourceTensor
-              , std::vector<Slice::Type> sliceTypes_
+              , std::vector<typename Slice<F>::Type> sliceTypes_
               , std::vector<size_t> sliceLength_
               , std::vector<size_t> paramLength
               , size_t np
               , MPI_Comm child_world
               , MPI_Comm global_world
-              , Slice::Name name_
+              , typename Slice<F>::Name name_
               , size_t nSliceBuffers = 4
               )
               : rankMap(paramLength, np)
@@ -344,13 +346,13 @@ namespace atrip {
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers, sources[0])
-              //, slices(2 * sliceTypes.size(), Slice{ sources[0].size() })
+              //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
 
       slices
-        = std::vector<Slice>(2 * sliceTypes.size(), { sources[0].size() });
+        = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
       // TODO: think exactly ^------------------- about this number
 
       // initialize the freePointers with the pointers to the buffers
@@ -419,19 +421,19 @@ namespace atrip {
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
-             , Slice::Info const& info
+             , typename Slice<F>::Info const& info
              , size_t tag) const noexcept {
       MPI_Request request;
       bool sendData_p = false;
 
-      if (info.state == Slice::Fetch) sendData_p = true;
+      if (info.state == Slice<F>::Fetch) sendData_p = true;
       // TODO: remove this because I have SelfSufficient
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
       MPI_Isend( sources[info.from.source].data()
                , sources[info.from.source].size()
-               , MPI_DOUBLE /* TODO: adapt this with traits */
+               , traits::mpi::datatypeOf<F>()
                , otherRank
                , tag
                , universe
@@ -445,19 +447,19 @@ namespace atrip {
     /**
      * \brief Receive asynchronously only if the state is Fetch
      */
-    void receive(Slice::Info const& info, size_t tag) noexcept {
-      auto& slice = Slice::findByInfo(slices, info);
+    void receive(typename Slice<F>::Info const& info, size_t tag) noexcept {
+      auto& slice = Slice<F>::findByInfo(slices, info);
 
       if (Atrip::rank == info.from.rank) return;
 
-      if (slice.info.state == Slice::Fetch) {
+      if (slice.info.state == Slice<F>::Fetch) {
         // TODO: do it through the slice class
-        slice.info.state = Slice::Dispatched;
+        slice.info.state = Slice<F>::Dispatched;
         MPI_Request request;
         slice.request = request;
         MPI_Irecv( slice.data
                  , slice.size
-                 , MPI_DOUBLE // TODO: Adapt this with traits
+                 , traits::mpi::datatypeOf<F>()
                  , info.from.rank
                  , tag
                  , universe
@@ -471,42 +473,42 @@ namespace atrip {
       for (auto type: sliceTypes) unwrapSlice(type, abc);
     }
 
-    F* unwrapSlice(Slice::Type type, ABCTuple const& abc) {
+    F* unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
       WITH_CRAZY_DEBUG
       WITH_RANK << "__unwrap__:slice " << type << " w n "
                 << name
                 << " abc" << pretty_print(abc)
                 << "\n";
-      auto& slice = Slice::findByTypeAbc(slices, type, abc);
-      WITH_RANK << "__unwrap__:info " << slice.info << "\n";
+      auto& slice = Slice<F>::findByTypeAbc(slices, type, abc);
+      //WITH_RANK << "__unwrap__:info " << slice.info << "\n";
       switch  (slice.info.state) {
-        case Slice::Dispatched:
+        case Slice<F>::Dispatched:
           WITH_RANK << "__unwrap__:Fetch: " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           slice.unwrapAndMarkReady();
           return slice.data;
           break;
-        case Slice::SelfSufficient:
+        case Slice<F>::SelfSufficient:
           WITH_RANK << "__unwrap__:SelfSufficient: " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return slice.data;
           break;
-        case Slice::Ready:
+        case Slice<F>::Ready:
           WITH_RANK << "__unwrap__:READY: UNWRAPPED ALREADY" << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return slice.data;
           break;
-        case Slice::Recycled:
+        case Slice<F>::Recycled:
           WITH_RANK << "__unwrap__:RECYCLED " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return unwrapSlice(slice.info.recycling, abc);
           break;
-        case Slice::Fetch:
-        case Slice::Acceptor:
+        case Slice<F>::Fetch:
+        case Slice<F>::Acceptor:
           throw std::domain_error("Can't unwrap an acceptor or fetch slice!");
           break;
         default:
@@ -515,24 +517,26 @@ namespace atrip {
       return slice.data;
     }
 
-    const RankMap rankMap;
+    const RankMap<F> rankMap;
     const MPI_Comm world;
     const MPI_Comm universe;
     const std::vector<size_t> sliceLength;
     std::vector< std::vector<F> > sources;
-    std::vector< Slice > slices;
-    Slice::Name name;
-    const std::vector<Slice::Type> sliceTypes;
+    std::vector< Slice<F> > slices;
+    typename Slice<F>::Name name;
+    const std::vector<typename Slice<F>::Type> sliceTypes;
     std::vector< std::vector<F> > sliceBuffers;
     std::set<F*> freePointers;
 
   };
 
-  SliceUnion&
-  unionByName(std::vector<SliceUnion*> const& unions, Slice::Name name) {
+  template <typename F=double>
+  SliceUnion<F>&
+  unionByName(std::vector<SliceUnion<F>*> const& unions,
+              typename Slice<F>::Name name) {
       const auto sliceUnionIt
         = std::find_if(unions.begin(), unions.end(),
-                      [&name](SliceUnion const* s) {
+                      [&name](SliceUnion<F> const* s) {
                         return name == s->name;
                       });
       if (sliceUnionIt == unions.end())

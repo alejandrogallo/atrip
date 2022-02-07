@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*Tuples][Tuples:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*Tuples][Tuples:1]]
 #pragma once
 
 #include <vector>

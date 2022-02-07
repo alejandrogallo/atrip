@@ -1,4 +1,4 @@
-// [[file:../../atrip.org::*The slice][The slice:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*The%20slice][The slice:1]]
 #pragma once
 #include <iostream>
 #include <algorithm>
@@ -7,16 +7,26 @@
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/Blas.hpp>
 
 namespace atrip {
 
+namespace traits {
+  template <typename FF> bool isComplex() { return false; };
+  template <> bool isComplex<Complex>() { return true; };
+namespace mpi {
+  template <typename FF> MPI_Datatype datatypeOf(void);
+  template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
+  template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
+}
+}
 
+
+template <typename F=double>
 struct Slice {
-
-  using F = double;
 // The slice:1 ends here
 
-// [[file:../../atrip.org::*The slice][The slice:2]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*The%20slice][The slice:2]]
 // ASSOCIATED TYPES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   struct Location { size_t rank; size_t source; };
@@ -93,8 +103,8 @@ struct Slice {
 
   // DATABASE ==========================================================={{{1
   struct LocalDatabaseElement {
-    Slice::Name name;
-    Slice::Info info;
+    Slice<F>::Name name;
+    Slice<F>::Info info;
   };
   using LocalDatabase = std::vector<LocalDatabaseElement>;
   using Database = LocalDatabase;
@@ -117,7 +127,7 @@ struct Slice {
         constexpr int n = 2;
         // create a sliceLocation to measure in the current architecture
         // the packing of the struct
-        Slice::Location measure;
+        Slice<F>::Location measure;
         MPI_Datatype dt;
         const std::vector<int> lengths(n, 1);
         const MPI_Datatype types[n] = {usizeDt(), usizeDt()};
@@ -141,7 +151,7 @@ struct Slice {
       static MPI_Datatype sliceInfo () {
         constexpr int n = 5;
         MPI_Datatype dt;
-        Slice::Info measure;
+        Slice<F>::Info measure;
         const std::vector<int> lengths(n, 1);
         const MPI_Datatype types[n]
           = { vector(2, usizeDt())
@@ -213,10 +223,10 @@ struct Slice {
      * It is important here to return a reference to a Slice
      * not to accidentally copy the associated buffer of the slice.
      */
-    static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
+    static Slice<F>& findOneByType(std::vector<Slice<F>> &slices, Slice<F>::Type type) {
         const auto sliceIt
           = std::find_if(slices.begin(), slices.end(),
-                         [&type](Slice const& s) {
+                         [&type](Slice<F> const& s) {
                            return type == s.info.type;
                          });
         WITH_CRAZY_DEBUG
@@ -231,11 +241,11 @@ struct Slice {
      * Check if an info has
      *
      */
-    static std::vector<Slice*> hasRecycledReferencingToIt
-      ( std::vector<Slice> &slices
+    static std::vector<Slice<F>*> hasRecycledReferencingToIt
+      ( std::vector<Slice<F>> &slices
       , Info const& info
       ) {
-      std::vector<Slice*> result;
+      std::vector<Slice<F>*> result;
 
       for (auto& s: slices)
         if (  s.info.recycling == info.type
@@ -246,11 +256,11 @@ struct Slice {
       return result;
     }
 
-    static Slice&
-    findRecycledSource (std::vector<Slice> &slices, Slice::Info info) {
+    static Slice<F>&
+    findRecycledSource (std::vector<Slice<F>> &slices, Slice<F>::Info info) {
       const auto sliceIt
         = std::find_if(slices.begin(), slices.end(),
-                       [&info](Slice const& s) {
+                       [&info](Slice<F> const& s) {
                          return info.recycling == s.info.type
                              && info.tuple == s.info.tuple
                              && State::Recycled != s.info.state
@@ -270,15 +280,15 @@ struct Slice {
       return *sliceIt;
     }
 
-    static Slice& findByTypeAbc
-      ( std::vector<Slice> &slices
-      , Slice::Type type
+    static Slice<F>& findByTypeAbc
+      ( std::vector<Slice<F>> &slices
+      , Slice<F>::Type type
       , ABCTuple const& abc
       ) {
-        const auto tuple = Slice::subtupleBySlice(abc, type);
+        const auto tuple = Slice<F>::subtupleBySlice(abc, type);
         const auto sliceIt
           = std::find_if(slices.begin(), slices.end(),
-                         [&type, &tuple](Slice const& s) {
+                         [&type, &tuple](Slice<F> const& s) {
                            return type == s.info.type
                                && tuple == s.info.tuple
                                ;
@@ -298,11 +308,11 @@ struct Slice {
         return *sliceIt;
     }
 
-    static Slice& findByInfo(std::vector<Slice> &slices,
-                             Slice::Info const& info) {
+    static Slice<F>& findByInfo(std::vector<Slice<F>> &slices,
+                             Slice<F>::Info const& info) {
         const auto sliceIt
           = std::find_if(slices.begin(), slices.end(),
-                         [&info](Slice const& s) {
+                         [&info](Slice<F> const& s) {
                            // TODO: maybe implement comparison in Info struct
                            return info.type == s.info.type
                                && info.state == s.info.state
@@ -448,13 +458,15 @@ struct Slice {
   }; // struct Slice
 
 
-std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Location const& v) {
   // TODO: remove me
   out << "{.r(" << v.rank << "), .s(" << v.source << ")};";
   return out;
 }
 
-std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Info const& i) {
   out << "«t" << i.type << ", s" << i.state << "»"
       << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
       << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"

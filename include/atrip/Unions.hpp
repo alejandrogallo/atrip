@@ -1,15 +1,16 @@
-// [[file:../../atrip.org::*Unions][Unions:1]]
+// [[file:~/cc4s/src/atrip/complex/atrip.org::*Unions][Unions:1]]
 #pragma once
 #include <atrip/SliceUnion.hpp>
 
 namespace atrip {
 
+  template <typename F=double>
   void sliceIntoVector
-    ( std::vector<double> &v
-    , CTF::Tensor<double> &toSlice
+    ( std::vector<F> &v
+    , CTF::Tensor<F> &toSlice
     , std::vector<int64_t> const low
     , std::vector<int64_t> const up
-    , CTF::Tensor<double> const& origin
+    , CTF::Tensor<F> const& origin
     , std::vector<int64_t> const originLow
     , std::vector<int64_t> const originUp
     ) {
@@ -36,155 +37,159 @@ namespace atrip {
                  , origin_.low.data()
                  , origin_.up.data()
                  , 1.0);
-    memcpy(v.data(), toSlice.data, sizeof(double) * v.size());
+    memcpy(v.data(), toSlice.data, sizeof(F) * v.size());
 #endif
 
   }
 
 
-  struct TAPHH : public SliceUnion {
-    TAPHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct TAPHH : public SliceUnion<F> {
+    TAPHH( CTF::Tensor<F> const& sourceTensor
          , size_t No
          , size_t Nv
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion( sourceTensor
-                       , {Slice::A, Slice::B, Slice::C}
-                       , {Nv, No, No} // size of the slices
-                       , {Nv}
-                       , np
-                       , child_world
-                       , global_world
-                       , Slice::TA
-                       , 4) {
+         ) : SliceUnion<F>( sourceTensor
+                          , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+                          , {Nv, No, No} // size of the slices
+                          , {Nv}
+                          , np
+                          , child_world
+                          , global_world
+                          , Slice<F>::TA
+                          , 4) {
            init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
-      const int Nv = sliceLength[0]
-              , No = sliceLength[1]
-              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it});
+      const int Nv = this->sliceLength[0]
+              , No = this->sliceLength[1]
+              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
               ;
 
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0, 0},    {Nv, No, No}
-                     , from, {a, 0, 0, 0}, {a+1, Nv, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0, 0},    {Nv, No, No}
+                        , from, {a, 0, 0, 0}, {a+1, Nv, No, No}
+                        );
 
     }
 
   };
 
 
-  struct HHHA : public SliceUnion {
-    HHHA( Tensor const& sourceTensor
+  template <typename F=double>
+  struct HHHA : public SliceUnion<F> {
+    HHHA( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , {Slice::A, Slice::B, Slice::C}
-                      , {No, No, No} // size of the slices
-                      , {Nv}         // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VIJKA
-                      , 4) {
+        ) : SliceUnion<F>( sourceTensor
+                         , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+                         , {No, No, No} // size of the slices
+                         , {Nv}         // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VIJKA
+                         , 4) {
            init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
 
-      const int No = sliceLength[0]
-              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+      const int No = this->sliceLength[0]
+              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0, 0},    {No, No, No}
-                     , from, {0, 0, 0, a}, {No, No, No, a+1}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0, 0},    {No, No, No}
+                        , from, {0, 0, 0, a}, {No, No, No, a+1}
+                        );
 
     }
   };
 
-  struct ABPH : public SliceUnion {
-    ABPH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct ABPH : public SliceUnion<F> {
+    ABPH( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , { Slice::AB, Slice::BC, Slice::AC
-                        , Slice::BA, Slice::CB, Slice::CA
-                        }
-                      , {Nv, No} // size of the slices
-                      , {Nv, Nv} // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VABCI
-                      , 2*6) {
+        ) : SliceUnion<F>( sourceTensor
+                         , { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
+                           , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
+                           }
+                         , {Nv, No} // size of the slices
+                         , {Nv, Nv} // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VABCI
+                         , 2*6) {
            init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
-      const int Nv = sliceLength[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+      const int Nv = this->sliceLength[0]
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {Nv, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, Nv, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {Nv, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, Nv, No}
+                        );
 
     }
 
   };
 
-  struct ABHH : public SliceUnion {
-    ABHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct ABHH : public SliceUnion<F> {
+    ABHH( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , {Slice::AB, Slice::BC, Slice::AC}
-                      , {No, No} // size of the slices
-                      , {Nv, Nv} // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VABIJ
-                      , 6) {
+        ) : SliceUnion<F>( sourceTensor
+                         , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+                         , {No, No} // size of the slices
+                         , {Nv, Nv} // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VABIJ
+                         , 6) {
            init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
       const int Nv = from.lens[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {No, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {No, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
+                        );
 
 
     }
@@ -192,39 +197,40 @@ namespace atrip {
   };
 
 
-  struct TABHH : public SliceUnion {
-    TABHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct TABHH : public SliceUnion<F> {
+    TABHH( CTF::Tensor<F> const& sourceTensor
          , size_t No
          , size_t Nv
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion( sourceTensor
-                       , {Slice::AB, Slice::BC, Slice::AC}
-                       , {No, No} // size of the slices
-                       , {Nv, Nv} // size of the parametrization
-                       , np
-                       , child_world
-                       , global_world
-                       , Slice::TABIJ
-                       , 6) {
+         ) : SliceUnion<F>( sourceTensor
+                          , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+                          , {No, No} // size of the slices
+                          , {Nv, Nv} // size of the parametrization
+                          , np
+                          , child_world
+                          , global_world
+                          , Slice<F>::TABIJ
+                          , 6) {
            init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
       // TODO: maybe generalize this with ABHH
 
       const int Nv = from.lens[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {No, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {No, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
+                        );
 
 
     }
