@@ -21,6 +21,9 @@ The algorithm uses two main data types, the =Slice= and the
 
 namespace atrip {
 
+template <typename FF> FF maybeConjugate(const FF a) { return a; }
+template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
+
 namespace traits {
   template <typename FF> bool isComplex() { return false; };
   template <> bool isComplex<Complex>() { return true; };
@@ -1521,12 +1524,12 @@ namespace atrip {
                   , X(Zijk_[j + No*k + No*No*i])
                   , Y(Zijk_[k + No*i + No*No*j])
                   , Z(Zijk_[k + No*j + No*No*i])
-                  , A(std::conj(Tijk_[i + No*j + No*No*k]))
-                  , B(std::conj(Tijk_[i + No*k + No*No*j]))
-                  , C(std::conj(Tijk_[j + No*i + No*No*k]))
-                  , D(std::conj(Tijk_[j + No*k + No*No*i]))
-                  , E(std::conj(Tijk_[k + No*i + No*No*j]))
-                  , F(std::conj(Tijk_[k + No*j + No*No*i]))
+                  , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                  , B(maybeConjugate<F>(Tijk_[i + No*k + No*No*j]))
+                  , C(maybeConjugate<F>(Tijk_[j + No*i + No*No*k]))
+                  , D(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                  , E(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                  , F(maybeConjugate<F>(Tijk_[k + No*j + No*No*i]))
                   , value
                     = 3.0 * ( A * U
                               + B * V
@@ -1583,9 +1586,9 @@ namespace atrip {
                 , U(Zijk_[i + No*j + No*No*k])
                 , V(Zijk_[j + No*k + No*No*i])
                 , W(Zijk_[k + No*i + No*No*j])
-                , A(std::conj(Tijk_[i + No*j + No*No*k]))
-                , B(std::conj(Tijk_[j + No*k + No*No*i]))
-                , C(std::conj(Tijk_[k + No*i + No*No*j]))
+                , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                , B(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                , C(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
                 , value
                   = F(3.0) * ( A * U
                              + B * V
@@ -1701,14 +1704,9 @@ namespace atrip {
                    , _t_buffer.data()        \
                    , (int const*)&NoNo       \
                    );
-  #define MAYBE_CONJ(_conj, _buffer)                          \
-    if (traits::isComplex<F>()) {                             \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)               \
-        _conj[__i] = std::conj(_buffer[__i]);                 \
-    } else {                                                  \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)               \
-        _conj[__i] = _buffer[__i];                            \
-    }
+  #define MAYBE_CONJ(_conj, _buffer)                 \
+    for (size_t __i = 0; __i < NoNoNo; ++__i)        \
+      _conj[__i] = maybeConjugate<F>(_buffer[__i]);  \
 
     const size_t NoNoNo = No*NoNo;
     std::vector<F> _t_buffer;
@@ -2259,11 +2257,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const double doublesFlops
     = double(No)
-    ,* double(No)
-    ,* double(No)
-    ,* (double(No) + double(Nv))
-    ,* 2
-    ,* 6
+    * double(No)
+    * double(No)
+    * (double(No) + double(Nv))
+    * 1
+    * (traits::isComplex<F>() ? 2.0 : 1.0)
+    * 6
     / 1e9
     ;
 
