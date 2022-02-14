@@ -192,9 +192,9 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
             /*, MPI_UINT64_T*/
             };
 
-        static_assert(sizeof(enum Type) == 4, "Enum type not 4 bytes long");
+        static_assert(sizeof(enum Type)  == 4, "Enum type not 4 bytes long");
         static_assert(sizeof(enum State) == 4, "Enum State not 4 bytes long");
-        static_assert(sizeof(enum Name) == 4, "Enum Name not 4 bytes long");
+        static_assert(sizeof(enum Name)  == 4, "Enum Name not 4 bytes long");
 
         // create the displacements from the info measurement struct
         size_t j = 0;
@@ -230,14 +230,16 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
         MPI_Get_address(&measure,      &base_address);
         MPI_Get_address(&measure.name, &displacements[j++]);
         MPI_Get_address(&measure.info, &displacements[j++]);
-        for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-        displacements[0] = 0;
+        for (size_t i = 0; i < n; i++)
+          displacements[i] = MPI_Aint_diff(displacements[i], base_address);
+
+        static_assert( sizeof(LocalDatabaseElement) == sizeof(measure)
+                     , "Measure has bad size");
 
         MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
         MPI_Type_commit(&dt);
-        /*return vector( 4 + 4 + 48, MPI_CHAR);*/
-        // TODO
         return vector(sizeof(LocalDatabaseElement), MPI_CHAR);
+        // TODO: write tests in order to know if this works
         return dt;
       }
 
