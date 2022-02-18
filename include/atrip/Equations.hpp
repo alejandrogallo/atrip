@@ -40,12 +40,12 @@ namespace atrip {
                   , X(Zijk_[j + No*k + No*No*i])
                   , Y(Zijk_[k + No*i + No*No*j])
                   , Z(Zijk_[k + No*j + No*No*i])
-                  , A(std::conj(Tijk_[i + No*j + No*No*k]))
-                  , B(std::conj(Tijk_[i + No*k + No*No*j]))
-                  , C(std::conj(Tijk_[j + No*i + No*No*k]))
-                  , D(std::conj(Tijk_[j + No*k + No*No*i]))
-                  , E(std::conj(Tijk_[k + No*i + No*No*j]))
-                  , F(std::conj(Tijk_[k + No*j + No*No*i]))
+                  , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                  , B(maybeConjugate<F>(Tijk_[i + No*k + No*No*j]))
+                  , C(maybeConjugate<F>(Tijk_[j + No*i + No*No*k]))
+                  , D(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                  , E(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                  , F(maybeConjugate<F>(Tijk_[k + No*j + No*No*i]))
                   , value
                     = 3.0 * ( A * U
                               + B * V
@@ -102,9 +102,9 @@ namespace atrip {
                 , U(Zijk_[i + No*j + No*No*k])
                 , V(Zijk_[j + No*k + No*No*i])
                 , W(Zijk_[k + No*i + No*No*j])
-                , A(std::conj(Tijk_[i + No*j + No*No*k]))
-                , B(std::conj(Tijk_[j + No*k + No*No*i]))
-                , C(std::conj(Tijk_[k + No*i + No*No*j]))
+                , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                , B(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                , C(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
                 , value
                   = F(3.0) * ( A * U
                              + B * V
@@ -172,10 +172,8 @@ namespace atrip {
     , F const* TBChh
     // -- TIJK
     , F *Tijk
-    , atrip::Timings& chrono
     ) {
 
-    auto& t_reorder = chrono["doubles:reorder"];
     const size_t a = abc[0], b = abc[1], c = abc[2]
               , NoNo = No*No, NoNv = No*Nv
               ;
@@ -183,13 +181,13 @@ namespace atrip {
   #if defined(ATRIP_USE_DGEMM)
   #define _IJK_(i, j, k) i + j*No + k*NoNo
   #define REORDER(__II, __JJ, __KK)                                 \
-    t_reorder.start();                                              \
+    WITH_CHRONO("doubles:reorder",                                  \
     for (size_t k = 0; k < No; k++)                                 \
     for (size_t j = 0; j < No; j++)                                 \
     for (size_t i = 0; i < No; i++) {                               \
       Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
     }                                                               \
-    t_reorder.stop();
+    )
   #define DGEMM_PARTICLES(__A, __B)      \
     atrip::xgemm<F>( "T"                 \
                    , "N"                 \
@@ -220,106 +218,100 @@ namespace atrip {
                    , _t_buffer.data()        \
                    , (int const*)&NoNo       \
                    );
-  #define MAYBE_CONJ(_conj, _buffer)                          \
-    if (traits::isComplex<F>()) {                             \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)               \
-        _conj[__i] = std::conj(_buffer[__i]);                 \
-    } else {                                                  \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)               \
-        _conj[__i] = _buffer[__i];                            \
-    }
+  #define MAYBE_CONJ(_conj, _buffer)                 \
+    for (size_t __i = 0; __i < NoNoNo; ++__i)        \
+      _conj[__i] = maybeConjugate<F>(_buffer[__i]);  \
 
     const size_t NoNoNo = No*NoNo;
     std::vector<F> _t_buffer;
     _t_buffer.reserve(NoNoNo);
     F one{1.0}, m_one{-1.0}, zero{0.0};
 
-    t_reorder.start();
-    for (size_t k = 0; k < NoNoNo; k++) {
-      // zero the Tijk
-      Tijk[k] = 0.0;
-    }
-    t_reorder.stop();
+    WITH_CHRONO("double:reorder",
+      for (size_t k = 0; k < NoNoNo; k++) {
+         Tijk[k] = 0.0;
+       })
 
-    chrono["doubles:holes"].start();
-    { // Holes part ============================================================
+    // TOMERGE: replace chronos
+    WITH_CHRONO("doubles:holes",
+      { // Holes part ========================================================
 
-      std::vector<F> _vhhh(NoNoNo);
+        std::vector<F> _vhhh(NoNoNo);
 
-      // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
-      MAYBE_CONJ(_vhhh, VhhhC)
-      chrono["doubles:holes:1"].start();
-      DGEMM_HOLES(_vhhh.data(), TABhh, "N")
-      REORDER(i, k, j)
-      chrono["doubles:holes:1"].stop();
-      // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
-      chrono["doubles:holes:2"].start();
-      DGEMM_HOLES(_vhhh.data(), TABhh, "T")
-      REORDER(j, k, i)
-      chrono["doubles:holes:2"].stop();
+        // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
+        MAYBE_CONJ(_vhhh, VhhhC)
+        WITH_CHRONO("doubles:holes:1",
+          DGEMM_HOLES(_vhhh.data(), TABhh, "N")
+          REORDER(i, k, j)
+        )
+        // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
+        WITH_CHRONO("doubles:holes:2",
+          DGEMM_HOLES(_vhhh.data(), TABhh, "T")
+          REORDER(j, k, i)
+        )
 
-      // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
-      MAYBE_CONJ(_vhhh, VhhhB)
-      chrono["doubles:holes:3"].start();
-      DGEMM_HOLES(_vhhh.data(), TAChh, "N")
-      REORDER(i, j, k)
-      chrono["doubles:holes:3"].stop();
-      // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
-      chrono["doubles:holes:4"].start();
-      DGEMM_HOLES(_vhhh.data(), TAChh, "T")
-      REORDER(k, j, i)
-      chrono["doubles:holes:4"].stop();
+        // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
+        MAYBE_CONJ(_vhhh, VhhhB)
+        WITH_CHRONO("doubles:holes:3",
+          DGEMM_HOLES(_vhhh.data(), TAChh, "N")
+          REORDER(i, j, k)
+        )
+        // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
+        WITH_CHRONO("doubles:holes:4",
+          DGEMM_HOLES(_vhhh.data(), TAChh, "T")
+          REORDER(k, j, i)
+        )
 
-      // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
-      MAYBE_CONJ(_vhhh, VhhhA)
-      chrono["doubles:holes:5"].start();
-      DGEMM_HOLES(_vhhh.data(), TBChh, "N")
-      REORDER(j, i, k)
-      chrono["doubles:holes:5"].stop();
-      // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
-      chrono["doubles:holes:6"].start();
-      DGEMM_HOLES(_vhhh.data(), TBChh, "T")
-      REORDER(k, i, j)
-      chrono["doubles:holes:6"].stop();
+        // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
+        MAYBE_CONJ(_vhhh, VhhhA)
+        WITH_CHRONO("doubles:holes:5",
+          DGEMM_HOLES(_vhhh.data(), TBChh, "N")
+          REORDER(j, i, k)
+        )
+        // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
+        WITH_CHRONO("doubles:holes:6",
+          DGEMM_HOLES(_vhhh.data(), TBChh, "T")
+          REORDER(k, i, j)
+        )
 
-    }
-    chrono["doubles:holes"].stop();
+      }
+    )
   #undef MAYBE_CONJ
 
-    chrono["doubles:particles"].start();
-    { // Particle part =========================================================
-      // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-      chrono["doubles:particles:1"].start();
-      DGEMM_PARTICLES(TAphh, VBCph)
-      REORDER(i, j, k)
-      chrono["doubles:particles:1"].stop();
-      // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-      chrono["doubles:particles:2"].start();
-      DGEMM_PARTICLES(TAphh, VCBph)
-      REORDER(i, k, j)
-      chrono["doubles:particles:2"].stop();
-      // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-      chrono["doubles:particles:3"].start();
-      DGEMM_PARTICLES(TCphh, VABph)
-      REORDER(k, i, j)
-      chrono["doubles:particles:3"].stop();
-      // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-      chrono["doubles:particles:4"].start();
-      DGEMM_PARTICLES(TCphh, VBAph)
-      REORDER(k, j, i)
-      chrono["doubles:particles:4"].stop();
-      // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-      chrono["doubles:particles:5"].start();
-      DGEMM_PARTICLES(TBphh, VACph)
-      REORDER(j, i, k)
-      chrono["doubles:particles:5"].stop();
-      // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-      chrono["doubles:particles:6"].start();
-      DGEMM_PARTICLES(TBphh, VCAph)
-      REORDER(j, k, i)
-      chrono["doubles:particles:6"].stop();
-    }
-    chrono["doubles:particles"].stop();
+    WITH_CHRONO("doubles:particles",
+      { // Particle part =====================================================
+        // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
+        WITH_CHRONO("doubles:particles:1",
+          DGEMM_PARTICLES(TAphh, VBCph)
+          REORDER(i, j, k)
+        )
+        // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
+        WITH_CHRONO("doubles:particles:2",
+          DGEMM_PARTICLES(TAphh, VCBph)
+          REORDER(i, k, j)
+        )
+        // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
+        WITH_CHRONO("doubles:particles:3",
+          DGEMM_PARTICLES(TCphh, VABph)
+          REORDER(k, i, j)
+        )
+        // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
+        WITH_CHRONO("doubles:particles:4",
+          DGEMM_PARTICLES(TCphh, VBAph)
+          REORDER(k, j, i)
+        )
+        // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
+        WITH_CHRONO("doubles:particles:5",
+          DGEMM_PARTICLES(TBphh, VACph)
+          REORDER(j, i, k)
+        )
+        // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
+        WITH_CHRONO("doubles:particles:6",
+          DGEMM_PARTICLES(TBphh, VCAph)
+          REORDER(j, k, i)
+        )
+      }
+    )
 
   #undef REORDER
   #undef DGEMM_HOLES

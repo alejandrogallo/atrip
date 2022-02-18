@@ -9,8 +9,11 @@
 
 using namespace atrip;
 
+bool RankMap<Complex>::RANK_ROUND_ROBIN;
+bool RankMap<double>::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
+Timings Atrip::chrono;
 
 // user printing block
 IterationDescriptor IterationDescription::descriptor;
@@ -30,27 +33,34 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   const int rank = Atrip::rank;
   MPI_Comm universe = in.ei->wrld->comm;
 
-  // Timings in seconds ================================================{{{1
-  Timings chrono{};
-
   const size_t No = in.ei->lens[0];
   const size_t Nv = in.ea->lens[0];
   LOG(0,"Atrip") << "No: " << No << "\n";
   LOG(0,"Atrip") << "Nv: " << Nv << "\n";
+  LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<F>   Tijk(No*No*No) // doubles only (see piecuch)
-                 , Zijk(No*No*No) // singles + doubles (see piecuch)
-                 // we need local copies of the following tensors on every
-                 // rank
-                 , epsi(No)
-                 , epsa(Nv)
-                 , Tai(No * Nv)
-                 ;
+  std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
+               , Zijk(No*No*No) // singles + doubles (see piecuch)
+               // we need local copies of the following tensors on every
+               // rank
+               , epsi(No)
+               , epsa(Nv)
+               , Tai(No * Nv)
+               ;
 
   in.ei->read_all(epsi.data());
   in.ea->read_all(epsa.data());
   in.Tph->read_all(Tai.data());
+
+  RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
+  if (RankMap<F>::RANK_ROUND_ROBIN) {
+    LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
+  } else {
+    LOG(0,"Atrip")
+      << "Doing node > local rank round robin slices distribution" << "\n";
+  }
+
 
   // COMMUNICATOR CONSTRUCTION ========================================={{{1
   //
@@ -72,41 +82,49 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   }
 
 
-  chrono["nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
-  LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-  TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  chrono["nv-slices"].stop();
+  WITH_CHRONO("nv-slices",
+    LOG(0,"Atrip") << "BUILD NV-SLICES\n";
+    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  )
 
-  chrono["nv-nv-slices"].start();
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
-  LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
-  ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  chrono["nv-nv-slices"].stop();
+  WITH_CHRONO("nv-nv-slices",
+    LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
+    ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  )
 
   // all tensors
   std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
-  //CONSTRUCT TUPLE LIST ==============================================={{{1
-  LOG(0,"Atrip") << "BUILD TUPLE LIST\n";
-  const auto tuplesList = std::move(getTuplesList(Nv));
-  WITH_RANK << "tupList.size() = " << tuplesList.size() << "\n";
+  // get tuples for the current rank
+  TuplesDistribution *distribution;
 
-  // GET ABC INDEX RANGE FOR RANK ======================================{{{1
-  auto abcIndex = getABCRange(np, rank, tuplesList);
-  size_t nIterations = abcIndex.second - abcIndex.first;
+  if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
+    LOG(0,"Atrip") << "Using the naive distribution\n";
+    distribution = new NaiveDistribution();
+  } else {
+    LOG(0,"Atrip") << "Using the group-and-sort distribution\n";
+    distribution = new group_and_sort::Distribution();
+  }
 
-  WITH_RANK << "abcIndex = " << pretty_print(abcIndex) << "\n";
-  LOG(0,"Atrip") << "#iterations: " << nIterations << "\n";
+  LOG(0,"Atrip") << "BUILDING TUPLE LIST\n";
+  WITH_CHRONO("tuples:build",
+    auto const tuplesList = distribution->getTuples(Nv, universe);
+    )
+  const size_t nIterations = tuplesList.size();
 
-  // first abc
-  const ABCTuple firstAbc = tuplesList[abcIndex.first];
-
-
-  double energy(0.);
+  {
+    const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
+    LOG(0,"Atrip") << "#iterations: "
+                  << nIterations
+                  << "/"
+                  << nIterations * np
+                  << "\n";
+  }
 
   const size_t
       iterationMod = (in.percentageMod > 0)
@@ -119,7 +137,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
   auto const isFakeTuple
-    = [&tuplesList](size_t const i) { return i >= tuplesList.size(); };
+    = [&tuplesList, distribution](size_t const i) {
+      return distribution->tupleIsFake(tuplesList[i]);
+    };
 
 
   using Database = typename Slice<F>::Database;
@@ -127,45 +147,42 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   auto communicateDatabase
     = [ &unions
       , np
-      , &chrono
       ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
 
-        chrono["db:comm:type:do"].start();
-        auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
-        chrono["db:comm:type:do"].stop();
+        WITH_CHRONO("db:comm:type:do",
+          auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
+        )
 
-        chrono["db:comm:ldb"].start();
-        LocalDatabase ldb;
-
-        for (auto const& tensor: unions) {
-          auto const& tensorDb = tensor->buildLocalDatabase(abc);
-          ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
-        }
-        chrono["db:comm:ldb"].stop();
+        WITH_CHRONO("db:comm:ldb",
+          typename Slice<F>::LocalDatabase ldb;
+          for (auto const& tensor: unions) {
+            auto const& tensorDb = tensor->buildLocalDatabase(abc);
+            ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+          }
+        )
 
         Database db(np * ldb.size(), ldb[0]);
 
-        chrono["oneshot-db:comm:allgather"].start();
-        chrono["db:comm:allgather"].start();
-        MPI_Allgather( ldb.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , db.data()
-                     , ldb.size()
-                     , MPI_LDB_ELEMENT
-                     , c);
-        chrono["db:comm:allgather"].stop();
-        chrono["oneshot-db:comm:allgather"].stop();
+        WITH_CHRONO("oneshot-db:comm:allgather",
+        WITH_CHRONO("db:comm:allgather",
+          MPI_Allgather( ldb.data()
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , db.data()
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , c);
+        ))
 
-        chrono["db:comm:type:free"].start();
-        MPI_Type_free(&MPI_LDB_ELEMENT);
-        chrono["db:comm:type:free"].stop();
+        WITH_CHRONO("db:comm:type:free",
+          MPI_Type_free(&MPI_LDB_ELEMENT);
+        )
 
         return db;
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe, &chrono] (Database const& db) {
+    = [&unions, &rank, &np, &universe] (Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -201,9 +218,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           << "\n"
           ;
 
-        chrono["db:io:recv"].start();
-        u.receive(el.info, recvTag);
-        chrono["db:io:recv"].stop();
+        WITH_CHRONO("db:io:recv",
+          u.receive(el.info, recvTag);
+        )
 
       } // recv
     }
@@ -237,9 +254,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           << "\n"
           ;
 
-        chrono["db:io:send"].start();
-        u.send(otherRank, el.info, sendTag);
-        chrono["db:io:send"].stop();
+        WITH_CHRONO("db:io:send",
+          u.send(otherRank, el, sendTag);
+        )
 
       } // send phase
 
@@ -257,31 +274,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     * double(No)
     * double(No)
     * (double(No) + double(Nv))
-    * 2
-    * 6
+    * 2.0
+    * (traits::isComplex<F>() ? 2.0 : 1.0)
+    * 6.0
     / 1e9
     ;
 
   // START MAIN LOOP ======================================================{{{1
 
-  for ( size_t i = abcIndex.first, iteration = 1
-      ; i < abcIndex.second
+  double energy(0.);
+
+  for ( size_t i = 0, iteration = 1
+      ; i < tuplesList.size()
       ; i++, iteration++
       ) {
-    chrono["iterations"].start();
-
+    Atrip::chrono["iterations"].start();
 
     // check overhead from chrono over all iterations
-    chrono["start:stop"].start(); chrono["start:stop"].stop();
+    WITH_CHRONO("start:stop", {})
 
     // check overhead of doing a barrier at the beginning
-    chrono["oneshot-mpi:barrier"].start();
-    chrono["mpi:barrier"].start();
-    // TODO: REMOVE
-    if (in.barrier == 1)
-    MPI_Barrier(universe);
-    chrono["mpi:barrier"].stop();
-    chrono["oneshot-mpi:barrier"].stop();
+    WITH_CHRONO("oneshot-mpi:barrier",
+    WITH_CHRONO("mpi:barrier",
+      if (in.barrier) MPI_Barrier(universe);
+    ))
 
     if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
@@ -289,22 +305,22 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         IterationDescription::descriptor({
           iteration,
           nIterations,
-          chrono["iterations"].count()
+          Atrip::chrono["iterations"].count()
         });
       }
 
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
-        << " (" << doublesFlops * iteration / chrono["doubles"].count()
+        << " (" << doublesFlops * iteration / Atrip::chrono["doubles"].count()
         << "GF)"
-        << " (" << doublesFlops * iteration / chrono["iterations"].count()
+        << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
         << " ===========================\n";
 
       // PRINT TIMINGS
       if (in.chrono)
-      for (auto const& pair: chrono)
+      for (auto const& pair: Atrip::chrono)
         LOG(1, " ") << pair.first << " :: "
                     << pair.second.count()
                     << std::endl;
@@ -314,46 +330,43 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     const ABCTuple abc = isFakeTuple(i)
                        ? tuplesList[tuplesList.size() - 1]
                        : tuplesList[i]
-                 , *abcNext = i == (abcIndex.second - 1)
+                 , *abcNext = i == (tuplesList.size() - 1)
                             ? nullptr
-                            : isFakeTuple(i + 1)
-                            ? &tuplesList[tuplesList.size() - 1]
                             : &tuplesList[i + 1]
                  ;
 
-    chrono["with_rank"].start();
-    WITH_RANK << " :it " << iteration
-              << " :abc " << pretty_print(abc)
-              << " :abcN "
-              << (abcNext ? pretty_print(*abcNext) : "None")
-              << "\n";
-    chrono["with_rank"].stop();
+    WITH_CHRONO("with_rank",
+      WITH_RANK << " :it " << iteration
+                << " :abc " << pretty_print(abc)
+                << " :abcN "
+                << (abcNext ? pretty_print(*abcNext) : "None")
+                << "\n";
+    )
 
 
     // COMM FIRST DATABASE ================================================{{{1
-    if (i == abcIndex.first) {
+    if (i == 0) {
       WITH_RANK << "__first__:first database ............ \n";
-      const auto __db = communicateDatabase(abc, universe);
+      const auto db = communicateDatabase(abc, universe);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
-      doIOPhase(__db);
+      doIOPhase(db);
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto& u: unions) u->unwrapAll(abc);
-      WITH_RANK << "__first__::::Unwrapping all slices for first database DONE\n";
+      WITH_RANK << "__first__::::Unwrapping slices for first database DONE\n";
       MPI_Barrier(universe);
     }
 
     // COMM NEXT DATABASE ================================================={{{1
     if (abcNext) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
-      chrono["db:comm"].start();
-      //const auto db = communicateDatabase(*abcNext, universe);
-      Database db = communicateDatabase(*abcNext, universe);
-      chrono["db:comm"].stop();
-      chrono["db:io"].start();
-      doIOPhase(db);
-      chrono["db:io"].stop();
+      WITH_CHRONO("db:comm",
+        const auto db = communicateDatabase(*abcNext, universe);
+      )
+      WITH_CHRONO("db:io",
+        doIOPhase(db);
+      )
       WITH_RANK << "__comm__:" <<  iteration << "th database io phase DONE\n";
     }
 
@@ -361,63 +374,61 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
       WITH_RANK << iteration << "-th doubles\n";
-      WITH_CHRONO(chrono["oneshot-unwrap"],
-      WITH_CHRONO(chrono["unwrap"],
-      WITH_CHRONO(chrono["unwrap:doubles"],
+      WITH_CHRONO("oneshot-unwrap",
+      WITH_CHRONO("unwrap",
+      WITH_CHRONO("unwrap:doubles",
         for (auto& u: decltype(unions){&abph, &hhha, &taphh, &tabhh}) {
           u->unwrapAll(abc);
         }
       )))
-      chrono["oneshot-doubles"].start();
-      chrono["doubles"].start();
-      doublesContribution<F>( abc, (size_t)No, (size_t)Nv
-                            // -- VABCI
-                            , abph.unwrapSlice(Slice<F>::AB, abc)
-                            , abph.unwrapSlice(Slice<F>::AC, abc)
-                            , abph.unwrapSlice(Slice<F>::BC, abc)
-                            , abph.unwrapSlice(Slice<F>::BA, abc)
-                            , abph.unwrapSlice(Slice<F>::CA, abc)
-                            , abph.unwrapSlice(Slice<F>::CB, abc)
-                            // -- VHHHA
-                            , hhha.unwrapSlice(Slice<F>::A, abc)
-                            , hhha.unwrapSlice(Slice<F>::B, abc)
-                            , hhha.unwrapSlice(Slice<F>::C, abc)
-                            // -- TA
-                            , taphh.unwrapSlice(Slice<F>::A, abc)
-                            , taphh.unwrapSlice(Slice<F>::B, abc)
-                            , taphh.unwrapSlice(Slice<F>::C, abc)
-                            // -- TABIJ
-                            , tabhh.unwrapSlice(Slice<F>::AB, abc)
-                            , tabhh.unwrapSlice(Slice<F>::AC, abc)
-                            , tabhh.unwrapSlice(Slice<F>::BC, abc)
-                            // -- TIJK
-                            , Tijk.data()
-                            , chrono
-                            );
-      WITH_RANK << iteration << "-th doubles done\n";
-      chrono["doubles"].stop();
-      chrono["oneshot-doubles"].stop();
+      WITH_CHRONO("oneshot-doubles",
+      WITH_CHRONO("doubles",
+        doublesContribution<F>( abc, (size_t)No, (size_t)Nv
+                              // -- VABCI
+                              , abph.unwrapSlice(Slice<F>::AB, abc)
+                              , abph.unwrapSlice(Slice<F>::AC, abc)
+                              , abph.unwrapSlice(Slice<F>::BC, abc)
+                              , abph.unwrapSlice(Slice<F>::BA, abc)
+                              , abph.unwrapSlice(Slice<F>::CA, abc)
+                              , abph.unwrapSlice(Slice<F>::CB, abc)
+                              // -- VHHHA
+                              , hhha.unwrapSlice(Slice<F>::A, abc)
+                              , hhha.unwrapSlice(Slice<F>::B, abc)
+                              , hhha.unwrapSlice(Slice<F>::C, abc)
+                              // -- TA
+                              , taphh.unwrapSlice(Slice<F>::A, abc)
+                              , taphh.unwrapSlice(Slice<F>::B, abc)
+                              , taphh.unwrapSlice(Slice<F>::C, abc)
+                              // -- TABIJ
+                              , tabhh.unwrapSlice(Slice<F>::AB, abc)
+                              , tabhh.unwrapSlice(Slice<F>::AC, abc)
+                              , tabhh.unwrapSlice(Slice<F>::BC, abc)
+                              // -- TIJK
+                              , Tijk.data()
+                              );
+        WITH_RANK << iteration << "-th doubles done\n";
+      ))
     }
 
     // COMPUTE SINGLES =================================================== {{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
-      WITH_CHRONO(chrono["oneshot-unwrap"],
-      WITH_CHRONO(chrono["unwrap"],
-      WITH_CHRONO(chrono["unwrap:singles"],
+      WITH_CHRONO("oneshot-unwrap",
+      WITH_CHRONO("unwrap",
+      WITH_CHRONO("unwrap:singles",
         abhh.unwrapAll(abc);
       )))
-      chrono["reorder"].start();
-      for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
-      chrono["reorder"].stop();
-      chrono["singles"].start();
+      WITH_CHRONO("reorder",
+        for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
+      )
+      WITH_CHRONO("singles",
       singlesContribution<F>( No, Nv, abc
                             , Tai.data()
                             , abhh.unwrapSlice(Slice<F>::AB, abc)
                             , abhh.unwrapSlice(Slice<F>::AC, abc)
                             , abhh.unwrapSlice(Slice<F>::BC, abc)
                             , Zijk.data());
-      chrono["singles"].stop();
+      )
     }
 
 
@@ -430,12 +441,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       if (abc[1] == abc[2]) distinct--;
       const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
-      chrono["energy"].start();
-      if ( distinct == 0)
-        tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
-      else
-        tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
-      chrono["energy"].stop();
+      WITH_CHRONO("energy",
+        if ( distinct == 0)
+          tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
+        else
+          tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
+      )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
       tupleEnergies[abc] = tupleEnergy;
@@ -445,6 +456,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     }
 
+    // TODO: remove this
     if (isFakeTuple(i)) {
       // fake iterations should also unwrap whatever they got
       WITH_RANK << iteration
@@ -466,7 +478,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     // CLEANUP UNIONS ===================================================={{{1
     OCD_Barrier(universe);
     if (abcNext) {
-      chrono["gc"].start();
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
       for (auto& u: unions) {
 
@@ -500,12 +511,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
       }
-      chrono["gc"].stop();
     }
 
       WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
-    chrono["iterations"].stop();
+    Atrip::chrono["iterations"].stop();
     // ITERATION END ====================================================={{{1
 
   }
@@ -543,15 +553,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   // PRINT TIMINGS {{{1
   if (in.chrono)
-  for (auto const& pair: chrono)
+  for (auto const& pair: Atrip::chrono)
     LOG(0,"atrip:chrono") << pair.first << " "
                           << pair.second.count() << std::endl;
 
 
   LOG(0, "atrip:flops(doubles)")
-    << nIterations * doublesFlops / chrono["doubles"].count() << "\n";
+    << nIterations * doublesFlops / Atrip::chrono["doubles"].count() << "\n";
   LOG(0, "atrip:flops(iterations)")
-    << nIterations * doublesFlops / chrono["iterations"].count() << "\n";
+    << nIterations * doublesFlops / Atrip::chrono["iterations"].count() << "\n";
 
   // TODO: change the sign in  the getEnergy routines
   return { - globalEnergy };

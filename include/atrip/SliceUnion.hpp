@@ -179,8 +179,14 @@ namespace atrip {
           if (blank.info.state == Slice<F>::SelfSufficient) {
             blank.data = sources[from.source].data();
           } else {
-            if (freePointers.size() == 0)
-              throw std::domain_error("No more free pointers!");
+            if (freePointers.size() == 0) {
+              std::stringstream stream;
+              stream << "No more free pointers "
+                     << "for type " << type
+                     << " and name " << name
+                      ;
+              throw std::domain_error(stream.str());
+            }
             auto dataPointer = freePointers.begin();
             freePointers.erase(dataPointer);
             blank.data = *dataPointer;
@@ -314,7 +320,8 @@ namespace atrip {
           // at this point, let us blank the slice
           WITH_RANK << "~~~:cl(" << name << ")"
                     << " freeing up slice "
-                    // TODO: make this possible
+                    // TODO: make this possible because of Templates
+                    // TODO: there is a deduction error here
                     // << " info " << slice.info
                     << "\n";
           slice.free();
@@ -334,7 +341,7 @@ namespace atrip {
               , typename Slice<F>::Name name_
               , size_t nSliceBuffers = 4
               )
-              : rankMap(paramLength, np)
+              : rankMap(paramLength, np, global_world)
               , world(child_world)
               , universe(global_world)
               , sliceLength(sliceLength_)
@@ -353,7 +360,7 @@ namespace atrip {
 
       slices
         = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
-      // TODO: think exactly ^------------------- about this number
+      // TODO: think exactly    ^------------------- about this number
 
       // initialize the freePointers with the pointers to the buffers
       std::transform(sliceBuffers.begin(), sliceBuffers.end(),
@@ -421,10 +428,11 @@ namespace atrip {
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
-             , typename Slice<F>::Info const& info
+             , typename Slice<F>::LocalDatabaseElement const& el
              , size_t tag) const noexcept {
       MPI_Request request;
       bool sendData_p = false;
+      auto const& info = el.info;
 
       if (info.state == Slice<F>::Fetch) sendData_p = true;
       // TODO: remove this because I have SelfSufficient
@@ -539,8 +547,11 @@ namespace atrip {
                       [&name](SliceUnion<F> const* s) {
                         return name == s->name;
                       });
-      if (sliceUnionIt == unions.end())
-        throw std::domain_error("SliceUnion not found!");
+      if (sliceUnionIt == unions.end()) {
+        std::stringstream stream;
+        stream << "SliceUnion(" << name << ") not found!";
+        throw std::domain_error(stream.str());
+      }
       return **sliceUnionIt;
   }
 
