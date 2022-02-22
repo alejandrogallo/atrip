@@ -1,4 +1,4 @@
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*Equations][Equations:1]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*Equations][Equations:1]]
 #pragma once
 
 #include<atrip/Slice.hpp>

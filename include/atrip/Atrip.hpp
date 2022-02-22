@@ -1,4 +1,4 @@
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*Header][Header:1]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*Header][Header:1]]
 #pragma once
 #include <sstream>
 #include <string>

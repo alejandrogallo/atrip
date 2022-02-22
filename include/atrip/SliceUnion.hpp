@@ -1,4 +1,4 @@
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*The%20slice%20union][The slice union:1]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*The%20slice%20union][The slice union:1]]
 #pragma once
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>

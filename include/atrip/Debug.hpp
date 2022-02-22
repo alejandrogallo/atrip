@@ -1,4 +1,4 @@
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*Macros][Macros:1]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*Macros][Macros:1]]
 #pragma once
 #include <functional>
 #define ATRIP_BENCHMARK
@@ -61,20 +61,20 @@
 #endif
 // Macros:1 ends here
 
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*Macros][Macros:2]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*Macros][Macros:2]]
 #ifndef LOG
 #define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
 #endif
 // Macros:2 ends here
 
-// [[file:~/cc4s/src/atrip/complex/atrip.org::*Macros][Macros:3]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::*Macros][Macros:3]]
 #ifdef ATRIP_NO_OUTPUT
 #  undef LOG
 #  define LOG(level, name) if (false) std::cout << name << ": "
 #endif
 // Macros:3 ends here
 
-// [[file:~/cc4s/src/atrip/complex/atrip.org::IterationDescriptor][IterationDescriptor]]
+// [[file:~/cc4s/src/atrip/bbbfb30/atrip.org::IterationDescriptor][IterationDescriptor]]
 namespace atrip {
 
   struct IterationDescription;
