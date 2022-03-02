@@ -1,4 +1,4 @@
-// [[file:~/atrip/atrip.org::*Equations][Equations:1]]
+// [[file:../../atrip.org::*Equations][Equations:1]]
 #pragma once
 
 #include<atrip/Slice.hpp>

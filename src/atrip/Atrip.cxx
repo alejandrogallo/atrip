@@ -1,4 +1,4 @@
-// [[file:~/atrip/atrip.org::*Main][Main:1]]
+// [[file:../../atrip.org::*Main][Main:1]]
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
@@ -15,6 +15,12 @@ int Atrip::np;
 Timings Atrip::chrono;
 size_t Atrip::networkSend;
 size_t Atrip::localSend;
+
+// user printing block
+IterationDescriptor IterationDescription::descriptor;
+void atrip::registerIterationDescriptor(IterationDescriptor d) {
+  IterationDescription::descriptor = d;
+}
 
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
@@ -111,7 +117,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   WITH_CHRONO("tuples:build",
     auto const tuplesList = distribution->getTuples(Nv, universe);
     )
-  size_t nIterations = tuplesList.size();
+  const size_t nIterations = tuplesList.size();
   {
     const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
     LOG(0,"Atrip") << "#iterations: "
@@ -120,6 +126,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << nIterations * np
                   << "\n";
   }
+
+  const size_t
+      iterationMod = (in.percentageMod > 0)
+                  ? nIterations * in.percentageMod / 100
+                  : in.iterationMod
+
+    , iteration1Percent = nIterations * 0.01
+    ;
+
 
 
   auto const isFakeTuple
@@ -282,7 +297,15 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       if (in.barrier) MPI_Barrier(universe);
     ))
 
-    if (iteration % in.iterationMod == 0) {
+    if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
+
+      if (IterationDescription::descriptor) {
+        IterationDescription::descriptor({
+          iteration,
+          nIterations,
+          Atrip::chrono["iterations"].count()
+        });
+      }
 
       size_t networkSend;
       MPI_Reduce(&Atrip::networkSend,

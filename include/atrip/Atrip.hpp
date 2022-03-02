@@ -1,4 +1,4 @@
-// [[file:~/atrip/atrip.org::*Atrip][Atrip:1]]
+// [[file:../../atrip.org::*Header][Header:1]]
 #pragma once
 #include <sstream>
 #include <string>
@@ -53,6 +53,7 @@ namespace atrip {
       ADD_ATTRIBUTE(bool, barrier, false)
       ADD_ATTRIBUTE(int, maxIterations, 0)
       ADD_ATTRIBUTE(int, iterationMod, -1)
+      ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
 
 
@@ -67,4 +68,4 @@ namespace atrip {
 }
 
 #undef ADD_ATTRIBUTE
-// Atrip:1 ends here
+// Header:1 ends here

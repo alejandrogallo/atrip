@@ -1,5 +1,6 @@
-// [[file:~/atrip/atrip.org::*Debug][Debug:1]]
+// [[file:../../atrip.org::*Macros][Macros:1]]
 #pragma once
+#include <functional>
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
 //#define ATRIP_WORKLOAD_DUMP
@@ -10,12 +11,8 @@
 #define ATRIP_DEBUG 1
 #endif
 
-#ifndef LOG
-#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
-#endif
-
 #if ATRIP_DEBUG == 4
-#  pragma message("WARNING: You have OCD debugging ABC triples "\
+#  pragma message("WARNING: You have OCD debugging ABC triples "    \
                   "expect GB of output and consult your therapist")
 #  include <dbg.h>
 #  define HAVE_OCD
@@ -28,7 +25,7 @@
 #  define WITH_DBG
 #  define DBG(...) dbg(__VA_ARGS__)
 #elif ATRIP_DEBUG == 3
-#  pragma message("WARNING: You have crazy debugging ABC triples,"\
+#  pragma message("WARNING: You have crazy debugging ABC triples,"  \
                   " expect GB of output")
 #  include <dbg.h>
 #  define OCD_Barrier(com)
@@ -60,4 +57,34 @@
 #  define WITH_CRAZY_DEBUG if (false)
 #  define DBG(...)
 #endif
-// Debug:1 ends here
+// Macros:1 ends here
+
+// [[file:../../atrip.org::*Macros][Macros:2]]
+#ifndef LOG
+#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
+#endif
+// Macros:2 ends here
+
+// [[file:../../atrip.org::*Macros][Macros:3]]
+#ifdef ATRIP_NO_OUTPUT
+#  undef LOG
+#  define LOG(level, name) if (false) std::cout << name << ": "
+#endif
+// Macros:3 ends here
+
+// [[file:../../atrip.org::IterationDescriptor][IterationDescriptor]]
+namespace atrip {
+
+  struct IterationDescription;
+  using IterationDescriptor = std::function<void(IterationDescription const&)>;
+  struct IterationDescription {
+    static IterationDescriptor descriptor;
+    size_t currentIteration;
+    size_t totalIterations;
+    double currentElapsedTime;
+  };
+
+  void registerIterationDescriptor(IterationDescriptor);
+
+}
+// IterationDescriptor ends here

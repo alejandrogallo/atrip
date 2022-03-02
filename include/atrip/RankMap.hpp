@@ -1,4 +1,4 @@
-// [[file:~/atrip/atrip.org::*The%20rank%20mapping][The rank mapping:1]]
+// [[file:../../atrip.org::*The rank mapping][The rank mapping:1]]
 #pragma once
 
 #include <vector>
