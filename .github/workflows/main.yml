@@ -44,6 +44,12 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2.3.4
+    - name: Install Nix
+      uses: cachix/install-nix-action@v13
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
     - name: create doc
       run: |
         mkdir -p doc
