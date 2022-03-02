@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['localdatabase_360',['LocalDatabase',['../structatrip_1_1Slice.html#a240bba668674cfab0979d08819d86a1a',1,'atrip::Slice']]]
+  ['iterationdescriptor_371',['IterationDescriptor',['../namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d',1,'atrip']]]
 ];

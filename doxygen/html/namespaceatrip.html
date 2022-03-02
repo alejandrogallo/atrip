@@ -109,6 +109,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1HHHA.html">HHHA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1IterationDescription.html">IterationDescription</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1NaiveDistribution.html">NaiveDistribution</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1RankInfo.html">RankInfo</a></td></tr>
@@ -130,6 +132,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:af4afd47789d6e8e39ce3886578386d6d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a> = std::function&lt; void(<a class="el" href="structatrip_1_1IterationDescription.html">IterationDescription</a> const  &amp;)&gt;</td></tr>
+<tr class="separator:af4afd47789d6e8e39ce3886578386d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28915c100861c4b2a8c868a4b8f1f233"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> = std::array&lt; size_t, 3 &gt;</td></tr>
 <tr class="separator:a28915c100861c4b2a8c868a4b8f1f233"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b97b58a2469967c1a6da53511879c7b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b">PartialTuple</a> = std::array&lt; size_t, 2 &gt;</td></tr>
@@ -143,6 +147,8 @@ Typedefs</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:abc809223f3a656c447664edc6622d909"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#abc809223f3a656c447664edc6622d909">dgemm_</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, double *alpha, const double *A, const int *lda, const double *B, const int *ldb, double *beta, double *C, const int *ldc)</td></tr>
 <tr class="separator:abc809223f3a656c447664edc6622d909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a65234e51491c3fa418fcdfeb6e51ee1d">registerIterationDescriptor</a> (<a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a>)</td></tr>
+<tr class="separator:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58909ffd308915d7ff289c4379bca9dc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a58909ffd308915d7ff289c4379bca9dc">getEnergyDistinct</a> (const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</td></tr>
 <tr class="separator:a58909ffd308915d7ff289c4379bca9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1374b8d65a9d0253f76a8bbe27da92d5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a1374b8d65a9d0253f76a8bbe27da92d5">getEnergySame</a> (const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</td></tr>
@@ -206,6 +212,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">atrip::ABCTuples</a> = typedef std::vector&lt;<a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af4afd47789d6e8e39ce3886578386d6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4afd47789d6e8e39ce3886578386d6d">&#9670;&nbsp;</a></span>IterationDescriptor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">atrip::IterationDescriptor</a> = typedef std::function&lt;void(<a class="el" href="structatrip_1_1IterationDescription.html">IterationDescription</a> const&amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -720,6 +740,24 @@ template&lt;typename T &gt; </div>
           <td>(</td>
           <td class="paramtype">T &amp;&amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65234e51491c3fa418fcdfeb6e51ee1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65234e51491c3fa418fcdfeb6e51ee1d">&#9670;&nbsp;</a></span>registerIterationDescriptor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void atrip::registerIterationDescriptor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a>&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['tensor_362',['Tensor',['../structatrip_1_1SliceUnion.html#a29dc40bdc76f833917f571681f5ca8f3',1,'atrip::SliceUnion']]],
-  ['timings_363',['Timings',['../namespaceatrip.html#aec2fd4244568d19e92eb8d89425f1376',1,'atrip']]],
-  ['ty_5fx_5ftu_364',['Ty_x_Tu',['../structatrip_1_1Slice.html#a598c17df34de3200c97425483c223570',1,'atrip::Slice']]]
+  ['partialtuple_373',['PartialTuple',['../namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b',1,'atrip']]]
 ];

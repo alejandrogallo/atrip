@@ -1,7 +1,6 @@
 var files_dup =
 [
     [ "Atrip.cxx", "Atrip_8cxx.html", null ],
-    [ "Atrip.d", "Atrip_8d.html", null ],
     [ "Atrip.hpp", "Atrip_8hpp.html", "Atrip_8hpp" ],
     [ "atrip.hpp", "atrip_8hpp.html", null ],
     [ "Blas.hpp", "Blas_8hpp.html", "Blas_8hpp" ],

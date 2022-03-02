@@ -11,10 +11,9 @@ var searchData=
   ['add_5fattribute_10',['ADD_ATTRIBUTE',['../Atrip_8hpp.html#a7c54062058578cbb65a776629621b5cb',1,'Atrip.hpp']]],
   ['atrip_11',['Atrip',['../structatrip_1_1Atrip.html',1,'atrip::Atrip'],['../namespaceatrip.html',1,'atrip']]],
   ['atrip_2ecxx_12',['Atrip.cxx',['../Atrip_8cxx.html',1,'']]],
-  ['atrip_2ed_13',['Atrip.d',['../Atrip_8d.html',1,'']]],
-  ['atrip_2ehpp_14',['Atrip.hpp',['../Atrip_8hpp.html',1,'(Global Namespace)'],['../atrip_8hpp.html',1,'(Global Namespace)']]],
-  ['atrip_5fbenchmark_15',['ATRIP_BENCHMARK',['../Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df',1,'Debug.hpp']]],
-  ['atrip_5fdebug_16',['ATRIP_DEBUG',['../Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e',1,'Debug.hpp']]],
-  ['atrip_5fuse_5fdgemm_17',['ATRIP_USE_DGEMM',['../Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf',1,'Debug.hpp']]],
-  ['group_5fand_5fsort_18',['group_and_sort',['../namespaceatrip_1_1group__and__sort.html',1,'atrip']]]
+  ['atrip_2ehpp_13',['Atrip.hpp',['../Atrip_8hpp.html',1,'(Global Namespace)'],['../atrip_8hpp.html',1,'(Global Namespace)']]],
+  ['atrip_5fbenchmark_14',['ATRIP_BENCHMARK',['../Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df',1,'Debug.hpp']]],
+  ['atrip_5fdebug_15',['ATRIP_DEBUG',['../Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e',1,'Debug.hpp']]],
+  ['atrip_5fuse_5fdgemm_16',['ATRIP_USE_DGEMM',['../Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf',1,'Debug.hpp']]],
+  ['group_5fand_5fsort_17',['group_and_sort',['../namespaceatrip_1_1group__and__sort.html',1,'atrip']]]
 ];

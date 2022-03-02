@@ -82,14 +82,29 @@ $(document).ready(function(){initNavTree('Debug_8hpp.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Debug.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &lt;functional&gt;</code><br />
+</div>
 <p><a href="Debug_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structatrip_1_1IterationDescription.html">atrip::IterationDescription</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceatrip"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html">atrip</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ad0141f91cd5e10e24d6a723624c437df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df">ATRIP_BENCHMARK</a></td></tr>
@@ -98,8 +113,6 @@ Macros</h2></td></tr>
 <tr class="separator:a5cc2051ac37b4867f478c20baa37ebcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1c9f39d9f533bf92bcf20f1e925691e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e">ATRIP_DEBUG</a>&#160;&#160;&#160;1</td></tr>
 <tr class="separator:af1c9f39d9f533bf92bcf20f1e925691e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab91ba8612c2b67dad4376d30871eb95"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#aab91ba8612c2b67dad4376d30871eb95">LOG</a>(level,  name)&#160;&#160;&#160;if (Atrip::rank == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</td></tr>
-<tr class="separator:aab91ba8612c2b67dad4376d30871eb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd562c2a281e45f3c9e777ee85940952"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#acd562c2a281e45f3c9e777ee85940952">OCD_Barrier</a>(com)</td></tr>
 <tr class="separator:acd562c2a281e45f3c9e777ee85940952"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a321f8f2fd92f00a4da2fe732c4198132"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#a321f8f2fd92f00a4da2fe732c4198132">WITH_OCD</a>&#160;&#160;&#160;if (false)</td></tr>
@@ -116,6 +129,18 @@ Macros</h2></td></tr>
 <tr class="separator:ac0c1f2990209029f452a33e8ae2206cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8924623ca601364965e3d88fb7f40fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#ae8924623ca601364965e3d88fb7f40fa">DBG</a>(...)</td></tr>
 <tr class="separator:ae8924623ca601364965e3d88fb7f40fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab91ba8612c2b67dad4376d30871eb95"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Debug_8hpp.html#aab91ba8612c2b67dad4376d30871eb95">LOG</a>(level,  name)&#160;&#160;&#160;if (Atrip::rank == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</td></tr>
+<tr class="separator:aab91ba8612c2b67dad4376d30871eb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:af4afd47789d6e8e39ce3886578386d6d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">atrip::IterationDescriptor</a> = std::function&lt; void(IterationDescription const  &amp;)&gt;</td></tr>
+<tr class="separator:af4afd47789d6e8e39ce3886578386d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a65234e51491c3fa418fcdfeb6e51ee1d">atrip::registerIterationDescriptor</a> (<a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a>)</td></tr>
+<tr class="separator:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ad0141f91cd5e10e24d6a723624c437df"></a>

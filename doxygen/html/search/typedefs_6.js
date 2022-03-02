@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['partialtuple_361',['PartialTuple',['../namespaceatrip.html#a8b97b58a2469967c1a6da53511879c7b',1,'atrip']]]
+  ['localdatabase_372',['LocalDatabase',['../structatrip_1_1Slice.html#a240bba668674cfab0979d08819d86a1a',1,'atrip::Slice']]]
 ];
