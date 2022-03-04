@@ -35,3 +35,13 @@
 (atrip-def-src atrip-atrip-cxx "Atrip.cxx")
 
 (atrip-def atrip-main-h   "include/atrip.hpp")
+
+(defvar atrip-root-directory (file-name-directory load-file-name))
+(defvar license-path (format "%s/LICENSE-HEADER" atrip-root-directory))
+
+(add-hook 'org-babel-post-tangle-hook
+          (lambda ()
+            (goto-char (point-min))
+            (insert-file-contents license-path)
+            (write-region nil nil (buffer-file-name (current-buffer)))
+            (message "license header in: %s" (current-buffer))))
