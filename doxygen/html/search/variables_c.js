@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['universe_360',['universe',['../structatrip_1_1SliceUnion.html#ae44a707a214e9cc094e5f8be5cd026fc',1,'atrip::SliceUnion']]]
+  ['universe_381',['universe',['../structatrip_1_1SliceUnion.html#a0d658b0a4e8989473fd51a9ccaf9f166',1,'atrip::SliceUnion']]]
 ];

@@ -96,6 +96,8 @@ $(document).ready(function(){initNavTree('namespaceatrip.html',''); initResizabl
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceatrip_1_1group__and__sort"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1group__and__sort.html">group_and_sort</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceatrip_1_1traits"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip_1_1traits.html">traits</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -132,6 +134,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:aa4158a2e7e79c518dcb11d7ccfc1c82f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> = std::complex&lt; double &gt;</td></tr>
+<tr class="separator:aa4158a2e7e79c518dcb11d7ccfc1c82f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4afd47789d6e8e39ce3886578386d6d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a> = std::function&lt; void(<a class="el" href="structatrip_1_1IterationDescription.html">IterationDescription</a> const  &amp;)&gt;</td></tr>
 <tr class="separator:af4afd47789d6e8e39ce3886578386d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28915c100861c4b2a8c868a4b8f1f233"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> = std::array&lt; size_t, 3 &gt;</td></tr>
@@ -145,24 +149,45 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abc809223f3a656c447664edc6622d909"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#abc809223f3a656c447664edc6622d909">dgemm_</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, double *alpha, const double *A, const int *lda, const double *B, const int *ldb, double *beta, double *C, const int *ldc)</td></tr>
-<tr class="separator:abc809223f3a656c447664edc6622d909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a302b648f916e8ad102dd42072cca699f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a302b648f916e8ad102dd42072cca699f">dgemm_</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, double *alpha, const double *a, const int *lda, const double *b, const int *ldb, double *beta, double *c, const int *ldc)</td></tr>
+<tr class="separator:a302b648f916e8ad102dd42072cca699f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbace53db67d2fe7117fd8d401a714a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a7dbace53db67d2fe7117fd8d401a714a">zgemm_</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *alpha, const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *A, const int *lda, const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *B, const int *ldb, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *beta, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *C, const int *ldc)</td></tr>
+<tr class="separator:a7dbace53db67d2fe7117fd8d401a714a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac816a227aaf7dcd0a1924bcbabedcd05"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:ac816a227aaf7dcd0a1924bcbabedcd05"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ac816a227aaf7dcd0a1924bcbabedcd05">xgemm</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, F *alpha, const F *A, const int *lda, const F *B, const int *ldb, F *beta, F *C, const int *ldc)</td></tr>
+<tr class="separator:ac816a227aaf7dcd0a1924bcbabedcd05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598533b252b76257af9d6d6e7c285db2"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a598533b252b76257af9d6d6e7c285db2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a598533b252b76257af9d6d6e7c285db2">xgemm</a> (const char *transa, const char *transb, const int *m, const int *n, const int *k, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *alpha, const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *A, const int *lda, const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *B, const int *ldb, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *beta, <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *C, const int *ldc)</td></tr>
+<tr class="separator:a598533b252b76257af9d6d6e7c285db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a65234e51491c3fa418fcdfeb6e51ee1d">registerIterationDescriptor</a> (<a class="el" href="namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d">IterationDescriptor</a>)</td></tr>
 <tr class="separator:a65234e51491c3fa418fcdfeb6e51ee1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58909ffd308915d7ff289c4379bca9dc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a58909ffd308915d7ff289c4379bca9dc">getEnergyDistinct</a> (const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</td></tr>
-<tr class="separator:a58909ffd308915d7ff289c4379bca9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1374b8d65a9d0253f76a8bbe27da92d5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a1374b8d65a9d0253f76a8bbe27da92d5">getEnergySame</a> (const double epsabc, std::vector&lt; double &gt; const &amp;epsi, std::vector&lt; double &gt; const &amp;Tijk_, std::vector&lt; double &gt; const &amp;Zijk_)</td></tr>
-<tr class="separator:a1374b8d65a9d0253f76a8bbe27da92d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e4f317ce66d446aaf87530d03876c28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a4e4f317ce66d446aaf87530d03876c28">singlesContribution</a> (size_t No, size_t Nv, const <a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> &amp;abc, double const *Tph, double const *VABij, double const *VACij, double const *VBCij, double *Zijk)</td></tr>
-<tr class="separator:a4e4f317ce66d446aaf87530d03876c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09dfc7f6543b9793c9a85eff8f107dff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a09dfc7f6543b9793c9a85eff8f107dff">doublesContribution</a> (const <a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> &amp;abc, size_t const No, size_t const Nv, double const *VABph, double const *VACph, double const *VBCph, double const *VBAph, double const *VCAph, double const *VCBph, double const *VhhhA, double const *VhhhB, double const *VhhhC, double const *TAphh, double const *TBphh, double const *TCphh, double const *TABhh, double const *TAChh, double const *TBChh, double *Tijk)</td></tr>
-<tr class="separator:a09dfc7f6543b9793c9a85eff8f107dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaae95970691f34179808f9b654b61e11"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aaae95970691f34179808f9b654b61e11">operator&lt;&lt;</a> (std::ostream &amp;out, <a class="el" href="structatrip_1_1Slice_1_1Location.html">Slice::Location</a> const &amp;v)</td></tr>
-<tr class="separator:aaae95970691f34179808f9b654b61e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c48fcc88885968b4dcc221aef819dd"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad8c48fcc88885968b4dcc221aef819dd">operator&lt;&lt;</a> (std::ostream &amp;out, <a class="el" href="structatrip_1_1Slice_1_1Info.html">Slice::Info</a> const &amp;i)</td></tr>
-<tr class="separator:ad8c48fcc88885968b4dcc221aef819dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca2c3acb290384ce5419a2f6c7e62555"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aca2c3acb290384ce5419a2f6c7e62555">unionByName</a> (std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> * &gt; const &amp;unions, <a class="el" href="structatrip_1_1Slice.html#ab62f723a61f7d96ff457aa0980a50806">Slice::Name</a> name)</td></tr>
-<tr class="separator:aca2c3acb290384ce5419a2f6c7e62555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a840b02bd30fe9a856766d3d46549cada"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a840b02bd30fe9a856766d3d46549cada"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a840b02bd30fe9a856766d3d46549cada">getEnergyDistinct</a> (const F epsabc, std::vector&lt; F &gt; const &amp;epsi, std::vector&lt; F &gt; const &amp;Tijk_, std::vector&lt; F &gt; const &amp;Zijk_)</td></tr>
+<tr class="separator:a840b02bd30fe9a856766d3d46549cada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a793b8f00a013edaba6f2085ef13639b5"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a793b8f00a013edaba6f2085ef13639b5"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a793b8f00a013edaba6f2085ef13639b5">getEnergySame</a> (const F epsabc, std::vector&lt; F &gt; const &amp;epsi, std::vector&lt; F &gt; const &amp;Tijk_, std::vector&lt; F &gt; const &amp;Zijk_)</td></tr>
+<tr class="separator:a793b8f00a013edaba6f2085ef13639b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a7787d4c4d5eaa1b23f1a38fd77452e91">singlesContribution</a> (size_t No, size_t Nv, const <a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> &amp;abc, F const *Tph, F const *VABij, F const *VACij, F const *VBCij, F *Zijk)</td></tr>
+<tr class="separator:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf38977bde26414f9921b16ea94e61a9"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:abf38977bde26414f9921b16ea94e61a9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#abf38977bde26414f9921b16ea94e61a9">doublesContribution</a> (const <a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> &amp;abc, size_t const No, size_t const Nv, F const *VABph, F const *VACph, F const *VBCph, F const *VBAph, F const *VCAph, F const *VCBph, F const *VhhhA, F const *VhhhB, F const *VhhhC, F const *TAphh, F const *TBphh, F const *TCphh, F const *TABhh, F const *TAChh, F const *TBChh, F *Tijk)</td></tr>
+<tr class="separator:abf38977bde26414f9921b16ea94e61a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e0cfc31bb96f193faaf7577e9d8ff86"><td class="memTemplParams" colspan="2">template&lt;typename FF &gt; </td></tr>
+<tr class="memitem:a2e0cfc31bb96f193faaf7577e9d8ff86"><td class="memTemplItemLeft" align="right" valign="top">FF&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a2e0cfc31bb96f193faaf7577e9d8ff86">maybeConjugate</a> (const FF a)</td></tr>
+<tr class="separator:a2e0cfc31bb96f193faaf7577e9d8ff86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3109af0495d84e38227d528cd87b4bbb"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a3109af0495d84e38227d528cd87b4bbb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a3109af0495d84e38227d528cd87b4bbb">maybeConjugate</a> (const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> a)</td></tr>
+<tr class="separator:a3109af0495d84e38227d528cd87b4bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae87ef13dea060e70fd45dc819d81c542"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:ae87ef13dea060e70fd45dc819d81c542"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ae87ef13dea060e70fd45dc819d81c542">operator&lt;&lt;</a> (std::ostream &amp;out, typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Location const &amp;v)</td></tr>
+<tr class="separator:ae87ef13dea060e70fd45dc819d81c542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48486dbe7da2ba48cb4a0971c558ee74"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a48486dbe7da2ba48cb4a0971c558ee74"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a48486dbe7da2ba48cb4a0971c558ee74">operator&lt;&lt;</a> (std::ostream &amp;out, typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Info const &amp;i)</td></tr>
+<tr class="separator:a48486dbe7da2ba48cb4a0971c558ee74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24ce996639a89d98eb5c4e31175620f4"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a24ce996639a89d98eb5c4e31175620f4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a>&lt; F &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a24ce996639a89d98eb5c4e31175620f4">unionByName</a> (std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a>&lt; F &gt; * &gt; const &amp;unions, typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Name name)</td></tr>
+<tr class="separator:a24ce996639a89d98eb5c4e31175620f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61b9bff51847e234f5357dfa5adc5a59"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a61b9bff51847e234f5357dfa5adc5a59">getNodeNames</a> (MPI_Comm comm)</td></tr>
 <tr class="separator:a61b9bff51847e234f5357dfa5adc5a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97dd69bc4fe50212652f17f2e6bd04fb"><td class="memTemplParams" colspan="2">template&lt;typename A &gt; </td></tr>
@@ -176,8 +201,9 @@ Functions</h2></td></tr>
 <tr class="separator:a6d24cef8b67603413dfae0002a083b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">ABCTuples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b">getAllTuplesList</a> (const size_t Nv)</td></tr>
 <tr class="separator:ad3b6dffd6ea5627cfb04fbc5653d0e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0b348ba8361d5e9015dc652413cb323"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ad0b348ba8361d5e9015dc652413cb323">sliceIntoVector</a> (std::vector&lt; double &gt; &amp;v, CTF::Tensor&lt; double &gt; &amp;toSlice, std::vector&lt; int64_t &gt; const low, std::vector&lt; int64_t &gt; const up, CTF::Tensor&lt; double &gt; const &amp;origin, std::vector&lt; int64_t &gt; const originLow, std::vector&lt; int64_t &gt; const originUp)</td></tr>
-<tr class="separator:ad0b348ba8361d5e9015dc652413cb323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a50c8632daf83dc3a61bbc6c2eb122a"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a6a50c8632daf83dc3a61bbc6c2eb122a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a6a50c8632daf83dc3a61bbc6c2eb122a">sliceIntoVector</a> (std::vector&lt; F &gt; &amp;v, CTF::Tensor&lt; F &gt; &amp;toSlice, std::vector&lt; int64_t &gt; const low, std::vector&lt; int64_t &gt; const up, CTF::Tensor&lt; F &gt; const &amp;origin, std::vector&lt; int64_t &gt; const originLow, std::vector&lt; int64_t &gt; const originUp)</td></tr>
+<tr class="separator:a6a50c8632daf83dc3a61bbc6c2eb122a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3178eea10b83bd01a95ca222be291c1f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3178eea10b83bd01a95ca222be291c1f"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a3178eea10b83bd01a95ca222be291c1f">pretty_print</a> (T &amp;&amp;value)</td></tr>
 <tr class="separator:a3178eea10b83bd01a95ca222be291c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,6 +238,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea">atrip::ABCTuples</a> = typedef std::vector&lt;<a class="el" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4158a2e7e79c518dcb11d7ccfc1c82f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4158a2e7e79c518dcb11d7ccfc1c82f">&#9670;&nbsp;</a></span>Complex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">atrip::Complex</a> = typedef std::complex&lt;double&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -261,8 +301,8 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="abc809223f3a656c447664edc6622d909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc809223f3a656c447664edc6622d909">&#9670;&nbsp;</a></span>dgemm_()</h2>
+<a id="a302b648f916e8ad102dd42072cca699f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a302b648f916e8ad102dd42072cca699f">&#9670;&nbsp;</a></span>dgemm_()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,7 +347,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double *&#160;</td>
-          <td class="paramname"><em>A</em>, </td>
+          <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -319,7 +359,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double *&#160;</td>
-          <td class="paramname"><em>B</em>, </td>
+          <td class="paramname"><em>b</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -337,7 +377,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>C</em>, </td>
+          <td class="paramname"><em>c</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -355,11 +395,13 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a09dfc7f6543b9793c9a85eff8f107dff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09dfc7f6543b9793c9a85eff8f107dff">&#9670;&nbsp;</a></span>doublesContribution()</h2>
+<a id="abf38977bde26414f9921b16ea94e61a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf38977bde26414f9921b16ea94e61a9">&#9670;&nbsp;</a></span>doublesContribution()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void atrip::doublesContribution </td>
@@ -382,97 +424,97 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VABph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VACph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VBCph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VBAph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VCAph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VCBph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VhhhA</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VhhhB</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VhhhC</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TAphh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TBphh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TCphh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TABhh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TAChh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>TBChh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype">F *&#160;</td>
           <td class="paramname"><em>Tijk</em>&#160;</td>
         </tr>
         <tr>
@@ -521,34 +563,36 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a58909ffd308915d7ff289c4379bca9dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58909ffd308915d7ff289c4379bca9dc">&#9670;&nbsp;</a></span>getEnergyDistinct()</h2>
+<a id="a840b02bd30fe9a856766d3d46549cada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840b02bd30fe9a856766d3d46549cada">&#9670;&nbsp;</a></span>getEnergyDistinct()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">double atrip::getEnergyDistinct </td>
           <td>(</td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">const F&#160;</td>
           <td class="paramname"><em>epsabc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>epsi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>Tijk_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>Zijk_</em>&#160;</td>
         </tr>
         <tr>
@@ -561,34 +605,36 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a1374b8d65a9d0253f76a8bbe27da92d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1374b8d65a9d0253f76a8bbe27da92d5">&#9670;&nbsp;</a></span>getEnergySame()</h2>
+<a id="a793b8f00a013edaba6f2085ef13639b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a793b8f00a013edaba6f2085ef13639b5">&#9670;&nbsp;</a></span>getEnergySame()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">double atrip::getEnergySame </td>
           <td>(</td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">const F&#160;</td>
           <td class="paramname"><em>epsabc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>epsi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>Tijk_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>Zijk_</em>&#160;</td>
         </tr>
         <tr>
@@ -671,11 +717,53 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ad8c48fcc88885968b4dcc221aef819dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8c48fcc88885968b4dcc221aef819dd">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+<a id="a3109af0495d84e38227d528cd87b4bbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3109af0495d84e38227d528cd87b4bbb">&#9670;&nbsp;</a></span>maybeConjugate() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> atrip::maybeConjugate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a>&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2e0cfc31bb96f193faaf7577e9d8ff86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e0cfc31bb96f193faaf7577e9d8ff86">&#9670;&nbsp;</a></span>maybeConjugate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename FF &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">FF atrip::maybeConjugate </td>
+          <td>(</td>
+          <td class="paramtype">const FF&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a48486dbe7da2ba48cb4a0971c558ee74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48486dbe7da2ba48cb4a0971c558ee74">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::ostream&amp; atrip::operator&lt;&lt; </td>
@@ -686,7 +774,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structatrip_1_1Slice_1_1Info.html">Slice::Info</a> const &amp;&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Info const &amp;&#160;</td>
           <td class="paramname"><em>i</em>&#160;</td>
         </tr>
         <tr>
@@ -699,11 +787,13 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aaae95970691f34179808f9b654b61e11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaae95970691f34179808f9b654b61e11">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/2]</span></h2>
+<a id="ae87ef13dea060e70fd45dc819d81c542"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae87ef13dea060e70fd45dc819d81c542">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::ostream&amp; atrip::operator&lt;&lt; </td>
@@ -714,7 +804,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structatrip_1_1Slice_1_1Location.html">Slice::Location</a> const &amp;&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Location const &amp;&#160;</td>
           <td class="paramname"><em>v</em>&#160;</td>
         </tr>
         <tr>
@@ -765,11 +855,13 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a4e4f317ce66d446aaf87530d03876c28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e4f317ce66d446aaf87530d03876c28">&#9670;&nbsp;</a></span>singlesContribution()</h2>
+<a id="a7787d4c4d5eaa1b23f1a38fd77452e91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7787d4c4d5eaa1b23f1a38fd77452e91">&#9670;&nbsp;</a></span>singlesContribution()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void atrip::singlesContribution </td>
@@ -792,31 +884,31 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>Tph</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VABij</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VACij</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double const *&#160;</td>
+          <td class="paramtype">F const *&#160;</td>
           <td class="paramname"><em>VBCij</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype">F *&#160;</td>
           <td class="paramname"><em>Zijk</em>&#160;</td>
         </tr>
         <tr>
@@ -829,22 +921,24 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ad0b348ba8361d5e9015dc652413cb323"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0b348ba8361d5e9015dc652413cb323">&#9670;&nbsp;</a></span>sliceIntoVector()</h2>
+<a id="a6a50c8632daf83dc3a61bbc6c2eb122a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a50c8632daf83dc3a61bbc6c2eb122a">&#9670;&nbsp;</a></span>sliceIntoVector()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void atrip::sliceIntoVector </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; F &gt; &amp;&#160;</td>
           <td class="paramname"><em>v</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">CTF::Tensor&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">CTF::Tensor&lt; F &gt; &amp;&#160;</td>
           <td class="paramname"><em>toSlice</em>, </td>
         </tr>
         <tr>
@@ -862,7 +956,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">CTF::Tensor&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramtype">CTF::Tensor&lt; F &gt; const &amp;&#160;</td>
           <td class="paramname"><em>origin</em>, </td>
         </tr>
         <tr>
@@ -887,22 +981,24 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="aca2c3acb290384ce5419a2f6c7e62555"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca2c3acb290384ce5419a2f6c7e62555">&#9670;&nbsp;</a></span>unionByName()</h2>
+<a id="a24ce996639a89d98eb5c4e31175620f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24ce996639a89d98eb5c4e31175620f4">&#9670;&nbsp;</a></span>unionByName()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a>&amp; atrip::unionByName </td>
+          <td class="memname"><a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a>&lt;F&gt;&amp; atrip::unionByName </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a> * &gt; const &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="structatrip_1_1SliceUnion.html">SliceUnion</a>&lt; F &gt; * &gt; const &amp;&#160;</td>
           <td class="paramname"><em>unions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structatrip_1_1Slice.html#ab62f723a61f7d96ff457aa0980a50806">Slice::Name</a>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structatrip_1_1Slice.html">Slice</a>&lt; F &gt;::Name&#160;</td>
           <td class="paramname"><em>name</em>&#160;</td>
         </tr>
         <tr>
@@ -929,6 +1025,292 @@ template&lt;typename A &gt; </div>
           <td class="paramtype">A const &amp;&#160;</td>
           <td class="paramname"><em>xs</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a598533b252b76257af9d6d6e7c285db2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a598533b252b76257af9d6d6e7c285db2">&#9670;&nbsp;</a></span>xgemm() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void atrip::xgemm </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>lda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>beta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>C</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac816a227aaf7dcd0a1924bcbabedcd05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac816a227aaf7dcd0a1924bcbabedcd05">&#9670;&nbsp;</a></span>xgemm() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename F  = double&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void atrip::xgemm </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F *&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const F *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>lda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const F *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F *&#160;</td>
+          <td class="paramname"><em>beta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F *&#160;</td>
+          <td class="paramname"><em>C</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7dbace53db67d2fe7117fd8d401a714a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dbace53db67d2fe7117fd8d401a714a">&#9670;&nbsp;</a></span>zgemm_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void atrip::zgemm_ </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>transb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>lda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>beta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceatrip.html#aa4158a2e7e79c518dcb11d7ccfc1c82f">Complex</a> *&#160;</td>
+          <td class="paramname"><em>C</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int *&#160;</td>
+          <td class="paramname"><em>ldc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

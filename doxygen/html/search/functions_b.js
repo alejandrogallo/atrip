@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['neededslices_278',['neededSlices',['../structatrip_1_1SliceUnion.html#afb03c3c0b1989a7a9f6cb47707c0b744',1,'atrip::SliceUnion']]],
-  ['nsources_279',['nSources',['../structatrip_1_1RankMap.html#a37ae3068f5e47f6723b01d5327205bd9',1,'atrip::RankMap']]]
+  ['operator_3c_3c_301',['operator&lt;&lt;',['../namespaceatrip.html#ae87ef13dea060e70fd45dc819d81c542',1,'atrip::operator&lt;&lt;(std::ostream &amp;out, typename Slice&lt; F &gt;::Location const &amp;v)'],['../namespaceatrip.html#a48486dbe7da2ba48cb4a0971c558ee74',1,'atrip::operator&lt;&lt;(std::ostream &amp;out, typename Slice&lt; F &gt;::Info const &amp;i)']]]
 ];

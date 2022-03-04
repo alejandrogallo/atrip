@@ -1,5 +1,5 @@
 var structatrip_1_1Slice_1_1LocalDatabaseElement =
 [
-    [ "info", "structatrip_1_1Slice_1_1LocalDatabaseElement.html#a598e830b2a3e87823b9861fb5ae45ac6", null ],
-    [ "name", "structatrip_1_1Slice_1_1LocalDatabaseElement.html#a749fa5d9a6b870207f62908bd80d83ee", null ]
+    [ "info", "structatrip_1_1Slice_1_1LocalDatabaseElement.html#a732f1eeac9b26b16d6fa40b022c1caa8", null ],
+    [ "name", "structatrip_1_1Slice_1_1LocalDatabaseElement.html#a071e50a7b7adcf28955b3c0f40dea720", null ]
 ];

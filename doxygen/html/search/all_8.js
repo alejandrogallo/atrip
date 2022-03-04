@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['hasrecycledreferencingtoit_76',['hasRecycledReferencingToIt',['../structatrip_1_1Slice.html#ab9ce0f693caf9da72de28f1704fe4f09',1,'atrip::Slice']]],
-  ['hasvaliddatapointer_77',['hasValidDataPointer',['../structatrip_1_1Slice.html#a8f3effafe9ead064607ab1782fe8e685',1,'atrip::Slice']]],
-  ['hhha_78',['HHHA',['../structatrip_1_1HHHA.html',1,'atrip::HHHA'],['../structatrip_1_1HHHA.html#ac18e7dce467f393348b4d57b4c753b1e',1,'atrip::HHHA::HHHA()']]]
+  ['hasrecycledreferencingtoit_80',['hasRecycledReferencingToIt',['../structatrip_1_1Slice.html#a74c8f856bc2b0aceca27849900fd8a2f',1,'atrip::Slice']]],
+  ['hasvaliddatapointer_81',['hasValidDataPointer',['../structatrip_1_1Slice.html#ae9851d6c9cbae126484ad37b2446408c',1,'atrip::Slice']]],
+  ['hhha_82',['HHHA',['../structatrip_1_1HHHA.html',1,'atrip::HHHA&lt; F &gt;'],['../structatrip_1_1HHHA.html#aff728e9a480579582405964457af0d65',1,'atrip::HHHA::HHHA()']]]
 ];

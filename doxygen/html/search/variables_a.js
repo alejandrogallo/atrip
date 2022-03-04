@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['size_347',['size',['../structatrip_1_1RankMap.html#a8b5898d4f8f5a5519ed13d8e631ccf07',1,'atrip::RankMap::size()'],['../structatrip_1_1Slice.html#a176a598e21988241c97b3739aad77711',1,'atrip::Slice::size()']]],
-  ['slicebuffers_348',['sliceBuffers',['../structatrip_1_1SliceUnion.html#ad420685484d6037ae189093d4d5a5b05',1,'atrip::SliceUnion']]],
-  ['slicelength_349',['sliceLength',['../structatrip_1_1SliceUnion.html#a218f0eb3998f0b3520c69e82f5fa34c8',1,'atrip::SliceUnion']]],
-  ['slices_350',['slices',['../structatrip_1_1SliceUnion.html#a1033b20f6aba196cc398f46067d4054b',1,'atrip::SliceUnion']]],
-  ['slicetypes_351',['sliceTypes',['../structatrip_1_1SliceUnion.html#afb29c3508657ef38173589050857c9ec',1,'atrip::SliceUnion']]],
-  ['source_352',['source',['../structatrip_1_1Slice_1_1Location.html#a21d64c651b21553ac6b2fa572e531d66',1,'atrip::Slice::Location']]],
-  ['sources_353',['sources',['../structatrip_1_1SliceUnion.html#a3c6f6d15a63e78907a52505538c4c416',1,'atrip::SliceUnion']]],
-  ['state_354',['state',['../structatrip_1_1Slice_1_1Info.html#a00c2cbc2af5f8e46fbfd92d99a3e48ed',1,'atrip::Slice::Info']]]
+  ['size_368',['size',['../structatrip_1_1RankMap.html#a9446d8e669ada2186bab67c0ada510f3',1,'atrip::RankMap::size()'],['../structatrip_1_1Slice.html#a7e16150ff4f60689556a1b9ca139a22d',1,'atrip::Slice::size()']]],
+  ['slicebuffers_369',['sliceBuffers',['../structatrip_1_1SliceUnion.html#a3ce1e87ce77c90131de1b647769ec518',1,'atrip::SliceUnion']]],
+  ['slicelength_370',['sliceLength',['../structatrip_1_1SliceUnion.html#a62e3f6bd006b32bf7045d49baba4f8bb',1,'atrip::SliceUnion']]],
+  ['slices_371',['slices',['../structatrip_1_1SliceUnion.html#a41082ca178c5fe8d391a3f48a3121651',1,'atrip::SliceUnion']]],
+  ['slicetypes_372',['sliceTypes',['../structatrip_1_1SliceUnion.html#a03c48b80d33fc123f36c091be480dd99',1,'atrip::SliceUnion']]],
+  ['source_373',['source',['../structatrip_1_1Slice_1_1Location.html#a4ae8c64c9ef47d9ebebd04598b1bb35f',1,'atrip::Slice::Location']]],
+  ['sources_374',['sources',['../structatrip_1_1SliceUnion.html#afc72b5575b3e9d5d9f3be4e645537a62',1,'atrip::SliceUnion']]],
+  ['state_375',['state',['../structatrip_1_1Slice_1_1Info.html#a95ae928785594ad332204f3377cd241e',1,'atrip::Slice::Info']]]
 ];

@@ -1,5 +1,5 @@
 var structatrip_1_1HHHA =
 [
-    [ "HHHA", "structatrip_1_1HHHA.html#ac18e7dce467f393348b4d57b4c753b1e", null ],
-    [ "sliceIntoBuffer", "structatrip_1_1HHHA.html#a677459d0bcc4e9bdd357a255c3119cd5", null ]
+    [ "HHHA", "structatrip_1_1HHHA.html#aff728e9a480579582405964457af0d65", null ],
+    [ "sliceIntoBuffer", "structatrip_1_1HHHA.html#aa1e0d1b558a5f2683742262857c72072", null ]
 ];

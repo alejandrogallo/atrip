@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['b_385',['B',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46aa7f88b4649d1d84b1fa9c23fc4e72fee',1,'atrip::Slice']]],
-  ['ba_386',['BA',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46a949d192b9ca6cf03451e6be14b8a29f1',1,'atrip::Slice']]],
-  ['bc_387',['BC',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46aa35fc25e432d4dc3e34cad631778b25c',1,'atrip::Slice']]],
-  ['blank_388',['Blank',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46a738db3071dee52d6c4e399c1af884915',1,'atrip::Slice']]]
+  ['b_406',['B',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46ab0cc4fdf016372ae51b4b33f19970877',1,'atrip::Slice']]],
+  ['ba_407',['BA',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46a95b07e2180c2f7003f986104dfb85677',1,'atrip::Slice']]],
+  ['bc_408',['BC',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46a56b6bbbe684c42ebf26bb91d68921b42',1,'atrip::Slice']]],
+  ['blank_409',['Blank',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46ac32b5c11df3f14116f3fddf2bc10a55e',1,'atrip::Slice']]]
 ];

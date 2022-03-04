@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['f_370',['F',['../structatrip_1_1Slice.html#ad2ac2a78758e46511d75c310cbba37c0',1,'atrip::Slice::F()'],['../structatrip_1_1SliceUnion.html#afa2b02ab8dfc2140aa6bc81fb50479df',1,'atrip::SliceUnion::F()']]]
+  ['iterationdescriptor_392',['IterationDescriptor',['../namespaceatrip.html#af4afd47789d6e8e39ce3886578386d6d',1,'atrip']]]
 ];

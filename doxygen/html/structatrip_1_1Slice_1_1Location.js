@@ -1,5 +1,5 @@
 var structatrip_1_1Slice_1_1Location =
 [
-    [ "rank", "structatrip_1_1Slice_1_1Location.html#a9f8da7a7c6a688c2093406d424db6a12", null ],
-    [ "source", "structatrip_1_1Slice_1_1Location.html#a21d64c651b21553ac6b2fa572e531d66", null ]
+    [ "rank", "structatrip_1_1Slice_1_1Location.html#adafd6595edf2739cd0a2a31eb1bf57e6", null ],
+    [ "source", "structatrip_1_1Slice_1_1Location.html#a4ae8c64c9ef47d9ebebd04598b1bb35f", null ]
 ];

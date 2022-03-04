@@ -1,5 +1,18 @@
 var NAVTREEINDEX1 =
 {
+"structatrip_1_1Timer.html":[1,0,0,15],
+"structatrip_1_1Timer.html#a09430eb4a9e28bb0bd81cd90a7cfd300":[1,0,0,15,4],
+"structatrip_1_1Timer.html#a3459f3c2a33eb751c07f117a1129dda9":[1,0,0,15,5],
+"structatrip_1_1Timer.html#a5a87a1d2a74e7b70a0f4f11fd211508c":[1,0,0,15,2],
+"structatrip_1_1Timer.html#aaefd99cf362148c5446ddaeca40ffa29":[1,0,0,15,6],
+"structatrip_1_1Timer.html#ab0c5de41ee1b8def08b719ce6ce94409":[1,0,0,15,7],
+"structatrip_1_1Timer.html#acad7c5d85e5f77af899840933b6e4f9e":[1,0,0,15,3],
+"structatrip_1_1Timer.html#ad31848c0314568ca145a7ebccf9e9946":[1,0,0,15,1],
+"structatrip_1_1Timer.html#ae15cc0675735926a17176c224976d098":[1,0,0,15,0],
+"structatrip_1_1TuplesDistribution.html":[1,0,0,16],
+"structatrip_1_1TuplesDistribution.html#a0767a603e2865fef7d6a8cc9bf41c52a":[1,0,0,16,1],
+"structatrip_1_1TuplesDistribution.html#abb339c6579cbd14147c075ebdabd5e7c":[1,0,0,16,0],
+"structatrip_1_1group__and__sort_1_1Distribution.html":[1,0,0,0,0],
 "structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7":[1,0,0,0,0,0],
 "structatrip_1_1group__and__sort_1_1Info.html":[1,0,0,0,1],
 "structatrip_1_1group__and__sort_1_1Info.html#a2449f1b8a24d5695df2037b9edf669b4":[1,0,0,0,1,1],
