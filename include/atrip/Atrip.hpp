@@ -36,12 +36,11 @@ namespace atrip {
     static int rank;
     static int np;
     static Timings chrono;
-    static size_t networkSend;
-    static size_t localSend;
     static void init();
 
+    template <typename F=double>
     struct Input {
-      CTF::Tensor<double> *ei = nullptr
+      CTF::Tensor<F> *ei = nullptr
                         , *ea = nullptr
                         , *Tph = nullptr
                         , *Tpphh = nullptr
@@ -49,13 +48,13 @@ namespace atrip {
                         , *Vhhhp = nullptr
                         , *Vppph = nullptr
                         ;
-      Input& with_epsilon_i(CTF::Tensor<double> * t) { ei = t; return *this; }
-      Input& with_epsilon_a(CTF::Tensor<double> * t) { ea = t; return *this; }
-      Input& with_Tai(CTF::Tensor<double> * t) { Tph = t; return *this; }
-      Input& with_Tabij(CTF::Tensor<double> * t) { Tpphh = t; return *this; }
-      Input& with_Vabij(CTF::Tensor<double> * t) { Vpphh = t; return *this; }
-      Input& with_Vijka(CTF::Tensor<double> * t) { Vhhhp = t; return *this; }
-      Input& with_Vabci(CTF::Tensor<double> * t) { Vppph = t; return *this; }
+      Input& with_epsilon_i(CTF::Tensor<F> * t) { ei = t; return *this; }
+      Input& with_epsilon_a(CTF::Tensor<F> * t) { ea = t; return *this; }
+      Input& with_Tai(CTF::Tensor<F> * t) { Tph = t; return *this; }
+      Input& with_Tabij(CTF::Tensor<F> * t) { Tpphh = t; return *this; }
+      Input& with_Vabij(CTF::Tensor<F> * t) { Vpphh = t; return *this; }
+      Input& with_Vijka(CTF::Tensor<F> * t) { Vhhhp = t; return *this; }
+      Input& with_Vabci(CTF::Tensor<F> * t) { Vppph = t; return *this; }
 
       enum TuplesDistribution {
         NAIVE,
@@ -70,13 +69,13 @@ namespace atrip {
       ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
 
-
     };
 
     struct Output {
       double energy;
     };
-    static Output run(Input const& in);
+    template <typename F=double>
+    static Output run(Input<F> const& in);
   };
 
 }

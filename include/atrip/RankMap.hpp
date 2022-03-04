@@ -22,6 +22,8 @@
 #include <atrip/Tuples.hpp>
 
 namespace atrip {
+
+  template <typename F=double>
   struct RankMap {
 
     static bool RANK_ROUND_ROBIN;
@@ -37,7 +39,7 @@ namespace atrip {
       , clusterInfo(getClusterInfo(comm))
     { assert(lengths.size() <= 2); }
 
-    size_t find(Slice::Location const& p) const noexcept {
+    size_t find(typename Slice<F>::Location const& p) const noexcept {
       if (RANK_ROUND_ROBIN) {
         return p.source * np + p.rank;
       } else {
@@ -67,11 +69,11 @@ namespace atrip {
       return source == nSources() && isPaddingRank(rank);
     }
 
-    Slice::Location
-    find(ABCTuple const& abc, Slice::Type sliceType) const {
+    typename Slice<F>::Location
+    find(ABCTuple const& abc, typename Slice<F>::Type sliceType) const {
       // tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB
       // tuple = {11, 0} when abc = {11, 8, 9} and sliceType = A
-      const auto tuple = Slice::subtupleBySlice(abc, sliceType);
+      const auto tuple = Slice<F>::subtupleBySlice(abc, sliceType);
 
       const size_t index
         = tuple[0]

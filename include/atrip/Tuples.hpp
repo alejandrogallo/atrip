@@ -255,7 +255,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     , container3d(nNodes * nNodes * nNodes)
     ;
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tGoing through all "
               << allTuples.size()
               << " tuples in "
@@ -287,7 +287,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 1-d containers\n";
   // DISTRIBUTE 1-d containers
   // every tuple which is only located at one node belongs to this node
@@ -297,7 +297,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     std::copy(_tuples.begin(), _tuples.end(), nodeTuples.begin());
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
@@ -332,7 +332,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
   for (size_t zyx = 0; zyx < container3d.size(); zyx++) {
@@ -371,7 +371,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   }
 
 
-  if (info.nodeId == 0) std::cout << "\tswapping tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\tswapping tuples...\n";
   /*
    *  sort part of group-and-sort algorithm
    *  every tuple on a given node is sorted in a way that
@@ -401,16 +401,16 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     }
   }
 
-  if (info.nodeId == 0) std::cout << "\tsorting list of tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\tsorting list of tuples...\n";
   //now we sort the list of tuples
   std::sort(nodeTuples.begin(), nodeTuples.end());
 
-  if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
   // we bring the tuples abc back in the order a<b<c
   for (auto &t: nodeTuples)  std::sort(t.begin(), t.end());
 
 #if ATRIP_DEBUG > 1
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
   std::cout << "checking for validity of " << nodeTuples.size() << std::endl;
   const bool anyInvalid
     = std::any_of(nodeTuples.begin(),
@@ -419,6 +419,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   if (anyInvalid) throw "Some tuple is invalid in group-and-sort algorithm";
 #endif
 
+  WITH_DBG if (info.nodeId == 0) std::cout << "\treturning tuples...\n";
   return nodeTuples;
 
 }

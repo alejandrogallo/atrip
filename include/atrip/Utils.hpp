@@ -29,7 +29,7 @@ namespace atrip {
 template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
-#if ATRIP_DEBUG > 1
+#if ATRIP_DEBUG > 2
     dbg::pretty_print(stream, std::forward<T>(value));
 #endif
     return stream.str();

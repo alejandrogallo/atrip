@@ -21,13 +21,26 @@
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/Blas.hpp>
 
 namespace atrip {
 
+template <typename FF> FF maybeConjugate(const FF a) { return a; }
+template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
 
+namespace traits {
+  template <typename FF> bool isComplex() { return false; }
+  template <> bool isComplex<Complex>() { return true; }
+namespace mpi {
+  template <typename FF> MPI_Datatype datatypeOf(void);
+  template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
+  template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
+}
+}
+
+
+template <typename F=double>
 struct Slice {
-
-  using F = double;
 // Prolog:1 ends here
 
 // [[file:../../atrip.org::*Location][Location:1]]
@@ -99,8 +112,8 @@ enum Name
 
 // [[file:../../atrip.org::*Database][Database:1]]
 struct LocalDatabaseElement {
-  Slice::Name name;
-  Slice::Info info;
+  Slice<F>::Name name;
+  Slice<F>::Info info;
 };
 // Database:1 ends here
 
@@ -123,50 +136,60 @@ struct mpi {
     constexpr int n = 2;
     // create a sliceLocation to measure in the current architecture
     // the packing of the struct
-    Slice::Location measure;
+    Slice<F>::Location measure;
     MPI_Datatype dt;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n] = {usizeDt(), usizeDt()};
 
+    static_assert(sizeof(Slice<F>::Location) == 2 * sizeof(size_t),
+                  "The Location packing is wrong in your compiler");
+
     // measure the displacements in the struct
     size_t j = 0;
-    MPI_Aint displacements[n];
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,        &base_address);
     MPI_Get_address(&measure.rank,   &displacements[j++]);
     MPI_Get_address(&measure.source, &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
     return dt;
   }
 
-  static MPI_Datatype enumDt() { return MPI_INT; }
   static MPI_Datatype usizeDt() { return MPI_UINT64_T; }
 
   static MPI_Datatype sliceInfo () {
     constexpr int n = 5;
     MPI_Datatype dt;
-    Slice::Info measure;
+    Slice<F>::Info measure;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n]
       = { vector(2, usizeDt())
-        , enumDt()
-        , enumDt()
+        , vector(sizeof(enum Type), MPI_CHAR)
+        , vector(sizeof(enum State), MPI_CHAR)
         , sliceLocation()
-        , enumDt()
+        , vector(sizeof(enum Type), MPI_CHAR)
+        // TODO: Why this does not work on intel mpi?
+        /*, MPI_UINT64_T*/
         };
+
+    static_assert(sizeof(enum Type)  == 4, "Enum type not 4 bytes long");
+    static_assert(sizeof(enum State) == 4, "Enum State not 4 bytes long");
+    static_assert(sizeof(enum Name)  == 4, "Enum Name not 4 bytes long");
 
     // create the displacements from the info measurement struct
     size_t j = 0;
-    MPI_Aint displacements[n];
-    MPI_Get_address(measure.tuple.data(), &displacements[j++]);
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,             &base_address);
+    MPI_Get_address(&measure.tuple[0],    &displacements[j++]);
     MPI_Get_address(&measure.type,        &displacements[j++]);
     MPI_Get_address(&measure.state,       &displacements[j++]);
     MPI_Get_address(&measure.from,        &displacements[j++]);
     MPI_Get_address(&measure.recycling,   &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
@@ -179,20 +202,26 @@ struct mpi {
     LocalDatabaseElement measure;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n]
-      = { enumDt()
+      = { vector(sizeof(enum Name), MPI_CHAR)
         , sliceInfo()
         };
 
     // measure the displacements in the struct
     size_t j = 0;
-    MPI_Aint displacements[n];
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,      &base_address);
     MPI_Get_address(&measure.name, &displacements[j++]);
     MPI_Get_address(&measure.info, &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
+
+    static_assert( sizeof(LocalDatabaseElement) == sizeof(measure)
+                 , "Measure has bad size");
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
+    return vector(sizeof(LocalDatabaseElement), MPI_CHAR);
+    // TODO: write tests in order to know if this works
     return dt;
   }
 
@@ -218,32 +247,32 @@ PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType) {
 // Static utilities:1 ends here
 
 // [[file:../../atrip.org::*Static utilities][Static utilities:2]]
-static std::vector<Slice*> hasRecycledReferencingToIt
-  ( std::vector<Slice> &slices
+static std::vector<Slice<F>*> hasRecycledReferencingToIt
+  ( std::vector<Slice<F>> &slices
   , Info const& info
   ) {
-  std::vector<Slice*> result;
+  std::vector<Slice<F>*> result;
 
   for (auto& s: slices)
     if (  s.info.recycling == info.type
-        && s.info.tuple == info.tuple
-        && s.info.state == Recycled
-        ) result.push_back(&s);
+       && s.info.tuple == info.tuple
+       && s.info.state == Recycled
+       ) result.push_back(&s);
 
   return result;
 }
 // Static utilities:2 ends here
 
 // [[file:../../atrip.org::*Static utilities][Static utilities:3]]
-static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
+static Slice<F>& findOneByType(std::vector<Slice<F>> &slices, Slice<F>::Type type) {
     const auto sliceIt
       = std::find_if(slices.begin(), slices.end(),
-                      [&type](Slice const& s) {
-                        return type == s.info.type;
-                      });
+                     [&type](Slice<F> const& s) {
+                       return type == s.info.type;
+                     });
     WITH_CRAZY_DEBUG
     WITH_RANK
-      << "__slice__:find:looking for " << type << "\n";
+      << "\t__ looking for " << type << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error("Slice by type not found!");
     return *sliceIt;
@@ -251,80 +280,80 @@ static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
 // Static utilities:3 ends here
 
 // [[file:../../atrip.org::*Static utilities][Static utilities:4]]
-static Slice&
-findRecycledSource (std::vector<Slice> &slices, Slice::Info info) {
+static Slice<F>&
+findRecycledSource (std::vector<Slice<F>> &slices, Slice<F>::Info info) {
   const auto sliceIt
     = std::find_if(slices.begin(), slices.end(),
-                    [&info](Slice const& s) {
-                      return info.recycling == s.info.type
-                          && info.tuple == s.info.tuple
-                          && State::Recycled != s.info.state
-                          ;
-                    });
+                   [&info](Slice<F> const& s) {
+                     return info.recycling == s.info.type
+                         && info.tuple == s.info.tuple
+                         && State::Recycled != s.info.state
+                         ;
+                   });
 
   WITH_CRAZY_DEBUG
   WITH_RANK << "__slice__:find: recycling source of "
             << pretty_print(info) << "\n";
   if (sliceIt == slices.end())
     throw std::domain_error( "Slice not found: "
-                            + pretty_print(info)
-                            + " rank: "
-                            + pretty_print(Atrip::rank)
-                            );
+                           + pretty_print(info)
+                           + " rank: "
+                           + pretty_print(Atrip::rank)
+                           );
   WITH_RANK << "__slice__:find: " << pretty_print(sliceIt->info) << "\n";
   return *sliceIt;
 }
 // Static utilities:4 ends here
 
 // [[file:../../atrip.org::*Static utilities][Static utilities:5]]
-static Slice& findByTypeAbc
-  ( std::vector<Slice> &slices
-  , Slice::Type type
+static Slice<F>& findByTypeAbc
+  ( std::vector<Slice<F>> &slices
+  , Slice<F>::Type type
   , ABCTuple const& abc
   ) {
-    const auto tuple = Slice::subtupleBySlice(abc, type);
+    const auto tuple = Slice<F>::subtupleBySlice(abc, type);
     const auto sliceIt
       = std::find_if(slices.begin(), slices.end(),
-                      [&type, &tuple](Slice const& s) {
-                        return type == s.info.type
-                            && tuple == s.info.tuple
-                            ;
-                      });
+                     [&type, &tuple](Slice<F> const& s) {
+                       return type == s.info.type
+                           && tuple == s.info.tuple
+                           ;
+                     });
     WITH_CRAZY_DEBUG
     WITH_RANK << "__slice__:find:" << type << " and tuple "
               << pretty_print(tuple)
               << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error( "Slice not found: "
-                              + pretty_print(tuple)
-                              + ", "
-                              + pretty_print(type)
-                              + " rank: "
-                              + pretty_print(Atrip::rank)
-                              );
+                             + pretty_print(tuple)
+                             + ", "
+                             + pretty_print(type)
+                             + " rank: "
+                             + pretty_print(Atrip::rank)
+                             );
     return *sliceIt;
 }
 // Static utilities:5 ends here
 
 // [[file:../../atrip.org::*Static utilities][Static utilities:6]]
-static Slice& findByInfo(std::vector<Slice> &slices,
-                         Slice::Info const& info) {
+static Slice<F>& findByInfo(std::vector<Slice<F>> &slices,
+                         Slice<F>::Info const& info) {
   const auto sliceIt
     = std::find_if(slices.begin(), slices.end(),
-                   [&info](Slice const& s) {
+                   [&info](Slice<F> const& s) {
                      // TODO: maybe implement comparison in Info struct
                      return info.type == s.info.type
-                       && info.state == s.info.state
-                       && info.tuple == s.info.tuple
-                       && info.from.rank == s.info.from.rank
-                       && info.from.source == s.info.from.source
-                       ;
+                         && info.state == s.info.state
+                         && info.tuple == s.info.tuple
+                         && info.from.rank == s.info.from.rank
+                         && info.from.source == s.info.from.source
+                          ;
                    });
   WITH_CRAZY_DEBUG
-    WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
+  WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
   if (sliceIt == slices.end())
     throw std::domain_error( "Slice by info not found: "
-                             + pretty_print(info));
+                           + pretty_print(info));
   return *sliceIt;
 }
 // Static utilities:6 ends here
@@ -457,13 +486,15 @@ Slice(size_t size_)
 // Epilog:1 ends here
 
 // [[file:../../atrip.org::*Debug][Debug:1]]
-std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Location const& v) {
   // TODO: remove me
   out << "{.r(" << v.rank << "), .s(" << v.source << ")};";
   return out;
 }
 
-std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Info const& i) {
   out << "«t" << i.type << ", s" << i.state << "»"
       << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
       << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"

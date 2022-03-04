@@ -23,12 +23,12 @@
 
 using namespace atrip;
 
-bool RankMap::RANK_ROUND_ROBIN;
+template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
+template bool RankMap<double>::RANK_ROUND_ROBIN;
+template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
 Timings Atrip::chrono;
-size_t Atrip::networkSend;
-size_t Atrip::localSend;
 
 // user printing block
 IterationDescriptor IterationDescription::descriptor;
@@ -39,11 +39,10 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
-  Atrip::networkSend = 0;
-  Atrip::localSend = 0;
 }
 
-Atrip::Output Atrip::run(Atrip::Input const& in) {
+template <typename F>
+Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
@@ -56,21 +55,21 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<double> Tijk(No*No*No) // doubles only (see piecuch)
-                    , Zijk(No*No*No) // singles + doubles (see piecuch)
-                    // we need local copies of the following tensors on every
-                    // rank
-                    , epsi(No)
-                    , epsa(Nv)
-                    , Tai(No * Nv)
-                    ;
+  std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
+               , Zijk(No*No*No) // singles + doubles (see piecuch)
+               // we need local copies of the following tensors on every
+               // rank
+               , epsi(No)
+               , epsa(Nv)
+               , Tai(No * Nv)
+               ;
 
   in.ei->read_all(epsi.data());
   in.ea->read_all(epsa.data());
   in.Tph->read_all(Tai.data());
 
-  RankMap::RANK_ROUND_ROBIN = in.rankRoundRobin;
-  if (RankMap::RANK_ROUND_ROBIN) {
+  RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
+  if (RankMap<F>::RANK_ROUND_ROBIN) {
     LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
   } else {
     LOG(0,"Atrip")
@@ -101,25 +100,25 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   WITH_CHRONO("nv-slices",
     LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-    TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   )
 
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   WITH_CHRONO("nv-nv-slices",
     LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
-    ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   )
 
   // all tensors
-  std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
+  std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   // get tuples for the current rank
   TuplesDistribution *distribution;
 
-  if (in.tuplesDistribution == Atrip::Input::TuplesDistribution::NAIVE) {
+  if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
     LOG(0,"Atrip") << "Using the naive distribution\n";
     distribution = new NaiveDistribution();
   } else {
@@ -157,34 +156,36 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     };
 
 
+  using Database = typename Slice<F>::Database;
+  using LocalDatabase = typename Slice<F>::LocalDatabase;
   auto communicateDatabase
     = [ &unions
       , np
-      ] (ABCTuple const& abc, MPI_Comm const& c) -> Slice::Database {
+      ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
 
         WITH_CHRONO("db:comm:type:do",
-          auto MPI_LDB_ELEMENT = Slice::mpi::localDatabaseElement();
+          auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
         )
 
         WITH_CHRONO("db:comm:ldb",
-          Slice::LocalDatabase ldb;
+          typename Slice<F>::LocalDatabase ldb;
           for (auto const& tensor: unions) {
             auto const& tensorDb = tensor->buildLocalDatabase(abc);
             ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
           }
         )
 
-        Slice::Database db(np * ldb.size(), ldb[0]);
+        Database db(np * ldb.size(), ldb[0]);
 
         WITH_CHRONO("oneshot-db:comm:allgather",
         WITH_CHRONO("db:comm:allgather",
           MPI_Allgather( ldb.data()
-                      , ldb.size()
-                      , MPI_LDB_ELEMENT
-                      , db.data()
-                      , ldb.size()
-                      , MPI_LDB_ELEMENT
-                      , c);
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , db.data()
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , c);
         ))
 
         WITH_CHRONO("db:comm:type:free",
@@ -195,7 +196,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe] (Slice::Database const& db) {
+    = [&unions, &rank, &np, &universe] (Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -245,7 +246,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                 ;
       for (auto it = begin; it != end; ++it) {
         sendTag++;
-        Slice::LocalDatabaseElement const& el = *it;
+        typename Slice<F>::LocalDatabaseElement const& el = *it;
 
         if (el.info.from.rank != rank) continue;
 
@@ -287,8 +288,9 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     * double(No)
     * double(No)
     * (double(No) + double(Nv))
-    * 2
-    * 6
+    * 2.0
+    * (traits::isComplex<F>() ? 2.0 : 1.0)
+    * 6.0
     / 1e9
     ;
 
@@ -321,24 +323,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         });
       }
 
-      size_t networkSend;
-      MPI_Reduce(&Atrip::networkSend,
-                 &networkSend,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 universe);
-
-      size_t localSend;
-      MPI_Reduce(&Atrip::localSend,
-                 &localSend,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 universe);
-
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
@@ -346,10 +330,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         << "GF)"
         << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
-        << " :net " << networkSend
-        << " :loc " << localSend
-        << " :loc/net " << (double(localSend) / double(networkSend))
-        //<< " ===========================\n"
         << "\n";
 
 
@@ -418,34 +398,34 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       )))
       WITH_CHRONO("oneshot-doubles",
       WITH_CHRONO("doubles",
-        doublesContribution( abc, (size_t)No, (size_t)Nv
-                          // -- VABCI
-                          , abph.unwrapSlice(Slice::AB, abc)
-                          , abph.unwrapSlice(Slice::AC, abc)
-                          , abph.unwrapSlice(Slice::BC, abc)
-                          , abph.unwrapSlice(Slice::BA, abc)
-                          , abph.unwrapSlice(Slice::CA, abc)
-                          , abph.unwrapSlice(Slice::CB, abc)
-                          // -- VHHHA
-                          , hhha.unwrapSlice(Slice::A, abc)
-                          , hhha.unwrapSlice(Slice::B, abc)
-                          , hhha.unwrapSlice(Slice::C, abc)
-                          // -- TA
-                          , taphh.unwrapSlice(Slice::A, abc)
-                          , taphh.unwrapSlice(Slice::B, abc)
-                          , taphh.unwrapSlice(Slice::C, abc)
-                          // -- TABIJ
-                          , tabhh.unwrapSlice(Slice::AB, abc)
-                          , tabhh.unwrapSlice(Slice::AC, abc)
-                          , tabhh.unwrapSlice(Slice::BC, abc)
-                          // -- TIJK
-                          , Tijk.data()
-                          );
+        doublesContribution<F>( abc, (size_t)No, (size_t)Nv
+                              // -- VABCI
+                              , abph.unwrapSlice(Slice<F>::AB, abc)
+                              , abph.unwrapSlice(Slice<F>::AC, abc)
+                              , abph.unwrapSlice(Slice<F>::BC, abc)
+                              , abph.unwrapSlice(Slice<F>::BA, abc)
+                              , abph.unwrapSlice(Slice<F>::CA, abc)
+                              , abph.unwrapSlice(Slice<F>::CB, abc)
+                              // -- VHHHA
+                              , hhha.unwrapSlice(Slice<F>::A, abc)
+                              , hhha.unwrapSlice(Slice<F>::B, abc)
+                              , hhha.unwrapSlice(Slice<F>::C, abc)
+                              // -- TA
+                              , taphh.unwrapSlice(Slice<F>::A, abc)
+                              , taphh.unwrapSlice(Slice<F>::B, abc)
+                              , taphh.unwrapSlice(Slice<F>::C, abc)
+                              // -- TABIJ
+                              , tabhh.unwrapSlice(Slice<F>::AB, abc)
+                              , tabhh.unwrapSlice(Slice<F>::AC, abc)
+                              , tabhh.unwrapSlice(Slice<F>::BC, abc)
+                              // -- TIJK
+                              , Tijk.data()
+                              );
         WITH_RANK << iteration << "-th doubles done\n";
       ))
     }
 
-    // COMPUTE SINGLES =================================================== {{{1
+    // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
       WITH_CHRONO("oneshot-unwrap",
@@ -457,30 +437,30 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
       )
       WITH_CHRONO("singles",
-        singlesContribution( No, Nv, abc
-                          , Tai.data()
-                          , abhh.unwrapSlice(Slice::AB, abc)
-                          , abhh.unwrapSlice(Slice::AC, abc)
-                          , abhh.unwrapSlice(Slice::BC, abc)
-                          , Zijk.data());
+      singlesContribution<F>( No, Nv, abc
+                            , Tai.data()
+                            , abhh.unwrapSlice(Slice<F>::AB, abc)
+                            , abhh.unwrapSlice(Slice<F>::AC, abc)
+                            , abhh.unwrapSlice(Slice<F>::BC, abc)
+                            , Zijk.data());
       )
     }
 
 
-    // COMPUTE ENERGY ==================================================== {{{1
+    // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     if (!isFakeTuple(i)) {
       double tupleEnergy(0.);
 
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const double epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
+      const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
       WITH_CHRONO("energy",
         if ( distinct == 0)
-          tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
         else
-          tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
       )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
@@ -510,7 +490,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #endif
 
 
-    // CLEANUP UNIONS ===================================================={{{1
+    // CLEANUP UNIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
     OCD_Barrier(universe);
     if (abcNext) {
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
@@ -521,8 +501,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << " :abc " << pretty_print(abc)
                   << " :abcN " << pretty_print(*abcNext)
                   << "\n";
-        for (auto const& slice: u->slices)
-          WITH_RANK << "__gc__:guts:" << slice.info << "\n";
+        // for (auto const& slice: u->slices)
+        //   WITH_RANK << "__gc__:guts:" << slice.info << "\n";
         u->clearUnusedSlicesForNext(*abcNext);
 
         WITH_RANK << "__gc__: checking validity\n";
@@ -530,13 +510,13 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #ifdef HAVE_OCD
         // check for validity of the slices
         for (auto type: u->sliceTypes) {
-          auto tuple = Slice::subtupleBySlice(abc, type);
+          auto tuple = Slice<F>::subtupleBySlice(abc, type);
         for (auto& slice: u->slices) {
           if ( slice.info.type == type
              && slice.info.tuple == tuple
              && slice.isDirectlyFetchable()
              ) {
-            if (slice.info.state == Slice::Dispatched)
+            if (slice.info.state == Slice<F>::Dispatched)
               throw std::domain_error( "This slice should not be undispatched! "
                                      + pretty_print(slice.info));
           }
@@ -551,14 +531,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
     Atrip::chrono["iterations"].stop();
-    // ITERATION END ====================================================={{{1
+    // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
   }
     // END OF MAIN LOOP
 
   MPI_Barrier(universe);
 
-  // PRINT TUPLES ========================================================={{{1
+  // PRINT TUPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0,"Atrip") << "tuple energies" << "\n";
   for (size_t i = 0; i < np; i++) {
@@ -576,7 +556,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   }
 #endif
 
-  // COMMUNICATE THE ENERGIES ============================================={{{1
+  // COMMUNICATE THE ENERGIES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
   LOG(0,"Atrip") << "COMMUNICATING ENERGIES \n";
   double globalEnergy = 0;
   MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
@@ -602,4 +582,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   return { - globalEnergy };
 
 }
+// instantiate
+template Atrip::Output Atrip::run(Atrip::Input<double> const& in);
+template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
 // Main:1 ends here

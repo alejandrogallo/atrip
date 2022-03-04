@@ -20,13 +20,27 @@ The following section introduces the idea of a slice.
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/Blas.hpp>
 
 namespace atrip {
 
+template <typename FF> FF maybeConjugate(const FF a) { return a; }
+template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
 
+namespace traits {
+  template <typename FF> bool isComplex() { return false; }
+  template <> bool isComplex<Complex>() { return true; }
+namespace mpi {
+  template <typename FF> MPI_Datatype datatypeOf(void);
+  template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
+  template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
+}
+}
+
+
+template <typename F=double>
 struct Slice {
 
-  using F = double;
 #+end_src
 ** Introduction
 
@@ -204,7 +218,6 @@ to the energy, the \( T \) amplidutes will be sliced
 through one parameter for the particle contribution
 and through two parameters for the hole contribution.
 
-
 #+begin_src c++ :tangle (atrip-slice-h)
   enum Name
     { TA    = 100
@@ -223,8 +236,8 @@ represents and the internal information structure.
 
 #+begin_src c++ :tangle (atrip-slice-h)
   struct LocalDatabaseElement {
-    Slice::Name name;
-    Slice::Info info;
+    Slice<F>::Name name;
+    Slice<F>::Info info;
   };
 #+end_src
 
@@ -251,50 +264,60 @@ struct mpi {
     constexpr int n = 2;
     // create a sliceLocation to measure in the current architecture
     // the packing of the struct
-    Slice::Location measure;
+    Slice<F>::Location measure;
     MPI_Datatype dt;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n] = {usizeDt(), usizeDt()};
 
+    static_assert(sizeof(Slice<F>::Location) == 2 * sizeof(size_t),
+                  "The Location packing is wrong in your compiler");
+
     // measure the displacements in the struct
     size_t j = 0;
-    MPI_Aint displacements[n];
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,        &base_address);
     MPI_Get_address(&measure.rank,   &displacements[j++]);
     MPI_Get_address(&measure.source, &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
     return dt;
   }
 
-  static MPI_Datatype enumDt() { return MPI_INT; }
   static MPI_Datatype usizeDt() { return MPI_UINT64_T; }
 
   static MPI_Datatype sliceInfo () {
     constexpr int n = 5;
     MPI_Datatype dt;
-    Slice::Info measure;
+    Slice<F>::Info measure;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n]
       = { vector(2, usizeDt())
-        , enumDt()
-        , enumDt()
+        , vector(sizeof(enum Type), MPI_CHAR)
+        , vector(sizeof(enum State), MPI_CHAR)
         , sliceLocation()
-        , enumDt()
+        , vector(sizeof(enum Type), MPI_CHAR)
+        // TODO: Why this does not work on intel mpi?
+        /*, MPI_UINT64_T*/
         };
+
+    static_assert(sizeof(enum Type)  == 4, "Enum type not 4 bytes long");
+    static_assert(sizeof(enum State) == 4, "Enum State not 4 bytes long");
+    static_assert(sizeof(enum Name)  == 4, "Enum Name not 4 bytes long");
 
     // create the displacements from the info measurement struct
     size_t j = 0;
-    MPI_Aint displacements[n];
-    MPI_Get_address(measure.tuple.data(), &displacements[j++]);
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,             &base_address);
+    MPI_Get_address(&measure.tuple[0],    &displacements[j++]);
     MPI_Get_address(&measure.type,        &displacements[j++]);
     MPI_Get_address(&measure.state,       &displacements[j++]);
     MPI_Get_address(&measure.from,        &displacements[j++]);
     MPI_Get_address(&measure.recycling,   &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
@@ -307,20 +330,26 @@ struct mpi {
     LocalDatabaseElement measure;
     const std::vector<int> lengths(n, 1);
     const MPI_Datatype types[n]
-      = { enumDt()
+      = { vector(sizeof(enum Name), MPI_CHAR)
         , sliceInfo()
         };
 
     // measure the displacements in the struct
     size_t j = 0;
-    MPI_Aint displacements[n];
+    MPI_Aint base_address, displacements[n];
+    MPI_Get_address(&measure,      &base_address);
     MPI_Get_address(&measure.name, &displacements[j++]);
     MPI_Get_address(&measure.info, &displacements[j++]);
-    for (size_t i = 1; i < n; i++) displacements[i] -= displacements[0];
-    displacements[0] = 0;
+    for (size_t i = 0; i < n; i++)
+      displacements[i] = MPI_Aint_diff(displacements[i], base_address);
+
+    static_assert( sizeof(LocalDatabaseElement) == sizeof(measure)
+                 , "Measure has bad size");
 
     MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
     MPI_Type_commit(&dt);
+    return vector(sizeof(LocalDatabaseElement), MPI_CHAR);
+    // TODO: write tests in order to know if this works
     return dt;
   }
 
@@ -371,23 +400,24 @@ This function should therefore return a vector of pointers
 of slices referencing to the given slice's info, when
 the length of the vector is zero, then there are no dangling
 links.
+
 #+begin_src c++ :tangle (atrip-slice-h)
-static std::vector<Slice*> hasRecycledReferencingToIt
-  ( std::vector<Slice> &slices
+static std::vector<Slice<F>*> hasRecycledReferencingToIt
+  ( std::vector<Slice<F>> &slices
   , Info const& info
   ) {
-  std::vector<Slice*> result;
+  std::vector<Slice<F>*> result;
 
   for (auto& s: slices)
     if (  s.info.recycling == info.type
-        && s.info.tuple == info.tuple
-        && s.info.state == Recycled
-        ) result.push_back(&s);
+       && s.info.tuple == info.tuple
+       && s.info.state == Recycled
+       ) result.push_back(&s);
 
   return result;
 }
 #+end_src
-    
+
 The rest of the coming functions are utilities in order to find in a vector
 of slices a given slice by reference. Mostly they are merely convenience
 wrappers to the standard library function =std::find_if=.
@@ -399,15 +429,15 @@ therefore these functions will throw a =std::domain_error= if the
 given slice could not be found.
 
 #+begin_src c++ :tangle (atrip-slice-h)
-static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
+static Slice<F>& findOneByType(std::vector<Slice<F>> &slices, Slice<F>::Type type) {
     const auto sliceIt
       = std::find_if(slices.begin(), slices.end(),
-                      [&type](Slice const& s) {
-                        return type == s.info.type;
-                      });
+                     [&type](Slice<F> const& s) {
+                       return type == s.info.type;
+                     });
     WITH_CRAZY_DEBUG
     WITH_RANK
-      << "__slice__:find:looking for " << type << "\n";
+      << "\t__ looking for " << type << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error("Slice by type not found!");
     return *sliceIt;
@@ -415,80 +445,80 @@ static Slice& findOneByType(std::vector<Slice> &slices, Slice::Type type) {
 #+end_src
 
 #+begin_src c++ :tangle (atrip-slice-h)
-static Slice&
-findRecycledSource (std::vector<Slice> &slices, Slice::Info info) {
+static Slice<F>&
+findRecycledSource (std::vector<Slice<F>> &slices, Slice<F>::Info info) {
   const auto sliceIt
     = std::find_if(slices.begin(), slices.end(),
-                    [&info](Slice const& s) {
-                      return info.recycling == s.info.type
-                          && info.tuple == s.info.tuple
-                          && State::Recycled != s.info.state
-                          ;
-                    });
+                   [&info](Slice<F> const& s) {
+                     return info.recycling == s.info.type
+                         && info.tuple == s.info.tuple
+                         && State::Recycled != s.info.state
+                         ;
+                   });
 
   WITH_CRAZY_DEBUG
   WITH_RANK << "__slice__:find: recycling source of "
             << pretty_print(info) << "\n";
   if (sliceIt == slices.end())
     throw std::domain_error( "Slice not found: "
-                            + pretty_print(info)
-                            + " rank: "
-                            + pretty_print(Atrip::rank)
-                            );
+                           + pretty_print(info)
+                           + " rank: "
+                           + pretty_print(Atrip::rank)
+                           );
   WITH_RANK << "__slice__:find: " << pretty_print(sliceIt->info) << "\n";
   return *sliceIt;
 }
 #+end_src
 
 #+begin_src c++ :tangle (atrip-slice-h)
-static Slice& findByTypeAbc
-  ( std::vector<Slice> &slices
-  , Slice::Type type
+static Slice<F>& findByTypeAbc
+  ( std::vector<Slice<F>> &slices
+  , Slice<F>::Type type
   , ABCTuple const& abc
   ) {
-    const auto tuple = Slice::subtupleBySlice(abc, type);
+    const auto tuple = Slice<F>::subtupleBySlice(abc, type);
     const auto sliceIt
       = std::find_if(slices.begin(), slices.end(),
-                      [&type, &tuple](Slice const& s) {
-                        return type == s.info.type
-                            && tuple == s.info.tuple
-                            ;
-                      });
+                     [&type, &tuple](Slice<F> const& s) {
+                       return type == s.info.type
+                           && tuple == s.info.tuple
+                           ;
+                     });
     WITH_CRAZY_DEBUG
     WITH_RANK << "__slice__:find:" << type << " and tuple "
               << pretty_print(tuple)
               << "\n";
     if (sliceIt == slices.end())
       throw std::domain_error( "Slice not found: "
-                              + pretty_print(tuple)
-                              + ", "
-                              + pretty_print(type)
-                              + " rank: "
-                              + pretty_print(Atrip::rank)
-                              );
+                             + pretty_print(tuple)
+                             + ", "
+                             + pretty_print(type)
+                             + " rank: "
+                             + pretty_print(Atrip::rank)
+                             );
     return *sliceIt;
 }
 #+end_src
 
 #+begin_src c++ :tangle (atrip-slice-h)
-static Slice& findByInfo(std::vector<Slice> &slices,
-                         Slice::Info const& info) {
+static Slice<F>& findByInfo(std::vector<Slice<F>> &slices,
+                         Slice<F>::Info const& info) {
   const auto sliceIt
     = std::find_if(slices.begin(), slices.end(),
-                   [&info](Slice const& s) {
+                   [&info](Slice<F> const& s) {
                      // TODO: maybe implement comparison in Info struct
                      return info.type == s.info.type
-                       && info.state == s.info.state
-                       && info.tuple == s.info.tuple
-                       && info.from.rank == s.info.from.rank
-                       && info.from.source == s.info.from.source
-                       ;
+                         && info.state == s.info.state
+                         && info.tuple == s.info.tuple
+                         && info.from.rank == s.info.from.rank
+                         && info.from.source == s.info.from.source
+                          ;
                    });
   WITH_CRAZY_DEBUG
-    WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
+  WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
   if (sliceIt == slices.end())
     throw std::domain_error( "Slice by info not found: "
-                             + pretty_print(info));
+                           + pretty_print(info));
   return *sliceIt;
 }
 #+end_src
@@ -688,16 +718,18 @@ The main behaviour of the function should
 
 #+end_src
 
-** Debug                                                           :noexport:
+** Debug                                                          :noexport:
 
 #+begin_src c++ :tangle (atrip-slice-h)
-std::ostream& operator<<(std::ostream& out, Slice::Location const& v) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Location const& v) {
   // TODO: remove me
   out << "{.r(" << v.rank << "), .s(" << v.source << ")};";
   return out;
 }
 
-std::ostream& operator<<(std::ostream& out, Slice::Info const& i) {
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Info const& i) {
   out << "«t" << i.type << ", s" << i.state << "»"
       << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
       << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"
@@ -734,7 +766,7 @@ The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]]
   template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
-#if ATRIP_DEBUG > 1
+#if ATRIP_DEBUG > 2
     dbg::pretty_print(stream, std::forward<T>(value));
 #endif
     return stream.str();
@@ -789,6 +821,8 @@ rank.
 #include <atrip/Tuples.hpp>
 
 namespace atrip {
+
+  template <typename F=double>
   struct RankMap {
 
     static bool RANK_ROUND_ROBIN;
@@ -804,7 +838,7 @@ namespace atrip {
       , clusterInfo(getClusterInfo(comm))
     { assert(lengths.size() <= 2); }
 
-    size_t find(Slice::Location const& p) const noexcept {
+    size_t find(typename Slice<F>::Location const& p) const noexcept {
       if (RANK_ROUND_ROBIN) {
         return p.source * np + p.rank;
       } else {
@@ -834,11 +868,11 @@ namespace atrip {
       return source == nSources() && isPaddingRank(rank);
     }
 
-    Slice::Location
-    find(ABCTuple const& abc, Slice::Type sliceType) const {
+    typename Slice<F>::Location
+    find(ABCTuple const& abc, typename Slice<F>::Type sliceType) const {
       // tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB
       // tuple = {11, 0} when abc = {11, 8, 9} and sliceType = A
-      const auto tuple = Slice::subtupleBySlice(abc, sliceType);
+      const auto tuple = Slice<F>::subtupleBySlice(abc, sliceType);
 
       const size_t index
         = tuple[0]
@@ -907,8 +941,8 @@ namespace atrip {
 
 namespace atrip {
 
+  template <typename F=double>
   struct SliceUnion {
-    using F = double;
     using Tensor = CTF::Tensor<F>;
 
     virtual void
@@ -921,7 +955,7 @@ namespace atrip {
      * This means that there can be at most one slice with a given Ty_x_Tu.
      */
     void checkForDuplicates() const {
-      std::vector<Slice::Ty_x_Tu> tytus;
+      std::vector<typename Slice<F>::Ty_x_Tu> tytus;
       for (auto const& s: slices) {
         if (s.isFree()) continue;
         tytus.push_back({s.info.type, s.info.tuple});
@@ -934,13 +968,13 @@ namespace atrip {
 
     }
 
-    std::vector<Slice::Ty_x_Tu> neededSlices(ABCTuple const& abc) {
-      std::vector<Slice::Ty_x_Tu> needed(sliceTypes.size());
+    std::vector<typename Slice<F>::Ty_x_Tu> neededSlices(ABCTuple const& abc) {
+      std::vector<typename Slice<F>::Ty_x_Tu> needed(sliceTypes.size());
       // build the needed vector
       std::transform(sliceTypes.begin(), sliceTypes.end(),
                      needed.begin(),
-                     [&abc](Slice::Type const type) {
-                       auto tuple = Slice::subtupleBySlice(abc, type);
+                     [&abc](typename Slice<F>::Type const type) {
+                       auto tuple = Slice<F>::subtupleBySlice(abc, type);
                        return std::make_pair(type, tuple);
                      });
       return needed;
@@ -965,8 +999,9 @@ namespace atrip {
      * slices.
      *
      */
-    Slice::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
-      Slice::LocalDatabase result;
+    typename
+    Slice<F>::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
+      typename Slice<F>::LocalDatabase result;
 
       auto const needed = neededSlices(abc);
 
@@ -996,7 +1031,7 @@ namespace atrip {
           // need
           auto const& it
             = std::find_if(slices.begin(), slices.end(),
-                           [&tuple, &type](Slice const& other) {
+                           [&tuple, &type](Slice<F> const& other) {
                              return other.info.tuple == tuple
                                  && other.info.type == type
                                     // we only want another slice when it
@@ -1022,7 +1057,7 @@ namespace atrip {
         // tuple and that has a valid data pointer.
         auto const& recycleIt
           = std::find_if(slices.begin(), slices.end(),
-                         [&tuple, &type](Slice const& other) {
+                         [&tuple, &type](Slice<F> const& other) {
                            return other.info.tuple == tuple
                                && other.info.type != type
                                && other.isRecyclable()
@@ -1033,13 +1068,13 @@ namespace atrip {
         // (which should exist by construction :THINK)
         //
         if (recycleIt != slices.end()) {
-          auto& blank = Slice::findOneByType(slices, Slice::Blank);
+          auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
           // TODO: formalize this through a method to copy information
           //       from another slice
           blank.data = recycleIt->data;
           blank.info.type = type;
           blank.info.tuple = tuple;
-          blank.info.state = Slice::Recycled;
+          blank.info.state = Slice<F>::Recycled;
           blank.info.from = from;
           blank.info.recycling = recycleIt->info.type;
           result.push_back({name, blank.info});
@@ -1066,17 +1101,17 @@ namespace atrip {
                     << " for tuple " << tuple[0] << ", " << tuple[1]
                     << "\n"
                     ;
-          auto& blank = Slice::findOneByType(slices, Slice::Blank);
+          auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
           blank.info.type = type;
           blank.info.tuple = tuple;
           blank.info.from = from;
 
           // Handle self sufficiency
           blank.info.state = Atrip::rank == from.rank
-                           ? Slice::SelfSufficient
-                           : Slice::Fetch
+                           ? Slice<F>::SelfSufficient
+                           : Slice<F>::Fetch
                            ;
-          if (blank.info.state == Slice::SelfSufficient) {
+          if (blank.info.state == Slice<F>::SelfSufficient) {
             blank.data = sources[from.source].data();
           } else {
             if (freePointers.size() == 0) {
@@ -1126,7 +1161,7 @@ namespace atrip {
         // try to find the slice in the needed slices list
         auto const found
           = std::find_if(needed.begin(), needed.end(),
-                         [&slice] (Slice::Ty_x_Tu const& tytu) {
+                         [&slice] (typename Slice<F>::Ty_x_Tu const& tytu) {
                            return slice.info.tuple == tytu.second
                                && slice.info.type == tytu.first
                                ;
@@ -1145,7 +1180,7 @@ namespace atrip {
 
           // allow to gc unwrapped and recycled, never Fetch,
           // if we have a Fetch slice then something has gone very wrong.
-          if (!slice.isUnwrapped() && slice.info.state != Slice::Recycled)
+          if (!slice.isUnwrapped() && slice.info.state != Slice<F>::Recycled)
             throw
               std::domain_error("Trying to garbage collect "
                                 " a non-unwrapped slice! "
@@ -1166,13 +1201,13 @@ namespace atrip {
           //  - we should make sure that the data pointer of slice
           //    does not get freed.
           //
-          if (slice.info.state == Slice::Ready) {
+          if (slice.info.state == Slice<F>::Ready) {
             WITH_OCD WITH_RANK
               << "__gc__:" << "checking for data recycled dependencies\n";
             auto recycled
-              = Slice::hasRecycledReferencingToIt(slices, slice.info);
+              = Slice<F>::hasRecycledReferencingToIt(slices, slice.info);
             if (recycled.size()) {
-              Slice* newReady = recycled[0];
+              Slice<F>* newReady = recycled[0];
               WITH_OCD WITH_RANK
                 << "__gc__:" << "swaping recycled "
                 << pretty_print(newReady->info)
@@ -1197,8 +1232,8 @@ namespace atrip {
 
           // if the slice is self sufficient, do not dare touching the
           // pointer, since it is a pointer to our sources in our rank.
-          if (  slice.info.state == Slice::SelfSufficient
-             || slice.info.state == Slice::Recycled
+          if (  slice.info.state == Slice<F>::SelfSufficient
+             || slice.info.state == Slice<F>::Recycled
              ) {
             freeSlicePointer = false;
           }
@@ -1220,7 +1255,9 @@ namespace atrip {
           // at this point, let us blank the slice
           WITH_RANK << "~~~:cl(" << name << ")"
                     << " freeing up slice "
-                    << " info " << slice.info
+                    // TODO: make this possible because of Templates
+                    // TODO: there is a deduction error here
+                    // << " info " << slice.info
                     << "\n";
           slice.free();
         }
@@ -1230,13 +1267,13 @@ namespace atrip {
 
     // CONSTRUCTOR
     SliceUnion( Tensor const& sourceTensor
-              , std::vector<Slice::Type> sliceTypes_
+              , std::vector<typename Slice<F>::Type> sliceTypes_
               , std::vector<size_t> sliceLength_
               , std::vector<size_t> paramLength
               , size_t np
               , MPI_Comm child_world
               , MPI_Comm global_world
-              , Slice::Name name_
+              , typename Slice<F>::Name name_
               , size_t nSliceBuffers = 4
               )
               : rankMap(paramLength, np, global_world)
@@ -1251,14 +1288,14 @@ namespace atrip {
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers, sources[0])
-              //, slices(2 * sliceTypes.size(), Slice{ sources[0].size() })
+              //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
 
       slices
-        = std::vector<Slice>(2 * sliceTypes.size(), { sources[0].size() });
-      // TODO: think exactly ^------------------- about this number
+        = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
+      // TODO: think exactly    ^------------------- about this number
 
       // initialize the freePointers with the pointers to the buffers
       std::transform(sliceBuffers.begin(), sliceBuffers.end(),
@@ -1326,30 +1363,20 @@ namespace atrip {
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
-             , Slice::LocalDatabaseElement const& el
+             , typename Slice<F>::LocalDatabaseElement const& el
              , size_t tag) const noexcept {
       MPI_Request request;
       bool sendData_p = false;
       auto const& info = el.info;
 
-      if (info.state == Slice::Fetch) sendData_p = true;
+      if (info.state == Slice<F>::Fetch) sendData_p = true;
       // TODO: remove this because I have SelfSufficient
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-      switch (el.name) {
-        case Slice::Name::TA:
-        case Slice::Name::VIJKA:
-          if (otherRank / 48 == Atrip::rank / 48) {
-            Atrip::localSend++;
-          } else {
-            Atrip::networkSend++;
-          }
-      }
-
       MPI_Isend( sources[info.from.source].data()
                , sources[info.from.source].size()
-               , MPI_DOUBLE /* TODO: adapt this with traits */
+               , traits::mpi::datatypeOf<F>()
                , otherRank
                , tag
                , universe
@@ -1363,19 +1390,19 @@ namespace atrip {
     /**
      * \brief Receive asynchronously only if the state is Fetch
      */
-    void receive(Slice::Info const& info, size_t tag) noexcept {
-      auto& slice = Slice::findByInfo(slices, info);
+    void receive(typename Slice<F>::Info const& info, size_t tag) noexcept {
+      auto& slice = Slice<F>::findByInfo(slices, info);
 
       if (Atrip::rank == info.from.rank) return;
 
-      if (slice.info.state == Slice::Fetch) {
+      if (slice.info.state == Slice<F>::Fetch) {
         // TODO: do it through the slice class
-        slice.info.state = Slice::Dispatched;
+        slice.info.state = Slice<F>::Dispatched;
         MPI_Request request;
         slice.request = request;
         MPI_Irecv( slice.data
                  , slice.size
-                 , MPI_DOUBLE // TODO: Adapt this with traits
+                 , traits::mpi::datatypeOf<F>()
                  , info.from.rank
                  , tag
                  , universe
@@ -1389,42 +1416,42 @@ namespace atrip {
       for (auto type: sliceTypes) unwrapSlice(type, abc);
     }
 
-    F* unwrapSlice(Slice::Type type, ABCTuple const& abc) {
+    F* unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
       WITH_CRAZY_DEBUG
       WITH_RANK << "__unwrap__:slice " << type << " w n "
                 << name
                 << " abc" << pretty_print(abc)
                 << "\n";
-      auto& slice = Slice::findByTypeAbc(slices, type, abc);
-      WITH_RANK << "__unwrap__:info " << slice.info << "\n";
+      auto& slice = Slice<F>::findByTypeAbc(slices, type, abc);
+      //WITH_RANK << "__unwrap__:info " << slice.info << "\n";
       switch  (slice.info.state) {
-        case Slice::Dispatched:
+        case Slice<F>::Dispatched:
           WITH_RANK << "__unwrap__:Fetch: " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           slice.unwrapAndMarkReady();
           return slice.data;
           break;
-        case Slice::SelfSufficient:
+        case Slice<F>::SelfSufficient:
           WITH_RANK << "__unwrap__:SelfSufficient: " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return slice.data;
           break;
-        case Slice::Ready:
+        case Slice<F>::Ready:
           WITH_RANK << "__unwrap__:READY: UNWRAPPED ALREADY" << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return slice.data;
           break;
-        case Slice::Recycled:
+        case Slice<F>::Recycled:
           WITH_RANK << "__unwrap__:RECYCLED " << &slice
                     << " info " << pretty_print(slice.info)
                     << "\n";
           return unwrapSlice(slice.info.recycling, abc);
           break;
-        case Slice::Fetch:
-        case Slice::Acceptor:
+        case Slice<F>::Fetch:
+        case Slice<F>::Acceptor:
           throw std::domain_error("Can't unwrap an acceptor or fetch slice!");
           break;
         default:
@@ -1433,24 +1460,26 @@ namespace atrip {
       return slice.data;
     }
 
-    const RankMap rankMap;
+    const RankMap<F> rankMap;
     const MPI_Comm world;
     const MPI_Comm universe;
     const std::vector<size_t> sliceLength;
     std::vector< std::vector<F> > sources;
-    std::vector< Slice > slices;
-    Slice::Name name;
-    const std::vector<Slice::Type> sliceTypes;
+    std::vector< Slice<F> > slices;
+    typename Slice<F>::Name name;
+    const std::vector<typename Slice<F>::Type> sliceTypes;
     std::vector< std::vector<F> > sliceBuffers;
     std::set<F*> freePointers;
 
   };
 
-  SliceUnion&
-  unionByName(std::vector<SliceUnion*> const& unions, Slice::Name name) {
+  template <typename F=double>
+  SliceUnion<F>&
+  unionByName(std::vector<SliceUnion<F>*> const& unions,
+              typename Slice<F>::Name name) {
       const auto sliceUnionIt
         = std::find_if(unions.begin(), unions.end(),
-                      [&name](SliceUnion const* s) {
+                      [&name](SliceUnion<F> const* s) {
                         return name == s->name;
                       });
       if (sliceUnionIt == unions.end()) {
@@ -1729,7 +1758,8 @@ struct NaiveDistribution : public TuplesDistribution {
 
 
 ** Group and sort list
-*** Prolog                                                         :noexport:
+*** Prolog                                                        :noexport:
+
 #+begin_src c++ :tangle (atrip-tuples-h)
 namespace group_and_sort {
 #+end_src
@@ -1783,7 +1813,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     , container3d(nNodes * nNodes * nNodes)
     ;
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tGoing through all "
               << allTuples.size()
               << " tuples in "
@@ -1815,7 +1845,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 1-d containers\n";
   // DISTRIBUTE 1-d containers
   // every tuple which is only located at one node belongs to this node
@@ -1825,7 +1855,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     std::copy(_tuples.begin(), _tuples.end(), nodeTuples.begin());
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 2-d containers\n";
   // DISTRIBUTE 2-d containers
   //the tuples which are located at two nodes are half/half given to these nodes
@@ -1860,7 +1890,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
   }
 
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
     std::cout << "\tBuilding 3-d containers\n";
   // DISTRIBUTE 3-d containers
   for (size_t zyx = 0; zyx < container3d.size(); zyx++) {
@@ -1899,7 +1929,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   }
 
 
-  if (info.nodeId == 0) std::cout << "\tswapping tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\tswapping tuples...\n";
   /*
    *  sort part of group-and-sort algorithm
    *  every tuple on a given node is sorted in a way that
@@ -1929,16 +1959,16 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
     }
   }
 
-  if (info.nodeId == 0) std::cout << "\tsorting list of tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\tsorting list of tuples...\n";
   //now we sort the list of tuples
   std::sort(nodeTuples.begin(), nodeTuples.end());
 
-  if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
+  WITH_DBG if (info.nodeId == 0) std::cout << "\trestoring tuples...\n";
   // we bring the tuples abc back in the order a<b<c
   for (auto &t: nodeTuples)  std::sort(t.begin(), t.end());
 
 #if ATRIP_DEBUG > 1
-  if (info.nodeId == 0)
+  WITH_DBG if (info.nodeId == 0)
   std::cout << "checking for validity of " << nodeTuples.size() << std::endl;
   const bool anyInvalid
     = std::any_of(nodeTuples.begin(),
@@ -1947,6 +1977,7 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
   if (anyInvalid) throw "Some tuple is invalid in group-and-sort algorithm";
 #endif
 
+  WITH_DBG if (info.nodeId == 0) std::cout << "\treturning tuples...\n";
   return nodeTuples;
 
 }
@@ -2147,13 +2178,13 @@ struct Distribution : public TuplesDistribution {
 #+end_src
 
 
-*** Epilog                                                         :noexport:
+*** Epilog                                                        :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 } // namespace group_and_sort
 #+end_src
 
 
-** Epilog                                                          :noexport:
+** Epilog                                                         :noexport:
 #+begin_src c++ :tangle (atrip-tuples-h)
 }
 #+end_src
@@ -2170,12 +2201,13 @@ is sliced differently.
 
 namespace atrip {
 
+  template <typename F=double>
   void sliceIntoVector
-    ( std::vector<double> &v
-    , CTF::Tensor<double> &toSlice
+    ( std::vector<F> &v
+    , CTF::Tensor<F> &toSlice
     , std::vector<int64_t> const low
     , std::vector<int64_t> const up
-    , CTF::Tensor<double> const& origin
+    , CTF::Tensor<F> const& origin
     , std::vector<int64_t> const originLow
     , std::vector<int64_t> const originUp
     ) {
@@ -2202,155 +2234,159 @@ namespace atrip {
                  , origin_.low.data()
                  , origin_.up.data()
                  , 1.0);
-    memcpy(v.data(), toSlice.data, sizeof(double) * v.size());
+    memcpy(v.data(), toSlice.data, sizeof(F) * v.size());
 #endif
 
   }
 
 
-  struct TAPHH : public SliceUnion {
-    TAPHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct TAPHH : public SliceUnion<F> {
+    TAPHH( CTF::Tensor<F> const& sourceTensor
          , size_t No
          , size_t Nv
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion( sourceTensor
-                       , {Slice::A, Slice::B, Slice::C}
-                       , {Nv, No, No} // size of the slices
-                       , {Nv}
-                       , np
-                       , child_world
-                       , global_world
-                       , Slice::TA
-                       , 6) {
-           init(sourceTensor);
+         ) : SliceUnion<F>( sourceTensor
+                          , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+                          , {Nv, No, No} // size of the slices
+                          , {Nv}
+                          , np
+                          , child_world
+                          , global_world
+                          , Slice<F>::TA
+                          , 6) {
+           this->init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
-      const int Nv = sliceLength[0]
-              , No = sliceLength[1]
-              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it});
+      const int Nv = this->sliceLength[0]
+              , No = this->sliceLength[1]
+              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
               ;
 
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0, 0},    {Nv, No, No}
-                     , from, {a, 0, 0, 0}, {a+1, Nv, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0, 0},    {Nv, No, No}
+                        , from, {a, 0, 0, 0}, {a+1, Nv, No, No}
+                        );
 
     }
 
   };
 
 
-  struct HHHA : public SliceUnion {
-    HHHA( Tensor const& sourceTensor
+  template <typename F=double>
+  struct HHHA : public SliceUnion<F> {
+    HHHA( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , {Slice::A, Slice::B, Slice::C}
-                      , {No, No, No} // size of the slices
-                      , {Nv}         // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VIJKA
-                      , 6) {
-           init(sourceTensor);
+        ) : SliceUnion<F>( sourceTensor
+                         , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+                         , {No, No, No} // size of the slices
+                         , {Nv}         // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VIJKA
+                         , 6) {
+           this->init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
 
-      const int No = sliceLength[0]
-              , a = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+      const int No = this->sliceLength[0]
+              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0, 0},    {No, No, No}
-                     , from, {0, 0, 0, a}, {No, No, No, a+1}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0, 0},    {No, No, No}
+                        , from, {0, 0, 0, a}, {No, No, No, a+1}
+                        );
 
     }
   };
 
-  struct ABPH : public SliceUnion {
-    ABPH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct ABPH : public SliceUnion<F> {
+    ABPH( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , { Slice::AB, Slice::BC, Slice::AC
-                        , Slice::BA, Slice::CB, Slice::CA
-                        }
-                      , {Nv, No} // size of the slices
-                      , {Nv, Nv} // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VABCI
-                      , 2*6) {
-           init(sourceTensor);
+        ) : SliceUnion<F>( sourceTensor
+                         , { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
+                           , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
+                           }
+                         , {Nv, No} // size of the slices
+                         , {Nv, Nv} // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VABCI
+                         , 2*6) {
+           this->init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
-      const int Nv = sliceLength[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+      const int Nv = this->sliceLength[0]
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {Nv, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, Nv, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {Nv, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, Nv, No}
+                        );
 
     }
 
   };
 
-  struct ABHH : public SliceUnion {
-    ABHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct ABHH : public SliceUnion<F> {
+    ABHH( CTF::Tensor<F> const& sourceTensor
         , size_t No
         , size_t Nv
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion( sourceTensor
-                      , {Slice::AB, Slice::BC, Slice::AC}
-                      , {No, No} // size of the slices
-                      , {Nv, Nv} // size of the parametrization
-                      , np
-                      , child_world
-                      , global_world
-                      , Slice::VABIJ
-                      , 6) {
-           init(sourceTensor);
+        ) : SliceUnion<F>( sourceTensor
+                         , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+                         , {No, No} // size of the slices
+                         , {Nv, Nv} // size of the parametrization
+                         , np
+                         , child_world
+                         , global_world
+                         , Slice<F>::VABIJ
+                         , 6) {
+           this->init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
       const int Nv = from.lens[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {No, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {No, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
+                        );
 
 
     }
@@ -2358,39 +2394,40 @@ namespace atrip {
   };
 
 
-  struct TABHH : public SliceUnion {
-    TABHH( Tensor const& sourceTensor
+  template <typename F=double>
+  struct TABHH : public SliceUnion<F> {
+    TABHH( CTF::Tensor<F> const& sourceTensor
          , size_t No
          , size_t Nv
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion( sourceTensor
-                       , {Slice::AB, Slice::BC, Slice::AC}
-                       , {No, No} // size of the slices
-                       , {Nv, Nv} // size of the parametrization
-                       , np
-                       , child_world
-                       , global_world
-                       , Slice::TABIJ
-                       , 6) {
-           init(sourceTensor);
+         ) : SliceUnion<F>( sourceTensor
+                          , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+                          , {No, No} // size of the slices
+                          , {Nv, Nv} // size of the parametrization
+                          , np
+                          , child_world
+                          , global_world
+                          , Slice<F>::TABIJ
+                          , 6) {
+           this->init(sourceTensor);
          }
 
-    void sliceIntoBuffer(size_t it, Tensor &to, Tensor const& from) override {
+    void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
       // TODO: maybe generalize this with ABHH
 
       const int Nv = from.lens[0]
-              , No = sliceLength[1]
-              , el = rankMap.find({static_cast<size_t>(Atrip::rank), it})
+              , No = this->sliceLength[1]
+              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
               , a = el % Nv
               , b = el / Nv
               ;
 
-      sliceIntoVector( sources[it]
-                     , to,   {0, 0},       {No, No}
-                     , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                     );
+      sliceIntoVector<F>( this->sources[it]
+                        , to,   {0, 0},       {No, No}
+                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
+                        );
 
 
     }
@@ -2410,14 +2447,15 @@ namespace atrip {
 
 namespace atrip {
 
+  template <typename F=double>
   double getEnergyDistinct
-    ( const double epsabc
-    , std::vector<double> const& epsi
-    , std::vector<double> const& Tijk_
-    , std::vector<double> const& Zijk_
+    ( const F epsabc
+    , std::vector<F> const& epsi
+    , std::vector<F> const& Tijk_
+    , std::vector<F> const& Zijk_
     ) {
     constexpr size_t blockSize=16;
-    double energy(0.);
+    F energy(0.);
     const size_t No = epsi.size();
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min(No, kk+blockSize) );
@@ -2426,52 +2464,64 @@ namespace atrip {
         for (size_t ii(jj); ii<No; ii+=blockSize){
           const size_t iend( std::min( No, ii+blockSize) );
           for (size_t k(kk); k < kend; k++){
-            const double ek(epsi[k]);
+            const F ek(epsi[k]);
             const size_t jstart = jj > k ? jj : k;
             for (size_t j(jstart); j < jend; j++){
-              const double ej(epsi[j]);
-              double facjk( j == k ? 0.5 : 1.0);
+              F const ej(epsi[j]);
+              F const facjk = j == k ? F(0.5) : F(1.0);
               size_t istart = ii > j ? ii : j;
               for (size_t i(istart); i < iend; i++){
-                const double ei(epsi[i]);
-                double facij ( i==j ? 0.5 : 1.0);
-                double denominator(epsabc - ei - ej - ek);
-                double U(Zijk_[i + No*j + No*No*k]);
-                double V(Zijk_[i + No*k + No*No*j]);
-                double W(Zijk_[j + No*i + No*No*k]);
-                double X(Zijk_[j + No*k + No*No*i]);
-                double Y(Zijk_[k + No*i + No*No*j]);
-                double Z(Zijk_[k + No*j + No*No*i]);
-
-                double A(Tijk_[i + No*j + No*No*k]);
-                double B(Tijk_[i + No*k + No*No*j]);
-                double C(Tijk_[j + No*i + No*No*k]);
-                double D(Tijk_[j + No*k + No*No*i]);
-                double E(Tijk_[k + No*i + No*No*j]);
-                double F(Tijk_[k + No*j + No*No*i]);
-                double value(3.0*(A*U+B*V+C*W+D*X+E*Y+F*Z)
-                            +((U+X+Y)-2.0*(V+W+Z))*(A+D+E)
-                            +((V+W+Z)-2.0*(U+X+Y))*(B+C+F));
-                energy += 2.0*value / denominator * facjk * facij;
+                const F
+                    ei(epsi[i])
+                  , facij = i == j ? F(0.5) : F(1.0)
+                  , denominator(epsabc - ei - ej - ek)
+                  , U(Zijk_[i + No*j + No*No*k])
+                  , V(Zijk_[i + No*k + No*No*j])
+                  , W(Zijk_[j + No*i + No*No*k])
+                  , X(Zijk_[j + No*k + No*No*i])
+                  , Y(Zijk_[k + No*i + No*No*j])
+                  , Z(Zijk_[k + No*j + No*No*i])
+                  , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                  , B(maybeConjugate<F>(Tijk_[i + No*k + No*No*j]))
+                  , C(maybeConjugate<F>(Tijk_[j + No*i + No*No*k]))
+                  , D(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                  , E(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                  , _F(maybeConjugate<F>(Tijk_[k + No*j + No*No*i]))
+                  , value
+                    = 3.0 * ( A * U
+                              + B * V
+                              + C * W
+                              + D * X
+                              + E * Y
+                              + _F * Z )
+                   + ( ( U + X + Y )
+                     - 2.0 * ( V + W + Z )
+                     ) * ( A + D + E )
+                   + ( ( V + W + Z )
+                     - 2.0 * ( U + X + Y )
+                     ) * ( B + C + _F )
+                  ;
+                energy += 2.0 * value / denominator * facjk * facij;
               } // i
             } // j
           } // k
         } // ii
       } // jj
     } // kk
-    return energy;
+    return std::real(energy);
   }
 
 
+  template <typename F=double>
   double getEnergySame
-    ( const double epsabc
-    , std::vector<double> const& epsi
-    , std::vector<double> const& Tijk_
-    , std::vector<double> const& Zijk_
+    ( const F epsabc
+    , std::vector<F> const& epsi
+    , std::vector<F> const& Tijk_
+    , std::vector<F> const& Zijk_
     ) {
     constexpr size_t blockSize = 16;
     const size_t No = epsi.size();
-    double energy(0.);
+    F energy = F(0.);
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min( kk+blockSize, No) );
       for (size_t jj(kk); jj<No; jj+=blockSize){
@@ -2479,42 +2529,50 @@ namespace atrip {
         for (size_t ii(jj); ii<No; ii+=blockSize){
           const size_t iend( std::min( ii+blockSize, No) );
           for (size_t k(kk); k < kend; k++){
-            const double ek(epsi[k]);
+            const F ek(epsi[k]);
             const size_t jstart = jj > k ? jj : k;
             for(size_t j(jstart); j < jend; j++){
-              const double facjk( j == k ? 0.5 : 1.0);
-              const double ej(epsi[j]);
+              const F facjk( j == k ? F(0.5) : F(1.0));
+              const F ej(epsi[j]);
               const size_t istart = ii > j ? ii : j;
               for(size_t i(istart); i < iend; i++){
-                double ei(epsi[i]);
-                double facij ( i==j ? 0.5 : 1.0);
-                double denominator(epsabc - ei - ej - ek);
-                double U(Zijk_[i + No*j + No*No*k]);
-                double V(Zijk_[j + No*k + No*No*i]);
-                double W(Zijk_[k + No*i + No*No*j]);
-                double A(Tijk_[i + No*j + No*No*k]);
-                double B(Tijk_[j + No*k + No*No*i]);
-                double C(Tijk_[k + No*i + No*No*j]);
-                double value(3.0*( A*U + B*V + C*W) - (A+B+C)*(U+V+W));
-                energy += 2.0*value / denominator * facjk * facij;
+                const F
+                  ei(epsi[i])
+                , facij ( i==j ? F(0.5) : F(1.0))
+                , denominator(epsabc - ei - ej - ek)
+                , U(Zijk_[i + No*j + No*No*k])
+                , V(Zijk_[j + No*k + No*No*i])
+                , W(Zijk_[k + No*i + No*No*j])
+                , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                , B(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                , C(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                , value
+                  = F(3.0) * ( A * U
+                             + B * V
+                             + C * W
+                             )
+                  - ( A + B + C ) * ( U + V + W )
+                ;
+                energy += F(2.0) * value / denominator * facjk * facij;
               } // i
             } // j
           } // k
         } // ii
       } // jj
     } // kk
-    return energy;
+    return std::real(energy);
   }
 
+  template <typename F=double>
   void singlesContribution
     ( size_t No
     , size_t Nv
     , const ABCTuple &abc
-    , double const* Tph
-    , double const* VABij
-    , double const* VACij
-    , double const* VBCij
-    , double *Zijk
+    , F const* Tph
+    , F const* VABij
+    , F const* VACij
+    , F const* VBCij
+    , F *Zijk
     ) {
     const size_t a(abc[0]), b(abc[1]), c(abc[2]);
     for (size_t k=0; k < No; k++)
@@ -2529,80 +2587,84 @@ namespace atrip {
     }
   }
 
+  template <typename F=double>
   void doublesContribution
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
     // -- VABCI
-    , double const* VABph
-    , double const* VACph
-    , double const* VBCph
-    , double const* VBAph
-    , double const* VCAph
-    , double const* VCBph
+    , F const* VABph
+    , F const* VACph
+    , F const* VBCph
+    , F const* VBAph
+    , F const* VCAph
+    , F const* VCBph
     // -- VHHHA
-    , double const* VhhhA
-    , double const* VhhhB
-    , double const* VhhhC
+    , F const* VhhhA
+    , F const* VhhhB
+    , F const* VhhhC
     // -- TA
-    , double const* TAphh
-    , double const* TBphh
-    , double const* TCphh
+    , F const* TAphh
+    , F const* TBphh
+    , F const* TCphh
     // -- TABIJ
-    , double const* TABhh
-    , double const* TAChh
-    , double const* TBChh
+    , F const* TABhh
+    , F const* TAChh
+    , F const* TBChh
     // -- TIJK
-    , double *Tijk
+    , F *Tijk
     ) {
 
     const size_t a = abc[0], b = abc[1], c = abc[2]
               , NoNo = No*No, NoNv = No*Nv
               ;
 
-#if defined(ATRIP_USE_DGEMM)
-#define _IJK_(i, j, k) i + j*No + k*NoNo
-#define REORDER(__II, __JJ, __KK)                           \
-  WITH_CHRONO("double:reorder",                             \
-              for (size_t k = 0; k < No; k++)               \
-                for (size_t j = 0; j < No; j++)             \
-                  for (size_t i = 0; i < No; i++) {         \
-                    Tijk[_IJK_(i, j, k)]                    \
-                    += _t_buffer[_IJK_(__II, __JJ, __KK)];  \
-                  }                                         \
-              )
-#define DGEMM_PARTICLES(__A, __B)               \
-  atrip::dgemm_("T",                            \
-                "N",                            \
-                (int const*)&NoNo,              \
-                (int const*)&No,                \
-                (int const*)&Nv,                \
-                &one,                           \
-                __A,                            \
-                (int const*)&Nv,                \
-                __B,                            \
-                (int const*)&Nv,                \
-                &zero,                          \
-                _t_buffer.data(),               \
-                (int const*)&NoNo);
-#define DGEMM_HOLES(__A, __B, __TRANSB)         \
-  atrip::dgemm_("N",                            \
-                __TRANSB,                       \
-                (int const*)&NoNo,              \
-                (int const*)&No,                \
-                (int const*)&No,                \
-                &m_one,                         \
-                __A,                            \
-                (int const*)&NoNo,              \
-                __B,                            \
-                (int const*)&No,                \
-                &zero,                          \
-                _t_buffer.data(),               \
-                (int const*)&NoNo);
+  #if defined(ATRIP_USE_DGEMM)
+  #define _IJK_(i, j, k) i + j*No + k*NoNo
+  #define REORDER(__II, __JJ, __KK)                                 \
+    WITH_CHRONO("doubles:reorder",                                  \
+    for (size_t k = 0; k < No; k++)                                 \
+    for (size_t j = 0; j < No; j++)                                 \
+    for (size_t i = 0; i < No; i++) {                               \
+      Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
+    }                                                               \
+    )
+  #define DGEMM_PARTICLES(__A, __B)      \
+    atrip::xgemm<F>( "T"                 \
+                   , "N"                 \
+                   , (int const*)&NoNo   \
+                   , (int const*)&No     \
+                   , (int const*)&Nv     \
+                   , &one                \
+                   , __A                 \
+                   , (int const*)&Nv     \
+                   , __B                 \
+                   , (int const*)&Nv     \
+                   , &zero               \
+                   , _t_buffer.data()    \
+                   , (int const*)&NoNo   \
+                   );
+  #define DGEMM_HOLES(__A, __B, __TRANSB)    \
+    atrip::xgemm<F>( "N"                     \
+                   , __TRANSB                \
+                   , (int const*)&NoNo       \
+                   , (int const*)&No         \
+                   , (int const*)&No         \
+                   , &m_one                  \
+                   , __A                     \
+                   , (int const*)&NoNo       \
+                   , __B                     \
+                   , (int const*)&No         \
+                   , &zero                   \
+                   , _t_buffer.data()        \
+                   , (int const*)&NoNo       \
+                   );
+  #define MAYBE_CONJ(_conj, _buffer)                 \
+    for (size_t __i = 0; __i < NoNoNo; ++__i)        \
+      _conj[__i] = maybeConjugate<F>(_buffer[__i]);  \
 
-    using F = double;
     const size_t NoNoNo = No*NoNo;
-    std::vector<double> _t_buffer;
+    std::vector<F> _t_buffer;
     _t_buffer.reserve(NoNoNo);
     F one{1.0}, m_one{-1.0}, zero{0.0};
 
@@ -2611,81 +2673,92 @@ namespace atrip {
          Tijk[k] = 0.0;
        })
 
+    // TOMERGE: replace chronos
     WITH_CHRONO("doubles:holes",
-                { // Holes part ================================================
-                  // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
-                  WITH_CHRONO("doubles:holes:1",
-                              DGEMM_HOLES(VhhhC, TABhh, "N")
-                              REORDER(i, k, j)
-                              )
-                  // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
-                  WITH_CHRONO("doubles:holes:2",
-                              DGEMM_HOLES(VhhhC, TABhh, "T")
-                              REORDER(j, k, i)
-                              )
-                  // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
-                  WITH_CHRONO("doubles:holes:3",
-                              DGEMM_HOLES(VhhhB, TAChh, "N")
-                              REORDER(i, j, k)
-                              )
-                  // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
-                  WITH_CHRONO("doubles:holes:4",
-                              DGEMM_HOLES(VhhhB, TAChh, "T")
-                              REORDER(k, j, i)
-                              )
-                  // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
-                  WITH_CHRONO("doubles:holes:5",
-                              DGEMM_HOLES(VhhhA, TBChh, "N")
-                              REORDER(j, i, k)
-                              )
-                  // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
-                  WITH_CHRONO("doubles:holes:6",
-                              DGEMM_HOLES(VhhhA, TBChh, "T")
-                              REORDER(k, i, j)
-                              )
-                }
-                )
+      { // Holes part %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-      WITH_CHRONO("doubles:particles",
-                  { // Particle part ===========================================
-                    // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-                    WITH_CHRONO("doubles:particles:1",
-                                DGEMM_PARTICLES(TAphh, VBCph)
-                                REORDER(i, j, k)
-                                )
-                    // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-                    WITH_CHRONO("doubles:particles:2",
-                                DGEMM_PARTICLES(TAphh, VCBph)
-                                REORDER(i, k, j)
-                                )
-                    // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-                    WITH_CHRONO("doubles:particles:3",
-                                DGEMM_PARTICLES(TCphh, VABph)
-                                REORDER(k, i, j)
-                                )
-                    // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-                    WITH_CHRONO("doubles:particles:4",
-                                DGEMM_PARTICLES(TCphh, VBAph)
-                                REORDER(k, j, i)
-                                )
-                    // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-                    WITH_CHRONO("doubles:particles:5",
-                                DGEMM_PARTICLES(TBphh, VACph)
-                                REORDER(j, i, k)
-                                )
-                    // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-                    WITH_CHRONO("doubles:particles:6",
-                                DGEMM_PARTICLES(TBphh, VCAph)
-                                REORDER(j, k, i)
-                                )
-                  }
-                  )
+        std::vector<F> _vhhh(NoNoNo);
 
-#undef REORDER
-#undef DGEMM_HOLES
-#undef DGEMM_PARTICLES
-#undef _IJK_
-#else
+        // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
+        MAYBE_CONJ(_vhhh, VhhhC)
+        WITH_CHRONO("doubles:holes:1",
+          DGEMM_HOLES(_vhhh.data(), TABhh, "N")
+          REORDER(i, k, j)
+        )
+        // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
+        WITH_CHRONO("doubles:holes:2",
+          DGEMM_HOLES(_vhhh.data(), TABhh, "T")
+          REORDER(j, k, i)
+        )
+
+        // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
+        MAYBE_CONJ(_vhhh, VhhhB)
+        WITH_CHRONO("doubles:holes:3",
+          DGEMM_HOLES(_vhhh.data(), TAChh, "N")
+          REORDER(i, j, k)
+        )
+        // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
+        WITH_CHRONO("doubles:holes:4",
+          DGEMM_HOLES(_vhhh.data(), TAChh, "T")
+          REORDER(k, j, i)
+        )
+
+        // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
+        MAYBE_CONJ(_vhhh, VhhhA)
+        WITH_CHRONO("doubles:holes:5",
+          DGEMM_HOLES(_vhhh.data(), TBChh, "N")
+          REORDER(j, i, k)
+        )
+        // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
+        WITH_CHRONO("doubles:holes:6",
+          DGEMM_HOLES(_vhhh.data(), TBChh, "T")
+          REORDER(k, i, j)
+        )
+
+      }
+    )
+  #undef MAYBE_CONJ
+
+    WITH_CHRONO("doubles:particles",
+      { // Particle part %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
+        WITH_CHRONO("doubles:particles:1",
+          DGEMM_PARTICLES(TAphh, VBCph)
+          REORDER(i, j, k)
+        )
+        // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
+        WITH_CHRONO("doubles:particles:2",
+          DGEMM_PARTICLES(TAphh, VCBph)
+          REORDER(i, k, j)
+        )
+        // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
+        WITH_CHRONO("doubles:particles:3",
+          DGEMM_PARTICLES(TCphh, VABph)
+          REORDER(k, i, j)
+        )
+        // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
+        WITH_CHRONO("doubles:particles:4",
+          DGEMM_PARTICLES(TCphh, VBAph)
+          REORDER(k, j, i)
+        )
+        // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
+        WITH_CHRONO("doubles:particles:5",
+          DGEMM_PARTICLES(TBphh, VACph)
+          REORDER(j, i, k)
+        )
+        // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
+        WITH_CHRONO("doubles:particles:6",
+          DGEMM_PARTICLES(TBphh, VCAph)
+          REORDER(j, k, i)
+        )
+      }
+    )
+
+  #undef REORDER
+  #undef DGEMM_HOLES
+  #undef DGEMM_PARTICLES
+  #undef _IJK_
+  #else
     for (size_t k = 0; k < No; k++)
     for (size_t j = 0; j < No; j++)
     for (size_t i = 0; i < No; i++){
@@ -2742,6 +2815,9 @@ is mainly using the =DGEMM= function, which we declare as
 #+begin_src c++ :tangle (atrip-blas-h)
 #pragma once
 namespace atrip {
+
+  using Complex = std::complex<double>;
+
   extern "C" {
     void dgemm_(
       const char *transa,
@@ -2750,14 +2826,73 @@ namespace atrip {
       const int *n,
       const int *k,
       double *alpha,
-      const double *A,
+      const double *a,
       const int *lda,
-      const double *B,
+      const double *b,
       const int *ldb,
       double *beta,
-      double *C,
+      double *c,
       const int *ldc
     );
+
+    void zgemm_(
+      const char *transa,
+      const char *transb,
+      const int *m,
+      const int *n,
+      const int *k,
+      Complex *alpha,
+      const Complex *A,
+      const int *lda,
+      const Complex *B,
+      const int *ldb,
+      Complex *beta,
+      Complex *C,
+      const int *ldc
+    );
+  }
+
+
+  template <typename F=double>
+  void xgemm(const char *transa,
+             const char *transb,
+             const int *m,
+             const int *n,
+             const int *k,
+             F *alpha,
+             const F *A,
+             const int *lda,
+             const F *B,
+             const int *ldb,
+             F *beta,
+             F *C,
+             const int *ldc) {
+    dgemm_(transa, transb,
+           m, n, k,
+           alpha, A, lda,
+           B, ldb, beta,
+           C, ldc);
+  }
+
+  template <>
+  void xgemm(const char *transa,
+             const char *transb,
+             const int *m,
+             const int *n,
+             const int *k,
+             Complex *alpha,
+             const Complex *A,
+             const int *lda,
+             const Complex *B,
+             const int *ldb,
+             Complex *beta,
+             Complex *C,
+             const int *ldc) {
+    zgemm_(transa, transb,
+           m, n, k,
+           alpha, A, lda,
+           B, ldb, beta,
+           C, ldc);
   }
 }
 #+end_src
@@ -2788,12 +2923,11 @@ namespace atrip {
     static int rank;
     static int np;
     static Timings chrono;
-    static size_t networkSend;
-    static size_t localSend;
     static void init();
 
+    template <typename F=double>
     struct Input {
-      CTF::Tensor<double> *ei = nullptr
+      CTF::Tensor<F> *ei = nullptr
                         , *ea = nullptr
                         , *Tph = nullptr
                         , *Tpphh = nullptr
@@ -2801,13 +2935,13 @@ namespace atrip {
                         , *Vhhhp = nullptr
                         , *Vppph = nullptr
                         ;
-      Input& with_epsilon_i(CTF::Tensor<double> * t) { ei = t; return *this; }
-      Input& with_epsilon_a(CTF::Tensor<double> * t) { ea = t; return *this; }
-      Input& with_Tai(CTF::Tensor<double> * t) { Tph = t; return *this; }
-      Input& with_Tabij(CTF::Tensor<double> * t) { Tpphh = t; return *this; }
-      Input& with_Vabij(CTF::Tensor<double> * t) { Vpphh = t; return *this; }
-      Input& with_Vijka(CTF::Tensor<double> * t) { Vhhhp = t; return *this; }
-      Input& with_Vabci(CTF::Tensor<double> * t) { Vppph = t; return *this; }
+      Input& with_epsilon_i(CTF::Tensor<F> * t) { ei = t; return *this; }
+      Input& with_epsilon_a(CTF::Tensor<F> * t) { ea = t; return *this; }
+      Input& with_Tai(CTF::Tensor<F> * t) { Tph = t; return *this; }
+      Input& with_Tabij(CTF::Tensor<F> * t) { Tpphh = t; return *this; }
+      Input& with_Vabij(CTF::Tensor<F> * t) { Vpphh = t; return *this; }
+      Input& with_Vijka(CTF::Tensor<F> * t) { Vhhhp = t; return *this; }
+      Input& with_Vabci(CTF::Tensor<F> * t) { Vppph = t; return *this; }
 
       enum TuplesDistribution {
         NAIVE,
@@ -2822,13 +2956,13 @@ namespace atrip {
       ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
 
-
     };
 
     struct Output {
       double energy;
     };
-    static Output run(Input const& in);
+    template <typename F=double>
+    static Output run(Input<F> const& in);
   };
 
 }
@@ -2849,12 +2983,12 @@ namespace atrip {
 
 using namespace atrip;
 
-bool RankMap::RANK_ROUND_ROBIN;
+template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
+template bool RankMap<double>::RANK_ROUND_ROBIN;
+template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
 Timings Atrip::chrono;
-size_t Atrip::networkSend;
-size_t Atrip::localSend;
 
 // user printing block
 IterationDescriptor IterationDescription::descriptor;
@@ -2865,11 +2999,10 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
 void Atrip::init()  {
   MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
   MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
-  Atrip::networkSend = 0;
-  Atrip::localSend = 0;
 }
 
-Atrip::Output Atrip::run(Atrip::Input const& in) {
+template <typename F>
+Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
@@ -2882,21 +3015,21 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<double> Tijk(No*No*No) // doubles only (see piecuch)
-                    , Zijk(No*No*No) // singles + doubles (see piecuch)
-                    // we need local copies of the following tensors on every
-                    // rank
-                    , epsi(No)
-                    , epsa(Nv)
-                    , Tai(No * Nv)
-                    ;
+  std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
+               , Zijk(No*No*No) // singles + doubles (see piecuch)
+               // we need local copies of the following tensors on every
+               // rank
+               , epsi(No)
+               , epsa(Nv)
+               , Tai(No * Nv)
+               ;
 
   in.ei->read_all(epsi.data());
   in.ea->read_all(epsa.data());
   in.Tph->read_all(Tai.data());
 
-  RankMap::RANK_ROUND_ROBIN = in.rankRoundRobin;
-  if (RankMap::RANK_ROUND_ROBIN) {
+  RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
+  if (RankMap<F>::RANK_ROUND_ROBIN) {
     LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
   } else {
     LOG(0,"Atrip")
@@ -2927,25 +3060,25 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   WITH_CHRONO("nv-slices",
     LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-    TAPHH taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    HHHA  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   )
 
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   WITH_CHRONO("nv-nv-slices",
     LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
-    ABPH abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    ABHH abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    TABHH tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   )
 
   // all tensors
-  std::vector< SliceUnion* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
+  std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   // get tuples for the current rank
   TuplesDistribution *distribution;
 
-  if (in.tuplesDistribution == Atrip::Input::TuplesDistribution::NAIVE) {
+  if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
     LOG(0,"Atrip") << "Using the naive distribution\n";
     distribution = new NaiveDistribution();
   } else {
@@ -2983,34 +3116,36 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
     };
 
 
+  using Database = typename Slice<F>::Database;
+  using LocalDatabase = typename Slice<F>::LocalDatabase;
   auto communicateDatabase
     = [ &unions
       , np
-      ] (ABCTuple const& abc, MPI_Comm const& c) -> Slice::Database {
+      ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
 
         WITH_CHRONO("db:comm:type:do",
-          auto MPI_LDB_ELEMENT = Slice::mpi::localDatabaseElement();
+          auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
         )
 
         WITH_CHRONO("db:comm:ldb",
-          Slice::LocalDatabase ldb;
+          typename Slice<F>::LocalDatabase ldb;
           for (auto const& tensor: unions) {
             auto const& tensorDb = tensor->buildLocalDatabase(abc);
             ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
           }
         )
 
-        Slice::Database db(np * ldb.size(), ldb[0]);
+        Database db(np * ldb.size(), ldb[0]);
 
         WITH_CHRONO("oneshot-db:comm:allgather",
         WITH_CHRONO("db:comm:allgather",
           MPI_Allgather( ldb.data()
-                      , ldb.size()
-                      , MPI_LDB_ELEMENT
-                      , db.data()
-                      , ldb.size()
-                      , MPI_LDB_ELEMENT
-                      , c);
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , db.data()
+                       , ldb.size()
+                       , MPI_LDB_ELEMENT
+                       , c);
         ))
 
         WITH_CHRONO("db:comm:type:free",
@@ -3021,7 +3156,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe] (Slice::Database const& db) {
+    = [&unions, &rank, &np, &universe] (Database const& db) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -3071,7 +3206,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                 ;
       for (auto it = begin; it != end; ++it) {
         sendTag++;
-        Slice::LocalDatabaseElement const& el = *it;
+        typename Slice<F>::LocalDatabaseElement const& el = *it;
 
         if (el.info.from.rank != rank) continue;
 
@@ -3110,11 +3245,12 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 
   const double doublesFlops
     = double(No)
-    ,* double(No)
-    ,* double(No)
-    ,* (double(No) + double(Nv))
-    ,* 2
-    ,* 6
+    * double(No)
+    * double(No)
+    * (double(No) + double(Nv))
+    * 2.0
+    * (traits::isComplex<F>() ? 2.0 : 1.0)
+    * 6.0
     / 1e9
     ;
 
@@ -3147,24 +3283,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         });
       }
 
-      size_t networkSend;
-      MPI_Reduce(&Atrip::networkSend,
-                 &networkSend,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 universe);
-
-      size_t localSend;
-      MPI_Reduce(&Atrip::localSend,
-                 &localSend,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 universe);
-
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
@@ -3172,10 +3290,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         << "GF)"
         << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
         << "GF)"
-        << " :net " << networkSend
-        << " :loc " << localSend
-        << " :loc/net " << (double(localSend) / double(networkSend))
-        //<< " ===========================\n"
         << "\n";
 
 
@@ -3244,34 +3358,34 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       )))
       WITH_CHRONO("oneshot-doubles",
       WITH_CHRONO("doubles",
-        doublesContribution( abc, (size_t)No, (size_t)Nv
-                          // -- VABCI
-                          , abph.unwrapSlice(Slice::AB, abc)
-                          , abph.unwrapSlice(Slice::AC, abc)
-                          , abph.unwrapSlice(Slice::BC, abc)
-                          , abph.unwrapSlice(Slice::BA, abc)
-                          , abph.unwrapSlice(Slice::CA, abc)
-                          , abph.unwrapSlice(Slice::CB, abc)
-                          // -- VHHHA
-                          , hhha.unwrapSlice(Slice::A, abc)
-                          , hhha.unwrapSlice(Slice::B, abc)
-                          , hhha.unwrapSlice(Slice::C, abc)
-                          // -- TA
-                          , taphh.unwrapSlice(Slice::A, abc)
-                          , taphh.unwrapSlice(Slice::B, abc)
-                          , taphh.unwrapSlice(Slice::C, abc)
-                          // -- TABIJ
-                          , tabhh.unwrapSlice(Slice::AB, abc)
-                          , tabhh.unwrapSlice(Slice::AC, abc)
-                          , tabhh.unwrapSlice(Slice::BC, abc)
-                          // -- TIJK
-                          , Tijk.data()
-                          );
+        doublesContribution<F>( abc, (size_t)No, (size_t)Nv
+                              // -- VABCI
+                              , abph.unwrapSlice(Slice<F>::AB, abc)
+                              , abph.unwrapSlice(Slice<F>::AC, abc)
+                              , abph.unwrapSlice(Slice<F>::BC, abc)
+                              , abph.unwrapSlice(Slice<F>::BA, abc)
+                              , abph.unwrapSlice(Slice<F>::CA, abc)
+                              , abph.unwrapSlice(Slice<F>::CB, abc)
+                              // -- VHHHA
+                              , hhha.unwrapSlice(Slice<F>::A, abc)
+                              , hhha.unwrapSlice(Slice<F>::B, abc)
+                              , hhha.unwrapSlice(Slice<F>::C, abc)
+                              // -- TA
+                              , taphh.unwrapSlice(Slice<F>::A, abc)
+                              , taphh.unwrapSlice(Slice<F>::B, abc)
+                              , taphh.unwrapSlice(Slice<F>::C, abc)
+                              // -- TABIJ
+                              , tabhh.unwrapSlice(Slice<F>::AB, abc)
+                              , tabhh.unwrapSlice(Slice<F>::AC, abc)
+                              , tabhh.unwrapSlice(Slice<F>::BC, abc)
+                              // -- TIJK
+                              , Tijk.data()
+                              );
         WITH_RANK << iteration << "-th doubles done\n";
       ))
     }
 
-    // COMPUTE SINGLES =================================================== {{{1
+    // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
       WITH_CHRONO("oneshot-unwrap",
@@ -3283,30 +3397,30 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
         for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
       )
       WITH_CHRONO("singles",
-        singlesContribution( No, Nv, abc
-                          , Tai.data()
-                          , abhh.unwrapSlice(Slice::AB, abc)
-                          , abhh.unwrapSlice(Slice::AC, abc)
-                          , abhh.unwrapSlice(Slice::BC, abc)
-                          , Zijk.data());
+      singlesContribution<F>( No, Nv, abc
+                            , Tai.data()
+                            , abhh.unwrapSlice(Slice<F>::AB, abc)
+                            , abhh.unwrapSlice(Slice<F>::AC, abc)
+                            , abhh.unwrapSlice(Slice<F>::BC, abc)
+                            , Zijk.data());
       )
     }
 
 
-    // COMPUTE ENERGY ==================================================== {{{1
+    // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     if (!isFakeTuple(i)) {
       double tupleEnergy(0.);
 
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const double epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
+      const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
       WITH_CHRONO("energy",
         if ( distinct == 0)
-          tupleEnergy = getEnergyDistinct(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
         else
-          tupleEnergy = getEnergySame(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
       )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
@@ -3336,7 +3450,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #endif
 
 
-    // CLEANUP UNIONS ===================================================={{{1
+    // CLEANUP UNIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
     OCD_Barrier(universe);
     if (abcNext) {
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
@@ -3347,8 +3461,8 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
                   << " :abc " << pretty_print(abc)
                   << " :abcN " << pretty_print(*abcNext)
                   << "\n";
-        for (auto const& slice: u->slices)
-          WITH_RANK << "__gc__:guts:" << slice.info << "\n";
+        // for (auto const& slice: u->slices)
+        //   WITH_RANK << "__gc__:guts:" << slice.info << "\n";
         u->clearUnusedSlicesForNext(*abcNext);
 
         WITH_RANK << "__gc__: checking validity\n";
@@ -3356,13 +3470,13 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #ifdef HAVE_OCD
         // check for validity of the slices
         for (auto type: u->sliceTypes) {
-          auto tuple = Slice::subtupleBySlice(abc, type);
+          auto tuple = Slice<F>::subtupleBySlice(abc, type);
         for (auto& slice: u->slices) {
           if ( slice.info.type == type
              && slice.info.tuple == tuple
              && slice.isDirectlyFetchable()
              ) {
-            if (slice.info.state == Slice::Dispatched)
+            if (slice.info.state == Slice<F>::Dispatched)
               throw std::domain_error( "This slice should not be undispatched! "
                                      + pretty_print(slice.info));
           }
@@ -3377,14 +3491,14 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
       WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
     Atrip::chrono["iterations"].stop();
-    // ITERATION END ====================================================={{{1
+    // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
   }
     // END OF MAIN LOOP
 
   MPI_Barrier(universe);
 
-  // PRINT TUPLES ========================================================={{{1
+  // PRINT TUPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0,"Atrip") << "tuple energies" << "\n";
   for (size_t i = 0; i < np; i++) {
@@ -3402,7 +3516,7 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   }
 #endif
 
-  // COMMUNICATE THE ENERGIES ============================================={{{1
+  // COMMUNICATE THE ENERGIES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
   LOG(0,"Atrip") << "COMMUNICATING ENERGIES \n";
   double globalEnergy = 0;
   MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
@@ -3428,6 +3542,10 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
   return { - globalEnergy };
 
 }
+// instantiate
+template Atrip::Output Atrip::run(Atrip::Input<double> const& in);
+template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
+
 #+end_src
 
 
@@ -3439,6 +3557,9 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #include <functional>
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
+#ifndef ATRIP_DEBUG
+#  define ATRIP_DEBUG 1
+#endif
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM
 //#define ATRIP_PRINT_TUPLES
@@ -3474,7 +3595,6 @@ Atrip::Output Atrip::run(Atrip::Input const& in) {
 #  define DBG(...) dbg(__VA_ARGS__)
 #elif ATRIP_DEBUG == 2
 #  pragma message("WARNING: You have some debugging info for ABC triples")
-#  include <dbg.h>
 #  define OCD_Barrier(com)
 #  define WITH_OCD if (false)
 #  define WITH_ROOT if (atrip::Atrip::rank == 0)

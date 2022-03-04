@@ -17,6 +17,9 @@
 #include <functional>
 #define ATRIP_BENCHMARK
 //#define ATRIP_DONT_SLICE
+#ifndef ATRIP_DEBUG
+#  define ATRIP_DEBUG 1
+#endif
 //#define ATRIP_WORKLOAD_DUMP
 #define ATRIP_USE_DGEMM
 //#define ATRIP_PRINT_TUPLES
@@ -52,7 +55,6 @@
 #  define DBG(...) dbg(__VA_ARGS__)
 #elif ATRIP_DEBUG == 2
 #  pragma message("WARNING: You have some debugging info for ABC triples")
-#  include <dbg.h>
 #  define OCD_Barrier(com)
 #  define WITH_OCD if (false)
 #  define WITH_ROOT if (atrip::Atrip::rank == 0)
