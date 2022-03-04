@@ -50,32 +50,28 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: create doc
+    - name: Create index
       run: |
-        mkdir -p doc
-        cd doc
-        nix-shell --run 'make all'
         echo hello world > index.html
 
-    - name: create atrip.html
+    - name: Create atrip.html
       run: |
         nix-shell --run 'make html'
-        mv atrip.html doc/
+        mv atrip.html docs/
 
-    - name: create doxygen
+    - name: Doxygen
       run: |
-        nix-shell --run 'make -C ./doc all'
-        cd doc
+        cd docs
+        nix-shell --run 'make all'
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
          branch: gh-pages
-         folder: ./doc
+         folder: ./docs
 
     #- name: Upload dist
       #uses: actions/upload-artifacts@v1
       #with:
         #name: lib
         #path: ./lib
-
