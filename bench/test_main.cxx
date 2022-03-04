@@ -73,12 +73,12 @@ int main(int argc, char** argv) {
   // USER PRINTING TEST END
 
 
-  atrip::Atrip::Input::TuplesDistribution tuplesDistribution;
+  atrip::Atrip::Input<double>::TuplesDistribution tuplesDistribution;
   { using atrip::Atrip;
     if (tuplesDistributionString == "naive") {
-      tuplesDistribution = Atrip::Input::TuplesDistribution::NAIVE;
+      tuplesDistribution = Atrip::Input<double>::TuplesDistribution::NAIVE;
     } else if (tuplesDistributionString == "group") {
-      tuplesDistribution = Atrip::Input::TuplesDistribution::GROUP_AND_SORT;
+      tuplesDistribution = Atrip::Input<double>::TuplesDistribution::GROUP_AND_SORT;
     } else {
       std::cout << "--dist should be either naive or group\n";
       exit(1);
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   Vppph.fill_random(0, 1);
 
   atrip::Atrip::init();
-  const auto in = atrip::Atrip::Input()
+  const auto in = atrip::Atrip::Input<double>()
     // Tensors
     .with_epsilon_i(&ei)
     .with_epsilon_a(&ea)
