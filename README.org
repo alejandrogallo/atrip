@@ -2,3 +2,7 @@
 #+PROPERTY: header-args+ :noweb yes :comments noweb :mkdirp t
 
 * About this document
+
+
+- [[https://alejandrogallo.github.io/atrip/doxygen/html/index.html][Doxygen]]
+- [[https://alejandrogallo.github.io/atrip/atrip.html][Literate program]]
