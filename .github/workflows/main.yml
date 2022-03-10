@@ -67,6 +67,11 @@ jobs:
         cd docs
         nix-shell --run 'make sphinx'
 
+    - name: nojekyll
+      run: |
+        cd docs/build
+        touch .nojekyll
+
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
