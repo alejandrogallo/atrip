@@ -12,3 +12,5 @@ lib
 a.out
 *~
 config.mk
+
+/docs/doxygen-awesome-css/

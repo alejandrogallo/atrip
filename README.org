@@ -10,7 +10,11 @@
 
 * About this document
 
-- [[./atrip.org][Literate program]]
+You can find this project written as a literate program
+
+- [[https://alejandrogallo.github.io/atrip/atrip.html][Literate program]]
+
+or if you prefer reading the source code with Doxygen there is also a built
+of doxygen available:
 
 - [[https://alejandrogallo.github.io/atrip/doxygen/html/index.html][Doxygen]]
-- [[https://alejandrogallo.github.io/atrip/atrip.html][Literate program]]
