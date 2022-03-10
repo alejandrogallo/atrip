@@ -57,12 +57,17 @@ jobs:
         nix-shell --run 'python --version'
         nix-shell --run 'sphinx-build --version'
 
-    - name: Make all
+    - name: doxygen
       run: |
         cd docs
-        make all
+        nix-shell --run 'make doxygen'
 
-    - name: Make sphinx as the main
+    - name: sphinx
+      run: |
+        cd docs
+        nix-shell --run 'make sphinx'
+
+    - name: Make sphinx as the main page
       run: |
         cd docs
         mv sphinx/* .
