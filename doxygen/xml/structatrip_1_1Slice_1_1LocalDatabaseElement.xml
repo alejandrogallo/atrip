@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1Slice_1_1LocalDatabaseElement" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::Slice::LocalDatabaseElement</compoundname>
+    <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1LocalDatabaseElement_1a071e50a7b7adcf28955b3c0f40dea720" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::<ref refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806" kindref="member">Name</ref></type>
+        <definition>Slice&lt;F&gt;::Name atrip::Slice&lt; F &gt;::LocalDatabaseElement::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="115" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1LocalDatabaseElement_1a732f1eeac9b26b16d6fa40b022c1caa8" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::<ref refid="structatrip_1_1Slice_1_1Info" kindref="compound">Info</ref></type>
+        <definition>Slice&lt;F&gt;::Info atrip::Slice&lt; F &gt;::LocalDatabaseElement::info</definition>
+        <argsstring></argsstring>
+        <name>info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="116" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>atrip::Slice&lt; F &gt;::Info</label>
+        <link refid="structatrip_1_1Slice_1_1Info"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>from</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>atrip::Slice&lt; F &gt;::Location</label>
+        <link refid="structatrip_1_1Slice_1_1Location"/>
+      </node>
+      <node id="1">
+        <label>atrip::Slice&lt; F &gt;::LocalDatabaseElement</label>
+        <link refid="structatrip_1_1Slice_1_1LocalDatabaseElement"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>info</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="114" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="114" bodyend="117"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1Slice_1_1LocalDatabaseElement_1a732f1eeac9b26b16d6fa40b022c1caa8" prot="public" virt="non-virtual"><scope>atrip::Slice::LocalDatabaseElement</scope><name>info</name></member>
+      <member refid="structatrip_1_1Slice_1_1LocalDatabaseElement_1a071e50a7b7adcf28955b3c0f40dea720" prot="public" virt="non-virtual"><scope>atrip::Slice::LocalDatabaseElement</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1group__and__sort_1_1Info" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::group_and_sort::Info</compoundname>
+    <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::group_and_sort::Info::nNodes</definition>
+        <argsstring></argsstring>
+        <name>nNodes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="241" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="241" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::group_and_sort::Info::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="242" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="240" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="240" bodyend="243"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" prot="public" virt="non-virtual"><scope>atrip::group_and_sort::Info</scope><name>nNodes</name></member>
+      <member refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" prot="public" virt="non-virtual"><scope>atrip::group_and_sort::Info</scope><name>nodeId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

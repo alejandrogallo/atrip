@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1Slice_1_1mpi" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::Slice::mpi</compoundname>
+    <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1mpi_1a320eaefea6f5238ac8f490ba85c9bdb0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>MPI_Datatype</type>
+        <definition>static MPI_Datatype atrip::Slice&lt; F &gt;::mpi::vector</definition>
+        <argsstring>(size_t n, MPI_Datatype const &amp;DT)</argsstring>
+        <name>vector</name>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>MPI_Datatype const &amp;</type>
+          <declname>DT</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="128" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="128" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>MPI_Datatype</type>
+        <definition>static MPI_Datatype atrip::Slice&lt; F &gt;::mpi::sliceLocation</definition>
+        <argsstring>()</argsstring>
+        <name>sliceLocation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="135" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="135" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1mpi_1a86502ca13faa0b4238c6c8c8c2c834a7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>MPI_Datatype</type>
+        <definition>static MPI_Datatype atrip::Slice&lt; F &gt;::mpi::usizeDt</definition>
+        <argsstring>()</argsstring>
+        <name>usizeDt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="161" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="161" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1mpi_1ae2b01fb82834442096abf8d020b3cbf1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>MPI_Datatype</type>
+        <definition>static MPI_Datatype atrip::Slice&lt; F &gt;::mpi::sliceInfo</definition>
+        <argsstring>()</argsstring>
+        <name>sliceInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="163" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="163" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1mpi_1a683412cfa56e875df04fd82a3530f332" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>MPI_Datatype</type>
+        <definition>static MPI_Datatype atrip::Slice&lt; F &gt;::mpi::localDatabaseElement</definition>
+        <argsstring>()</argsstring>
+        <name>localDatabaseElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="199" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="199" bodyend="226"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="126" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="126" bodyend="228"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1Slice_1_1mpi_1a683412cfa56e875df04fd82a3530f332" prot="public" virt="non-virtual"><scope>atrip::Slice::mpi</scope><name>localDatabaseElement</name></member>
+      <member refid="structatrip_1_1Slice_1_1mpi_1ae2b01fb82834442096abf8d020b3cbf1" prot="public" virt="non-virtual"><scope>atrip::Slice::mpi</scope><name>sliceInfo</name></member>
+      <member refid="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" prot="public" virt="non-virtual"><scope>atrip::Slice::mpi</scope><name>sliceLocation</name></member>
+      <member refid="structatrip_1_1Slice_1_1mpi_1a86502ca13faa0b4238c6c8c8c2c834a7" prot="public" virt="non-virtual"><scope>atrip::Slice::mpi</scope><name>usizeDt</name></member>
+      <member refid="structatrip_1_1Slice_1_1mpi_1a320eaefea6f5238ac8f490ba85c9bdb0" prot="public" virt="non-virtual"><scope>atrip::Slice::mpi</scope><name>vector</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

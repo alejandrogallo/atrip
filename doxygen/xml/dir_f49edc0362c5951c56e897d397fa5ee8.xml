@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="dir_f49edc0362c5951c56e897d397fa5ee8" kind="dir">
+    <compoundname>atrip</compoundname>
+    <innerfile refid="Atrip_8hpp">Atrip.hpp</innerfile>
+    <innerfile refid="Blas_8hpp">Blas.hpp</innerfile>
+    <innerfile refid="Debug_8hpp">Debug.hpp</innerfile>
+    <innerfile refid="Equations_8hpp">Equations.hpp</innerfile>
+    <innerfile refid="RankMap_8hpp">RankMap.hpp</innerfile>
+    <innerfile refid="Slice_8hpp">Slice.hpp</innerfile>
+    <innerfile refid="SliceUnion_8hpp">SliceUnion.hpp</innerfile>
+    <innerfile refid="Tuples_8hpp">Tuples.hpp</innerfile>
+    <innerfile refid="Unions_8hpp">Unions.hpp</innerfile>
+    <innerfile refid="Utils_8hpp">Utils.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/"/>
+  </compounddef>
+</doxygen>

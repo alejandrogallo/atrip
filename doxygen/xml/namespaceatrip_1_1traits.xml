@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="namespaceatrip_1_1traits" kind="namespace" language="C++">
+    <compoundname>atrip::traits</compoundname>
+    <innernamespace refid="namespaceatrip_1_1traits_1_1mpi">atrip::traits::mpi</innernamespace>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceatrip_1_1traits_1ac5c317b719c6ea751a3da3cb11a26a2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FF</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool atrip::traits::isComplex</definition>
+        <argsstring>()</argsstring>
+        <name>isComplex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="32" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1_1traits_1acb15e4dc55bc4d3c9277ac5ed40b8ef4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool atrip::traits::isComplex&lt; Complex &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>isComplex&lt; Complex &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="33" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="31" column="1"/>
+  </compounddef>
+</doxygen>

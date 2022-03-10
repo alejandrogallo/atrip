@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="namespaceatrip_1_1group__and__sort" kind="namespace" language="C++">
+    <compoundname>atrip::group_and_sort</compoundname>
+    <innerclass refid="structatrip_1_1group__and__sort_1_1Distribution" prot="public">atrip::group_and_sort::Distribution</innerclass>
+    <innerclass refid="structatrip_1_1group__and__sort_1_1Info" prot="public">atrip::group_and_sort::Info</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t atrip::group_and_sort::isOnNode</definition>
+        <argsstring>(size_t tuple, size_t nNodes)</argsstring>
+        <name>isOnNode</name>
+        <param>
+          <type>size_t</type>
+          <declname>tuple</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nNodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="226" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="226" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; atrip::group_and_sort::getTupleNodes</definition>
+        <argsstring>(ABCTuple const &amp;t, size_t nNodes)</argsstring>
+        <name>getTupleNodes</name>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nNodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="231" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="231" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref></type>
+        <definition>ABCTuples atrip::group_and_sort::specialDistribution</definition>
+        <argsstring>(Info const &amp;info, ABCTuples const &amp;allTuples)</argsstring>
+        <name>specialDistribution</name>
+        <param>
+          <type><ref refid="structatrip_1_1group__and__sort_1_1Info" kindref="compound">Info</ref> const &amp;</type>
+          <declname>info</declname>
+        </param>
+        <param>
+          <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref> const &amp;</type>
+          <declname>allTuples</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="247" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="247" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> &gt;</type>
+        <definition>std::vector&lt;ABCTuple&gt; atrip::group_and_sort::main</definition>
+        <argsstring>(MPI_Comm universe, size_t Nv)</argsstring>
+        <name>main</name>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>universe</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>Nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="429" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="429" bodyend="535"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="218" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1group__and__sort_1_1Distribution" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::group_and_sort::Distribution</compoundname>
+    <basecompoundref refid="structatrip_1_1TuplesDistribution" prot="public" virt="non-virtual">atrip::TuplesDistribution</basecompoundref>
+    <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref></type>
+        <definition>ABCTuples atrip::group_and_sort::Distribution::getTuples</definition>
+        <argsstring>(size_t Nv, MPI_Comm universe) override</argsstring>
+        <name>getTuples</name>
+        <reimplements refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c">getTuples</reimplements>
+        <param>
+          <type>size_t</type>
+          <declname>Nv</declname>
+        </param>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>universe</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="540" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="540" bodyend="542"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>atrip::group_and_sort::Distribution</label>
+        <link refid="structatrip_1_1group__and__sort_1_1Distribution"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>atrip::TuplesDistribution</label>
+        <link refid="structatrip_1_1TuplesDistribution"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::group_and_sort::Distribution</label>
+        <link refid="structatrip_1_1group__and__sort_1_1Distribution"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>atrip::TuplesDistribution</label>
+        <link refid="structatrip_1_1TuplesDistribution"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="539" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="539" bodyend="543"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" prot="public" virt="virtual"><scope>atrip::group_and_sort::Distribution</scope><name>getTuples</name></member>
+      <member refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" prot="public" virt="virtual"><scope>atrip::group_and_sort::Distribution</scope><name>tupleIsFake</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

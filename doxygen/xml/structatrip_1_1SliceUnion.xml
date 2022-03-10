@@ -1,0 +1,474 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1SliceUnion" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>atrip::SliceUnion</compoundname>
+    <includes refid="SliceUnion_8hpp" local="no">SliceUnion.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename F</type>
+        <defval>double</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" prot="public" static="no">
+        <type>CTF::Tensor&lt; F &gt;</type>
+        <definition>using atrip::SliceUnion&lt; F &gt;::Tensor =  CTF::Tensor&lt;F&gt;</definition>
+        <argsstring></argsstring>
+        <name>Tensor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="25" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" prot="public" static="no" mutable="no">
+        <type>const <ref refid="structatrip_1_1RankMap" kindref="compound">RankMap</ref>&lt; F &gt;</type>
+        <definition>const RankMap&lt;F&gt; atrip::SliceUnion&lt; F &gt;::rankMap</definition>
+        <argsstring></argsstring>
+        <name>rankMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="542" column="19" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="542" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" prot="public" static="no" mutable="no">
+        <type>const MPI_Comm</type>
+        <definition>const MPI_Comm atrip::SliceUnion&lt; F &gt;::world</definition>
+        <argsstring></argsstring>
+        <name>world</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="543" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="543" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" prot="public" static="no" mutable="no">
+        <type>const MPI_Comm</type>
+        <definition>const MPI_Comm atrip::SliceUnion&lt; F &gt;::universe</definition>
+        <argsstring></argsstring>
+        <name>universe</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="544" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="544" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; size_t &gt;</type>
+        <definition>const std::vector&lt;size_t&gt; atrip::SliceUnion&lt; F &gt;::sliceLength</definition>
+        <argsstring></argsstring>
+        <name>sliceLength</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="545" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="545" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; F &gt; &gt;</type>
+        <definition>std::vector&lt; std::vector&lt;F&gt; &gt; atrip::SliceUnion&lt; F &gt;::sources</definition>
+        <argsstring></argsstring>
+        <name>sources</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="546" column="17" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="546" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &gt;</type>
+        <definition>std::vector&lt; Slice&lt;F&gt; &gt; atrip::SliceUnion&lt; F &gt;::slices</definition>
+        <argsstring></argsstring>
+        <name>slices</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="547" column="17" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="547" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Name</type>
+        <definition>Slice&lt;F&gt;::Name atrip::SliceUnion&lt; F &gt;::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="548" column="27" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="548" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Type &gt;</type>
+        <definition>const std::vector&lt;typename Slice&lt;F&gt;::Type&gt; atrip::SliceUnion&lt; F &gt;::sliceTypes</definition>
+        <argsstring></argsstring>
+        <name>sliceTypes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="549" column="24" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="549" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; F &gt; &gt;</type>
+        <definition>std::vector&lt; std::vector&lt;F&gt; &gt; atrip::SliceUnion&lt; F &gt;::sliceBuffers</definition>
+        <argsstring></argsstring>
+        <name>sliceBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="550" column="17" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="550" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" prot="public" static="no" mutable="no">
+        <type>std::set&lt; F * &gt;</type>
+        <definition>std::set&lt;F*&gt; atrip::SliceUnion&lt; F &gt;::freePointers</definition>
+        <argsstring></argsstring>
+        <name>freePointers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="551" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="551" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void atrip::SliceUnion&lt; F &gt;::sliceIntoBuffer</definition>
+        <argsstring>(size_t iteration, Tensor &amp;to, Tensor const &amp;from)=0</argsstring>
+        <name>sliceIntoBuffer</name>
+        <param>
+          <type>size_t</type>
+          <declname>iteration</declname>
+        </param>
+        <param>
+          <type><ref refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kindref="member">Tensor</ref> &amp;</type>
+          <declname>to</declname>
+        </param>
+        <param>
+          <type><ref refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kindref="member">Tensor</ref> const &amp;</type>
+          <declname>from</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="28" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::checkForDuplicates</definition>
+        <argsstring>() const</argsstring>
+        <name>checkForDuplicates</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="36" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="36" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Ty_x_Tu &gt;</type>
+        <definition>std::vector&lt;typename Slice&lt;F&gt;::Ty_x_Tu&gt; atrip::SliceUnion&lt; F &gt;::neededSlices</definition>
+        <argsstring>(ABCTuple const &amp;abc)</argsstring>
+        <name>neededSlices</name>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="50" column="18" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="50" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::LocalDatabase</type>
+        <definition>Slice&lt;F&gt;::LocalDatabase atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</definition>
+        <argsstring>(ABCTuple const &amp;abc)</argsstring>
+        <name>buildLocalDatabase</name>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="82" column="27" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="82" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</definition>
+        <argsstring>(ABCTuple const &amp;abc)</argsstring>
+        <name>clearUnusedSlicesForNext</name>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="231" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="231" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>atrip::SliceUnion&lt; F &gt;::SliceUnion</definition>
+        <argsstring>(Tensor const &amp;sourceTensor, std::vector&lt; typename Slice&lt; F &gt;::Type &gt; sliceTypes_, std::vector&lt; size_t &gt; sliceLength_, std::vector&lt; size_t &gt; paramLength, size_t np, MPI_Comm child_world, MPI_Comm global_world, typename Slice&lt; F &gt;::Name name_, size_t nSliceBuffers=4)</argsstring>
+        <name>SliceUnion</name>
+        <param>
+          <type><ref refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kindref="member">Tensor</ref> const &amp;</type>
+          <declname>sourceTensor</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Type &gt;</type>
+          <declname>sliceTypes_</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt;</type>
+          <declname>sliceLength_</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt;</type>
+          <declname>paramLength</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>child_world</declname>
+        </param>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>global_world</declname>
+        </param>
+        <param>
+          <type>typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Name</type>
+          <declname>name_</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nSliceBuffers</declname>
+          <defval>4</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="348" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="348" bodyend="412"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::init</definition>
+        <argsstring>(Tensor const &amp;sourceTensor)</argsstring>
+        <name>init</name>
+        <param>
+          <type><ref refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kindref="member">Tensor</ref> const &amp;</type>
+          <declname>sourceTensor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="414" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="414" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::send</definition>
+        <argsstring>(size_t otherRank, typename Slice&lt; F &gt;::LocalDatabaseElement const &amp;el, size_t tag) const noexcept</argsstring>
+        <name>send</name>
+        <param>
+          <type>size_t</type>
+          <declname>otherRank</declname>
+        </param>
+        <param>
+          <type>typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::LocalDatabaseElement const &amp;</type>
+          <declname>el</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>tag</declname>
+        </param>
+        <briefdescription>
+<para>Send asynchronously only if the state is Fetch. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="444" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="444" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::receive</definition>
+        <argsstring>(typename Slice&lt; F &gt;::Info const &amp;info, size_t tag) noexcept</argsstring>
+        <name>receive</name>
+        <param>
+          <type>typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Info const &amp;</type>
+          <declname>info</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>tag</declname>
+        </param>
+        <briefdescription>
+<para>Receive asynchronously only if the state is Fetch. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="472" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="472" bodyend="492"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void atrip::SliceUnion&lt; F &gt;::unwrapAll</definition>
+        <argsstring>(ABCTuple const &amp;abc)</argsstring>
+        <name>unwrapAll</name>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="494" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="494" bodyend="496"/>
+      </memberdef>
+      <memberdef kind="function" id="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>F *</type>
+        <definition>F* atrip::SliceUnion&lt; F &gt;::unwrapSlice</definition>
+        <argsstring>(typename Slice&lt; F &gt;::Type type, ABCTuple const &amp;abc)</argsstring>
+        <name>unwrapSlice</name>
+        <param>
+          <type>typename <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Type</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="498" column="7" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="498" bodyend="540"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>atrip::ClusterInfo</label>
+        <link refid="structatrip_1_1ClusterInfo"/>
+      </node>
+      <node id="2">
+        <label>atrip::RankMap&lt; double &gt;</label>
+        <link refid="structatrip_1_1RankMap"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>clusterInfo</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>atrip::Slice&lt; F &gt;::Info</label>
+        <link refid="structatrip_1_1Slice_1_1Info"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>from</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>atrip::SliceUnion&lt; F &gt;</label>
+        <link refid="structatrip_1_1SliceUnion"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>rankMap</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>atrip::Slice&lt; F &gt;::Location</label>
+        <link refid="structatrip_1_1Slice_1_1Location"/>
+      </node>
+      <node id="4">
+        <label>atrip::Slice&lt; double &gt;</label>
+        <link refid="structatrip_1_1Slice"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>info</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="24" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="24" bodyend="553"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>buildLocalDatabase</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>checkForDuplicates</name></member>
+      <member refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>clearUnusedSlicesForNext</name></member>
+      <member refid="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>freePointers</name></member>
+      <member refid="structatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>init</name></member>
+      <member refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>name</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>neededSlices</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>rankMap</name></member>
+      <member refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>receive</name></member>
+      <member refid="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>send</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>sliceBuffers</name></member>
+      <member refid="structatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" prot="public" virt="pure-virtual"><scope>atrip::SliceUnion</scope><name>sliceIntoBuffer</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>sliceLength</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>slices</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>sliceTypes</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>SliceUnion</name></member>
+      <member refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>sources</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>Tensor</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>universe</name></member>
+      <member refid="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>unwrapAll</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>unwrapSlice</name></member>
+      <member refid="structatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" prot="public" virt="non-virtual"><scope>atrip::SliceUnion</scope><name>world</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

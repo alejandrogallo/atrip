@@ -1,0 +1,302 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.20" xml:lang="en-US">
+  <compound refid="structatrip_1_1ABHH" kind="struct"><name>atrip::ABHH</name>
+    <member refid="structatrip_1_1ABHH_1a170266890dd623dc1a4711c98b5455c6" kind="function"><name>ABHH</name></member>
+    <member refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" kind="function"><name>sliceIntoBuffer</name></member>
+  </compound>
+  <compound refid="structatrip_1_1ABPH" kind="struct"><name>atrip::ABPH</name>
+    <member refid="structatrip_1_1ABPH_1a1f8b1183e719c256ff2de4e181c84594" kind="function"><name>ABPH</name></member>
+    <member refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" kind="function"><name>sliceIntoBuffer</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Atrip" kind="struct"><name>atrip::Atrip</name>
+    <member refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" kind="variable"><name>rank</name></member>
+    <member refid="structatrip_1_1Atrip_1a3ae9ddbec7d076ff8a99260febe93779" kind="variable"><name>np</name></member>
+    <member refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kind="variable"><name>chrono</name></member>
+    <member refid="structatrip_1_1Atrip_1ac5d9d695dca918f22ca9182f4f3b0478" kind="function"><name>init</name></member>
+    <member refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" kind="function"><name>run</name></member>
+  </compound>
+  <compound refid="structatrip_1_1ClusterInfo" kind="struct"><name>atrip::ClusterInfo</name>
+    <member refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" kind="variable"><name>nNodes</name></member>
+    <member refid="structatrip_1_1ClusterInfo_1a15b76e199a4ae5335613417b451cacd8" kind="variable"><name>np</name></member>
+    <member refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" kind="variable"><name>ranksPerNode</name></member>
+    <member refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" kind="variable"><name>rankInfos</name></member>
+  </compound>
+  <compound refid="structatrip_1_1group__and__sort_1_1Distribution" kind="struct"><name>atrip::group_and_sort::Distribution</name>
+    <member refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" kind="function"><name>getTuples</name></member>
+  </compound>
+  <compound refid="structatrip_1_1HHHA" kind="struct"><name>atrip::HHHA</name>
+    <member refid="structatrip_1_1HHHA_1aff728e9a480579582405964457af0d65" kind="function"><name>HHHA</name></member>
+    <member refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" kind="function"><name>sliceIntoBuffer</name></member>
+  </compound>
+  <compound refid="structatrip_1_1group__and__sort_1_1Info" kind="struct"><name>atrip::group_and_sort::Info</name>
+    <member refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" kind="variable"><name>nNodes</name></member>
+    <member refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" kind="variable"><name>nodeId</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Slice_1_1Info" kind="struct"><name>atrip::Slice::Info</name>
+    <member refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" kind="variable"><name>tuple</name></member>
+    <member refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" kind="variable"><name>type</name></member>
+    <member refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" kind="variable"><name>state</name></member>
+    <member refid="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" kind="variable"><name>from</name></member>
+    <member refid="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" kind="variable"><name>recycling</name></member>
+    <member refid="structatrip_1_1Slice_1_1Info_1adbee4f0ea45a68d04f65e572d3bb1196" kind="function"><name>Info</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Atrip_1_1Input" kind="struct"><name>atrip::Atrip::Input</name>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58" kind="enum"><name>TuplesDistribution</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kind="enumvalue"><name>NAIVE</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58abf50306bc47e7c6eadfb5f69ee72ac83" kind="enumvalue"><name>GROUP_AND_SORT</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" kind="variable"><name>ei</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" kind="variable"><name>ea</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" kind="variable"><name>Tph</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" kind="variable"><name>Tpphh</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" kind="variable"><name>Vpphh</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" kind="variable"><name>Vhhhp</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" kind="variable"><name>Vppph</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a1536339db4fd86c9a9e836cf6c7f31d6" kind="function"><name>with_epsilon_i</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a846653743822be3190ee7d4b0af8ff38" kind="function"><name>with_epsilon_a</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1ad590ab73692d62cc87a7310daba2b0d5" kind="function"><name>with_Tai</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a9530693d00ab66f6191096d8888dca03" kind="function"><name>with_Tabij</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1ad5438912aec3f82f694b8dd0c890c891" kind="function"><name>with_Vabij</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a167997dd84511b20d66c59390a15cee1" kind="function"><name>with_Vijka</name></member>
+    <member refid="structatrip_1_1Atrip_1_1Input_1a31a610422b35978a00b2f11dcca53a6d" kind="function"><name>with_Vabci</name></member>
+  </compound>
+  <compound refid="structatrip_1_1IterationDescription" kind="struct"><name>atrip::IterationDescription</name>
+    <member refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" kind="variable"><name>descriptor</name></member>
+    <member refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" kind="variable"><name>currentIteration</name></member>
+    <member refid="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" kind="variable"><name>totalIterations</name></member>
+    <member refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" kind="variable"><name>currentElapsedTime</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Slice_1_1LocalDatabaseElement" kind="struct"><name>atrip::Slice::LocalDatabaseElement</name>
+    <member refid="structatrip_1_1Slice_1_1LocalDatabaseElement_1a071e50a7b7adcf28955b3c0f40dea720" kind="variable"><name>name</name></member>
+    <member refid="structatrip_1_1Slice_1_1LocalDatabaseElement_1a732f1eeac9b26b16d6fa40b022c1caa8" kind="variable"><name>info</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Slice_1_1Location" kind="struct"><name>atrip::Slice::Location</name>
+    <member refid="structatrip_1_1Slice_1_1Location_1adafd6595edf2739cd0a2a31eb1bf57e6" kind="variable"><name>rank</name></member>
+    <member refid="structatrip_1_1Slice_1_1Location_1a4ae8c64c9ef47d9ebebd04598b1bb35f" kind="variable"><name>source</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Slice_1_1mpi" kind="struct"><name>atrip::Slice::mpi</name>
+    <member refid="structatrip_1_1Slice_1_1mpi_1a320eaefea6f5238ac8f490ba85c9bdb0" kind="function"><name>vector</name></member>
+    <member refid="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" kind="function"><name>sliceLocation</name></member>
+    <member refid="structatrip_1_1Slice_1_1mpi_1a86502ca13faa0b4238c6c8c8c2c834a7" kind="function"><name>usizeDt</name></member>
+    <member refid="structatrip_1_1Slice_1_1mpi_1ae2b01fb82834442096abf8d020b3cbf1" kind="function"><name>sliceInfo</name></member>
+    <member refid="structatrip_1_1Slice_1_1mpi_1a683412cfa56e875df04fd82a3530f332" kind="function"><name>localDatabaseElement</name></member>
+  </compound>
+  <compound refid="structatrip_1_1NaiveDistribution" kind="struct"><name>atrip::NaiveDistribution</name>
+    <member refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" kind="function"><name>getTuples</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Atrip_1_1Output" kind="struct"><name>atrip::Atrip::Output</name>
+    <member refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" kind="variable"><name>energy</name></member>
+  </compound>
+  <compound refid="structatrip_1_1RankInfo" kind="struct"><name>atrip::RankInfo</name>
+    <member refid="structatrip_1_1RankInfo_1a4d45ecf2d0af72d23a290b6938bf0fde" kind="variable"><name>name</name></member>
+    <member refid="structatrip_1_1RankInfo_1ae97c5776e0429f5986ddeca169802813" kind="variable"><name>nodeId</name></member>
+    <member refid="structatrip_1_1RankInfo_1a3247711bc8708d20cb2bd62d371de92d" kind="variable"><name>globalRank</name></member>
+    <member refid="structatrip_1_1RankInfo_1a807b6ac8db68f58fe1c61cf07eff765e" kind="variable"><name>localRank</name></member>
+    <member refid="structatrip_1_1RankInfo_1a3dd67883323ea5dfe28a71ede86a93a6" kind="variable"><name>ranksPerNode</name></member>
+  </compound>
+  <compound refid="structatrip_1_1RankMap" kind="struct"><name>atrip::RankMap</name>
+    <member refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" kind="variable"><name>RANK_ROUND_ROBIN</name></member>
+    <member refid="structatrip_1_1RankMap_1a265e337d553853bf4c2b15703d9316c8" kind="variable"><name>lengths</name></member>
+    <member refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" kind="variable"><name>np</name></member>
+    <member refid="structatrip_1_1RankMap_1a9446d8e669ada2186bab67c0ada510f3" kind="variable"><name>size</name></member>
+    <member refid="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" kind="variable"><name>clusterInfo</name></member>
+    <member refid="structatrip_1_1RankMap_1a7b770e5c35a4edf4e8fc56bd9a9886e6" kind="function"><name>RankMap</name></member>
+    <member refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" kind="function"><name>find</name></member>
+    <member refid="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" kind="function"><name>nSources</name></member>
+    <member refid="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" kind="function"><name>isPaddingRank</name></member>
+    <member refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" kind="function"><name>isSourcePadding</name></member>
+    <member refid="structatrip_1_1RankMap_1a1f754793a757c579d91961b5d0390cfd" kind="function"><name>find</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Slice" kind="struct"><name>atrip::Slice</name>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kind="enum"><name>Type</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46ac37202de596dc7eb8a95a68a168750ba" kind="enumvalue"><name>A</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46ab0cc4fdf016372ae51b4b33f19970877" kind="enumvalue"><name>B</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a4d34dab093e3bc7dc5a6afa466dfc7a3" kind="enumvalue"><name>C</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a95d8dd6c535cdf180d9b78fea1dabd2c" kind="enumvalue"><name>AB</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a56b6bbbe684c42ebf26bb91d68921b42" kind="enumvalue"><name>BC</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46aed801e2742ba2af5a55804d6e0e7613e" kind="enumvalue"><name>AC</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a1781b62e2b19583ea840692812d17cea" kind="enumvalue"><name>CB</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a95b07e2180c2f7003f986104dfb85677" kind="enumvalue"><name>BA</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a5d98c0f033fde70dd1b2d48220a4726d" kind="enumvalue"><name>CA</name></member>
+    <member refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46ac32b5c11df3f14116f3fddf2bc10a55e" kind="enumvalue"><name>Blank</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0" kind="enum"><name>State</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0a5651eced6ec56a1720f3e315c7fad891" kind="enumvalue"><name>Fetch</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0ae6d67fb1c5af3b568ab9ad22659ce152" kind="enumvalue"><name>Dispatched</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0a08aec9b7b59e8a3ee12a965bf4d7afd9" kind="enumvalue"><name>Ready</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0a57a108e7e6561000ac9f7d9e9b9317b9" kind="enumvalue"><name>SelfSufficient</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0af916232db704e602917e8b38720e5863" kind="enumvalue"><name>Recycled</name></member>
+    <member refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0a37b0da7cf0ebee6184b29c2c212574e7" kind="enumvalue"><name>Acceptor</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806" kind="enum"><name>Name</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806a7eaa6927fdb18899e6a074efb86e8ff0" kind="enumvalue"><name>TA</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806a54ca340c35868c536f767e6cd25af16e" kind="enumvalue"><name>VIJKA</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806af35e8f182569229bb6eecffa58eba1eb" kind="enumvalue"><name>VABCI</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806a80b26620da8680b6e19501a07fbfc2cf" kind="enumvalue"><name>TABIJ</name></member>
+    <member refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806a7f84e9e4065b546c2a6793e1eca6f0cf" kind="enumvalue"><name>VABIJ</name></member>
+    <member refid="structatrip_1_1Slice_1a9ee6254fe98a83b507ca88ec92dd5227" kind="typedef"><name>Ty_x_Tu</name></member>
+    <member refid="structatrip_1_1Slice_1a82088d08e7e28f88623fc0253bb0d730" kind="typedef"><name>LocalDatabase</name></member>
+    <member refid="structatrip_1_1Slice_1a464f534f896f1b8e24fefbdbef28fa29" kind="typedef"><name>Database</name></member>
+    <member refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" kind="variable"><name>info</name></member>
+    <member refid="structatrip_1_1Slice_1ab0c99e8ec9e0c84611d7fdec14bdb6ee" kind="variable"><name>data</name></member>
+    <member refid="structatrip_1_1Slice_1a0a10dbe08bdaca9682f640be8f8ae736" kind="variable"><name>request</name></member>
+    <member refid="structatrip_1_1Slice_1a7e16150ff4f60689556a1b9ca139a22d" kind="variable"><name>size</name></member>
+    <member refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" kind="function"><name>subtupleBySlice</name></member>
+    <member refid="structatrip_1_1Slice_1a74c8f856bc2b0aceca27849900fd8a2f" kind="function"><name>hasRecycledReferencingToIt</name></member>
+    <member refid="structatrip_1_1Slice_1a237680f772d527a25bbeeff619454230" kind="function"><name>findOneByType</name></member>
+    <member refid="structatrip_1_1Slice_1accba377efd6a4cde3da7c421d0360a1b" kind="function"><name>findRecycledSource</name></member>
+    <member refid="structatrip_1_1Slice_1a560e50548083cc86b2ed7381ed35fd98" kind="function"><name>findByTypeAbc</name></member>
+    <member refid="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" kind="function"><name>findByInfo</name></member>
+    <member refid="structatrip_1_1Slice_1aea2369215b927bc117bbad21e4aa2b35" kind="function"><name>markReady</name></member>
+    <member refid="structatrip_1_1Slice_1ac87980ccdf02128fee5a3529e32ce346" kind="function"><name>isUnwrapped</name></member>
+    <member refid="structatrip_1_1Slice_1a47d5e4787f2a9f5122ee7efc27b2565d" kind="function"><name>isUnwrappable</name></member>
+    <member refid="structatrip_1_1Slice_1adb64c4e0ccabba3313fdd82ac384ff12" kind="function"><name>isDirectlyFetchable</name></member>
+    <member refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" kind="function"><name>free</name></member>
+    <member refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" kind="function"><name>isFree</name></member>
+    <member refid="structatrip_1_1Slice_1acf78d7a1f3cdf125c05ff5007c52232f" kind="function"><name>isRecyclable</name></member>
+    <member refid="structatrip_1_1Slice_1ae9851d6c9cbae126484ad37b2446408c" kind="function"><name>hasValidDataPointer</name></member>
+    <member refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" kind="function"><name>unwrapAndMarkReady</name></member>
+    <member refid="structatrip_1_1Slice_1a00a827ca8fcc5c1caa383b2798e10e5c" kind="function"><name>Slice</name></member>
+  </compound>
+  <compound refid="structatrip_1_1SliceUnion" kind="struct"><name>atrip::SliceUnion</name>
+    <member refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kind="typedef"><name>Tensor</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" kind="variable"><name>rankMap</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" kind="variable"><name>world</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" kind="variable"><name>universe</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" kind="variable"><name>sliceLength</name></member>
+    <member refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" kind="variable"><name>sources</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kind="variable"><name>slices</name></member>
+    <member refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kind="variable"><name>name</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kind="variable"><name>sliceTypes</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" kind="variable"><name>sliceBuffers</name></member>
+    <member refid="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" kind="variable"><name>freePointers</name></member>
+    <member refid="structatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" kind="function"><name>sliceIntoBuffer</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" kind="function"><name>checkForDuplicates</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" kind="function"><name>neededSlices</name></member>
+    <member refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" kind="function"><name>buildLocalDatabase</name></member>
+    <member refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" kind="function"><name>clearUnusedSlicesForNext</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" kind="function"><name>SliceUnion</name></member>
+    <member refid="structatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" kind="function"><name>init</name></member>
+    <member refid="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" kind="function"><name>send</name></member>
+    <member refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" kind="function"><name>receive</name></member>
+    <member refid="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" kind="function"><name>unwrapAll</name></member>
+    <member refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" kind="function"><name>unwrapSlice</name></member>
+  </compound>
+  <compound refid="structatrip_1_1TABHH" kind="struct"><name>atrip::TABHH</name>
+    <member refid="structatrip_1_1TABHH_1a35d1049d09072784c92ba0657c9921ee" kind="function"><name>TABHH</name></member>
+    <member refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" kind="function"><name>sliceIntoBuffer</name></member>
+  </compound>
+  <compound refid="structatrip_1_1TAPHH" kind="struct"><name>atrip::TAPHH</name>
+    <member refid="structatrip_1_1TAPHH_1aa4be7b8ef10aa7f4fdddf632010da076" kind="function"><name>TAPHH</name></member>
+    <member refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" kind="function"><name>sliceIntoBuffer</name></member>
+  </compound>
+  <compound refid="structatrip_1_1Timer" kind="struct"><name>atrip::Timer</name>
+    <member refid="structatrip_1_1Timer_1ae15cc0675735926a17176c224976d098" kind="typedef"><name>Clock</name></member>
+    <member refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kind="typedef"><name>Event</name></member>
+    <member refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kind="variable"><name>duration</name></member>
+    <member refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kind="variable"><name>_start</name></member>
+    <member refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" kind="function"><name>start</name></member>
+    <member refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" kind="function"><name>stop</name></member>
+    <member refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" kind="function"><name>clear</name></member>
+    <member refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" kind="function"><name>count</name></member>
+  </compound>
+  <compound refid="structatrip_1_1TuplesDistribution" kind="struct"><name>atrip::TuplesDistribution</name>
+    <member refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" kind="function"><name>getTuples</name></member>
+    <member refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" kind="function"><name>tupleIsFake</name></member>
+  </compound>
+  <compound refid="namespaceatrip" kind="namespace"><name>atrip</name>
+    <member refid="namespaceatrip_1aa4158a2e7e79c518dcb11d7ccfc1c82f" kind="typedef"><name>Complex</name></member>
+    <member refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kind="typedef"><name>IterationDescriptor</name></member>
+    <member refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kind="typedef"><name>ABCTuple</name></member>
+    <member refid="namespaceatrip_1a8b97b58a2469967c1a6da53511879c7b" kind="typedef"><name>PartialTuple</name></member>
+    <member refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kind="typedef"><name>ABCTuples</name></member>
+    <member refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kind="typedef"><name>Timings</name></member>
+    <member refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kind="variable"><name>FAKE_TUPLE</name></member>
+    <member refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" kind="variable"><name>INVALID_TUPLE</name></member>
+    <member refid="namespaceatrip_1a302b648f916e8ad102dd42072cca699f" kind="function"><name>dgemm_</name></member>
+    <member refid="namespaceatrip_1a7dbace53db67d2fe7117fd8d401a714a" kind="function"><name>zgemm_</name></member>
+    <member refid="namespaceatrip_1ac816a227aaf7dcd0a1924bcbabedcd05" kind="function"><name>xgemm</name></member>
+    <member refid="namespaceatrip_1a598533b252b76257af9d6d6e7c285db2" kind="function"><name>xgemm</name></member>
+    <member refid="namespaceatrip_1a65234e51491c3fa418fcdfeb6e51ee1d" kind="function"><name>registerIterationDescriptor</name></member>
+    <member refid="namespaceatrip_1a840b02bd30fe9a856766d3d46549cada" kind="function"><name>getEnergyDistinct</name></member>
+    <member refid="namespaceatrip_1a793b8f00a013edaba6f2085ef13639b5" kind="function"><name>getEnergySame</name></member>
+    <member refid="namespaceatrip_1a7787d4c4d5eaa1b23f1a38fd77452e91" kind="function"><name>singlesContribution</name></member>
+    <member refid="namespaceatrip_1abf38977bde26414f9921b16ea94e61a9" kind="function"><name>doublesContribution</name></member>
+    <member refid="namespaceatrip_1a2e0cfc31bb96f193faaf7577e9d8ff86" kind="function"><name>maybeConjugate</name></member>
+    <member refid="namespaceatrip_1a3109af0495d84e38227d528cd87b4bbb" kind="function"><name>maybeConjugate</name></member>
+    <member refid="namespaceatrip_1ae87ef13dea060e70fd45dc819d81c542" kind="function"><name>operator&lt;&lt;</name></member>
+    <member refid="namespaceatrip_1a48486dbe7da2ba48cb4a0971c558ee74" kind="function"><name>operator&lt;&lt;</name></member>
+    <member refid="namespaceatrip_1a24ce996639a89d98eb5c4e31175620f4" kind="function"><name>unionByName</name></member>
+    <member refid="namespaceatrip_1a61b9bff51847e234f5357dfa5adc5a59" kind="function"><name>getNodeNames</name></member>
+    <member refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" kind="function"><name>unique</name></member>
+    <member refid="namespaceatrip_1a5d282a028b26de5e1ea7d74e4e7f880b" kind="function"><name>getNodeInfos</name></member>
+    <member refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" kind="function"><name>getClusterInfo</name></member>
+    <member refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" kind="function"><name>getTuplesList</name></member>
+    <member refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" kind="function"><name>getAllTuplesList</name></member>
+    <member refid="namespaceatrip_1a6a50c8632daf83dc3a61bbc6c2eb122a" kind="function"><name>sliceIntoVector</name></member>
+    <member refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kind="function"><name>pretty_print</name></member>
+  </compound>
+  <compound refid="namespaceatrip_1_1group__and__sort" kind="namespace"><name>atrip::group_and_sort</name>
+    <member refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" kind="function"><name>isOnNode</name></member>
+    <member refid="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" kind="function"><name>getTupleNodes</name></member>
+    <member refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" kind="function"><name>specialDistribution</name></member>
+    <member refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="namespaceatrip_1_1traits" kind="namespace"><name>atrip::traits</name>
+    <member refid="namespaceatrip_1_1traits_1ac5c317b719c6ea751a3da3cb11a26a2f" kind="function"><name>isComplex</name></member>
+    <member refid="namespaceatrip_1_1traits_1acb15e4dc55bc4d3c9277ac5ed40b8ef4" kind="function"><name>isComplex&lt; Complex &gt;</name></member>
+  </compound>
+  <compound refid="namespaceatrip_1_1traits_1_1mpi" kind="namespace"><name>atrip::traits::mpi</name>
+    <member refid="namespaceatrip_1_1traits_1_1mpi_1ac5cddb4841206f9704c515491f9b7892" kind="function"><name>datatypeOf</name></member>
+    <member refid="namespaceatrip_1_1traits_1_1mpi_1ab2b7059ea380f3639caeae806f3255b5" kind="function"><name>datatypeOf&lt; double &gt;</name></member>
+    <member refid="namespaceatrip_1_1traits_1_1mpi_1a95ed3fa24afbdb708d2e4525f6abe027" kind="function"><name>datatypeOf&lt; Complex &gt;</name></member>
+  </compound>
+  <compound refid="Atrip_8cxx" kind="file"><name>Atrip.cxx</name>
+  </compound>
+  <compound refid="Atrip_8hpp" kind="file"><name>Atrip.hpp</name>
+    <member refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kind="define"><name>ADD_ATTRIBUTE</name></member>
+  </compound>
+  <compound refid="atrip_8hpp" kind="file"><name>atrip.hpp</name>
+  </compound>
+  <compound refid="Blas_8hpp" kind="file"><name>Blas.hpp</name>
+  </compound>
+  <compound refid="Debug_8hpp" kind="file"><name>Debug.hpp</name>
+    <member refid="Debug_8hpp_1ad0141f91cd5e10e24d6a723624c437df" kind="define"><name>ATRIP_BENCHMARK</name></member>
+    <member refid="Debug_8hpp_1af1c9f39d9f533bf92bcf20f1e925691e" kind="define"><name>ATRIP_DEBUG</name></member>
+    <member refid="Debug_8hpp_1a5cc2051ac37b4867f478c20baa37ebcf" kind="define"><name>ATRIP_USE_DGEMM</name></member>
+    <member refid="Debug_8hpp_1acd562c2a281e45f3c9e777ee85940952" kind="define"><name>OCD_Barrier</name></member>
+    <member refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" kind="define"><name>WITH_OCD</name></member>
+    <member refid="Debug_8hpp_1a51c4696a55d683ddde13f60d905bc053" kind="define"><name>WITH_ROOT</name></member>
+    <member refid="Debug_8hpp_1ad6b642c97ff359593a6b7dc92f457995" kind="define"><name>WITH_SPECIAL</name></member>
+    <member refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kind="define"><name>WITH_RANK</name></member>
+    <member refid="Debug_8hpp_1a318fefe76cbd9fb484ad4457e2285053" kind="define"><name>WITH_DBG</name></member>
+    <member refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" kind="define"><name>WITH_CRAZY_DEBUG</name></member>
+    <member refid="Debug_8hpp_1ae8924623ca601364965e3d88fb7f40fa" kind="define"><name>DBG</name></member>
+    <member refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" kind="define"><name>LOG</name></member>
+  </compound>
+  <compound refid="Equations_8hpp" kind="file"><name>Equations.hpp</name>
+    <member refid="Equations_8hpp_1a395c02ccca573561c1c6e5a2145c496b" kind="define"><name>_IJK_</name></member>
+    <member refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kind="define"><name>REORDER</name></member>
+    <member refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kind="define"><name>DGEMM_PARTICLES</name></member>
+    <member refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kind="define"><name>DGEMM_HOLES</name></member>
+    <member refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" kind="define"><name>MAYBE_CONJ</name></member>
+  </compound>
+  <compound refid="RankMap_8hpp" kind="file"><name>RankMap.hpp</name>
+  </compound>
+  <compound refid="Slice_8hpp" kind="file"><name>Slice.hpp</name>
+  </compound>
+  <compound refid="SliceUnion_8hpp" kind="file"><name>SliceUnion.hpp</name>
+  </compound>
+  <compound refid="Tuples_8hpp" kind="file"><name>Tuples.hpp</name>
+  </compound>
+  <compound refid="Unions_8hpp" kind="file"><name>Unions.hpp</name>
+  </compound>
+  <compound refid="Utils_8hpp" kind="file"><name>Utils.hpp</name>
+    <member refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kind="define"><name>WITH_CHRONO</name></member>
+  </compound>
+  <compound refid="dir_60408188ff2dfa1650f8b8c81a499cb7" kind="dir"><name>atrip</name>
+  </compound>
+  <compound refid="dir_f49edc0362c5951c56e897d397fa5ee8" kind="dir"><name>atrip</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>src</name>
+  </compound>
+</doxygenindex>

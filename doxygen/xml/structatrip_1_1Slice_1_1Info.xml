@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1Slice_1_1Info" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::Slice::Info</compoundname>
+    <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" prot="public" static="no" mutable="no">
+        <type><ref refid="namespaceatrip_1a8b97b58a2469967c1a6da53511879c7b" kindref="member">PartialTuple</ref></type>
+        <definition>PartialTuple atrip::Slice&lt; F &gt;::Info::tuple</definition>
+        <argsstring></argsstring>
+        <name>tuple</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="82" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kindref="member">Type</ref></type>
+        <definition>Type atrip::Slice&lt; F &gt;::Info::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="84" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0" kindref="member">State</ref></type>
+        <definition>State atrip::Slice&lt; F &gt;::Info::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="86" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice_1_1Location" kindref="compound">Location</ref></type>
+        <definition>Location atrip::Slice&lt; F &gt;::Info::from</definition>
+        <argsstring></argsstring>
+        <name>from</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="88" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" prot="public" static="no" mutable="no">
+        <type><ref refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kindref="member">Type</ref></type>
+        <definition>Type atrip::Slice&lt; F &gt;::Info::recycling</definition>
+        <argsstring></argsstring>
+        <name>recycling</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="90" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structatrip_1_1Slice_1_1Info_1adbee4f0ea45a68d04f65e572d3bb1196" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>atrip::Slice&lt; F &gt;::Info::Info</definition>
+        <argsstring>()</argsstring>
+        <name>Info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="92" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="92" bodyend="97"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::Slice&lt; F &gt;::Info</label>
+        <link refid="structatrip_1_1Slice_1_1Info"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>from</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>atrip::Slice&lt; F &gt;::Location</label>
+        <link refid="structatrip_1_1Slice_1_1Location"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="80" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="80" bodyend="98"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>from</name></member>
+      <member refid="structatrip_1_1Slice_1_1Info_1adbee4f0ea45a68d04f65e572d3bb1196" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>Info</name></member>
+      <member refid="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>recycling</name></member>
+      <member refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>state</name></member>
+      <member refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>tuple</name></member>
+      <member refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" prot="public" virt="non-virtual"><scope>atrip::Slice::Info</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

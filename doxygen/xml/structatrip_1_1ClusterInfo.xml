@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="structatrip_1_1ClusterInfo" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::ClusterInfo</compoundname>
+    <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" prot="public" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t atrip::ClusterInfo::nNodes</definition>
+        <argsstring></argsstring>
+        <name>nNodes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="137" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1ClusterInfo_1a15b76e199a4ae5335613417b451cacd8" prot="public" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t atrip::ClusterInfo::np</definition>
+        <argsstring></argsstring>
+        <name>np</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="137" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" prot="public" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t atrip::ClusterInfo::ranksPerNode</definition>
+        <argsstring></argsstring>
+        <name>ranksPerNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="137" column="26" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; <ref refid="structatrip_1_1RankInfo" kindref="compound">RankInfo</ref> &gt;</type>
+        <definition>const std::vector&lt;RankInfo&gt; atrip::ClusterInfo::rankInfos</definition>
+        <argsstring></argsstring>
+        <name>rankInfos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="138" column="21" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="136" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="136" bodyend="139"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" prot="public" virt="non-virtual"><scope>atrip::ClusterInfo</scope><name>nNodes</name></member>
+      <member refid="structatrip_1_1ClusterInfo_1a15b76e199a4ae5335613417b451cacd8" prot="public" virt="non-virtual"><scope>atrip::ClusterInfo</scope><name>np</name></member>
+      <member refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" prot="public" virt="non-virtual"><scope>atrip::ClusterInfo</scope><name>rankInfos</name></member>
+      <member refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" prot="public" virt="non-virtual"><scope>atrip::ClusterInfo</scope><name>ranksPerNode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
