@@ -27,9 +27,14 @@ pkgs.mkShell {
 
         openmpi
 
-        gnumake
         binutils
         emacs
+
+        gnumake
+        libtool
+        autoconf
+        automake
+        pkg-config
       ]
     ++ compiler-configuration
     ++ (if with-mkl then mkl.buildInputs else openblas.buildInputs)
