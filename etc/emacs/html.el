@@ -17,13 +17,10 @@
 (use-package htmlize
              :ensure t)
 
+(use-package ox-rst
+             :ensure t)
+
 (require 'org)
-
-;(use-package org-plus-contrib
-;             :ensure 
-
-;(use-package org-src
-             ;:ensure t)
 
 (setq org-src-fontify-natively t
       org-src-preserve-indentation t
@@ -31,3 +28,4 @@
 
 (load-theme 'tsdh-light)
 (require 'ox-html)
+(require 'ox-rst)

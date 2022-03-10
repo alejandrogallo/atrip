@@ -1,8 +1,16 @@
 #+title: ATRIP: An MPI-asynchronous implementation of CCSD(T)
 #+PROPERTY: header-args+ :noweb yes :comments noweb :mkdirp t
 
+#+begin_export rst
+.. toctree::
+   :maxdepth: 2
+
+   atrip
+#+end_export
+
 * About this document
 
+- [[./atrip.org][Literate program]]
 
 - [[https://alejandrogallo.github.io/atrip/doxygen/html/index.html][Doxygen]]
 - [[https://alejandrogallo.github.io/atrip/atrip.html][Literate program]]

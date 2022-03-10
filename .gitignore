@@ -1,4 +1,7 @@
 .emacs
+*.rst
+doxygen
+sphinx
 
 include/dbg.h
 doc/doxygen/

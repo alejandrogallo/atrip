@@ -48,7 +48,7 @@ $(ATRIP_STATIC_LIBRARY): $(OBJ_FILES)
 
 $(SOURCES_FILE): config.el
 	echo -n "ATRIP_SOURCES = " > $@
-	$(EMACS) --eval '(atrip-print-sources)' >> $@
+	$(EMACS) -f atrip-print-sources >> $@
 
 print:
 	$(info $(filter-out %.hpp,$(ATRIP_SOURCES)))
@@ -102,7 +102,10 @@ EMACS_HTML = $(EMACS) --load ./etc/emacs/html.el
 HTML_MAIN = $(patsubst %.org,%.html,$(ORG_MAIN))
 html: $(HTML_MAIN)
 %.html: %.org
-	$(EMACS_HTML) $< --eval "(org-html-export-to-html)"
+	$(EMACS_HTML) $< -f org-html-export-to-html
+
+%.rst: %.org
+	$(EMACS_HTML) $< -f org-rst-export-to-rst
 
 .PHONY: dbg
 dbg: include/dbg.h

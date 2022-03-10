@@ -50,28 +50,25 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Create index
-      run: |
-        echo hello world > index.html
-
-    - name: Create atrip.html
-      run: |
-        nix-shell --run 'make html'
-        mv atrip.html docs/
-
-    - name: Doxygen
+    - name: Install dependencies
       run: |
         cd docs
-        nix-shell --run 'make all'
+        nix-shell --run 'emacs --version'
+        nix-shell --run 'python --version'
+        nix-shell --run 'sphinx-build --version'
+
+    - name: Make all
+      run: |
+        cd docs
+        make all
+
+    - name: Make sphinx as the main
+      run: |
+        cd docs
+        mv sphinx/* .
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
          branch: gh-pages
          folder: ./docs
-
-    #- name: Upload dist
-      #uses: actions/upload-artifacts@v1
-      #with:
-        #name: lib
-        #path: ./lib
