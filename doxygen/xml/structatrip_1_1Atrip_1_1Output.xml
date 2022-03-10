@@ -22,6 +22,12 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::Atrip::Output</label>
+        <link refid="structatrip_1_1Atrip_1_1Output"/>
+      </node>
+    </collaborationgraph>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="74" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="74" bodyend="76"/>
     <listofallmembers>
       <member refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" prot="public" virt="non-virtual"><scope>atrip::Atrip::Output</scope><name>energy</name></member>

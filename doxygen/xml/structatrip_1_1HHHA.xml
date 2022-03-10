@@ -72,6 +72,11 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="118" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="118" bodyend="130"/>
+        <references refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; F &gt;::find</references>
+        <references refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" compoundref="Atrip_8hpp" startline="36">atrip::Atrip::rank</references>
+        <references refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="542">atrip::SliceUnion&lt; double &gt;::rankMap</references>
+        <references refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="545">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
+        <references refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="546">atrip::SliceUnion&lt; double &gt;::sources</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -85,9 +90,16 @@
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="3">
+        <label>atrip::SliceUnion&lt; F &gt;</label>
+        <link refid="structatrip_1_1SliceUnion"/>
+      </node>
       <node id="2">
         <label>atrip::SliceUnion&lt; double &gt;</label>
         <link refid="structatrip_1_1SliceUnion"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
@@ -99,7 +111,10 @@
         <label>atrip::RankMap&lt; double &gt;</label>
         <link refid="structatrip_1_1RankMap"/>
         <childnode refid="4" relation="usage">
-          <edgelabel>clusterInfo</edgelabel>
+          <edgelabel>+clusterInfo</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
         </childnode>
       </node>
       <node id="1">
@@ -108,14 +123,31 @@
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="6">
-        <label>atrip::Slice&lt; F &gt;::Info</label>
-        <link refid="structatrip_1_1Slice_1_1Info"/>
+      <node id="9">
+        <label>atrip::Slice&lt; F &gt;</label>
+        <link refid="structatrip_1_1Slice"/>
         <childnode refid="7" relation="usage">
-          <edgelabel>from</edgelabel>
+          <edgelabel>+info</edgelabel>
         </childnode>
       </node>
       <node id="7">
+        <label>atrip::Slice&lt; F &gt;::Info</label>
+        <link refid="structatrip_1_1Slice_1_1Info"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>+from</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>atrip::SliceUnion&lt; F &gt;</label>
+        <link refid="structatrip_1_1SliceUnion"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+rankMap</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+name</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
         <label>atrip::Slice&lt; F &gt;::Location</label>
         <link refid="structatrip_1_1Slice_1_1Location"/>
       </node>
@@ -123,17 +155,30 @@
         <label>atrip::SliceUnion&lt; double &gt;</label>
         <link refid="structatrip_1_1SliceUnion"/>
         <childnode refid="3" relation="usage">
-          <edgelabel>rankMap</edgelabel>
+          <edgelabel>+rankMap</edgelabel>
         </childnode>
-        <childnode refid="5" relation="usage">
-          <edgelabel>name</edgelabel>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+name</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
         </childnode>
       </node>
       <node id="5">
+        <label>atrip::RankMap&lt; F &gt;</label>
+        <link refid="structatrip_1_1RankMap"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+clusterInfo</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
         <label>atrip::Slice&lt; double &gt;</label>
         <link refid="structatrip_1_1Slice"/>
-        <childnode refid="6" relation="usage">
-          <edgelabel>info</edgelabel>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+info</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>

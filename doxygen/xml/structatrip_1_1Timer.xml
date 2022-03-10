@@ -44,6 +44,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="48" column="25" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" compoundref="Utils_8hpp" startline="51" endline="51">stop</referencedby>
+        <referencedby refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" compoundref="Utils_8hpp" startline="52" endline="52">clear</referencedby>
+        <referencedby refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" compoundref="Utils_8hpp" startline="53" endline="53">count</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" prot="public" static="no" mutable="no">
         <type><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref></type>
@@ -57,6 +60,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="49" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="49" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" compoundref="Utils_8hpp" startline="50" endline="50">start</referencedby>
+        <referencedby refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" compoundref="Utils_8hpp" startline="51" endline="51">stop</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -72,6 +77,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="50" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="50" bodyend="50"/>
+        <references refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" compoundref="Utils_8hpp" startline="49">_start</references>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>void</type>
@@ -85,6 +91,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="51" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="51" bodyend="51"/>
+        <references refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" compoundref="Utils_8hpp" startline="49">_start</references>
+        <references refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" compoundref="Utils_8hpp" startline="48">duration</references>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>void</type>
@@ -98,6 +106,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="52" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="52" bodyend="52"/>
+        <references refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" compoundref="Utils_8hpp" startline="48">duration</references>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>double</type>
@@ -111,12 +120,19 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="53" column="17" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="53" bodyend="53"/>
+        <references refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" compoundref="Utils_8hpp" startline="48">duration</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::Timer</label>
+        <link refid="structatrip_1_1Timer"/>
+      </node>
+    </collaborationgraph>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="45" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="45" bodyend="54"/>
     <listofallmembers>
       <member refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" prot="public" virt="non-virtual"><scope>atrip::Timer</scope><name>_start</name></member>

@@ -13,8 +13,11 @@ ATRIP: An MPI-asynchronous implementation of CCSD(T)
 1 About this document
 ---------------------
 
-- `Literate program <./atrip.rst>`_
-
-- `Doxygen <https://alejandrogallo.github.io/atrip/doxygen/html/index.html>`_
+You can find this project written as a literate program
 
 - `Literate program <https://alejandrogallo.github.io/atrip/atrip.html>`_
+
+or if you prefer reading the source code with Doxygen there is also a built
+of doxygen available:
+
+- `Doxygen <https://alejandrogallo.github.io/atrip/doxygen/html/index.html>`_

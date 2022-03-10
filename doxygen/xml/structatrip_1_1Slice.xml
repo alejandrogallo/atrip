@@ -261,6 +261,20 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="362" column="6" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="362" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Slice_1a74c8f856bc2b0aceca27849900fd8a2f" compoundref="Slice_8hpp" startline="251" endline="263">atrip::Slice&lt; double &gt;::hasRecycledReferencingToIt</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1accba377efd6a4cde3da7c421d0360a1b" compoundref="Slice_8hpp" startline="284" endline="305">atrip::Slice&lt; double &gt;::findRecycledSource</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" compoundref="Slice_8hpp" startline="339" endline="358">atrip::Slice&lt; double &gt;::findByInfo</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1aea2369215b927bc117bbad21e4aa2b35" compoundref="Slice_8hpp" startline="378" endline="381">atrip::Slice&lt; double &gt;::markReady</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ac87980ccdf02128fee5a3529e32ce346" compoundref="Slice_8hpp" startline="385" endline="389">atrip::Slice&lt; double &gt;::isUnwrapped</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1a47d5e4787f2a9f5122ee7efc27b2565d" compoundref="Slice_8hpp" startline="393" endline="398">atrip::Slice&lt; double &gt;::isUnwrappable</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1adb64c4e0ccabba3313fdd82ac384ff12" compoundref="Slice_8hpp" startline="400" endline="402">atrip::Slice&lt; double &gt;::isDirectlyFetchable</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="404" endline="411">atrip::Slice&lt; double &gt;::free</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="413" endline="422">atrip::Slice&lt; double &gt;::isFree</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1acf78d7a1f3cdf125c05ff5007c52232f" compoundref="Slice_8hpp" startline="426" endline="433">atrip::Slice&lt; double &gt;::isRecyclable</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ae9851d6c9cbae126484ad37b2446408c" compoundref="Slice_8hpp" startline="437" endline="442">atrip::Slice&lt; double &gt;::hasValidDataPointer</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" compoundref="Slice_8hpp" startline="446" endline="474">atrip::Slice&lt; double &gt;::unwrapAndMarkReady</referencedby>
+        <referencedby refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" compoundref="SliceUnion_8hpp" startline="82" endline="223">atrip::SliceUnion&lt; double &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="231" endline="345">atrip::SliceUnion&lt; double &gt;::clearUnusedSlicesForNext</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Slice_1ab0c99e8ec9e0c84611d7fdec14bdb6ee" prot="public" static="no" mutable="no">
         <type>F *</type>
@@ -274,6 +288,11 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="366" column="4" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="366" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="404" endline="411">atrip::Slice&lt; double &gt;::free</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="413" endline="422">atrip::Slice&lt; double &gt;::isFree</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ae9851d6c9cbae126484ad37b2446408c" compoundref="Slice_8hpp" startline="437" endline="442">atrip::Slice&lt; double &gt;::hasValidDataPointer</referencedby>
+        <referencedby refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" compoundref="SliceUnion_8hpp" startline="82" endline="223">atrip::SliceUnion&lt; double &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="231" endline="345">atrip::SliceUnion&lt; double &gt;::clearUnusedSlicesForNext</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Slice_1a0a10dbe08bdaca9682f640be8f8ae736" prot="public" static="no" mutable="no">
         <type>MPI_Request</type>
@@ -287,6 +306,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="370" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="370" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" compoundref="Slice_8hpp" startline="446" endline="474">atrip::Slice&lt; double &gt;::unwrapAndMarkReady</referencedby>
+        <referencedby refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="472" endline="492">atrip::SliceUnion&lt; double &gt;::receive</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Slice_1a7e16150ff4f60689556a1b9ca139a22d" prot="public" static="no" mutable="no">
         <type>const size_t</type>
@@ -323,6 +344,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="233" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="233" bodyend="246"/>
+        <referencedby refid="structatrip_1_1RankMap_1a1f754793a757c579d91961b5d0390cfd" compoundref="RankMap_8hpp" startline="73" endline="129">atrip::RankMap&lt; double &gt;::find</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1a560e50548083cc86b2ed7381ed35fd98" compoundref="Slice_8hpp" startline="310" endline="335">atrip::Slice&lt; double &gt;::findByTypeAbc</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="584">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a74c8f856bc2b0aceca27849900fd8a2f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::vector&lt; <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; * &gt;</type>
@@ -344,6 +368,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="250" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="251" bodyend="263"/>
+        <referencedby refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="231" endline="345">atrip::SliceUnion&lt; double &gt;::clearUnusedSlicesForNext</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a237680f772d527a25bbeeff619454230" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -365,6 +390,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="267" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="267" bodyend="279"/>
+        <referencedby refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" compoundref="SliceUnion_8hpp" startline="82" endline="223">atrip::SliceUnion&lt; double &gt;::buildLocalDatabase</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1accba377efd6a4cde3da7c421d0360a1b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -411,6 +437,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="309" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="310" bodyend="335"/>
+        <referencedby refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" compoundref="SliceUnion_8hpp" startline="498" endline="540">atrip::SliceUnion&lt; double &gt;::unwrapSlice</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -432,6 +459,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="339" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="339" bodyend="358"/>
+        <referencedby refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="472" endline="492">atrip::SliceUnion&lt; double &gt;::receive</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -447,6 +475,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="378" column="6" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="378" bodyend="381"/>
+        <referencedby refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="231" endline="345">atrip::SliceUnion&lt; double &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" compoundref="Slice_8hpp" startline="446" endline="474">atrip::Slice&lt; double &gt;::unwrapAndMarkReady</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1ac87980ccdf02128fee5a3529e32ce346" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
@@ -460,6 +490,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="385" column="6" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="385" bodyend="389"/>
+        <referencedby refid="structatrip_1_1Slice_1a47d5e4787f2a9f5122ee7efc27b2565d" compoundref="Slice_8hpp" startline="393" endline="398">atrip::Slice&lt; double &gt;::isUnwrappable</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a47d5e4787f2a9f5122ee7efc27b2565d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
@@ -538,6 +569,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="437" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="437" bodyend="442"/>
+        <referencedby refid="structatrip_1_1Slice_1acf78d7a1f3cdf125c05ff5007c52232f" compoundref="Slice_8hpp" startline="426" endline="433">atrip::Slice&lt; double &gt;::isRecyclable</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -574,19 +606,32 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>atrip::Slice&lt; F &gt;</label>
+        <link refid="structatrip_1_1Slice"/>
+      </node>
+      <node id="2">
+        <label>atrip::Slice&lt; double &gt;</label>
+        <link refid="structatrip_1_1Slice"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
       <node id="1">
         <label>atrip::Slice&lt; F &gt;</label>
         <link refid="structatrip_1_1Slice"/>
         <childnode refid="2" relation="usage">
-          <edgelabel>info</edgelabel>
+          <edgelabel>+info</edgelabel>
         </childnode>
       </node>
       <node id="2">
         <label>atrip::Slice&lt; F &gt;::Info</label>
         <link refid="structatrip_1_1Slice_1_1Info"/>
         <childnode refid="3" relation="usage">
-          <edgelabel>from</edgelabel>
+          <edgelabel>+from</edgelabel>
         </childnode>
       </node>
       <node id="3">

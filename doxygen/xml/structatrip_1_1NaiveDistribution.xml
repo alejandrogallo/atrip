@@ -26,6 +26,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="208" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="208" bodyend="213"/>
+        <references refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" compoundref="Tuples_8hpp" startline="157" endline="187">atrip::getTuplesList</references>
       </memberdef>
       </sectiondef>
     <briefdescription>

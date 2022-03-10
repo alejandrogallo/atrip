@@ -26,6 +26,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="540" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="540" bodyend="542"/>
+        <references refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" compoundref="Tuples_8hpp" startline="429" endline="535">atrip::group_and_sort::main</references>
       </memberdef>
       </sectiondef>
     <briefdescription>

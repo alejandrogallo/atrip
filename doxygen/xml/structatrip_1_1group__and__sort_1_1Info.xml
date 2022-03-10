@@ -16,6 +16,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="241" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="241" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="247" endline="425">atrip::group_and_sort::specialDistribution</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" prot="public" static="no" mutable="no">
         <type>size_t</type>
@@ -29,12 +30,20 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="242" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="242" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="247" endline="425">atrip::group_and_sort::specialDistribution</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" compoundref="Tuples_8hpp" startline="429" endline="535">atrip::group_and_sort::main</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::group_and_sort::Info</label>
+        <link refid="structatrip_1_1group__and__sort_1_1Info"/>
+      </node>
+    </collaborationgraph>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="240" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="240" bodyend="243"/>
     <listofallmembers>
       <member refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" prot="public" virt="non-virtual"><scope>atrip::group_and_sort::Info</scope><name>nNodes</name></member>

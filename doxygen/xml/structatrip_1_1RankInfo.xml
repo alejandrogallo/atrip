@@ -74,6 +74,12 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::RankInfo</label>
+        <link refid="structatrip_1_1RankInfo"/>
+      </node>
+    </collaborationgraph>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="95" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="95" bodyend="101"/>
     <listofallmembers>
       <member refid="structatrip_1_1RankInfo_1a3247711bc8708d20cb2bd62d371de92d" prot="public" virt="non-virtual"><scope>atrip::RankInfo</scope><name>globalRank</name></member>

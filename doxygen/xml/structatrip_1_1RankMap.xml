@@ -22,6 +22,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="29" column="17" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; double &gt;::find</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -37,6 +38,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="30" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1RankMap_1a7b770e5c35a4edf4e8fc56bd9a9886e6" compoundref="RankMap_8hpp" startline="34" endline="40">atrip::RankMap&lt; double &gt;::RankMap</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1a1f754793a757c579d91961b5d0390cfd" compoundref="RankMap_8hpp" startline="73" endline="129">atrip::RankMap&lt; double &gt;::find</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" prot="public" static="no" mutable="no">
         <type>size_t const</type>
@@ -50,6 +53,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="31" column="18" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; double &gt;::find</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" compoundref="RankMap_8hpp" startline="56" endline="58">atrip::RankMap&lt; double &gt;::nSources</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" compoundref="RankMap_8hpp" startline="61" endline="66">atrip::RankMap&lt; double &gt;::isPaddingRank</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1RankMap_1a9446d8e669ada2186bab67c0ada510f3" prot="public" static="no" mutable="no">
         <type>size_t const</type>
@@ -63,6 +69,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="31" column="21" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" compoundref="RankMap_8hpp" startline="56" endline="58">atrip::RankMap&lt; double &gt;::nSources</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" compoundref="RankMap_8hpp" startline="61" endline="66">atrip::RankMap&lt; double &gt;::isPaddingRank</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" prot="public" static="no" mutable="no">
         <type><ref refid="structatrip_1_1ClusterInfo" kindref="compound">ClusterInfo</ref> const</type>
@@ -76,6 +84,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="32" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; double &gt;::find</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -120,6 +129,11 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="42" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="42" bodyend="54"/>
+        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="80" endline="93">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="155" endline="170">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="194" endline="209">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="234" endline="250">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>size_t</type>
@@ -133,6 +147,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="56" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="56" bodyend="58"/>
+        <referencedby refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" compoundref="RankMap_8hpp" startline="68" endline="70">atrip::RankMap&lt; double &gt;::isSourcePadding</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
@@ -150,6 +165,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="61" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="61" bodyend="66"/>
+        <referencedby refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" compoundref="RankMap_8hpp" startline="68" endline="70">atrip::RankMap&lt; double &gt;::isSourcePadding</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
@@ -198,6 +214,19 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>atrip::RankMap&lt; double &gt;</label>
+        <link refid="structatrip_1_1RankMap"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>atrip::RankMap&lt; F &gt;</label>
+        <link refid="structatrip_1_1RankMap"/>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
       <node id="2">
         <label>atrip::ClusterInfo</label>
@@ -207,7 +236,7 @@
         <label>atrip::RankMap&lt; F &gt;</label>
         <link refid="structatrip_1_1RankMap"/>
         <childnode refid="2" relation="usage">
-          <edgelabel>clusterInfo</edgelabel>
+          <edgelabel>+clusterInfo</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
