@@ -67,13 +67,8 @@ jobs:
         cd docs
         nix-shell --run 'make sphinx'
 
-    - name: Make sphinx as the main page
-      run: |
-        cd docs
-        mv sphinx/* .
-
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
          branch: gh-pages
-         folder: ./docs
+         folder: ./docs/build
