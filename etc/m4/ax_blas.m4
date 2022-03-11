@@ -1,54 +1,42 @@
 # ===========================================================================
-#          http://www.gnu.org/software/autoconf-archive/ax_mpi.html
+#         https://www.gnu.org/software/autoconf-archive/ax_blas.html
 # ===========================================================================
 #
 # SYNOPSIS
 #
-#   AX_MPI([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
+#   AX_BLAS([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
 #
 # DESCRIPTION
 #
-#   This macro tries to find out how to compile programs that use MPI
-#   (Message Passing Interface), a standard API for parallel process
-#   communication (see http://www-unix.mcs.anl.gov/mpi/)
+#   This macro looks for a library that implements the BLAS linear-algebra
+#   interface (see http://www.netlib.org/blas/). On success, it sets the
+#   BLAS_LIBS output variable to hold the requisite library linkages.
 #
-#   On success, it sets the MPICC, MPICXX, MPIF77, or MPIFC output variable
-#   to the name of the MPI compiler, depending upon the current language.
-#   (This may just be $CC/$CXX/$F77/$FC, but is more often something like
-#   mpicc/mpiCC/mpif77/mpif90.) It also sets MPILIBS to any libraries that
-#   are needed for linking MPI (e.g. -lmpi or -lfmpi, if a special
-#   MPICC/MPICXX/MPIF77/MPIFC was not found).
+#   To link with BLAS, you should link with:
 #
-#   If you want to compile everything with MPI, you should use something
-#   like this for C:
+#     $BLAS_LIBS $LIBS $FLIBS
 #
-#     if test -z "$CC" && test -n "$MPICC"; then
-#       CC="$MPICC"
-#     fi
-#     AC_PROG_CC
-#     AX_MPI
-#     CC="$MPICC"
-#     LIBS="$MPILIBS $LIBS"
+#   in that order. FLIBS is the output variable of the
+#   AC_F77_LIBRARY_LDFLAGS macro (called if necessary by AX_BLAS), and is
+#   sometimes necessary in order to link with F77 libraries. Users will also
+#   need to use AC_F77_DUMMY_MAIN (see the autoconf manual), for the same
+#   reason.
 #
-#   and similar for C++ (change all instances of CC to CXX), Fortran 77
-#   (with F77 instead of CC) or Fortran (with FC instead of CC).
+#   Many libraries are searched for, from ATLAS to CXML to ESSL. The user
+#   may also use --with-blas=<lib> in order to use some specific BLAS
+#   library <lib>. In order to link successfully, however, be aware that you
+#   will probably need to use the same Fortran compiler (which can be set
+#   via the F77 env. var.) as was used to compile the BLAS library.
 #
-#   NOTE: The above assumes that you will use $CC (or whatever) for linking
-#   as well as for compiling. (This is the default for automake and most
-#   Makefiles.)
-#
-#   The user can force a particular library/compiler by setting the
-#   MPICC/MPICXX/MPIF77/MPIFC and/or MPILIBS environment variables.
-#
-#   ACTION-IF-FOUND is a list of shell commands to run if an MPI library is
-#   found, and ACTION-IF-NOT-FOUND is a list of commands to run if it is not
-#   found. If ACTION-IF-FOUND is not specified, the default action will
-#   define HAVE_MPI.
+#   ACTION-IF-FOUND is a list of shell commands to run if a BLAS library is
+#   found, and ACTION-IF-NOT-FOUND is a list of commands to run it if it is
+#   not found. If ACTION-IF-FOUND is not specified, the default action will
+#   define HAVE_BLAS.
 #
 # LICENSE
 #
 #   Copyright (c) 2008 Steven G. Johnson <stevenj@alum.mit.edu>
-#   Copyright (c) 2008 Julian C. Cummings <cummings@cacr.caltech.edu>
+#   Copyright (c) 2019 Geoffrey M. Oxberry <goxberry@gmail.com>
 #
 #   This program is free software: you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the
@@ -61,7 +49,7 @@
 #   Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License along
-#   with this program. If not, see <http://www.gnu.org/licenses/>.
+#   with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 #   As a special exception, the respective Autoconf Macro's copyright owner
 #   gives unlimited permission to copy, distribute and modify the configure
@@ -76,117 +64,178 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+#serial 17
 
-AU_ALIAS([ACX_MPI], [AX_MPI])
-AC_DEFUN([AX_MPI], [
-AC_PREREQ([2.50]) dnl for AC_LANG_CASE
+AU_ALIAS([ACX_BLAS], [AX_BLAS])
+AC_DEFUN([AX_BLAS], [
+AC_PREREQ([2.55])
+AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
+AC_REQUIRE([AC_CANONICAL_HOST])
+ax_blas_ok=no
 
-AC_LANG_CASE([C], [
-	AC_REQUIRE([AC_PROG_CC])
-	AC_ARG_VAR(MPICC,[MPI C compiler command])
-	AC_CHECK_PROGS(MPICC, mpicc hcc mpxlc_r mpxlc mpcc cmpicc, $CC)
-	ax_mpi_save_CC="$CC"
-	CC="$MPICC"
-	AC_SUBST(MPICC)
-],
-[C++], [
-	AC_REQUIRE([AC_PROG_CXX])
-	AC_ARG_VAR(MPICXX,[MPI C++ compiler command])
-	AC_CHECK_PROGS(MPICXX, mpic++ mpicxx mpiCC hcp mpxlC_r mpxlC mpCC cmpic++, $CXX)
-	ax_mpi_save_CXX="$CXX"
-	CXX="$MPICXX"
-	AC_SUBST(MPICXX)
-],
-[Fortran 77], [
-	AC_REQUIRE([AC_PROG_F77])
-	AC_ARG_VAR(MPIF77,[MPI Fortran 77 compiler command])
-	AC_CHECK_PROGS(MPIF77, mpif77 hf77 mpxlf_r mpxlf mpf77 cmpifc, $F77)
-	ax_mpi_save_F77="$F77"
-	F77="$MPIF77"
-	AC_SUBST(MPIF77)
-],
-[Fortran], [
-	AC_REQUIRE([AC_PROG_FC])
-	AC_ARG_VAR(MPIFC,[MPI Fortran compiler command])
-	AC_CHECK_PROGS(MPIFC, mpif90 mpxlf95_r mpxlf90_r mpxlf95 mpxlf90 mpf90 cmpif90c, $FC)
-	ax_mpi_save_FC="$FC"
-	FC="$MPIFC"
-	AC_SUBST(MPIFC)
-])
+AC_ARG_WITH(blas,
+	[AS_HELP_STRING([--with-blas=<lib>], [use BLAS library <lib>])])
+case $with_blas in
+	yes | "") ;;
+	no) ax_blas_ok=disable ;;
+	-* | */* | *.a | *.so | *.so.* | *.dylib | *.dylib.* | *.o)
+		BLAS_LIBS="$with_blas"
+	;;
+	*) BLAS_LIBS="-l$with_blas" ;;
+esac
 
-if test x = x"$MPILIBS"; then
-	AC_LANG_CASE([C], [AC_CHECK_FUNC(MPI_Init, [MPILIBS=" "])],
-		[C++], [AC_CHECK_FUNC(MPI_Init, [MPILIBS=" "])],
-		[Fortran 77], [AC_MSG_CHECKING([for MPI_Init])
-			AC_LINK_IFELSE([AC_LANG_PROGRAM([],[      call MPI_Init])],[MPILIBS=""
-				AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])],
-		[Fortran], [AC_MSG_CHECKING([for MPI_Init])
-			AC_LINK_IFELSE([AC_LANG_PROGRAM([],[      call MPI_Init])],[MPILIBS=" "
-				AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])])
+# Get fortran linker names of BLAS functions to check for.
+AC_F77_FUNC(sgemm)
+AC_F77_FUNC(dgemm)
+
+ax_blas_save_LIBS="$LIBS"
+LIBS="$LIBS $FLIBS"
+
+# First, check BLAS_LIBS environment variable
+if test $ax_blas_ok = no; then
+if test "x$BLAS_LIBS" != x; then
+	save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
+	AC_MSG_CHECKING([for $sgemm in $BLAS_LIBS])
+	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes], [BLAS_LIBS=""])
+	AC_MSG_RESULT($ax_blas_ok)
+	LIBS="$save_LIBS"
 fi
-AC_LANG_CASE([Fortran 77], [
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(fmpi, MPI_Init, [MPILIBS="-lfmpi"])
-	fi
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(fmpich, MPI_Init, [MPILIBS="-lfmpich"])
-	fi
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(mpif77, MPI_Init, [MPILIBS="-lmpif77"])
-	fi
-],
-[Fortran], [
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(fmpi, MPI_Init, [MPILIBS="-lfmpi"])
-	fi
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(mpichf90, MPI_Init, [MPILIBS="-lmpichf90"])
-	fi
-])
-if test x = x"$MPILIBS"; then
-	AC_CHECK_LIB(mpi, MPI_Init, [MPILIBS="-lmpi"])
-fi
-if test x = x"$MPILIBS"; then
-	AC_CHECK_LIB(mpich, MPI_Init, [MPILIBS="-lmpich"])
 fi
 
-dnl We have to use AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[],[]) and not AC_CHECK_HEADER because the
-dnl latter uses $CPP, not $CC (which may be mpicc).
-AC_LANG_CASE([C], [if test x != x"$MPILIBS"; then
-	AC_MSG_CHECKING([for mpi.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <mpi.h>]], [[]])],[AC_MSG_RESULT(yes)],[MPILIBS=""
-		AC_MSG_RESULT(no)])
-fi],
-[C++], [if test x != x"$MPILIBS"; then
-	AC_MSG_CHECKING([for mpi.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <mpi.h>]], [[]])],[AC_MSG_RESULT(yes)],[MPILIBS=""
-		AC_MSG_RESULT(no)])
-fi],
-[Fortran 77], [if test x != x"$MPILIBS"; then
-	AC_MSG_CHECKING([for mpif.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[      include 'mpif.h'])],[AC_MSG_RESULT(yes)], [MPILIBS=""
-		AC_MSG_RESULT(no)])
-fi],
-[Fortran], [if test x != x"$MPILIBS"; then
-	AC_MSG_CHECKING([for mpif.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[      include 'mpif.h'])],[AC_MSG_RESULT(yes)], [MPILIBS=""
-		AC_MSG_RESULT(no)])
-fi])
+# BLAS linked to by default?  (happens on some supercomputers)
+if test $ax_blas_ok = no; then
+	save_LIBS="$LIBS"; LIBS="$LIBS"
+	AC_MSG_CHECKING([if $sgemm is being linked in already])
+	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes])
+	AC_MSG_RESULT($ax_blas_ok)
+	LIBS="$save_LIBS"
+fi
 
-AC_LANG_CASE([C], [CC="$ax_mpi_save_CC"],
-	[C++], [CXX="$ax_mpi_save_CXX"],
-	[Fortran 77], [F77="$ax_mpi_save_F77"],
-	[Fortran], [FC="$ax_mpi_save_FC"])
+# BLAS in OpenBLAS library? (http://xianyi.github.com/OpenBLAS/)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(openblas, $sgemm, [ax_blas_ok=yes
+			                BLAS_LIBS="-lopenblas"])
+fi
 
-AC_SUBST(MPILIBS)
+# BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(atlas, ATL_xerbla,
+		[AC_CHECK_LIB(f77blas, $sgemm,
+		[AC_CHECK_LIB(cblas, cblas_dgemm,
+			[ax_blas_ok=yes
+			 BLAS_LIBS="-lcblas -lf77blas -latlas"],
+			[], [-lf77blas -latlas])],
+			[], [-latlas])])
+fi
+
+# BLAS in PhiPACK libraries? (requires generic BLAS lib, too)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(blas, $sgemm,
+		[AC_CHECK_LIB(dgemm, $dgemm,
+		[AC_CHECK_LIB(sgemm, $sgemm,
+			[ax_blas_ok=yes; BLAS_LIBS="-lsgemm -ldgemm -lblas"],
+			[], [-lblas])],
+			[], [-lblas])])
+fi
+
+# BLAS in Intel MKL library?
+if test $ax_blas_ok = no; then
+	# MKL for gfortran
+	if test x"$ac_cv_fc_compiler_gnu" = xyes; then
+		# 64 bit
+		if test $host_cpu = x86_64; then
+			AC_CHECK_LIB(mkl_gf_lp64, $sgemm,
+			[ax_blas_ok=yes;BLAS_LIBS="-lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread"],,
+			[-lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread])
+		# 32 bit
+		elif test $host_cpu = i686; then
+			AC_CHECK_LIB(mkl_gf, $sgemm,
+				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_gf -lmkl_sequential -lmkl_core -lpthread"],,
+				[-lmkl_gf -lmkl_sequential -lmkl_core -lpthread])
+		fi
+	# MKL for other compilers (Intel, PGI, ...?)
+	else
+		# 64-bit
+		if test $host_cpu = x86_64; then
+			AC_CHECK_LIB(mkl_intel_lp64, $sgemm,
+				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread"],,
+				[-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread])
+		# 32-bit
+		elif test $host_cpu = i686; then
+			AC_CHECK_LIB(mkl_intel, $sgemm,
+				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_intel -lmkl_sequential -lmkl_core -lpthread"],,
+				[-lmkl_intel -lmkl_sequential -lmkl_core -lpthread])
+		fi
+	fi
+fi
+# Old versions of MKL
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(mkl, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lmkl -lguide -lpthread"],,[-lguide -lpthread])
+fi
+
+# BLAS in Apple vecLib library?
+if test $ax_blas_ok = no; then
+	save_LIBS="$LIBS"; LIBS="-framework vecLib $LIBS"
+	AC_MSG_CHECKING([for $sgemm in -framework vecLib])
+	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes;BLAS_LIBS="-framework vecLib"])
+	AC_MSG_RESULT($ax_blas_ok)
+	LIBS="$save_LIBS"
+fi
+
+# BLAS in Alpha CXML library?
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(cxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lcxml"])
+fi
+
+# BLAS in Alpha DXML library? (now called CXML, see above)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(dxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-ldxml"])
+fi
+
+# BLAS in Sun Performance library?
+if test $ax_blas_ok = no; then
+	if test "x$GCC" != xyes; then # only works with Sun CC
+		AC_CHECK_LIB(sunmath, acosp,
+			[AC_CHECK_LIB(sunperf, $sgemm,
+				[BLAS_LIBS="-xlic_lib=sunperf -lsunmath"
+                                 ax_blas_ok=yes],[],[-lsunmath])])
+	fi
+fi
+
+# BLAS in SCSL library?  (SGI/Cray Scientific Library)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(scs, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lscs"])
+fi
+
+# BLAS in SGIMATH library?
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(complib.sgimath, $sgemm,
+		     [ax_blas_ok=yes; BLAS_LIBS="-lcomplib.sgimath"])
+fi
+
+# BLAS in IBM ESSL library? (requires generic BLAS lib, too)
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(blas, $sgemm,
+		[AC_CHECK_LIB(essl, $sgemm,
+			[ax_blas_ok=yes; BLAS_LIBS="-lessl -lblas"],
+			[], [-lblas $FLIBS])])
+fi
+
+# Generic BLAS library?
+if test $ax_blas_ok = no; then
+	AC_CHECK_LIB(blas, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lblas"])
+fi
+
+AC_SUBST(BLAS_LIBS)
+
+LIBS="$ax_blas_save_LIBS"
 
 # Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
-if test x = x"$MPILIBS"; then
-        $2
+if test x"$ax_blas_ok" = xyes; then
+        ifelse([$1],,AC_DEFINE(HAVE_BLAS,1,[Define if you have a BLAS library.]),[$1])
         :
 else
-        ifelse([$1],,[AC_DEFINE(HAVE_MPI,1,[Define if you have the MPI library.])],[$1])
-        :
+        ax_blas_ok=no
+        $2
 fi
-])dnl AX_MPI
+])dnl AX_BLAS

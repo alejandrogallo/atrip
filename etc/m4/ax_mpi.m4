@@ -1,5 +1,5 @@
 # ===========================================================================
-#          http://www.gnu.org/software/autoconf-archive/ax_mpi.html
+#          https://www.gnu.org/software/autoconf-archive/ax_mpi.html
 # ===========================================================================
 #
 # SYNOPSIS
@@ -19,26 +19,13 @@
 #   are needed for linking MPI (e.g. -lmpi or -lfmpi, if a special
 #   MPICC/MPICXX/MPIF77/MPIFC was not found).
 #
-#   If you want to compile everything with MPI, you should use something
-#   like this for C:
-#
-#     if test -z "$CC" && test -n "$MPICC"; then
-#       CC="$MPICC"
-#     fi
-#     AC_PROG_CC
-#     AX_MPI
-#     CC="$MPICC"
-#     LIBS="$MPILIBS $LIBS"
-#
-#   and similar for C++ (change all instances of CC to CXX), Fortran 77
-#   (with F77 instead of CC) or Fortran (with FC instead of CC).
-#
-#   NOTE: The above assumes that you will use $CC (or whatever) for linking
-#   as well as for compiling. (This is the default for automake and most
-#   Makefiles.)
-#
-#   The user can force a particular library/compiler by setting the
-#   MPICC/MPICXX/MPIF77/MPIFC and/or MPILIBS environment variables.
+#   Note that this macro should be used only if you just have a few source
+#   files that need to be compiled using MPI. In particular, you should
+#   neither overwrite CC/CXX/F77/FC with the values of
+#   MPICC/MPICXX/MPIF77/MPIFC, nor assume that you can use the same flags
+#   etc. as the standard compilers. If you want to compile a whole program
+#   using the MPI compiler commands, use one of the macros
+#   AX_PROG_{CC,CXX,FC}_MPI.
 #
 #   ACTION-IF-FOUND is a list of shell commands to run if an MPI library is
 #   found, and ACTION-IF-NOT-FOUND is a list of commands to run if it is not
@@ -61,7 +48,7 @@
 #   Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License along
-#   with this program. If not, see <http://www.gnu.org/licenses/>.
+#   with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 #   As a special exception, the respective Autoconf Macro's copyright owner
 #   gives unlimited permission to copy, distribute and modify the configure
@@ -76,11 +63,11 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+#serial 9
 
 AU_ALIAS([ACX_MPI], [AX_MPI])
 AC_DEFUN([AX_MPI], [
-AC_PREREQ([2.50]) dnl for AC_LANG_CASE
+AC_PREREQ(2.50) dnl for AC_LANG_CASE
 
 AC_LANG_CASE([C], [
 	AC_REQUIRE([AC_PROG_CC])
@@ -119,7 +106,7 @@ if test x = x"$MPILIBS"; then
 	AC_LANG_CASE([C], [AC_CHECK_FUNC(MPI_Init, [MPILIBS=" "])],
 		[C++], [AC_CHECK_FUNC(MPI_Init, [MPILIBS=" "])],
 		[Fortran 77], [AC_MSG_CHECKING([for MPI_Init])
-			AC_LINK_IFELSE([AC_LANG_PROGRAM([],[      call MPI_Init])],[MPILIBS=""
+			AC_LINK_IFELSE([AC_LANG_PROGRAM([],[      call MPI_Init])],[MPILIBS=" "
 				AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])],
 		[Fortran], [AC_MSG_CHECKING([for MPI_Init])
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([],[      call MPI_Init])],[MPILIBS=" "
@@ -131,9 +118,6 @@ AC_LANG_CASE([Fortran 77], [
 	fi
 	if test x = x"$MPILIBS"; then
 		AC_CHECK_LIB(fmpich, MPI_Init, [MPILIBS="-lfmpich"])
-	fi
-	if test x = x"$MPILIBS"; then
-		AC_CHECK_LIB(mpif77, MPI_Init, [MPILIBS="-lmpif77"])
 	fi
 ],
 [Fortran], [
@@ -151,16 +135,16 @@ if test x = x"$MPILIBS"; then
 	AC_CHECK_LIB(mpich, MPI_Init, [MPILIBS="-lmpich"])
 fi
 
-dnl We have to use AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[],[]) and not AC_CHECK_HEADER because the
+dnl We have to use AC_TRY_COMPILE and not AC_CHECK_HEADER because the
 dnl latter uses $CPP, not $CC (which may be mpicc).
 AC_LANG_CASE([C], [if test x != x"$MPILIBS"; then
 	AC_MSG_CHECKING([for mpi.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <mpi.h>]], [[]])],[AC_MSG_RESULT(yes)],[MPILIBS=""
+	AC_TRY_COMPILE([#include <mpi.h>],[],[AC_MSG_RESULT(yes)], [MPILIBS=""
 		AC_MSG_RESULT(no)])
 fi],
 [C++], [if test x != x"$MPILIBS"; then
 	AC_MSG_CHECKING([for mpi.h])
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <mpi.h>]], [[]])],[AC_MSG_RESULT(yes)],[MPILIBS=""
+	AC_TRY_COMPILE([#include <mpi.h>],[],[AC_MSG_RESULT(yes)], [MPILIBS=""
 		AC_MSG_RESULT(no)])
 fi],
 [Fortran 77], [if test x != x"$MPILIBS"; then
