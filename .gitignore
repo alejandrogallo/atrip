@@ -1,7 +1,13 @@
+etc/autotools/
+Makefile.in
+build
 .emacs
 *.rst
 doxygen
 sphinx
+aclocal.m4
+autom4te.cache/
+configure
 
 include/dbg.h
 doc/doxygen/

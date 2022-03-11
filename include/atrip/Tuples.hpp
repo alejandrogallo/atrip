@@ -125,6 +125,7 @@ getNodeInfos(std::vector<string> const& nodeNames) {
                       nodeId,
                       globalRank++,
                       localRanks[nodeId]++,
+                      (size_t)
                       std::count(nodeNames.begin(),
                                  nodeNames.end(),
                                  name)

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
-#include <bench/CLI11.hpp>
+#include <CLI11.hpp>
 
 #define _print_size(what, size)                 \
   if (rank == 0) {                              \

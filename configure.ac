@@ -9,30 +9,32 @@ AC_CONFIG_SRCDIR([.])
 AC_PREREQ(2.69)
 AC_LANG([C++])
 AC_CONFIG_MACRO_DIR([./etc/m4])
-AM_INIT_AUTOMAKE([foreign])
+AC_CONFIG_AUX_DIR([./etc/autotools])
+AM_INIT_AUTOMAKE([foreign -Wall])
 
 
 dnl -----------------------------------------------------------------------
 dnl Configure switches
 
 AC_ARG_ENABLE(shared,
-  AS_HELP_STRING( [--enable-shared],
-                  [enable loading compiled files (default=YES)]),
-  [], [enable_shared=yes])
+              AS_HELP_STRING([--enable-shared],
+                             [enable loading compiled
+                                     files (default=YES)]),
+              [], [enable_shared=yes])
 
 dnl LIBGC library options
 AC_ARG_WITH(libctf-prefix,
-  AS_HELP_STRING( [--with-libctf-prefix=path],
-                  [prefix for system LIBGC includes and libraries] ),
-  [LIBCTF_CPATH="$withval/include";
-   LIBCTF_LD_LIBRARY_PATH="$withval/lib";
-   BUILD_CTF=NO],
-  [BUILD_CTF=YES])
+            AS_HELP_STRING([--with-libctf-prefix=path],
+                           [prefix for CTF includes and libraries] ),
+            [LIBCTF_CPATH="`readlink -f $withval`/include";
+                           LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
+                           BUILD_CTF=NO],
+            [BUILD_CTF=YES])
 
 AC_ARG_WITH(dgemm,
-  AS_HELP_STRING( [--without-dgemm],
-                  [Disable dgemm]),
-  [with_dgemm=NO], [with_dgemm=YES])
+            AS_HELP_STRING([--without-dgemm], [Disable dgemm]),
+            [with_dgemm=NO],
+            [with_dgemm=YES])
 
 
 
@@ -52,6 +54,7 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
 AC_PROG_CXX           dnl sets variable CXX
+AM_PROG_AR
 AC_PROG_CPP           dnl sets variable CPP
 AC_PROG_RANLIB        dnl sets variable RANLIB
 AC_PROG_INSTALL       dnl sets variables INSTALL, INSTALL_DATA, INSTALL_PROGRAM
@@ -64,21 +67,31 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 
 AX_CXX_COMPILE_STDCXX([11])
-
+AX_CXX_STATIC_CAST
+AX_CXX_TEMPLATES
+AX_CXX_TYPENAME
 AX_MPI([],
        [AC_MSG_ERROR([You don not have an MPI Implementation!])])
+AX_PROG_CXX_MPI
 CXX=${MPICXX}
 
-CXXFLAGS="$CXXFLAGS -I$PWD/include"
-CXXFLAGS="$CXXFLAGS -I${LIBCTF_CPATH}"
-LDFLAGS="$LDFLAGS -L${LIBCTF_LD_LIBRARY_PATH} -lctf"
+dnl ---------- CHECK CTF
+if test xYES = x${BUILD_CTF}; then
+  AC_MSG_ERROR([Sorry, building CTF not supported yet provide a build path
+                      with --with-libctf-prefix=path])
+else
+  CPPFLAGS="$CPPFLAGS -I${LIBCTF_CPATH}"
+  LDFLAGS="$LDFLAGS -L${LIBCTF_LD_LIBRARY_PATH} -lctf"
+  AC_CHECK_HEADER([ctf.hpp],
+                  [],
+                  [AC_MSG_ERROR([no ctf.hpp])])
+fi
 
-AC_CONFIG_FILES([
-  src/Makefile
-  bench/Makefile
-  etc/config/auto.mk
- ])
 
+AC_CONFIG_FILES([Makefile
+                 src/Makefile
+                 bench/Makefile
+                 ])
 AC_CONFIG_HEADERS([config.h])
 
 AC_MSG_RESULT([
@@ -86,11 +99,8 @@ AC_MSG_RESULT([
                        -----------------------
                        CXX      = $CXX
                        CXXFLAGS = $CXXFLAGS
-                       DEFAULT_INCLUDES = $DEFAULT_INCLUDES
                        LDFLAGS  = $LDFLAGS
                        ATRIP_LDFLAGS  = $ATRIP_LDFLAGS
-                       bindir   = $bindir
-                       libdir   = $libdir
 ])
 
 AC_OUTPUT

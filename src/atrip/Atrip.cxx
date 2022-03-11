@@ -157,7 +157,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
   using Database = typename Slice<F>::Database;
-  using LocalDatabase = typename Slice<F>::LocalDatabase;
   auto communicateDatabase
     = [ &unions
       , np
