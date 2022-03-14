@@ -24,15 +24,19 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Install nix dependencies
-      run: nix-shell --run 'env'
+      env:
+        WITH_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
+      run: ${WITH_SHELL} 'env'
 
     - name: Make configure script
-      run: test -f ./configure || nix-shell --run 'autoreconf -sfiv'
+      env:
+        WITH_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
+      run: test -f ./configure || ${WITH_SHELL} 'autoreconf -sfiv'
 
       ## TODO: do this in a matrix
     - name: Compiler ${{matrix.compiler}}
       env:
-        WITH_SHELL: "nix-shell ../../shell.nix--argstr compiler ${{matrix.compiler}} --run"
+        WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --run"
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
