@@ -21,11 +21,16 @@ pkgs.mkShell rec {
     else if compiler == "gcc8" then pkgs.gcc8
     else if compiler == "gcc7" then pkgs.gcc7
     else if compiler == "gcc6" then pkgs.gcc6
+    else if compiler == "gcc49" then pkgs.gcc49
     else if compiler == "clang13" then pkgs.clang_13
     else if compiler == "clang12" then pkgs.clang_12
     else if compiler == "clang11" then pkgs.clang_11
     else if compiler == "clang10" then pkgs.clang_10
     else if compiler == "clang9" then pkgs.clang_9
+    else if compiler == "clang8" then pkgs.clang_8
+    else if compiler == "clang7" then pkgs.clang_7
+    else if compiler == "clang6" then pkgs.clang_6
+    else if compiler == "clang5" then pkgs.clang_5
     else pkgs.gcc;
 
   buildInputs
@@ -39,6 +44,7 @@ pkgs.mkShell rec {
 
         binutils
         emacs
+        gfortran
 
         gnumake
         libtool

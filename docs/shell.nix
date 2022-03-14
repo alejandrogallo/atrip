@@ -12,6 +12,7 @@ pkgs.mkShell rec {
     python3Packages.breathe
     doxygen
     sphinx
+    git
     graphviz
   ];
 

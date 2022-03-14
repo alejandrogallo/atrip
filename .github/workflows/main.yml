@@ -13,7 +13,22 @@ jobs:
 
     strategy:
       matrix:
-        compiler: [gcc6, gcc7, gcc8, gcc9, gcc10, gcc11, clang9, clang10, clang11, clang12, clang13]
+        compiler:
+          - gcc11
+          - gcc10
+          - gcc9
+          - gcc8
+          - gcc7
+          - gcc6
+          - clang13
+          - clang12
+          - clang11
+          - clang10
+          - clang9
+          - clang8
+          - clang7
+          - clang6
+          - clang5
 
     steps:
     - uses: actions/checkout@v2.3.4

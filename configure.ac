@@ -104,11 +104,13 @@ else
                   [AC_MSG_ERROR([no ctf.hpp])])
 fi
 
-
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  bench/Makefile
-                 ])
+                 docs/Makefile
+                 docs/conf.py:docs/conf.py
+                 docs/Doxyfile:docs/Doxyfile
+               ])
 AC_CONFIG_HEADERS([config.h])
 
 AC_MSG_RESULT([
