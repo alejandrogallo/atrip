@@ -2,6 +2,16 @@ include ./etc/make/emacs.mk
 
 SUBDIRS = src bench
 
+if WITH_BUILD_CTF
+CTF_COMMIT         = 968f8f9eb6aab1d6b67d2fcc1a70c9fc3b98adfa
+CTF_GIT_REPOSITORY = https://github.com/cc4s/ctf
+CTF_BUILD_PATH     = $(builddir)/extern/build/$(CONFIG)/ctf/$(CTF_COMMIT)
+CTF_SRC_PATH       = $(builddir)/extern/src/$(CONFIG)/ctf/$(CTF_COMMIT)
+include $(srcdir)/etc/make/ctf.mk
+src: ctf
+SUBDIRS += extern/ctf/
+endif
+
 _ATRIPSRCS = Sources.mk
 ## include $(_ATRIPSRCS)
 

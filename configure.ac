@@ -30,6 +30,15 @@ AC_ARG_WITH(libctf-prefix,
                            LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
                            BUILD_CTF=NO],
             [BUILD_CTF=YES])
+AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
+
+AC_ARG_WITH([clang-check],
+            [AS_HELP_STRING([--with-clang-check],
+                            [Check with clang-check])],
+            [clang_check=YES;
+             AC_CHECK_PROG([CLANG_CHECK], [clang-check])],
+            [clang_check=NO])
+AM_CONDITIONAL([WITH_CLANG_CHECK], [test x${clang_check} = xYES])
 
 AC_ARG_WITH(dgemm,
             AS_HELP_STRING([--without-dgemm], [Disable dgemm]),
@@ -77,7 +86,7 @@ CXX=${MPICXX}
 
 dnl ---------- CHECK CTF
 if test xYES = x${BUILD_CTF}; then
-  AC_MSG_ERROR([Sorry, building CTF not supported yet provide a build path
+  AC_MSG_WARN([Sorry, building CTF not supported yet provide a build path
                       with --with-libctf-prefix=path])
 else
   CPPFLAGS="$CPPFLAGS -I${LIBCTF_CPATH}"
