@@ -55,11 +55,13 @@ As an example, for the doubles amplitudes \( T^{ab}_{ij} \), one need two kinds 
 ** Location
 
 Every slice set, for instance,
-\( S_k = \left\{
+$$
+S_k = \left\{
     a \mapsto \mathsf{T}(a)^{b}_{ij}
     \mid
     a \in A_k
-\right\} \)
+    \right\}
+$$
 where \( A_k \) is some subset of
 \( \mathsf{N}_\mathrm{v} \),
 gets stored in some rank \( k \).
@@ -81,17 +83,17 @@ is therefore a simple structure:
 Due to the permutation operators in the equations
 it is noticeable that for every one dimensional
 slice and triple \( (a,b,c) \)
-\begin{equation*}
+$$
 a \mapsto \mathsf{t}(a)
-\end{equation*}
+$$
 one needs at the same time
 \( \mathsf{t}(a) \),
 \( \mathsf{t}(b) \) and
 \( \mathsf{t}(c) \).
 For two dimensional slices, i.e., slices of the form
-\begin{equation*}
+$$
 (a,b) \mapsto \mathsf{t}(a,b)
-\end{equation*}
+$$
 one needs in the equations the slices
 \( \mathsf{t}(a,b) \),
 \( \mathsf{t}(b,c) \) and
@@ -1685,10 +1687,8 @@ three for loops creating tuples of the sort
   \)
 
 This means,
-\( (1, 2, 3)
- , (1, 1, 3)
- , (1, 2, 2)
-\) are acceptable tuples wherease \( (2, 1, 1) \) and \( (1, 1, 1) \) are not.
+\( (1, 2, 3) , (1, 1, 3) , (1, 2, 2) \)
+are acceptable tuples wherease \( (2, 1, 1) \) and \( (1, 1, 1) \) are not.
 
 
 #+begin_src c++ :tangle (atrip-tuples-h)
@@ -2144,7 +2144,7 @@ Every rank gets =tuplesPerRankLocal= tuples and
 the =nodeTuples= vector is now homogeneous and divisible by the number
 of ranks per node in our node.
 Therefore, the =displacements= are simply the vector
-\begin{equation*}
+$$
   \left\{
   k * \mathrm{tuplesPerNodeLocal}
   \mid
@@ -2154,7 +2154,7 @@ Therefore, the =displacements= are simply the vector
         , \#\text{ranks in node} - 1
         \right\}
   \right\}
-\end{equation*}
+$$
 
 and the =sendCounts= vector is simply the constant vector
 =tuplesPerRankLocal= of size =ranksPerNode=.
