@@ -11,44 +11,48 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        compiler: [gcc6, gcc7, gcc8, gcc9, gcc10, gcc11, clang9, clang10, clang11, clang12, clang13]
+
     steps:
     - uses: actions/checkout@v2.3.4
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v13
+      uses: cachix/install-nix-action@v15
       with:
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Tangle
-      run: nix-shell --run 'make tangle'
+    - name: Install nix dependencies
+      run: nix-shell --run 'env'
+
+    - name: Make configure script
+      run: test -f ./configure || nix-shell --run 'autoreconf -sfiv'
 
       ## TODO: do this in a matrix
-    - name: gcc → Build external dependencies
-      run: nix-shell --run 'make extern CONFIG=gcc'
+    - name: Compiler ${{matrix.compiler}}
+      run: |
+        mkdir -p build/${{matrix.compiler}}
+        cd build/${{matrix.compiler}}
+        nix-shell $_NIXSHELL --run '../../configure'
+        nix-shell $_NIXSHELL --run 'make ctf'
+        nix-shell $_NIXSHELL --run 'make'
+      env:
+        _NIXSHELL="../../shell.nix"
 
-    - name: gcc → Build lib
-      run: nix-shell --run 'make lib CONFIG=gcc'
-
-    - name: gcc → Build bench
-      run: nix-shell --run 'make bench CONFIG=gcc'
-
-    - name: clang → Build external dependencies
-      run: nix-shell --arg with-clang true --run 'make extern CONFIG=clang'
-
-    - name: clang → Build lib
-      run: nix-shell --arg with-clang true --run 'make lib CONFIG=clang'
-
-    - name: clang → Build bench
-      run: nix-shell --arg with-clang true --run 'make bench CONFIG=clang'
 
   documentation:
     runs-on: ubuntu-latest
+    needs: build
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Install Nix
-      uses: cachix/install-nix-action@v13
+      uses: cachix/install-nix-action@v15
       with:
         nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Check configure
+      run: test -f configure
 
     - name: Install dependencies
       run: |
