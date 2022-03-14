@@ -26,11 +26,11 @@ dnl LIBGC library options
 AC_ARG_WITH(libctf-prefix,
             AS_HELP_STRING([--with-libctf-prefix=path],
                            [prefix for CTF includes and libraries] ),
-            [LIBCTF_CPATH="`readlink -f $withval`/include";
-                           LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
-                           BUILD_CTF=NO],
+            [LIBCTF_PATH="`readlink -f $withval`";
+             LIBCTF_CPATH="`readlink -f $withval`/include";
+             LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
+             BUILD_CTF=NO],
             [BUILD_CTF=YES])
-AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
 
 AC_ARG_WITH([clang-check],
             [AS_HELP_STRING([--with-clang-check],
@@ -54,6 +54,8 @@ dnl AC_ARG_VAR([ecldir], [the directory where *.fas files are installed])
 ATRIP_LDFLAGS="-L$PWD/src -latrip"
 AC_SUBST(ATRIP_LDFLAGS)
 
+AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
+AC_SUBST(LIBCTF_PATH)
 AC_SUBST(LIBCTF_CPATH)
 AC_SUBST(LIBCTF_LD_LIBRARY_PATH)
 
@@ -71,9 +73,14 @@ AC_PROG_LN_S          dnl sets variable LN_S
 AC_PROG_MAKE_SET      dnl set $(MAKE) if needed
 AC_PROG_RANLIB        dnl set variable RANLIB
 AC_CHECK_TOOL([AR],[ar]) dnl set variable AR to appropriate `ar' program
+AC_OPENMP
 
 AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
+
+
+AX_BLAS([], [AC_MSG_FAILURE([Could not find BLAS library.])])
+AX_LAPACK([], [AC_MSG_FAILURE([Could not find LAPACK library.])])
 
 AX_CXX_COMPILE_STDCXX([11])
 AX_CXX_STATIC_CAST
