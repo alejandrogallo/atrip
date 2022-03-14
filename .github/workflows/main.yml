@@ -34,11 +34,11 @@ jobs:
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
-        nix-shell $_NIXSHELL --run '../../configure'
-        nix-shell $_NIXSHELL --run 'make ctf'
-        nix-shell $_NIXSHELL --run 'make'
+        nix-shell $NIXSHELL --run '../../configure'
+        nix-shell $NIXSHELL --run 'make ctf'
+        nix-shell $NIXSHELL --run 'make'
       env:
-        _NIXSHELL="../../shell.nix"
+        NIXSHELL="../../shell.nix"
 
 
   documentation:
