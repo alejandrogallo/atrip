@@ -31,14 +31,14 @@ jobs:
 
       ## TODO: do this in a matrix
     - name: Compiler ${{matrix.compiler}}
+      env:
+        NIXSHELL: "../../shell.nix"
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
         nix-shell $NIXSHELL --run '../../configure'
         nix-shell $NIXSHELL --run 'make ctf'
         nix-shell $NIXSHELL --run 'make'
-      env:
-        NIXSHELL="../../shell.nix"
 
 
   documentation:
