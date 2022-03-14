@@ -22,6 +22,12 @@ AC_ARG_ENABLE(shared,
                                      files (default=YES)]),
               [], [enable_shared=yes])
 
+AC_ARG_ENABLE([docs],
+              [AS_HELP_STRING([--enable-docs],
+                              [Enable building docs])],
+              [build_docs=YES], [build_docs=NO])
+
+
 dnl LIBGC library options
 AC_ARG_WITH(libctf-prefix,
             AS_HELP_STRING([--with-libctf-prefix=path],
@@ -102,6 +108,12 @@ else
   AC_CHECK_HEADER([ctf.hpp],
                   [],
                   [AC_MSG_ERROR([no ctf.hpp])])
+fi
+
+if test x${build_docs} = xYES; then
+  AC_CHECK_PROGS([DOXYGEN], [doxygen])
+  AC_CHECK_PROGS([DOT], [dot])
+  AC_CHECK_PROGS([EMACS], [emacs])
 fi
 
 AC_CONFIG_FILES([Makefile
