@@ -82,7 +82,6 @@ AC_FUNC_MALLOC
 AX_BLAS([], [AC_MSG_FAILURE([Could not find BLAS library.])])
 AX_LAPACK([], [AC_MSG_FAILURE([Could not find LAPACK library.])])
 
-AX_CXX_COMPILE_STDCXX([11])
 AX_CXX_STATIC_CAST
 AX_CXX_TEMPLATES
 AX_CXX_TYPENAME
@@ -90,6 +89,8 @@ AX_MPI([],
        [AC_MSG_ERROR([You don not have an MPI Implementation!])])
 AX_PROG_CXX_MPI
 CXX=${MPICXX}
+
+AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])
 
 dnl ---------- CHECK CTF
 if test xYES = x${BUILD_CTF}; then
@@ -115,6 +116,7 @@ AC_MSG_RESULT([
                        -----------------------
                        CXX      = $CXX
                        CXXFLAGS = $CXXFLAGS
+                       CPPFLAGS = $CPPFLAGS
                        LDFLAGS  = $LDFLAGS
                        ATRIP_LDFLAGS  = $ATRIP_LDFLAGS
 ])
