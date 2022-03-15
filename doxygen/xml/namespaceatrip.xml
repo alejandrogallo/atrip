@@ -96,7 +96,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="55" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="62" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="62" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="var">
@@ -644,7 +644,7 @@
         <references refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</references>
         <references refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8">MAYBE_CONJ</references>
         <references refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00">REORDER</references>
-        <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="40">WITH_CHRONO</references>
+        <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="47">WITH_CHRONO</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a2e0cfc31bb96f193faaf7577e9d8ff86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -956,7 +956,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="22" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="23" bodyend="57"/>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="30" endline="36">pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="37" endline="43">pretty_print</references>
         <references refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" compoundref="Debug_8hpp" startline="68">WITH_OCD</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="71">WITH_RANK</references>
       </memberdef>
@@ -980,7 +980,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="30" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="30" bodyend="36"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="37" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="37" bodyend="43"/>
         <referencedby refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" compoundref="SliceUnion_8hpp" startline="82" endline="223">atrip::SliceUnion&lt; double &gt;::buildLocalDatabase</referencedby>
         <referencedby refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="231" endline="345">atrip::SliceUnion&lt; double &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" compoundref="Slice_8hpp" startline="339" endline="358">atrip::Slice&lt; double &gt;::findByInfo</referencedby>
@@ -995,6 +995,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="32" column="1"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="31" column="1"/>
   </compounddef>
 </doxygen>

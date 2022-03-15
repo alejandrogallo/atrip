@@ -2851,7 +2851,6 @@ is mainly using the ``DGEMM`` function, which we declare as
     #include <string>
     #include <map>
 
-    #include <ctf.hpp>
 
     #include <atrip/Utils.hpp>
 

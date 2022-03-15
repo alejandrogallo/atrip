@@ -73,7 +73,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="80" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="80" bodyend="93"/>
         <references refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; F &gt;::find</references>
-        <references refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" compoundref="Atrip_8hpp" startline="36">atrip::Atrip::rank</references>
+        <references refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" compoundref="Atrip_8hpp" startline="35">atrip::Atrip::rank</references>
         <references refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="542">atrip::SliceUnion&lt; double &gt;::rankMap</references>
         <references refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="545">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
         <references refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="546">atrip::SliceUnion&lt; double &gt;::sources</references>
