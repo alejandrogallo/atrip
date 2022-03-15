@@ -25,8 +25,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="208" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="208" bodyend="213"/>
-        <references refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" compoundref="Tuples_8hpp" startline="157" endline="187">atrip::getTuplesList</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="209" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="209" bodyend="214"/>
+        <references refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" compoundref="Tuples_8hpp" startline="158" endline="188">atrip::getTuplesList</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -57,7 +57,7 @@
         <link refid="structatrip_1_1TuplesDistribution"/>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="207" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="207" bodyend="214"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="208" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="208" bodyend="215"/>
     <listofallmembers>
       <member refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" prot="public" virt="virtual"><scope>atrip::NaiveDistribution</scope><name>getTuples</name></member>
       <member refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" prot="public" virt="virtual"><scope>atrip::NaiveDistribution</scope><name>tupleIsFake</name></member>

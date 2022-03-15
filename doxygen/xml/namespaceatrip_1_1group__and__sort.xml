@@ -24,9 +24,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="226" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="226" bodyend="226"/>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" compoundref="Tuples_8hpp" startline="231" endline="238">getTupleNodes</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="247" endline="425">specialDistribution</referencedby>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="227" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="227" bodyend="227"/>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" compoundref="Tuples_8hpp" startline="232" endline="239">getTupleNodes</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="248" endline="426">specialDistribution</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; size_t &gt;</type>
@@ -47,10 +47,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="231" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="231" bodyend="238"/>
-        <references refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" compoundref="Tuples_8hpp" startline="226" endline="226">isOnNode</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="232" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="232" bodyend="239"/>
+        <references refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" compoundref="Tuples_8hpp" startline="227" endline="227">isOnNode</references>
         <references refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">atrip::unique</references>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="247" endline="425">specialDistribution</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="248" endline="426">specialDistribution</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref></type>
@@ -71,14 +71,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="247" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="247" bodyend="425"/>
-        <references refid="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" compoundref="Tuples_8hpp" startline="231" endline="238">getTupleNodes</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="248" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="248" bodyend="426"/>
+        <references refid="namespaceatrip_1_1group__and__sort_1aa01df5c4f70883f728f55a19f0979e60" compoundref="Tuples_8hpp" startline="232" endline="239">getTupleNodes</references>
         <references refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" compoundref="Tuples_8hpp" startline="44">atrip::INVALID_TUPLE</references>
-        <references refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" compoundref="Tuples_8hpp" startline="226" endline="226">isOnNode</references>
-        <references refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" compoundref="Tuples_8hpp" startline="241">atrip::group_and_sort::Info::nNodes</references>
-        <references refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" compoundref="Tuples_8hpp" startline="242">atrip::group_and_sort::Info::nodeId</references>
+        <references refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" compoundref="Tuples_8hpp" startline="227" endline="227">isOnNode</references>
+        <references refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" compoundref="Tuples_8hpp" startline="242">atrip::group_and_sort::Info::nNodes</references>
+        <references refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" compoundref="Tuples_8hpp" startline="243">atrip::group_and_sort::Info::nodeId</references>
         <references refid="Debug_8hpp_1a318fefe76cbd9fb484ad4457e2285053" compoundref="Debug_8hpp" startline="72">WITH_DBG</references>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" compoundref="Tuples_8hpp" startline="429" endline="535">main</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" compoundref="Tuples_8hpp" startline="430" endline="536">main</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; <ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> &gt;</type>
@@ -99,22 +99,22 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="429" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="429" bodyend="535"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="430" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="430" bodyend="536"/>
         <references refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" compoundref="Tuples_8hpp" startline="43">atrip::FAKE_TUPLE</references>
-        <references refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" compoundref="Tuples_8hpp" startline="191" endline="203">atrip::getAllTuplesList</references>
-        <references refid="namespaceatrip_1a5d282a028b26de5e1ea7d74e4e7f880b" compoundref="Tuples_8hpp" startline="113" endline="134">atrip::getNodeInfos</references>
+        <references refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" compoundref="Tuples_8hpp" startline="192" endline="204">atrip::getAllTuplesList</references>
+        <references refid="namespaceatrip_1a5d282a028b26de5e1ea7d74e4e7f880b" compoundref="Tuples_8hpp" startline="113" endline="135">atrip::getNodeInfos</references>
         <references refid="namespaceatrip_1a61b9bff51847e234f5357dfa5adc5a59" compoundref="Tuples_8hpp" startline="55" endline="91">atrip::getNodeNames</references>
         <references refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" compoundref="Debug_8hpp" startline="80">LOG</references>
-        <references refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" compoundref="Tuples_8hpp" startline="242">atrip::group_and_sort::Info::nodeId</references>
-        <references refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="247" endline="425">specialDistribution</references>
+        <references refid="structatrip_1_1group__and__sort_1_1Info_1a2449f1b8a24d5695df2037b9edf669b4" compoundref="Tuples_8hpp" startline="243">atrip::group_and_sort::Info::nodeId</references>
+        <references refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="248" endline="426">specialDistribution</references>
         <references refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">atrip::unique</references>
-        <referencedby refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" compoundref="Tuples_8hpp" startline="540" endline="542">atrip::group_and_sort::Distribution::getTuples</referencedby>
+        <referencedby refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" compoundref="Tuples_8hpp" startline="541" endline="543">atrip::group_and_sort::Distribution::getTuples</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="218" column="1"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="219" column="1"/>
   </compounddef>
 </doxygen>

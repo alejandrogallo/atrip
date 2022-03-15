@@ -38,82 +38,82 @@
           <div class="body" role="main">
             
   <section id="atrip-an-mpi-asynchronous-implementation-of-ccsd-t">
-<h1><a class="toc-backref" href="#id8">ATRIP: An MPI-asynchronous implementation of CCSD(T)</a><a class="headerlink" href="#atrip-an-mpi-asynchronous-implementation-of-ccsd-t" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id4">ATRIP: An MPI-asynchronous implementation of CCSD(T)</a><a class="headerlink" href="#atrip-an-mpi-asynchronous-implementation-of-ccsd-t" title="Permalink to this headline">¶</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#atrip-an-mpi-asynchronous-implementation-of-ccsd-t" id="id8">ATRIP: An MPI-asynchronous implementation of CCSD(T)</a></p>
+<li><p><a class="reference internal" href="#atrip-an-mpi-asynchronous-implementation-of-ccsd-t" id="id4">ATRIP: An MPI-asynchronous implementation of CCSD(T)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#introduction" id="id9">1 Introduction</a></p></li>
-<li><p><a class="reference internal" href="#the-slice" id="id10">2 The slice</a></p>
+<li><p><a class="reference internal" href="#introduction" id="id5">1 Introduction</a></p></li>
+<li><p><a class="reference internal" href="#the-slice" id="id6">2 The slice</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id1" id="id11">2.1 Introduction</a></p></li>
-<li><p><a class="reference internal" href="#location" id="id12">2.2 Location</a></p></li>
-<li><p><a class="reference internal" href="#type" id="id13">2.3 Type</a></p></li>
-<li><p><a class="reference internal" href="#state" id="id14">2.4 State</a></p></li>
-<li><p><a class="reference internal" href="#the-info-structure" id="id15">2.5 The Info structure</a></p></li>
-<li><p><a class="reference internal" href="#name" id="id16">2.6 Name</a></p></li>
-<li><p><a class="reference internal" href="#database" id="id17">2.7 Database</a></p></li>
-<li><p><a class="reference internal" href="#mpi-types" id="id18">2.8 MPI Types</a></p></li>
-<li><p><a class="reference internal" href="#static-utilities" id="id19">2.9 Static utilities</a></p></li>
-<li><p><a class="reference internal" href="#attributes" id="id20">2.10 Attributes</a></p></li>
-<li><p><a class="reference internal" href="#member-functions" id="id21">2.11 Member functions</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id7">2.1 Introduction</a></p></li>
+<li><p><a class="reference internal" href="#location" id="id8">2.2 Location</a></p></li>
+<li><p><a class="reference internal" href="#type" id="id9">2.3 Type</a></p></li>
+<li><p><a class="reference internal" href="#state" id="id10">2.4 State</a></p></li>
+<li><p><a class="reference internal" href="#the-info-structure" id="id11">2.5 The Info structure</a></p></li>
+<li><p><a class="reference internal" href="#name" id="id12">2.6 Name</a></p></li>
+<li><p><a class="reference internal" href="#database" id="id13">2.7 Database</a></p></li>
+<li><p><a class="reference internal" href="#mpi-types" id="id14">2.8 MPI Types</a></p></li>
+<li><p><a class="reference internal" href="#static-utilities" id="id15">2.9 Static utilities</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id16">2.10 Attributes</a></p></li>
+<li><p><a class="reference internal" href="#member-functions" id="id17">2.11 Member functions</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#utils" id="id22">3 Utils</a></p>
+<li><p><a class="reference internal" href="#utils" id="id18">3 Utils</a></p>
 <ul>
-<li><p><a class="reference internal" href="#pretty-printing" id="id23">3.1 Pretty printing</a></p></li>
-<li><p><a class="reference internal" href="#chrono" id="id24">3.2 Chrono</a></p></li>
+<li><p><a class="reference internal" href="#pretty-printing" id="id19">3.1 Pretty printing</a></p></li>
+<li><p><a class="reference internal" href="#chrono" id="id20">3.2 Chrono</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#the-rank-mapping" id="id25">4 The rank mapping</a></p></li>
-<li><p><a class="reference internal" href="#the-slice-union" id="id26">5 The slice union</a></p></li>
-<li><p><a class="reference internal" href="#tuples" id="id27">6 Tuples</a></p>
+<li><p><a class="reference internal" href="#the-rank-mapping" id="id21">4 The rank mapping</a></p></li>
+<li><p><a class="reference internal" href="#the-slice-union" id="id22">5 The slice union</a></p></li>
+<li><p><a class="reference internal" href="#tuples" id="id23">6 Tuples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#tuples-types" id="id28">6.1 Tuples types</a></p></li>
-<li><p><a class="reference internal" href="#distributing-the-tuples" id="id29">6.2 Distributing the tuples</a></p></li>
-<li><p><a class="reference internal" href="#node-information" id="id30">6.3 Node information</a></p></li>
-<li><p><a class="reference internal" href="#naive-list" id="id31">6.4 Naive list</a></p></li>
-<li><p><a class="reference internal" href="#group-and-sort-list" id="id32">6.5 Group and sort list</a></p>
+<li><p><a class="reference internal" href="#tuples-types" id="id24">6.1 Tuples types</a></p></li>
+<li><p><a class="reference internal" href="#distributing-the-tuples" id="id25">6.2 Distributing the tuples</a></p></li>
+<li><p><a class="reference internal" href="#node-information" id="id26">6.3 Node information</a></p></li>
+<li><p><a class="reference internal" href="#naive-list" id="id27">6.4 Naive list</a></p></li>
+<li><p><a class="reference internal" href="#group-and-sort-list" id="id28">6.5 Group and sort list</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id6" id="id33">6.5.1 Utils</a></p></li>
-<li><p><a class="reference internal" href="#distribution" id="id34">6.5.2 Distribution</a></p></li>
-<li><p><a class="reference internal" href="#main" id="id35">6.5.3 Main</a></p></li>
-<li><p><a class="reference internal" href="#interface" id="id36">6.5.4 Interface</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id29">6.5.1 Utils</a></p></li>
+<li><p><a class="reference internal" href="#distribution" id="id30">6.5.2 Distribution</a></p></li>
+<li><p><a class="reference internal" href="#main" id="id31">6.5.3 Main</a></p></li>
+<li><p><a class="reference internal" href="#interface" id="id32">6.5.4 Interface</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#unions" id="id37">7 Unions</a></p></li>
-<li><p><a class="reference internal" href="#equations" id="id38">8 Equations</a></p></li>
-<li><p><a class="reference internal" href="#blas" id="id39">9 Blas</a></p></li>
-<li><p><a class="reference internal" href="#atrip" id="id40">10 Atrip</a></p>
+<li><p><a class="reference internal" href="#unions" id="id33">7 Unions</a></p></li>
+<li><p><a class="reference internal" href="#equations" id="id34">8 Equations</a></p></li>
+<li><p><a class="reference internal" href="#blas" id="id35">9 Blas</a></p></li>
+<li><p><a class="reference internal" href="#atrip" id="id36">10 Atrip</a></p>
 <ul>
-<li><p><a class="reference internal" href="#header" id="id41">10.1 Header</a></p></li>
-<li><p><a class="reference internal" href="#id7" id="id42">10.2 Main</a></p></li>
+<li><p><a class="reference internal" href="#header" id="id37">10.1 Header</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id38">10.2 Main</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#debug-and-logging" id="id43">11 Debug and Logging</a></p>
+<li><p><a class="reference internal" href="#debug-and-logging" id="id39">11 Debug and Logging</a></p>
 <ul>
-<li><p><a class="reference internal" href="#macros" id="id44">11.1 Macros</a></p></li>
-<li><p><a class="reference internal" href="#iteration-informer" id="id45">11.2 Iteration informer</a></p></li>
+<li><p><a class="reference internal" href="#macros" id="id40">11.1 Macros</a></p></li>
+<li><p><a class="reference internal" href="#iteration-informer" id="id41">11.2 Iteration informer</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#include-header" id="id46">12 Include header</a></p></li>
+<li><p><a class="reference internal" href="#include-header" id="id42">12 Include header</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
 <section id="introduction">
-<h2><a class="toc-backref" href="#id9">1 Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">1 Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The algorithm uses two main data types, the <code class="docutils literal notranslate"><span class="pre">Slice</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">SliceUnion</span></code> as a container and resource manager of the <code class="docutils literal notranslate"><span class="pre">Slice</span></code>.</p>
 </section>
 <section id="the-slice">
-<h2><a class="toc-backref" href="#id10">2 The slice</a><a class="headerlink" href="#the-slice" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">2 The slice</a><a class="headerlink" href="#the-slice" title="Permalink to this headline">¶</a></h2>
 <p>The following section introduces the idea of a slice.</p>
 <section id="id1">
-<h3><a class="toc-backref" href="#id11">2.1 Introduction</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">2.1 Introduction</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>A slice is the concept of a subset of values of a given tensor.
 As an example, for the doubles amplitudes <span class="math notranslate nohighlight">\(T^{ab}_{ij}\)</span>, one need two kinds of objects:</p>
 <ul class="simple">
@@ -124,16 +124,15 @@ corresponds the <span class="math notranslate nohighlight">\(N_\mathrm{o}^2\)</s
 </ul>
 </section>
 <section id="location">
-<h3><a class="toc-backref" href="#id12">2.2 Location</a><a class="headerlink" href="#location" title="Permalink to this headline">¶</a></h3>
-<p>Every slice set, for instance,
-:math:<a href="#id2"><span class="problematic" id="id3">`</span></a>S_k = left{</p>
-<blockquote>
-<div><p>a mapsto mathsf{T}(a)^{b}_{ij}
-mid
-a in A_k</p>
-</div></blockquote>
-<p>right}`
-where <span class="math notranslate nohighlight">\(A_k\)</span> is some subset of
+<h3><a class="toc-backref" href="#id8">2.2 Location</a><a class="headerlink" href="#location" title="Permalink to this headline">¶</a></h3>
+<p>Every slice set, for instance,</p>
+<div class="math notranslate nohighlight">
+\[S_k = \left\{
+    a \mapsto \mathsf{T}(a)^{b}_{ij}
+    \mid
+    a \in A_k
+    \right\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_k\)</span> is some subset of
 <span class="math notranslate nohighlight">\(\mathsf{N}_\mathrm{v}\)</span>,
 gets stored in some rank <span class="math notranslate nohighlight">\(k\)</span>.
 In general however, the number of elements in <span class="math notranslate nohighlight">\(A_k\)</span> can be bigger
@@ -148,21 +147,19 @@ is therefore a simple structure:</p>
 </div>
 </section>
 <section id="type">
-<h3><a class="toc-backref" href="#id13">2.3 Type</a><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">2.3 Type</a><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
 <p>Due to the permutation operators in the equations
 it is noticeable that for every one dimensional
 slice and triple <span class="math notranslate nohighlight">\((a,b,c)\)</span></p>
-<p>begin{equation*}
-a mapsto mathsf{t}(a)
-end{equation*}</p>
+<div class="math notranslate nohighlight">
+\[a \mapsto \mathsf{t}(a)\]</div>
 <p>one needs at the same time
 <span class="math notranslate nohighlight">\(\mathsf{t}(a)\)</span>,
 <span class="math notranslate nohighlight">\(\mathsf{t}(b)\)</span> and
 <span class="math notranslate nohighlight">\(\mathsf{t}(c)\)</span>.
 For two dimensional slices, i.e., slices of the form</p>
-<p>begin{equation*}
-(a,b) mapsto mathsf{t}(a,b)
-end{equation*}</p>
+<div class="math notranslate nohighlight">
+\[(a,b) \mapsto \mathsf{t}(a,b)\]</div>
 <p>one needs in the equations the slices
 <span class="math notranslate nohighlight">\(\mathsf{t}(a,b)\)</span>,
 <span class="math notranslate nohighlight">\(\mathsf{t}(b,c)\)</span> and
@@ -195,7 +192,7 @@ a type which denotes which permutation it is.</p>
 </div>
 </section>
 <section id="state">
-<h3><a class="toc-backref" href="#id14">2.4 State</a><a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">2.4 State</a><a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h3>
 <p>Every slice can be in different states and every state
 denotes which function the slice is going to provide
 and which relations they have between themselves.</p>
@@ -244,7 +241,7 @@ the counterpart of the <code class="docutils literal notranslate"><span class="p
 </div>
 </section>
 <section id="the-info-structure">
-<h3><a class="toc-backref" href="#id15">2.5 The Info structure</a><a class="headerlink" href="#the-info-structure" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">2.5 The Info structure</a><a class="headerlink" href="#the-info-structure" title="Permalink to this headline">¶</a></h3>
 <p>Every slice has an information structure associated with it
 that keeps track of the <strong>**variable**</strong> type, state and so on.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Info</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -272,7 +269,7 @@ that keeps track of the <strong>**variable**</strong> type, state and so on.</p>
 </div>
 </section>
 <section id="name">
-<h3><a class="toc-backref" href="#id16">2.6 Name</a><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">2.6 Name</a><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
 <p>CCSD(T) needs in this algorithm 5 types of tensor slices,
 namely
 <span class="math notranslate nohighlight">\(V^{ij}_{ka}\)</span>, <span class="math notranslate nohighlight">\(V^{ab}_{ci}\)</span>,
@@ -294,7 +291,7 @@ and through two parameters for the hole contribution.</p>
 </div>
 </section>
 <section id="database">
-<h3><a class="toc-backref" href="#id17">2.7 Database</a><a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id13">2.7 Database</a><a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
 <p>The database is a simple representation of the slices of a slice union.
 Every element of the database is given by the name of the tensor it
 represents and the internal information structure.</p>
@@ -312,7 +309,7 @@ a vector of these elements.</p>
 </div>
 </section>
 <section id="mpi-types">
-<h3><a class="toc-backref" href="#id18">2.8 MPI Types</a><a class="headerlink" href="#mpi-types" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">2.8 MPI Types</a><a class="headerlink" href="#mpi-types" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">mpi</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
 <span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">MPI_Datatype</span><span class="w"> </span><span class="nf">vector</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_Datatype</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">DT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -420,7 +417,7 @@ a vector of these elements.</p>
 </div>
 </section>
 <section id="static-utilities">
-<h3><a class="toc-backref" href="#id19">2.9 Static utilities</a><a class="headerlink" href="#static-utilities" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">2.9 Static utilities</a><a class="headerlink" href="#static-utilities" title="Permalink to this headline">¶</a></h3>
 <p>This section presents some functions which are useful to work with
 slices and are inside the namespace created by the slice struct.</p>
 <p>The function <code class="docutils literal notranslate"><span class="pre">subtupleBySlice</span></code> gives to every <code class="docutils literal notranslate"><span class="pre">Slice::Type</span></code>
@@ -573,7 +570,7 @@ given slice could not be found.</p>
 </div>
 </section>
 <section id="attributes">
-<h3><a class="toc-backref" href="#id20">2.10 Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id16">2.10 Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
 <p>A slice object does not own data, it is just a container
 or a pointer to data together with additional bookkeeping facilities.</p>
 <p>It includes an info structure with the information about the slice,
@@ -598,7 +595,7 @@ to receive data through MPI can know which request they belong to.</p>
 </div>
 </section>
 <section id="member-functions">
-<h3><a class="toc-backref" href="#id21">2.11 Member functions</a><a class="headerlink" href="#member-functions" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">2.11 Member functions</a><a class="headerlink" href="#member-functions" title="Permalink to this headline">¶</a></h3>
 <p>It is important to note that a ready slice should not be recycled from
 any other slice, so that it can have access by itself to the data.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">markReady</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -736,10 +733,10 @@ can be unwrapped through MPI.</p></li>
 </section>
 </section>
 <section id="utils">
-<h2><a class="toc-backref" href="#id22">3 Utils</a><a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id18">3 Utils</a><a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
 <p>This section presents some utilities</p>
 <section id="pretty-printing">
-<h3><a class="toc-backref" href="#id23">3.1 Pretty printing</a><a class="headerlink" href="#pretty-printing" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id19">3.1 Pretty printing</a><a class="headerlink" href="#pretty-printing" title="Permalink to this headline">¶</a></h3>
 <p>The pretty printing uses the <a class="reference external" href="https://github.com/sharkdp/dbg-macro">dbg-macro</a> package.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">pretty_print</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -753,7 +750,7 @@ can be unwrapped through MPI.</p></li>
 </div>
 </section>
 <section id="chrono">
-<h3><a class="toc-backref" href="#id24">3.2 Chrono</a><a class="headerlink" href="#chrono" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id20">3.2 Chrono</a><a class="headerlink" href="#chrono" title="Permalink to this headline">¶</a></h3>
 <p>The chrono is just a simple wrapper for a high resolution clock
 that can be found in the <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code> namespace of the standard library.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#define WITH_CHRONO(__chrono_name, ...)         \</span>
@@ -777,7 +774,7 @@ that can be found in the <code class="docutils literal notranslate"><span class=
 </section>
 </section>
 <section id="the-rank-mapping">
-<h2><a class="toc-backref" href="#id25">4 The rank mapping</a><a class="headerlink" href="#the-rank-mapping" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id21">4 The rank mapping</a><a class="headerlink" href="#the-rank-mapping" title="Permalink to this headline">¶</a></h2>
 <p>This section introduces the concept of rank mapping,
 which defines how slices will be allocated to every
 rank.</p>
@@ -903,7 +900,7 @@ rank.</p>
 </div>
 </section>
 <section id="the-slice-union">
-<h2><a class="toc-backref" href="#id26">5 The slice union</a><a class="headerlink" href="#the-slice-union" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id22">5 The slice union</a><a class="headerlink" href="#the-slice-union" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atrip/Debug.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atrip/Slice.hpp&gt;</span><span class="cp"></span>
@@ -1465,11 +1462,11 @@ rank.</p>
 </div>
 </section>
 <section id="tuples">
-<h2><a class="toc-backref" href="#id27">6 Tuples</a><a class="headerlink" href="#tuples" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id23">6 Tuples</a><a class="headerlink" href="#tuples" title="Permalink to this headline">¶</a></h2>
 <p>This section introduces the types for tuples <span class="math notranslate nohighlight">\((a,b,c)\)</span>
 as well as their distribution to nodes and cores.</p>
 <section id="tuples-types">
-<h3><a class="toc-backref" href="#id28">6.1 Tuples types</a><a class="headerlink" href="#tuples-types" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id24">6.1 Tuples types</a><a class="headerlink" href="#tuples-types" title="Permalink to this headline">¶</a></h3>
 <p>The main tuple types are simple type aliases for finite-size arrays.
 A tuple is thus simply 3 natural numbers <span class="math notranslate nohighlight">\((a,b,c)\)</span>
 whereas a partial tuple is a two dimensional subset of these three.</p>
@@ -1483,7 +1480,7 @@ whereas a partial tuple is a two dimensional subset of these three.</p>
 </div>
 </section>
 <section id="distributing-the-tuples">
-<h3><a class="toc-backref" href="#id29">6.2 Distributing the tuples</a><a class="headerlink" href="#distributing-the-tuples" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id25">6.2 Distributing the tuples</a><a class="headerlink" href="#distributing-the-tuples" title="Permalink to this headline">¶</a></h3>
 <p>In general it is our task to distribute all the tuples
 <span class="math notranslate nohighlight">\((a,b,c)\)</span> among the ranks. Every distribution should
 make sure to allocate the same amount of tuples to every rank,
@@ -1497,7 +1494,7 @@ padding the list with <code class="docutils literal notranslate"><span class="pr
 </div>
 </section>
 <section id="node-information">
-<h3><a class="toc-backref" href="#id30">6.3 Node information</a><a class="headerlink" href="#node-information" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id26">6.3 Node information</a><a class="headerlink" href="#node-information" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
 <dt>nodeList</dt><dd><p>List of hostnames of size <span class="math notranslate nohighlight">\(N_n\)</span></p>
 </dd>
@@ -1582,6 +1579,7 @@ number of nodes.</p>
 <span class="w">                      </span><span class="n">nodeId</span><span class="p">,</span><span class="w"></span>
 <span class="w">                      </span><span class="n">globalRank</span><span class="o">++</span><span class="p">,</span><span class="w"></span>
 <span class="w">                      </span><span class="n">localRanks</span><span class="p">[</span><span class="n">nodeId</span><span class="p">]</span><span class="o">++</span><span class="p">,</span><span class="w"></span>
+<span class="w">                      </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="w"></span>
 <span class="w">                      </span><span class="n">std</span><span class="o">::</span><span class="n">count</span><span class="p">(</span><span class="n">nodeNames</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"></span>
 <span class="w">                                 </span><span class="n">nodeNames</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"></span>
 <span class="w">                                 </span><span class="n">name</span><span class="p">)</span><span class="w"></span>
@@ -1612,7 +1610,7 @@ number of nodes.</p>
 </div>
 </section>
 <section id="naive-list">
-<h3><a class="toc-backref" href="#id31">6.4 Naive list</a><a class="headerlink" href="#naive-list" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id27">6.4 Naive list</a><a class="headerlink" href="#naive-list" title="Permalink to this headline">¶</a></h3>
 <p>The naive implementation of the global tuples list is simple
 three for loops creating tuples of the sort
 <span class="math notranslate nohighlight">\((a,b,c)\)</span> where the following conditions are met at the same time:</p>
@@ -1621,11 +1619,8 @@ three for loops creating tuples of the sort
 <li><p><span class="math notranslate nohighlight">\(a \neq b \land b \neq c\)</span></p></li>
 </ul>
 <p>This means,
-:math:<a href="#id4"><span class="problematic" id="id5">`</span></a>(1, 2, 3)</p>
-<blockquote>
-<div><p>, (1, 1, 3)
-, (1, 2, 2)` are acceptable tuples wherease <span class="math notranslate nohighlight">\((2, 1, 1)\)</span> and <span class="math notranslate nohighlight">\((1, 1, 1)\)</span> are not.</p>
-</div></blockquote>
+<span class="math notranslate nohighlight">\((1, 2, 3) , (1, 1, 3) , (1, 2, 2)\)</span>
+are acceptable tuples wherease <span class="math notranslate nohighlight">\((2, 1, 1)\)</span> and <span class="math notranslate nohighlight">\((1, 1, 1)\)</span> are not.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">ABCTuples</span><span class="w"> </span><span class="nf">getTuplesList</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">Nv</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">np</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"></span>
@@ -1688,9 +1683,9 @@ three for loops creating tuples of the sort
 </div>
 </section>
 <section id="group-and-sort-list">
-<h3><a class="toc-backref" href="#id32">6.5 Group and sort list</a><a class="headerlink" href="#group-and-sort-list" title="Permalink to this headline">¶</a></h3>
-<section id="id6">
-<h4><a class="toc-backref" href="#id33">6.5.1 Utils</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<h3><a class="toc-backref" href="#id28">6.5 Group and sort list</a><a class="headerlink" href="#group-and-sort-list" title="Permalink to this headline">¶</a></h3>
+<section id="id2">
+<h4><a class="toc-backref" href="#id29">6.5.1 Utils</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Provides the node on which the slice-element is found</span>
 <span class="c1">// Right now we distribute the slices in a round robin fashion</span>
 <span class="c1">// over the different nodes (NOTE: not mpi ranks but nodes)</span>
@@ -1717,7 +1712,7 @@ three for loops creating tuples of the sort
 </div>
 </section>
 <section id="distribution">
-<h4><a class="toc-backref" href="#id34">6.5.2 Distribution</a><a class="headerlink" href="#distribution" title="Permalink to this headline">¶</a></h4>
+<h4><a class="toc-backref" href="#id30">6.5.2 Distribution</a><a class="headerlink" href="#distribution" title="Permalink to this headline">¶</a></h4>
 <p>wording: home element = element which is located on the given node</p>
 <ol class="arabic simple">
 <li><p>we distribute the tuples such that each tuple has at least one ‘home element’</p></li>
@@ -1908,7 +1903,7 @@ three for loops creating tuples of the sort
 </div>
 </section>
 <section id="main">
-<h4><a class="toc-backref" href="#id35">6.5.3 Main</a><a class="headerlink" href="#main" title="Permalink to this headline">¶</a></h4>
+<h4><a class="toc-backref" href="#id31">6.5.3 Main</a><a class="headerlink" href="#main" title="Permalink to this headline">¶</a></h4>
 <p>The main routine should return the list of tuples to be handled by the current rank.</p>
 <p>Let <span class="math notranslate nohighlight">\(N_p\)</span> be the number of ranks or processes.
 Let <span class="math notranslate nohighlight">\(N_n\)</span> be the number of nodes or sockets.</p>
@@ -2046,21 +2041,16 @@ Every rank gets <code class="docutils literal notranslate"><span class="pre">tup
 the <code class="docutils literal notranslate"><span class="pre">nodeTuples</span></code> vector is now homogeneous and divisible by the number
 of ranks per node in our node.
 Therefore, the <code class="docutils literal notranslate"><span class="pre">displacements</span></code> are simply the vector</p>
-<dl>
-<dt>begin{equation*}</dt><dd><p>left{
-k * mathrm{tuplesPerNodeLocal}
-mid
-k in
-left{ 0</p>
-<blockquote>
-<div><p>, ldots
-, #text{ranks in node} - 1
-right}</p>
-</div></blockquote>
-<p>right}</p>
-</dd>
-</dl>
-<p>end{equation*}</p>
+<div class="math notranslate nohighlight">
+\[\left\{
+  k * \mathrm{tuplesPerNodeLocal}
+  \mid
+  k \in
+  \left\{ 0
+        , \ldots
+        , \#\text{ranks in node} - 1
+        \right\}
+  \right\}\]</div>
 <p>and the <code class="docutils literal notranslate"><span class="pre">sendCounts</span></code> vector is simply the constant vector
 <code class="docutils literal notranslate"><span class="pre">tuplesPerRankLocal</span></code> of size <code class="docutils literal notranslate"><span class="pre">ranksPerNode</span></code>.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w"></span>
@@ -2070,7 +2060,7 @@ right}</p>
 </div>
 </section>
 <section id="interface">
-<h4><a class="toc-backref" href="#id36">6.5.4 Interface</a><a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h4>
+<h4><a class="toc-backref" href="#id32">6.5.4 Interface</a><a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h4>
 <p>The distribution interface will then simply be</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Distribution</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TuplesDistribution</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="n">ABCTuples</span><span class="w"> </span><span class="nf">getTuples</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">Nv</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">universe</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2083,7 +2073,7 @@ right}</p>
 </section>
 </section>
 <section id="unions">
-<h2><a class="toc-backref" href="#id37">7 Unions</a><a class="headerlink" href="#unions" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id33">7 Unions</a><a class="headerlink" href="#unions" title="Permalink to this headline">¶</a></h2>
 <p>Every slice pertaining to every different tensor
 is sliced differently.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
@@ -2329,7 +2319,7 @@ is sliced differently.</p>
 </div>
 </section>
 <section id="equations">
-<h2><a class="toc-backref" href="#id38">8 Equations</a><a class="headerlink" href="#equations" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id34">8 Equations</a><a class="headerlink" href="#equations" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="cpf">&lt;atrip/Slice.hpp&gt;</span><span class="cp"></span>
@@ -2700,7 +2690,7 @@ is sliced differently.</p>
 </div>
 </section>
 <section id="blas">
-<h2><a class="toc-backref" href="#id39">9 Blas</a><a class="headerlink" href="#blas" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id35">9 Blas</a><a class="headerlink" href="#blas" title="Permalink to this headline">¶</a></h2>
 <p>The main matrix-matrix multiplication method used in this algorithm
 is mainly using the <code class="docutils literal notranslate"><span class="pre">DGEMM</span></code> function, which we declare as
 <code class="docutils literal notranslate"><span class="pre">extern</span></code> since it should be known only at link-time.</p>
@@ -2790,9 +2780,9 @@ is mainly using the <code class="docutils literal notranslate"><span class="pre"
 </div>
 </section>
 <section id="atrip">
-<h2><a class="toc-backref" href="#id40">10 Atrip</a><a class="headerlink" href="#atrip" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id36">10 Atrip</a><a class="headerlink" href="#atrip" title="Permalink to this headline">¶</a></h2>
 <section id="header">
-<h3><a class="toc-backref" href="#id41">10.1 Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id37">10.1 Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="cp"></span>
@@ -2864,8 +2854,8 @@ is mainly using the <code class="docutils literal notranslate"><span class="pre"
 </pre></div>
 </div>
 </section>
-<section id="id7">
-<h3><a class="toc-backref" href="#id42">10.2 Main</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id3">
+<h3><a class="toc-backref" href="#id38">10.2 Main</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atrip/Atrip.hpp&gt;</span><span class="cp"></span>
@@ -3010,7 +3000,6 @@ is mainly using the <code class="docutils literal notranslate"><span class="pre"
 
 
 <span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Slice</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;::</span><span class="n">Database</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">LocalDatabase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Slice</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;::</span><span class="n">LocalDatabase</span><span class="p">;</span><span class="w"></span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">communicateDatabase</span><span class="w"></span>
 <span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">&amp;</span><span class="n">unions</span><span class="w"></span>
 <span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="n">np</span><span class="w"></span>
@@ -3443,9 +3432,9 @@ is mainly using the <code class="docutils literal notranslate"><span class="pre"
 </section>
 </section>
 <section id="debug-and-logging">
-<h2><a class="toc-backref" href="#id43">11 Debug and Logging</a><a class="headerlink" href="#debug-and-logging" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id39">11 Debug and Logging</a><a class="headerlink" href="#debug-and-logging" title="Permalink to this headline">¶</a></h2>
 <section id="macros">
-<h3><a class="toc-backref" href="#id44">11.1 Macros</a><a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id40">11.1 Macros</a><a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
 <span class="cp">#define ATRIP_BENCHMARK</span>
@@ -3525,7 +3514,7 @@ define <code class="docutils literal notranslate"><span class="pre">ATRIP_NO_OUT
 </div>
 </section>
 <section id="iteration-informer">
-<h3><a class="toc-backref" href="#id45">11.2 Iteration informer</a><a class="headerlink" href="#iteration-informer" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id41">11.2 Iteration informer</a><a class="headerlink" href="#iteration-informer" title="Permalink to this headline">¶</a></h3>
 <p>In general a code writer will want to write some messages in every iteration.
 A developer then can register a function to be used in this sense.
 The input of the function is an <a class="reference internal" href="#iterationdescriptor">IterationDescriptor</a> structure and the output
@@ -3549,7 +3538,7 @@ should be nothing.</p>
 </section>
 </section>
 <section id="include-header">
-<h2><a class="toc-backref" href="#id46">12 Include header</a><a class="headerlink" href="#include-header" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id42">12 Include header</a><a class="headerlink" href="#include-header" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atrip/Atrip.hpp&gt;</span><span class="cp"></span>
@@ -3597,7 +3586,7 @@ should be nothing.</p>
 <li><a class="reference internal" href="#node-information">6.3 Node information</a></li>
 <li><a class="reference internal" href="#naive-list">6.4 Naive list</a></li>
 <li><a class="reference internal" href="#group-and-sort-list">6.5 Group and sort list</a><ul>
-<li><a class="reference internal" href="#id6">6.5.1 Utils</a></li>
+<li><a class="reference internal" href="#id2">6.5.1 Utils</a></li>
 <li><a class="reference internal" href="#distribution">6.5.2 Distribution</a></li>
 <li><a class="reference internal" href="#main">6.5.3 Main</a></li>
 <li><a class="reference internal" href="#interface">6.5.4 Interface</a></li>
@@ -3610,7 +3599,7 @@ should be nothing.</p>
 <li><a class="reference internal" href="#blas">9 Blas</a></li>
 <li><a class="reference internal" href="#atrip">10 Atrip</a><ul>
 <li><a class="reference internal" href="#header">10.1 Header</a></li>
-<li><a class="reference internal" href="#id7">10.2 Main</a></li>
+<li><a class="reference internal" href="#id3">10.2 Main</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#debug-and-logging">11 Debug and Logging</a><ul>

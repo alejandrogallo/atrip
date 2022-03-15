@@ -34,11 +34,17 @@ As an example, for the doubles amplitudes :math:`T^{ab}_{ij}`, one need two kind
 ~~~~~~~~~~~~
 
 Every slice set, for instance,
-:math:`S_k = \left\{
-    a \mapsto \mathsf{T}(a)^{b}_{ij}
-    \mid
-    a \in A_k
-\right\}`
+
+
+.. math::
+
+    S_k = \left\{
+        a \mapsto \mathsf{T}(a)^{b}_{ij}
+        \mid
+        a \in A_k
+        \right\}
+
+
 where :math:`A_k` is some subset of
 :math:`\mathsf{N}_\mathrm{v}`,
 gets stored in some rank :math:`k`.
@@ -62,9 +68,11 @@ Due to the permutation operators in the equations
 it is noticeable that for every one dimensional
 slice and triple :math:`(a,b,c)`
 
-\begin{equation*}
-a \mapsto \mathsf{t}(a)
-\end{equation*}
+
+.. math::
+
+    a \mapsto \mathsf{t}(a)
+
 
 one needs at the same time
 :math:`\mathsf{t}(a)`,
@@ -72,9 +80,11 @@ one needs at the same time
 :math:`\mathsf{t}(c)`.
 For two dimensional slices, i.e., slices of the form
 
-\begin{equation*}
-(a,b) \mapsto \mathsf{t}(a,b)
-\end{equation*}
+
+.. math::
+
+    (a,b) \mapsto \mathsf{t}(a,b)
+
 
 one needs in the equations the slices
 :math:`\mathsf{t}(a,b)`,
@@ -1581,6 +1591,7 @@ number of nodes.
                           nodeId,
                           globalRank++,
                           localRanks[nodeId]++,
+                          (size_t)
                           std::count(nodeNames.begin(),
                                      nodeNames.end(),
                                      name)
@@ -1620,9 +1631,8 @@ three for loops creating tuples of the sort
 - :math:`a \neq b \land b \neq c`
 
 This means,
-:math:`(1, 2, 3)
- , (1, 1, 3)
- , (1, 2, 2)` are acceptable tuples wherease :math:`(2, 1, 1)` and :math:`(1, 1, 1)` are not.
+:math:`(1, 2, 3) , (1, 1, 3) , (1, 2, 2)`
+are acceptable tuples wherease :math:`(2, 1, 1)` and :math:`(1, 1, 1)` are not.
 
 
 .. code:: c++
@@ -2079,17 +2089,18 @@ the ``nodeTuples`` vector is now homogeneous and divisible by the number
 of ranks per node in our node.
 Therefore, the ``displacements`` are simply the vector
 
-\begin{equation*}
-  \left\{
-  k * \mathrm{tuplesPerNodeLocal}
-  \mid
-  k \in
-  \left\{ 0
-        , \ldots
-        , \#\text{ranks in node} - 1
-        \right\}
-  \right\}
-\end{equation*}
+
+.. math::
+
+    \left\{
+      k * \mathrm{tuplesPerNodeLocal}
+      \mid
+      k \in
+      \left\{ 0
+            , \ldots
+            , \#\text{ranks in node} - 1
+            \right\}
+      \right\}
 
 and the ``sendCounts`` vector is simply the constant vector
 ``tuplesPerRankLocal`` of size ``ranksPerNode``.
@@ -3053,7 +3064,6 @@ is mainly using the ``DGEMM`` function, which we declare as
 
 
       using Database = typename Slice<F>::Database;
-      using LocalDatabase = typename Slice<F>::LocalDatabase;
       auto communicateDatabase
         = [ &unions
           , np
