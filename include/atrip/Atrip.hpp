@@ -18,7 +18,6 @@
 #include <string>
 #include <map>
 
-#include <ctf.hpp>
 
 #include <atrip/Utils.hpp>
 
