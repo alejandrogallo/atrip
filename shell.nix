@@ -1,4 +1,4 @@
-{ compiler, pkgs ? import <nixpkgs> {} , with-mkl ? false }:
+{ compiler ? "gcc", pkgs ? import <nixpkgs> {} , with-mkl ? false, docs ? true }:
 
 let
 
@@ -7,8 +7,6 @@ let
   }); };
 
   openblas = import ./etc/nix/openblas.nix { inherit pkgs; }; 
-
-  clang = import ./etc/nix/clang.nix { inherit pkgs; };
 
 in
 
@@ -33,6 +31,21 @@ pkgs.mkShell rec {
     else if compiler == "clang5" then pkgs.clang_5
     else pkgs.gcc;
 
+  docInputs = with pkgs; [
+    emacs
+    emacsPackages.ox-rst
+    emacsPackages.htmlize
+
+    python3
+    python3Packages.breathe
+
+    doxygen
+    sphinx
+
+    graphviz
+  ];
+
+
   buildInputs
     = with pkgs; [
 
@@ -53,6 +66,7 @@ pkgs.mkShell rec {
         pkg-config
       ]
     ++ (if with-mkl then mkl.buildInputs else openblas.buildInputs)
+    ++ (if docs then docInputs else [])
     ;
 
   CXX = "${compiler-pkg}/bin/c++";

@@ -46,9 +46,8 @@ jobs:
     - name: Make configure script
       env:
         WITH_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
-      run: test -f ./configure || ${WITH_SHELL} 'autoreconf -sfiv'
+      run: ${WITH_SHELL} 'autoreconf -sfiv'
 
-      ## TODO: do this in a matrix
     - name: Compiler ${{matrix.compiler}}
       env:
         WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --run"
@@ -73,12 +72,15 @@ jobs:
     - name: Check configure
       run: test -f configure
 
-    - name: Install dependencies
+    - name: Configure
+      env:
+        WITH_SHELL: "nix-shell --argstr compiler gcc6 --run"
       run: |
-        cd docs
-        nix-shell --run 'emacs --version'
-        nix-shell --run 'python --version'
-        nix-shell --run 'sphinx-build --version'
+        ${WITH_SHELL} 'autoreconf -sfiv'
+        ${WITH_SHELL} './configure --enable-docs'
+        ${WITH_SHELL} 'emacs --version'
+        ${WITH_SHELL} 'python --version'
+        ${WITH_SHELL} 'sphinx-build --version'
 
     - name: doxygen
       run: |
