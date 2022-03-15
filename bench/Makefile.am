@@ -1,15 +1,13 @@
 include $(top_srcdir)/atrip.mk
 
 AM_CPPFLAGS = -I$(top_srcdir)/include/ $(CTF_CPPFLAGS)
-AM_LDFLAGS = -lgomp
+AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 
 bin_PROGRAMS = test_main
 test_main_SOURCES = test_main.cxx
 
 
 test_main_LDADD  = \
-	-lopenblas       \
-	-lscalapack      \
 	$(top_builddir)/src/libatrip.a
 
 if WITH_BUILD_CTF

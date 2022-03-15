@@ -1,12 +1,7 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wvla"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#include <ctf.hpp>
-#pragma GCC diagnostic pop
-
 #include <iostream>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
+#include <atrip/Utils.hpp>
 #include <CLI11.hpp>
 
 #define _print_size(what, size)                 \

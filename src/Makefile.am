@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = subdir-objects
 include $(top_srcdir)/atrip.mk
 
-AM_CXXFLAGS = -Wall --pedantic $(CTF_CPPFLAGS)
+AM_CXXFLAGS = $(CTF_CPPFLAGS)
 
 lib_LIBRARIES = libatrip.a
 
