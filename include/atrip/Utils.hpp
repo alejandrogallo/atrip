@@ -33,7 +33,7 @@ namespace atrip {
 // Prolog:1 ends here
 
 // [[file:../../atrip.org::*Pretty printing][Pretty printing:1]]
-template <typename T>
+  template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
 #if ATRIP_DEBUG > 2

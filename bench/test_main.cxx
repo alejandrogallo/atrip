@@ -17,13 +17,15 @@ int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
   int no(10), nv(10), itMod(-1), percentageMod(10);
-  bool nochrono(false), barrier(false), rankRoundRobin(false);
+  bool nochrono(false), barrier(false), rankRoundRobin(false),
+       keepVppph(false);
   std::string tuplesDistributionString = "naive";
 
   CLI::App app{"Main bench for atrip"};
   app.add_option("--no", no, "Occupied orbitals");
   app.add_option("--nv", nv, "Virtual orbitals");
   app.add_option("--mod", itMod, "Iteration modifier");
+  app.add_flag("--keep-vppph", keepVppph, "Do not delete Vppph");
   app.add_flag("--nochrono", nochrono, "Do not print chrono");
   app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
   app.add_flag("--barrier", barrier, "Use the first barrier");
@@ -38,12 +40,13 @@ int main(int argc, char** argv) {
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
 
   // USER PRINTING TEST BEGIN
-  const double doublesFlops = no * no * no
-                            * (no + nv)
-                            * 2.0
-                            * 6.0
-                            / 1.0e9
-                            ;
+  const double doublesFlops
+       = no * no * no
+       * (no + nv)
+       * 2.0
+       * 6.0
+       / 1.0e9
+       ;
   double lastElapsedTime = 0;
   bool firstHeaderPrinted = false;
   atrip::registerIterationDescriptor
@@ -110,23 +113,25 @@ int main(int argc, char** argv) {
   Vppph.fill_random(0, 1);
 
   atrip::Atrip::init();
-  const auto in = atrip::Atrip::Input<double>()
-    // Tensors
-    .with_epsilon_i(&ei)
-    .with_epsilon_a(&ea)
-    .with_Tai(&Tph)
-    .with_Tabij(&Tpphh)
-    .with_Vabij(&Vpphh)
-    .with_Vijka(&Vhhhp)
-    .with_Vabci(&Vppph)
-    // some options
-    .with_barrier(barrier)
-    .with_chrono(!nochrono)
-    .with_rankRoundRobin(rankRoundRobin)
-    .with_iterationMod(itMod)
-    .with_percentageMod(percentageMod)
-    .with_tuplesDistribution(tuplesDistribution)
-    ;
+  const auto in
+       = atrip::Atrip::Input<double>()
+       // Tensors
+       .with_epsilon_i(&ei)
+       .with_epsilon_a(&ea)
+       .with_Tai(&Tph)
+       .with_Tabij(&Tpphh)
+       .with_Vabij(&Vpphh)
+       .with_Vijka(&Vhhhp)
+       .with_Vabci(&Vppph)
+       // some options
+       .with_deleteVppph(!keepVppph)
+       .with_barrier(barrier)
+       .with_chrono(!nochrono)
+       .with_rankRoundRobin(rankRoundRobin)
+       .with_iterationMod(itMod)
+       .with_percentageMod(percentageMod)
+       .with_tuplesDistribution(tuplesDistribution)
+       ;
 
   auto out = atrip::Atrip::run(in);
 

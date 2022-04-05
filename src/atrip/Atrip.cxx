@@ -96,20 +96,24 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     MPI_Comm_size(child_comm, &child_size);
   }
 
-
-  // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
-  WITH_CHRONO("nv-slices",
-    LOG(0,"Atrip") << "BUILD NV-SLICES\n";
-    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-  )
-
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   WITH_CHRONO("nv-nv-slices",
     LOG(0,"Atrip") << "BUILD NV x NV-SLICES\n";
     ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
     ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
     TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+  )
+
+  // delete the Vppph so that we don't have a HWM situation for the NV slices
+  if (in.deleteVppph) {
+    delete in.Vppph;
+  }
+
+  // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
+  WITH_CHRONO("nv-slices",
+    LOG(0,"Atrip") << "BUILD NV-SLICES\n";
+    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
   )
 
   // all tensors

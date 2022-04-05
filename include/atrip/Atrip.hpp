@@ -40,13 +40,13 @@ namespace atrip {
     template <typename F=double>
     struct Input {
       CTF::Tensor<F> *ei = nullptr
-                        , *ea = nullptr
-                        , *Tph = nullptr
-                        , *Tpphh = nullptr
-                        , *Vpphh = nullptr
-                        , *Vhhhp = nullptr
-                        , *Vppph = nullptr
-                        ;
+                   , *ea = nullptr
+                   , *Tph = nullptr
+                   , *Tpphh = nullptr
+                   , *Vpphh = nullptr
+                   , *Vhhhp = nullptr
+                   , *Vppph = nullptr
+                   ;
       Input& with_epsilon_i(CTF::Tensor<F> * t) { ei = t; return *this; }
       Input& with_epsilon_a(CTF::Tensor<F> * t) { ea = t; return *this; }
       Input& with_Tai(CTF::Tensor<F> * t) { Tph = t; return *this; }
@@ -60,6 +60,7 @@ namespace atrip {
         GROUP_AND_SORT,
       };
 
+      ADD_ATTRIBUTE(bool, deleteVppph, false)
       ADD_ATTRIBUTE(bool, rankRoundRobin, false)
       ADD_ATTRIBUTE(bool, chrono, false)
       ADD_ATTRIBUTE(bool, barrier, false)
