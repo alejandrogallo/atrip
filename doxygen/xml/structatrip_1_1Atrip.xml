@@ -19,7 +19,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="35" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="35" bodyend="-1"/>
         <referencedby refid="structatrip_1_1Atrip_1ac5d9d695dca918f22ca9182f4f3b0478" compoundref="Atrip_8cxx" startline="39" endline="42">init</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="583">run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">run</referencedby>
         <referencedby refid="structatrip_1_1Slice_1accba377efd6a4cde3da7c421d0360a1b" compoundref="Slice_8hpp" startline="284" endline="305">atrip::Slice&lt; double &gt;::findRecycledSource</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a560e50548083cc86b2ed7381ed35fd98" compoundref="Slice_8hpp" startline="310" endline="335">atrip::Slice&lt; double &gt;::findByTypeAbc</referencedby>
         <referencedby refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" compoundref="SliceUnion_8hpp" startline="82" endline="223">atrip::SliceUnion&lt; double &gt;::buildLocalDatabase</referencedby>
@@ -44,7 +44,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="36" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="36" bodyend="-1"/>
         <referencedby refid="structatrip_1_1Atrip_1ac5d9d695dca918f22ca9182f4f3b0478" compoundref="Atrip_8cxx" startline="39" endline="42">init</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="583">run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">run</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" prot="public" static="yes" mutable="no">
         <type><ref refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kindref="member">Timings</ref></type>
@@ -58,7 +58,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="37" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="37" bodyend="-1"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="583">run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">run</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="77" column="19" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Atrip.cxx" bodystart="45" bodyend="583"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="78" column="19" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Atrip.cxx" bodystart="45" bodyend="587"/>
         <references refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" compoundref="Atrip_8hpp" startline="37">chrono</references>
         <references refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" compoundref="Debug_8hpp" startline="97">atrip::IterationDescription::descriptor</references>
         <references refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" compoundref="Atrip_8hpp" startline="43">atrip::Atrip::Input&lt; F &gt;::ea</references>
@@ -142,7 +142,7 @@
         <link refid="structatrip_1_1Atrip"/>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="33" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="33" bodyend="78"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="33" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="33" bodyend="79"/>
     <listofallmembers>
       <member refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" prot="public" virt="non-virtual"><scope>atrip::Atrip</scope><name>chrono</name></member>
       <member refid="structatrip_1_1Atrip_1ac5d9d695dca918f22ca9182f4f3b0478" prot="public" virt="non-virtual"><scope>atrip::Atrip</scope><name>init</name></member>

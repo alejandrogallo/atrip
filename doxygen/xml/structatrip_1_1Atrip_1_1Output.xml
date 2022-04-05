@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="74" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="74" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="75" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="75" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -28,7 +28,7 @@
         <link refid="structatrip_1_1Atrip_1_1Output"/>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="73" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="73" bodyend="75"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="74" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="74" bodyend="76"/>
     <listofallmembers>
       <member refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" prot="public" virt="non-virtual"><scope>atrip::Atrip::Output</scope><name>energy</name></member>
     </listofallmembers>

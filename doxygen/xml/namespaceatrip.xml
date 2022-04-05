@@ -776,7 +776,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="557" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="557" bodyend="570"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="583">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a61b9bff51847e234f5357dfa5adc5a59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; std::string &gt;</type>
@@ -986,7 +986,7 @@
         <referencedby refid="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" compoundref="Slice_8hpp" startline="339" endline="358">atrip::Slice&lt; double &gt;::findByInfo</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a560e50548083cc86b2ed7381ed35fd98" compoundref="Slice_8hpp" startline="310" endline="335">atrip::Slice&lt; double &gt;::findByTypeAbc</referencedby>
         <referencedby refid="structatrip_1_1Slice_1accba377efd6a4cde3da7c421d0360a1b" compoundref="Slice_8hpp" startline="284" endline="305">atrip::Slice&lt; double &gt;::findRecycledSource</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="583">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">atrip::Atrip::run</referencedby>
         <referencedby refid="namespaceatrip_1a6a50c8632daf83dc3a61bbc6c2eb122a" compoundref="Unions_8hpp" startline="23" endline="57">sliceIntoVector</referencedby>
         <referencedby refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" compoundref="SliceUnion_8hpp" startline="498" endline="540">atrip::SliceUnion&lt; double &gt;::unwrapSlice</referencedby>
       </memberdef>

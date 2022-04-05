@@ -187,7 +187,7 @@
 <codeline lineno="33"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight></codeline>
 <codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Pretty<sp/>printing][Pretty<sp/>printing:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
 <codeline lineno="37" refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" refkind="member"><highlight class="normal"><sp/><sp/>std::string<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(T&amp;&amp;<sp/>value)<sp/>{</highlight></codeline>
 <codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>std::stringstream<sp/>stream;</highlight></codeline>
 <codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>&gt;<sp/>2</highlight><highlight class="normal"></highlight></codeline>
