@@ -97,8 +97,11 @@ int main(int argc, char** argv) {
     , Tpphh(4, vvoo.data(), symmetries.data(), world)
     , Vpphh(4, vvoo.data(), symmetries.data(), world)
     , Vhhhp(4, ooov.data(), symmetries.data(), world)
-    , Vppph(4, vvvo.data(), symmetries.data(), world)
     ;
+
+  // initialize deletable tensors in heap
+  auto Vppph
+    = new CTF::Tensor<double>(4, vvvo.data(), symmetries.data(), world);
 
   _print_size(Vabci, no*nv*nv*nv)
   _print_size(Vabij, no*no*nv*nv)
@@ -110,7 +113,7 @@ int main(int argc, char** argv) {
   Tph.fill_random(0, 1);
   Vpphh.fill_random(0, 1);
   Vhhhp.fill_random(0, 1);
-  Vppph.fill_random(0, 1);
+  Vppph->fill_random(0, 1);
 
   atrip::Atrip::init();
   const auto in
@@ -122,7 +125,7 @@ int main(int argc, char** argv) {
        .with_Tabij(&Tpphh)
        .with_Vabij(&Vpphh)
        .with_Vijka(&Vhhhp)
-       .with_Vabci(&Vppph)
+       .with_Vabci(Vppph)
        // some options
        .with_deleteVppph(!keepVppph)
        .with_barrier(barrier)
@@ -134,6 +137,9 @@ int main(int argc, char** argv) {
        ;
 
   auto out = atrip::Atrip::run(in);
+
+  if (!in.deleteVppph)
+    delete Vppph;
 
   if (atrip::Atrip::rank == 0)
     std::cout << "Energy: " << out.energy << std::endl;
