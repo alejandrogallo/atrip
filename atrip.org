@@ -6,6 +6,45 @@
 The algorithm uses two main data types, the =Slice= and the
 =SliceUnion= as a container and resource manager of the =Slice=.
 
+* Tests                                                       :noexport:test:
+
+We will try to test some programatic functionality in atrip too, and
+mostly we will append all tests in a single file, however this might
+change for special purpose test functionality.
+
+#+begin_src c++ :tangle (atrip-test-main) :noweb yes
+#include <atrip.hpp>
+#include <cassert>
+<<testcase-headers>>
+
+<<testcase-prologs>>
+
+#define TESTCASE(_name, ...) {                  \
+    std::cout << "\x1b[35m-> \x1b[0m"           \
+              <<  _name                         \
+              << std::endl;                     \
+    __VA_ARGS__                                 \
+    }
+
+int main() {
+
+  <<testcase>>
+
+  return 0;
+}
+
+#+end_src
+
+Therefore, small tests can be written like
+
+#+begin_src example
+,#+begin_src c++ :noweb-ref testcase
+// your c++ snippet of code
+,#+end_src
+#+end_src
+
+
+
 * The slice
 
 The following section introduces the idea of a slice.
@@ -2988,6 +3027,7 @@ namespace atrip {
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
+#include <atrip/Checkpoint.hpp>
 
 using namespace atrip;
 
@@ -3668,6 +3708,166 @@ namespace atrip {
 
   void registerIterationDescriptor(IterationDescriptor);
 
+}
+#+end_src
+
+* Checkpoints and restarts
+
+** Prolog                                                          :noexport:
+
+#+begin_src c++ :tangle (atrip-checkpoint-h)
+#pragma once
+#include <fstream>
+#include <iomanip>
+
+#include <atrip/Atrip.hpp>
+
+namespace atrip {
+#+end_src
+
+
+** Introduction
+
+For very heavy workloads and possible bugs in the packages it is often
+useful to restart from a given state of the calculation.
+
+An advantage of the =atrip= algorithm is that the state is essentially given
+by the
+
+#+begin_src yaml
+No: number of occupied orbitals
+Nv: number of virtual orbitals
+Nranks: number of ranks
+Nnodes: number of nodes
+Energy: the current total energy of the iterations
+Iteration: the iteration number
+Distribution: the type of distribution
+RankRoundRobin: wether the round robin is done through the ranks or
+  nodes
+#+end_src
+
+This information we can encode in a simple struct
+
+#+name: checkpoint-definition
+#+begin_src c++ :tangle (atrip-checkpoint-h)
+// template <typename F>
+struct Checkpoint {
+  size_t no, nv;
+  size_t nranks;
+  size_t nnodes;
+  double energy;
+  size_t iteration;
+  // TODO
+  // Input<F>::TuplesDistribution distribution(GROUP_AND_SORT);
+  bool rankRoundRobin;
+};
+#+end_src
+
+** Input and output
+
+In order to read and write the [[checkpoint-definition][checkpoint information]], we need
+to define a format. We choose a simple yaml format without any kind
+of depth, so that we can write quite easily a parser.
+
+#+begin_src c++ :tangle (atrip-checkpoint-h)
+void write_checkpoint(Checkpoint const& c, std::string const& filepath) {
+  std::ofstream out(filepath);
+  out << "No: " << c.no
+      << "\n"
+      << "Nv: " << c.nv
+      << "\n"
+      << "Nranks: " << c.nranks
+      << "\n"
+      << "Nnodes: " << c.nnodes
+      << "\n"
+      << "Energy: " << std::setprecision(19) << c.energy
+      << "\n"
+      << "Iteration: " << c.iteration
+      << "\n"
+      << "RankRoundRobin: " << (c.rankRoundRobin ? "true" : "false")
+      << "\n";
+}
+
+Checkpoint read_checkpoint(std::string const& filepath) {
+  std::ifstream in(filepath);
+  Checkpoint c;
+  // trim chars from the string, to be more sure and not use regexes
+  auto trim = [](std::string& s, std::string const& chars) {
+    s.erase(0, s.find_first_not_of(chars));
+    s.erase(s.find_last_not_of(chars) + 1);
+    return s;
+  };
+  for (std::string header, value; std::getline(in, header, ':');) {
+    std::getline(in, value, '\n');
+    trim(value, " \t"); // trim all whitespaces
+    trim(header, " \t");
+
+    /**/ if (header == "No")        c.no = std::atoi(value.c_str());
+    else if (header == "Nv")        c.nv = std::atoi(value.c_str());
+    else if (header == "Nranks")    c.nranks = std::atoi(value.c_str());
+    else if (header == "Nnodes")    c.nnodes = std::atoi(value.c_str());
+    else if (header == "Energy")    c.energy = std::atof(value.c_str());
+    else if (header == "Iteration") c.iteration = std::atoi(value.c_str());
+    else if (header == "RankRoundRobin") c.rankRoundRobin = (value[0] == 't');
+  }
+  return c;
+}
+
+#+end_src
+
+
+*** Test                                                      :noexport:test:
+
+#+begin_src c++ :noweb-ref testcase-headers
+#include <atrip/Checkpoint.hpp>
+using namespace atrip;
+#+end_src
+
+#+begin_src c++ :noweb-ref testcase
+#define _CMP_CHECK(what)                              \
+  std::cout << "\t Checking " << #what  << std::endl; \
+  assert(in.what == what);                            \
+  assert(out.what == what);
+
+  TESTCASE("Testing checkpoint reader and writers",
+           const std::string out_checkpoint = "/tmp/checkpoint.yaml";
+           const double energy = -1.493926352289995443;
+           const size_t no = 154, nv = 1500, nranks = 48*10, nnodes = 10;
+           const size_t iteration = 546;
+           std::cout << "\twriting to " << out_checkpoint << std::endl;
+
+           for (bool rankRoundRobin: {true, false}) {
+             atrip::Checkpoint out = {no,
+                                      nv,
+                                      nranks,
+                                      nnodes,
+                                      energy,
+                                      iteration,
+                                      rankRoundRobin}, in;
+
+
+             write_checkpoint(out, out_checkpoint);
+             in = read_checkpoint(out_checkpoint);
+
+             _CMP_CHECK(no);
+             _CMP_CHECK(nv);
+             _CMP_CHECK(nranks);
+             _CMP_CHECK(nnodes);
+             _CMP_CHECK(iteration);
+             _CMP_CHECK(rankRoundRobin);
+             _CMP_CHECK(energy);
+           }
+
+
+           )
+#undef _CMP_CHECK
+
+#+end_src
+
+
+
+** Epilog                                                          :noexport:
+#+begin_src c++ :tangle (atrip-checkpoint-h)
 }
 #+end_src
 

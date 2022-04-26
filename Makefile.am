@@ -1,7 +1,7 @@
 include $(top_srcdir)/etc/make/emacs.mk
 include $(top_srcdir)/atrip.mk
 
-SUBDIRS = src bench
+SUBDIRS = src bench test
 
 
 _ATRIPSRCS = Sources.mk

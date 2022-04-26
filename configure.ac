@@ -142,6 +142,7 @@ dnl -----------------------------------------------------------------------
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  bench/Makefile
+                 test/Makefile
                  docs/Makefile
                  docs/conf.py:docs/conf.py
                  docs/Doxyfile:docs/Doxyfile
