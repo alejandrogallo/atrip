@@ -8,13 +8,17 @@
 (defun atrip-print-sources ()
   (princ (string-join atrip-sources " ")))
 
-(defvar atrip-include-f "include/atrip") ;; TODO: create defvar
-(defvar atrip-src-f "src/atrip")         ;; TODO: create defvar
+(defvar atrip-include-f "include/atrip")
+(defvar atrip-src-f "src/atrip")
+(defvar atrip-test-d "test")
 
-(defmacro atrip-def (name body) `(progn (defun ,name () ,body)
-                                             (push (,name) atrip-sources)))
+(defmacro atrip-def (name body)
+  `(progn (defun ,name () ,body)
+          (push (,name) atrip-sources)))
 
 
+(defmacro atrip-def-test (name body)
+  `(atrip-def ,name (f-join atrip-test-d ,body)))
 (defmacro atrip-def-src (name body)
   `(atrip-def ,name (f-join atrip-src-f ,body)))
 (defmacro atrip-def-hdr (name body)
@@ -30,15 +34,20 @@
 (atrip-def-hdr atrip-tuples-h "Tuples.hpp")
 (atrip-def-hdr atrip-equations-h "Equations.hpp")
 (atrip-def-hdr atrip-debug-h "Debug.hpp")
+(atrip-def-hdr atrip-checkpoint-h "Checkpoint.hpp")
 
 (atrip-def-hdr atrip-atrip-h "Atrip.hpp")
 (atrip-def-src atrip-atrip-cxx "Atrip.cxx")
 
 (atrip-def atrip-main-h   "include/atrip.hpp")
 
+;; main test
+(atrip-def-test atrip-test-main "main.cxx")
+
 (defvar atrip-root-directory (file-name-directory load-file-name))
 (defvar license-path (format "%s/LICENSE-HEADER" atrip-root-directory))
 
+;; add local hook for license headers
 (add-hook 'org-babel-post-tangle-hook
           (lambda ()
             (goto-char (point-min))

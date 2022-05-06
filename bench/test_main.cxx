@@ -16,10 +16,15 @@
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
+  size_t checkpoint_it;
   int no(10), nv(10), itMod(-1), percentageMod(10);
-  bool nochrono(false), barrier(false), rankRoundRobin(false),
-       keepVppph(false);
-  std::string tuplesDistributionString = "naive";
+  float checkpoint_percentage;
+  bool
+    nochrono(false), barrier(false), rankRoundRobin(false),
+    keepVppph(false),
+    noCheckpoint = false;
+  std::string tuplesDistributionString = "naive",
+              checkpoint_path = "checkpoint.yaml";
 
   CLI::App app{"Main bench for atrip"};
   app.add_option("--no", no, "Occupied orbitals");
@@ -31,6 +36,14 @@ int main(int argc, char** argv) {
   app.add_flag("--barrier", barrier, "Use the first barrier");
   app.add_option("--dist", tuplesDistributionString, "Which distribution");
   app.add_option("-%", percentageMod, "Percentage to be printed");
+  // checkpointing
+  app.add_flag("--nocheckpoint", noCheckpoint, "Do not use checkpoint");
+  app.add_option("--checkpoint-path", checkpoint_path, "Path for checkpoint");
+  app.add_option("--checkpoint-it",
+                 checkpoint_it, "Checkpoint at every iteration");
+  app.add_option("--checkpoint-%",
+                 checkpoint_percentage,
+                 "Percentage for checkpoints");
 
   CLI11_PARSE(app, argc, argv);
 
@@ -74,9 +87,11 @@ int main(int argc, char** argv) {
   atrip::Atrip::Input<double>::TuplesDistribution tuplesDistribution;
   { using atrip::Atrip;
     if (tuplesDistributionString == "naive") {
-      tuplesDistribution = Atrip::Input<double>::TuplesDistribution::NAIVE;
+      tuplesDistribution
+        = Atrip::Input<double>::TuplesDistribution::NAIVE;
     } else if (tuplesDistributionString == "group") {
-      tuplesDistribution = Atrip::Input<double>::TuplesDistribution::GROUP_AND_SORT;
+      tuplesDistribution
+        = Atrip::Input<double>::TuplesDistribution::GROUP_AND_SORT;
     } else {
       std::cout << "--dist should be either naive or group\n";
       exit(1);
@@ -134,6 +149,11 @@ int main(int argc, char** argv) {
        .with_iterationMod(itMod)
        .with_percentageMod(percentageMod)
        .with_tuplesDistribution(tuplesDistribution)
+       // checkpoint options
+       .with_checkpointAtEveryIteration(checkpoint_it)
+       .with_checkpointAtPercentage(checkpoint_percentage)
+       .with_checkpointPath(checkpoint_path)
+       .with_readCheckpointIfExists(!noCheckpoint)
        ;
 
   auto out = atrip::Atrip::run(in);
