@@ -467,31 +467,31 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 // Main:1 ends here
 
 // [[file:../../atrip.org::*Main][Main:2]]
-  size_t const
-    tuplesPerRankLocal
-       = nodeTuples.size() / nodeInfos[rank].ranksPerNode
-       + size_t(nodeTuples.size() % nodeInfos[rank].ranksPerNode != 0)
-       ;
+size_t const
+  tuplesPerRankLocal
+     = nodeTuples.size() / nodeInfos[rank].ranksPerNode
+     + size_t(nodeTuples.size() % nodeInfos[rank].ranksPerNode != 0)
+     ;
 
-  size_t tuplesPerRankGlobal;
+size_t tuplesPerRankGlobal;
 
-  MPI_Reduce(&tuplesPerRankLocal,
-             &tuplesPerRankGlobal,
-             1,
-             MPI_UINT64_T,
-             MPI_MAX,
-             0,
-             universe);
+MPI_Reduce(&tuplesPerRankLocal,
+           &tuplesPerRankGlobal,
+           1,
+           MPI_UINT64_T,
+           MPI_MAX,
+           0,
+           universe);
 
-  MPI_Bcast(&tuplesPerRankGlobal,
-            1,
-            MPI_UINT64_T,
-            0,
-            universe);
+MPI_Bcast(&tuplesPerRankGlobal,
+          1,
+          MPI_UINT64_T,
+          0,
+          universe);
 
-  LOG(1,"Atrip") << "Tuples per rank: " << tuplesPerRankGlobal << "\n";
-  LOG(1,"Atrip") << "ranks per node " << nodeInfos[rank].ranksPerNode << "\n";
-  LOG(1,"Atrip") << "#nodes " << nNodes << "\n";
+LOG(1,"Atrip") << "Tuples per rank: " << tuplesPerRankGlobal << "\n";
+LOG(1,"Atrip") << "ranks per node " << nodeInfos[rank].ranksPerNode << "\n";
+LOG(1,"Atrip") << "#nodes " << nNodes << "\n";
 // Main:2 ends here
 
 // [[file:../../atrip.org::*Main][Main:3]]
@@ -531,7 +531,7 @@ if (computeDistribution) {
 // Main:4 ends here
 
 // [[file:../../atrip.org::*Main][Main:5]]
-  return result;
+return result;
 
 }
 // Main:5 ends here

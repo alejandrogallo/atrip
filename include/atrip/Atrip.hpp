@@ -17,6 +17,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <mpi.h>
 
 
 #include <atrip/Utils.hpp>
@@ -34,8 +35,9 @@ namespace atrip {
 
     static int rank;
     static int np;
+    static MPI_Comm communicator;
     static Timings chrono;
-    static void init();
+    static void init(MPI_Comm);
 
     template <typename F=double>
     struct Input {
@@ -68,6 +70,11 @@ namespace atrip {
       ADD_ATTRIBUTE(int, iterationMod, -1)
       ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
+      ADD_ATTRIBUTE(std::string, checkpointPath, "atrip-checkpoint.yaml")
+      ADD_ATTRIBUTE(bool, readCheckpointIfExists, true)
+      ADD_ATTRIBUTE(bool, writeCheckpoint, true)
+      ADD_ATTRIBUTE(float, checkpointAtPercentage, 10)
+      ADD_ATTRIBUTE(size_t, checkpointAtEveryIteration, 0)
 
     };
 

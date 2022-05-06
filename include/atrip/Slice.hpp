@@ -44,36 +44,36 @@ struct Slice {
 // Prolog:1 ends here
 
 // [[file:../../atrip.org::*Location][Location:1]]
-  struct Location { size_t rank; size_t source; };
+struct Location { size_t rank; size_t source; };
 // Location:1 ends here
 
 // [[file:../../atrip.org::*Type][Type:1]]
-  enum Type
-    { A = 10
-    , B
-    , C
-    // Two-parameter slices
-    , AB = 20
-    , BC
-    , AC
-    // for abci and the doubles
-    , CB
-    , BA
-    , CA
-    // The non-typed slice
-    , Blank = 404
-    };
+enum Type
+  { A = 10
+  , B
+  , C
+  // Two-parameter slices
+  , AB = 20
+  , BC
+  , AC
+  // for abci and the doubles
+  , CB
+  , BA
+  , CA
+  // The non-typed slice
+  , Blank = 404
+  };
 // Type:1 ends here
 
 // [[file:../../atrip.org::*State][State:1]]
-  enum State {
-    Fetch = 0,
-    Dispatched = 2,
-    Ready = 1,
-    SelfSufficient = 911,
-    Recycled = 123,
-    Acceptor = 405
-  };
+enum State {
+  Fetch = 0,
+  Dispatched = 2,
+  Ready = 1,
+  SelfSufficient = 911,
+  Recycled = 123,
+  Acceptor = 405
+};
 // State:1 ends here
 
 // [[file:../../atrip.org::*The Info structure][The Info structure:1]]
@@ -101,25 +101,25 @@ using Ty_x_Tu = std::pair< Type, PartialTuple >;
 // The Info structure:1 ends here
 
 // [[file:../../atrip.org::*Name][Name:1]]
-  enum Name
-    { TA    = 100
-    , VIJKA = 101
-    , VABCI = 200
-    , TABIJ = 201
-    , VABIJ = 202
-    };
+enum Name
+  { TA    = 100
+  , VIJKA = 101
+  , VABCI = 200
+  , TABIJ = 201
+  , VABIJ = 202
+  };
 // Name:1 ends here
 
 // [[file:../../atrip.org::*Database][Database:1]]
-  struct LocalDatabaseElement {
-    Slice<F>::Name name;
-    Slice<F>::Info info;
-  };
+struct LocalDatabaseElement {
+  Slice<F>::Name name;
+  Slice<F>::Info info;
+};
 // Database:1 ends here
 
 // [[file:../../atrip.org::*Database][Database:2]]
-  using LocalDatabase = std::vector<LocalDatabaseElement>;
-  using Database = LocalDatabase;
+using LocalDatabase = std::vector<LocalDatabaseElement>;
+using Database = LocalDatabase;
 // Database:2 ends here
 
 // [[file:../../atrip.org::*MPI Types][MPI Types:1]]
@@ -359,91 +359,91 @@ static Slice<F>& findByInfo(std::vector<Slice<F>> &slices,
 // Static utilities:6 ends here
 
 // [[file:../../atrip.org::*Attributes][Attributes:1]]
-    Info info;
+Info info;
 // Attributes:1 ends here
 
 // [[file:../../atrip.org::*Attributes][Attributes:2]]
-    F  *data;
+F  *data;
 // Attributes:2 ends here
 
 // [[file:../../atrip.org::*Attributes][Attributes:3]]
-    MPI_Request request;
+MPI_Request request;
 // Attributes:3 ends here
 
 // [[file:../../atrip.org::*Attributes][Attributes:4]]
-    const size_t size;
+const size_t size;
 // Attributes:4 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:1]]
-    void markReady() noexcept {
-      info.state = Ready;
-      info.recycling = Blank;
-    }
+void markReady() noexcept {
+  info.state = Ready;
+  info.recycling = Blank;
+}
 // Member functions:1 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:2]]
-    bool isUnwrapped() const noexcept {
-      return info.state == Ready
-          || info.state == SelfSufficient
-          ;
-    }
+bool isUnwrapped() const noexcept {
+  return info.state == Ready
+      || info.state == SelfSufficient
+      ;
+}
 // Member functions:2 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:3]]
-    bool isUnwrappable() const noexcept {
-      return isUnwrapped()
-          || info.state == Recycled
-          || info.state == Dispatched
-          ;
-    }
+bool isUnwrappable() const noexcept {
+  return isUnwrapped()
+      || info.state == Recycled
+      || info.state == Dispatched
+      ;
+}
 
-    inline bool isDirectlyFetchable() const noexcept {
-      return info.state == Ready || info.state == Dispatched;
-    }
+inline bool isDirectlyFetchable() const noexcept {
+  return info.state == Ready || info.state == Dispatched;
+}
 
-    void free() noexcept {
-      info.tuple      = {0, 0};
-      info.type       = Blank;
-      info.state      = Acceptor;
-      info.from       = {0, 0};
-      info.recycling  = Blank;
-      data            = nullptr;
-    }
+void free() noexcept {
+  info.tuple      = {0, 0};
+  info.type       = Blank;
+  info.state      = Acceptor;
+  info.from       = {0, 0};
+  info.recycling  = Blank;
+  data            = nullptr;
+}
 
-    inline bool isFree() const noexcept {
-      return info.tuple       == PartialTuple{0, 0}
-          && info.type        == Blank
-          && info.state       == Acceptor
-          && info.from.rank   == 0
-          && info.from.source == 0
-          && info.recycling   == Blank
-          && data             == nullptr
-           ;
-    }
+inline bool isFree() const noexcept {
+  return info.tuple       == PartialTuple{0, 0}
+      && info.type        == Blank
+      && info.state       == Acceptor
+      && info.from.rank   == 0
+      && info.from.source == 0
+      && info.recycling   == Blank
+      && data             == nullptr
+       ;
+}
 // Member functions:3 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:4]]
-    inline bool isRecyclable() const noexcept {
-      return (  info.state == Dispatched
-             || info.state == Ready
-             || info.state == Fetch
-             )
-          && hasValidDataPointer()
-          ;
-    }
+inline bool isRecyclable() const noexcept {
+  return (  info.state == Dispatched
+         || info.state == Ready
+         || info.state == Fetch
+         )
+      && hasValidDataPointer()
+      ;
+}
 // Member functions:4 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:5]]
-    inline bool hasValidDataPointer() const noexcept {
-      return data       != nullptr
-          && info.state != Acceptor
-          && info.type  != Blank
-          ;
-    }
+inline bool hasValidDataPointer() const noexcept {
+  return data       != nullptr
+      && info.state != Acceptor
+      && info.type  != Blank
+      ;
+}
 // Member functions:5 ends here
 
 // [[file:../../atrip.org::*Member functions][Member functions:6]]
-    void unwrapAndMarkReady() {
+void unwrapAndMarkReady() {
       if (info.state == Ready) return;
       if (info.state != Dispatched)
         throw
@@ -475,14 +475,14 @@ static Slice<F>& findByInfo(std::vector<Slice<F>> &slices,
 // Member functions:6 ends here
 
 // [[file:../../atrip.org::*Epilog][Epilog:1]]
-    Slice(size_t size_)
-      : info({})
-      , data(nullptr)
-      , size(size_)
-      {}
+Slice(size_t size_)
+    : info({})
+    , data(nullptr)
+    , size(size_)
+    {}
 
 
-  }; // struct Slice
+}; // struct Slice
 // Epilog:1 ends here
 
 // [[file:../../atrip.org::*Debug][Debug:1]]

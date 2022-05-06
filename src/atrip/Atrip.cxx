@@ -20,6 +20,7 @@
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
+#include <atrip/Checkpoint.hpp>
 
 using namespace atrip;
 
@@ -28,6 +29,7 @@ template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
+MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
 
 // user printing block
@@ -36,9 +38,10 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
   IterationDescription::descriptor = d;
 }
 
-void Atrip::init()  {
-  MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
-  MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
+void Atrip::init(MPI_Comm world)  {
+  Atrip::communicator = world;
+  MPI_Comm_rank(world, &Atrip::rank);
+  MPI_Comm_size(world, &Atrip::np);
 }
 
 template <typename F>
@@ -46,7 +49,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
-  MPI_Comm universe = in.ei->wrld->comm;
+  MPI_Comm universe = Atrip::communicator;
 
   const size_t No = in.ei->lens[0];
   const size_t Nv = in.ea->lens[0];
@@ -70,10 +73,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
   if (RankMap<F>::RANK_ROUND_ROBIN) {
-    LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
+    LOG(0,"Atrip") << "Doing rank round robin slices distribution\n";
   } else {
     LOG(0,"Atrip")
-      << "Doing node > local rank round robin slices distribution" << "\n";
+      << "Doing node > local rank round robin slices distribution\n";
   }
 
 
@@ -146,7 +149,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const size_t
       iterationMod = (in.percentageMod > 0)
-                  ? nIterations * in.percentageMod / 100
+                  ? nIterations * in.percentageMod / 100.0
                   : in.iterationMod
 
     , iteration1Percent = nIterations * 0.01
@@ -300,8 +303,44 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   // START MAIN LOOP ======================================================{{{1
 
   double energy(0.);
+  size_t first_iteration = 0;
+  Checkpoint c;
+  const size_t checkpoint_mod
+    = in.checkpointAtEveryIteration != 0
+    ? in.checkpointAtEveryIteration
+    : nIterations * in.checkpointAtPercentage / 100;
+  if (in.readCheckpointIfExists) {
+    std::ifstream fin(in.checkpointPath);
+    if (fin.is_open()) {
+      LOG(0, "Atrip") <<  "Reading checkpoint from "
+                      << in.checkpointPath << "\n";
+      c = read_checkpoint(fin);
+      first_iteration = (size_t)c.iteration;
+      if (first_iteration > nIterations) {
+        // TODO: throw an error here
+        // first_iteration is bigger than nIterations,
+        // you probably started the program with a different number
+        // of cores
+      }
+      if (No != c.no) {/* TODO: write warning */}
+      if (Nv != c.nv) {/* TODO: write warning */}
+      // TODO write warnings for nrank and so on
+      if (Atrip::rank == 0) {
+        // take the negative of the energy to correct for the
+        // negativity of the equations, the energy in the checkpoint
+        // should always be the correct physical one.
+        energy = - (double)c.energy;
+      }
+      LOG(0, "Atrip") << "energy from checkpoint "
+                      << energy << "\n";
+      LOG(0, "Atrip") << "iteration from checkpoint "
+                      << first_iteration << "\n";
+    }
+  }
 
-  for ( size_t i = 0, iteration = 1
+  for ( size_t
+          i = first_iteration,
+          iteration = first_iteration + 1
       ; i < tuplesList.size()
       ; i++, iteration++
       ) {
@@ -316,6 +355,23 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       if (in.barrier) MPI_Barrier(universe);
     ))
 
+    // write checkpoints
+    if (iteration % checkpoint_mod == 0) {
+        double globalEnergy = 0;
+        MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
+        Checkpoint out
+          = {No,
+             Nv,
+             0, // TODO
+             0, // TODO
+             - globalEnergy,
+             iteration - 1,
+             in.rankRoundRobin};
+        LOG(0, "Atrip") << "Writing checkpoint\n";
+        if (Atrip::rank == 0) write_checkpoint(out, in.checkpointPath);
+    }
+
+    // write reporting
     if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
       if (IterationDescription::descriptor) {
@@ -363,7 +419,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
     // COMM FIRST DATABASE ================================================{{{1
-    if (i == 0) {
+    if (i == first_iteration) {
       WITH_RANK << "__first__:first database ............ \n";
       const auto db = communicateDatabase(abc, universe);
       WITH_RANK << "__first__:first database communicated \n";
