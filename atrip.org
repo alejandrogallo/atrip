@@ -2951,6 +2951,7 @@ namespace atrip {
 #include <sstream>
 #include <string>
 #include <map>
+#include <mpi.h>
 
 
 #include <atrip/Utils.hpp>
@@ -2968,8 +2969,9 @@ namespace atrip {
 
     static int rank;
     static int np;
+    static MPI_Comm communicator;
     static Timings chrono;
-    static void init();
+    static void init(MPI_Comm);
 
     template <typename F=double>
     struct Input {
@@ -3041,6 +3043,7 @@ template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 int Atrip::rank;
 int Atrip::np;
+MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
 
 // user printing block
@@ -3049,9 +3052,10 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
   IterationDescription::descriptor = d;
 }
 
-void Atrip::init()  {
-  MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
-  MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
+void Atrip::init(MPI_Comm world)  {
+  Atrip::communicator = world;
+  MPI_Comm_rank(world, &Atrip::rank);
+  MPI_Comm_size(world, &Atrip::np);
 }
 
 template <typename F>
@@ -3059,7 +3063,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const int np = Atrip::np;
   const int rank = Atrip::rank;
-  MPI_Comm universe = in.ei->wrld->comm;
+  MPI_Comm universe = Atrip::communicator;
 
   const size_t No = in.ei->lens[0];
   const size_t Nv = in.ea->lens[0];
@@ -3083,10 +3087,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
   if (RankMap<F>::RANK_ROUND_ROBIN) {
-    LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
+    LOG(0,"Atrip") << "Doing rank round robin slices distribution\n";
   } else {
     LOG(0,"Atrip")
-      << "Doing node > local rank round robin slices distribution" << "\n";
+      << "Doing node > local rank round robin slices distribution\n";
   }
 
 
@@ -3159,7 +3163,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   const size_t
       iterationMod = (in.percentageMod > 0)
-                  ? nIterations * in.percentageMod / 100
+                  ? nIterations * in.percentageMod / 100.0
                   : in.iterationMod
 
     , iteration1Percent = nIterations * 0.01

@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
   Vhhhp.fill_random(0, 1);
   Vppph->fill_random(0, 1);
 
-  atrip::Atrip::init();
+  atrip::Atrip::init(MPI_COMM_WORLD);
   const auto in
        = atrip::Atrip::Input<double>()
        // Tensors
