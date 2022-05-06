@@ -60,7 +60,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Atrip_8cxx.html",
-"structatrip_1_1Timer.html"
+"structatrip_1_1NaiveDistribution.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

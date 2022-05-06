@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="structatrip_1_1group__and__sort_1_1Info" kind="struct" language="C++" prot="public">
     <compoundname>atrip::group_and_sort::Info</compoundname>
     <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
@@ -9,6 +9,7 @@
         <definition>size_t atrip::group_and_sort::Info::nNodes</definition>
         <argsstring></argsstring>
         <name>nNodes</name>
+        <qualifiedname>atrip::group_and_sort::Info::nNodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -23,6 +24,7 @@
         <definition>size_t atrip::group_and_sort::Info::nodeId</definition>
         <argsstring></argsstring>
         <name>nodeId</name>
+        <qualifiedname>atrip::group_and_sort::Info::nodeId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -30,8 +32,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="243" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="243" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
         <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="248" endline="426">atrip::group_and_sort::specialDistribution</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a31c2426ba83d4e87098657d78750dcf4" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>

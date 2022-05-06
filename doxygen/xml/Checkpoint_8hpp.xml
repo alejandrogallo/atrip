@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="Checkpoint_8hpp" kind="file" language="C++">
+    <compoundname>Checkpoint.hpp</compoundname>
+    <includes local="no">fstream</includes>
+    <includes local="no">iomanip</includes>
+    <includes refid="Atrip_8hpp" local="no">atrip/Atrip.hpp</includes>
+    <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
+    <incdepgraph>
+      <node id="4">
+        <label>atrip/Atrip.hpp</label>
+        <link refid="Atrip_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Checkpoint.hpp</label>
+        <link refid="Checkpoint_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>atrip/Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>atrip/Utils.hpp</label>
+        <link refid="Utils_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>chrono</label>
+      </node>
+      <node id="11">
+        <label>ctf.hpp</label>
+      </node>
+      <node id="2">
+        <label>fstream</label>
+      </node>
+      <node id="13">
+        <label>functional</label>
+      </node>
+      <node id="3">
+        <label>iomanip</label>
+      </node>
+      <node id="7">
+        <label>map</label>
+      </node>
+      <node id="8">
+        <label>mpi.h</label>
+      </node>
+      <node id="5">
+        <label>sstream</label>
+      </node>
+      <node id="6">
+        <label>string</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>Checkpoint.hpp</label>
+        <link refid="Checkpoint_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Atrip.cxx</label>
+        <link refid="Atrip_8cxx"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structatrip_1_1Checkpoint" prot="public">atrip::Checkpoint</innerclass>
+    <innernamespace refid="namespaceatrip">atrip</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>2022<sp/>Alejandro<sp/>Gallo</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Licensed<sp/>under<sp/>the<sp/>Apache<sp/>License,<sp/>Version<sp/>2.0<sp/>(the<sp/>&quot;License&quot;);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>you<sp/>may<sp/>not<sp/>use<sp/>this<sp/>file<sp/>except<sp/>in<sp/>compliance<sp/>with<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>You<sp/>may<sp/>obtain<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>License<sp/>at</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>http://www.apache.org/licenses/LICENSE-2.0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Unless<sp/>required<sp/>by<sp/>applicable<sp/>law<sp/>or<sp/>agreed<sp/>to<sp/>in<sp/>writing,<sp/>software</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">//<sp/>distributed<sp/>under<sp/>the<sp/>License<sp/>is<sp/>distributed<sp/>on<sp/>an<sp/>&quot;AS<sp/>IS&quot;<sp/>BASIS,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="comment">//<sp/>WITHOUT<sp/>WARRANTIES<sp/>OR<sp/>CONDITIONS<sp/>OF<sp/>ANY<sp/>KIND,<sp/>either<sp/>express<sp/>or<sp/>implied.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iomanip&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Atrip_8hpp" kindref="compound">atrip/Atrip.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::checkpoint-definition][checkpoint-definition]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">//<sp/>template<sp/>&lt;typename<sp/>F&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="structatrip_1_1Checkpoint" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/>{</highlight></codeline>
+<codeline lineno="28" refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" kindref="member">no</ref>,<sp/><ref refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" kindref="member">nv</ref>;</highlight></codeline>
+<codeline lineno="29" refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" kindref="member">nranks</ref>;</highlight></codeline>
+<codeline lineno="30" refid="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" kindref="member">nnodes</ref>;</highlight></codeline>
+<codeline lineno="31" refid="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" kindref="member">energy</ref>;</highlight></codeline>
+<codeline lineno="32" refid="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" kindref="member">iteration</ref>;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Input&lt;F&gt;::TuplesDistribution<sp/>distribution(GROUP_AND_SORT);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" kindref="member">rankRoundRobin</ref>;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="comment">//<sp/>checkpoint-definition<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Input<sp/>and<sp/>output][Input<sp/>and<sp/>output:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40" refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" kindref="member">write_checkpoint</ref>(<ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>c,<sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>filepath)<sp/>{</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/>std::ofstream<sp/>out(filepath);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/>out<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;No:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" kindref="member">no</ref></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Nv:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" kindref="member">nv</ref></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Nranks:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" kindref="member">nranks</ref></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Nnodes:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" kindref="member">nnodes</ref></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Energy:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>std::setprecision(19)<sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" kindref="member">energy</ref></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Iteration:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" kindref="member">iteration</ref></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;RankRoundRobin:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>(c.<ref refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" kindref="member">rankRoundRobin</ref><sp/>?<sp/></highlight><highlight class="stringliteral">&quot;true&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;false&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59" refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" refkind="member"><highlight class="normal"><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/><ref refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" kindref="member">read_checkpoint</ref>(std::ifstream&amp;<sp/>in)<sp/>{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/>c;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>trim<sp/>chars<sp/>from<sp/>the<sp/>string,<sp/>to<sp/>be<sp/>more<sp/>sure<sp/>and<sp/>not<sp/>use<sp/>regexes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>trim<sp/>=<sp/>[](std::string&amp;<sp/>s,<sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>chars)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>s.erase(0,<sp/>s.find_first_not_of(chars));</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>s.erase(s.find_last_not_of(chars)<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>s;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(std::string<sp/>header,<sp/>value;<sp/>std::getline(in,<sp/>header,<sp/></highlight><highlight class="charliteral">&apos;:&apos;</highlight><highlight class="normal">);)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>std::getline(in,<sp/>value,<sp/></highlight><highlight class="charliteral">&apos;\n&apos;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>trim(value,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>\t&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>trim<sp/>all<sp/>whitespaces</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>trim(header,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>\t&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;No&quot;</highlight><highlight class="normal">)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>c.<ref refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" kindref="member">no</ref><sp/>=<sp/>std::atoi(value.c_str());</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Nv&quot;</highlight><highlight class="normal">)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>c.<ref refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" kindref="member">nv</ref><sp/>=<sp/>std::atoi(value.c_str());</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Nranks&quot;</highlight><highlight class="normal">)<sp/><sp/><sp/><sp/>c.<ref refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" kindref="member">nranks</ref><sp/>=<sp/>std::atoi(value.c_str());</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Nnodes&quot;</highlight><highlight class="normal">)<sp/><sp/><sp/><sp/>c.<ref refid="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" kindref="member">nnodes</ref><sp/>=<sp/>std::atoi(value.c_str());</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Energy&quot;</highlight><highlight class="normal">)<sp/><sp/><sp/><sp/>c.<ref refid="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" kindref="member">energy</ref><sp/>=<sp/>std::atof(value.c_str());</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Iteration&quot;</highlight><highlight class="normal">)<sp/>c.<ref refid="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" kindref="member">iteration</ref><sp/>=<sp/>std::atoi(value.c_str());</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(header<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;RankRoundRobin&quot;</highlight><highlight class="normal">)<sp/>c.<ref refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" kindref="member">rankRoundRobin</ref><sp/>=<sp/>(value[0]<sp/>==<sp/></highlight><highlight class="charliteral">&apos;t&apos;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>c;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84" refid="namespaceatrip_1acb8c08d5972eb89777650317e5b765d2" refkind="member"><highlight class="normal"><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/><ref refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" kindref="member">read_checkpoint</ref>(std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>filepath)<sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/>std::ifstream<sp/>in(filepath);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" kindref="member">read_checkpoint</ref>(in);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Input<sp/>and<sp/>output:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp"/>
+  </compounddef>
+</doxygen>

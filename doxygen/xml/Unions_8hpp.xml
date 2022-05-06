@@ -1,16 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="Unions_8hpp" kind="file" language="C++">
     <compoundname>Unions.hpp</compoundname>
     <includes refid="SliceUnion_8hpp" local="no">atrip/SliceUnion.hpp</includes>
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
     <incdepgraph>
-      <node id="4">
-        <label>functional</label>
-      </node>
       <node id="23">
         <label>atrip/Blas.hpp</label>
         <link refid="Blas_8hpp"/>
+      </node>
+      <node id="3">
+        <label>atrip/Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
       </node>
       <node id="24">
         <label>atrip/RankMap.hpp</label>
@@ -22,6 +25,34 @@
         <childnode refid="5" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>atrip/Slice.hpp</label>
+        <link refid="Slice_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>atrip/SliceUnion.hpp</label>
+        <link refid="SliceUnion_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
         </childnode>
       </node>
       <node id="10">
@@ -54,17 +85,11 @@
         <childnode refid="3" relation="include">
         </childnode>
       </node>
-      <node id="16">
-        <label>cassert</label>
-      </node>
-      <node id="12">
-        <label>numeric</label>
-      </node>
-      <node id="21">
-        <label>string</label>
-      </node>
-      <node id="15">
-        <label>map</label>
+      <node id="1">
+        <label>Unions.hpp</label>
+        <link refid="Unions_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
       </node>
       <node id="19">
         <label>atrip/Utils.hpp</label>
@@ -82,78 +107,53 @@
         <childnode refid="3" relation="include">
         </childnode>
       </node>
-      <node id="3">
-        <label>atrip/Debug.hpp</label>
-        <link refid="Debug_8hpp"/>
-        <childnode refid="4" relation="include">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>atrip/SliceUnion.hpp</label>
-        <link refid="SliceUnion_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="24" relation="include">
-        </childnode>
-      </node>
-      <node id="22">
-        <label>ctf.hpp</label>
-      </node>
-      <node id="8">
-        <label>vector</label>
+      <node id="7">
+        <label>algorithm</label>
       </node>
       <node id="11">
         <label>array</label>
       </node>
-      <node id="20">
-        <label>sstream</label>
-      </node>
-      <node id="1">
-        <label>Unions.hpp</label>
-        <link refid="Unions_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-      </node>
-      <node id="14">
-        <label>math.h</label>
-      </node>
-      <node id="6">
-        <label>iostream</label>
-      </node>
-      <node id="5">
-        <label>atrip/Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
-        </childnode>
-        <childnode refid="23" relation="include">
-        </childnode>
-      </node>
-      <node id="18">
-        <label>climits</label>
+      <node id="16">
+        <label>cassert</label>
       </node>
       <node id="17">
         <label>chrono</label>
       </node>
+      <node id="18">
+        <label>climits</label>
+      </node>
+      <node id="22">
+        <label>ctf.hpp</label>
+      </node>
+      <node id="4">
+        <label>functional</label>
+      </node>
+      <node id="6">
+        <label>iostream</label>
+      </node>
+      <node id="15">
+        <label>map</label>
+      </node>
+      <node id="14">
+        <label>math.h</label>
+      </node>
       <node id="9">
         <label>mpi.h</label>
       </node>
-      <node id="7">
-        <label>algorithm</label>
+      <node id="12">
+        <label>numeric</label>
+      </node>
+      <node id="20">
+        <label>sstream</label>
       </node>
       <node id="13">
         <label>stdio.h</label>
+      </node>
+      <node id="21">
+        <label>string</label>
+      </node>
+      <node id="8">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>

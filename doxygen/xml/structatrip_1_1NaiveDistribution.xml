@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="structatrip_1_1NaiveDistribution" kind="struct" language="C++" prot="public">
     <compoundname>atrip::NaiveDistribution</compoundname>
     <basecompoundref refid="structatrip_1_1TuplesDistribution" prot="public" virt="non-virtual">atrip::TuplesDistribution</basecompoundref>
@@ -10,6 +10,7 @@
         <definition>ABCTuples atrip::NaiveDistribution::getTuples</definition>
         <argsstring>(size_t Nv, MPI_Comm universe) override</argsstring>
         <name>getTuples</name>
+        <qualifiedname>atrip::NaiveDistribution::getTuples</qualifiedname>
         <reimplements refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c">getTuples</reimplements>
         <param>
           <type>size_t</type>

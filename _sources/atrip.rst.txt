@@ -2850,6 +2850,7 @@ is mainly using the ``DGEMM`` function, which we declare as
     #include <sstream>
     #include <string>
     #include <map>
+    #include <mpi.h>
 
 
     #include <atrip/Utils.hpp>
@@ -2867,8 +2868,9 @@ is mainly using the ``DGEMM`` function, which we declare as
 
         static int rank;
         static int np;
+        static MPI_Comm communicator;
         static Timings chrono;
-        static void init();
+        static void init(MPI_Comm);
 
         template <typename F=double>
         struct Input {
@@ -2901,6 +2903,11 @@ is mainly using the ``DGEMM`` function, which we declare as
           ADD_ATTRIBUTE(int, iterationMod, -1)
           ADD_ATTRIBUTE(int, percentageMod, -1)
           ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
+          ADD_ATTRIBUTE(std::string, checkpointPath, "atrip-checkpoint.yaml")
+          ADD_ATTRIBUTE(bool, readCheckpointIfExists, true)
+          ADD_ATTRIBUTE(bool, writeCheckpoint, true)
+          ADD_ATTRIBUTE(float, checkpointAtPercentage, 10)
+          ADD_ATTRIBUTE(size_t, checkpointAtEveryIteration, 0)
 
         };
 
@@ -2927,6 +2934,7 @@ is mainly using the ``DGEMM`` function, which we declare as
     #include <atrip/Equations.hpp>
     #include <atrip/SliceUnion.hpp>
     #include <atrip/Unions.hpp>
+    #include <atrip/Checkpoint.hpp>
 
     using namespace atrip;
 
@@ -2935,6 +2943,7 @@ is mainly using the ``DGEMM`` function, which we declare as
     template bool RankMap<Complex>::RANK_ROUND_ROBIN;
     int Atrip::rank;
     int Atrip::np;
+    MPI_Comm Atrip::communicator;
     Timings Atrip::chrono;
 
     // user printing block
@@ -2943,9 +2952,10 @@ is mainly using the ``DGEMM`` function, which we declare as
       IterationDescription::descriptor = d;
     }
 
-    void Atrip::init()  {
-      MPI_Comm_rank(MPI_COMM_WORLD, &Atrip::rank);
-      MPI_Comm_size(MPI_COMM_WORLD, &Atrip::np);
+    void Atrip::init(MPI_Comm world)  {
+      Atrip::communicator = world;
+      MPI_Comm_rank(world, &Atrip::rank);
+      MPI_Comm_size(world, &Atrip::np);
     }
 
     template <typename F>
@@ -2953,7 +2963,7 @@ is mainly using the ``DGEMM`` function, which we declare as
 
       const int np = Atrip::np;
       const int rank = Atrip::rank;
-      MPI_Comm universe = in.ei->wrld->comm;
+      MPI_Comm universe = Atrip::communicator;
 
       const size_t No = in.ei->lens[0];
       const size_t Nv = in.ea->lens[0];
@@ -2977,10 +2987,10 @@ is mainly using the ``DGEMM`` function, which we declare as
 
       RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
       if (RankMap<F>::RANK_ROUND_ROBIN) {
-        LOG(0,"Atrip") << "Doing rank round robin slices distribution" << "\n";
+        LOG(0,"Atrip") << "Doing rank round robin slices distribution\n";
       } else {
         LOG(0,"Atrip")
-          << "Doing node > local rank round robin slices distribution" << "\n";
+          << "Doing node > local rank round robin slices distribution\n";
       }
 
 
@@ -3053,7 +3063,7 @@ is mainly using the ``DGEMM`` function, which we declare as
 
       const size_t
           iterationMod = (in.percentageMod > 0)
-                      ? nIterations * in.percentageMod / 100
+                      ? nIterations * in.percentageMod / 100.0
                       : in.iterationMod
 
         , iteration1Percent = nIterations * 0.01
@@ -3207,8 +3217,44 @@ is mainly using the ``DGEMM`` function, which we declare as
       // START MAIN LOOP ======================================================{{{1
 
       double energy(0.);
+      size_t first_iteration = 0;
+      Checkpoint c;
+      const size_t checkpoint_mod
+        = in.checkpointAtEveryIteration != 0
+        ? in.checkpointAtEveryIteration
+        : nIterations * in.checkpointAtPercentage / 100;
+      if (in.readCheckpointIfExists) {
+        std::ifstream fin(in.checkpointPath);
+        if (fin.is_open()) {
+          LOG(0, "Atrip") <<  "Reading checkpoint from "
+                          << in.checkpointPath << "\n";
+          c = read_checkpoint(fin);
+          first_iteration = (size_t)c.iteration;
+          if (first_iteration > nIterations) {
+            // TODO: throw an error here
+            // first_iteration is bigger than nIterations,
+            // you probably started the program with a different number
+            // of cores
+          }
+          if (No != c.no) {/* TODO: write warning */}
+          if (Nv != c.nv) {/* TODO: write warning */}
+          // TODO write warnings for nrank and so on
+          if (Atrip::rank == 0) {
+            // take the negative of the energy to correct for the
+            // negativity of the equations, the energy in the checkpoint
+            // should always be the correct physical one.
+            energy = - (double)c.energy;
+          }
+          LOG(0, "Atrip") << "energy from checkpoint "
+                          << energy << "\n";
+          LOG(0, "Atrip") << "iteration from checkpoint "
+                          << first_iteration << "\n";
+        }
+      }
 
-      for ( size_t i = 0, iteration = 1
+      for ( size_t
+              i = first_iteration,
+              iteration = first_iteration + 1
           ; i < tuplesList.size()
           ; i++, iteration++
           ) {
@@ -3223,6 +3269,23 @@ is mainly using the ``DGEMM`` function, which we declare as
           if (in.barrier) MPI_Barrier(universe);
         ))
 
+        // write checkpoints
+        if (iteration % checkpoint_mod == 0) {
+            double globalEnergy = 0;
+            MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
+            Checkpoint out
+              = {No,
+                 Nv,
+                 0, // TODO
+                 0, // TODO
+                 - globalEnergy,
+                 iteration - 1,
+                 in.rankRoundRobin};
+            LOG(0, "Atrip") << "Writing checkpoint\n";
+            if (Atrip::rank == 0) write_checkpoint(out, in.checkpointPath);
+        }
+
+        // write reporting
         if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
           if (IterationDescription::descriptor) {
@@ -3270,7 +3333,7 @@ is mainly using the ``DGEMM`` function, which we declare as
 
 
         // COMM FIRST DATABASE ================================================{{{1
-        if (i == 0) {
+        if (i == first_iteration) {
           WITH_RANK << "__first__:first database ............ \n";
           const auto db = communicateDatabase(abc, universe);
           WITH_RANK << "__first__:first database communicated \n";
@@ -3611,7 +3674,106 @@ should be nothing.
 
     }
 
-12 Include header
+12 Checkpoints and restarts
+---------------------------
+
+12.1 Introduction
+~~~~~~~~~~~~~~~~~
+
+For very heavy workloads and possible bugs in the packages it is often
+useful to restart from a given state of the calculation.
+
+An advantage of the ``atrip`` algorithm is that the state is essentially given
+by the
+
+.. code:: yaml
+
+    No: number of occupied orbitals
+    Nv: number of virtual orbitals
+    Nranks: number of ranks
+    Nnodes: number of nodes
+    Energy: the current total energy of the iterations
+    Iteration: the iteration number
+    Distribution: the type of distribution
+    RankRoundRobin: wether the round robin is done through the ranks or
+      nodes
+
+This information we can encode in a simple struct
+
+.. code:: c++
+    :name: checkpoint-definition
+
+    // template <typename F>
+    struct Checkpoint {
+      size_t no, nv;
+      size_t nranks;
+      size_t nnodes;
+      double energy;
+      size_t iteration;
+      // TODO
+      // Input<F>::TuplesDistribution distribution(GROUP_AND_SORT);
+      bool rankRoundRobin;
+    };
+
+12.2 Input and output
+~~~~~~~~~~~~~~~~~~~~~
+
+In order to read and write the `checkpoint information <checkpoint-definition>`_, we need
+to define a format. We choose a simple yaml format without any kind
+of depth, so that we can write quite easily a parser.
+
+.. code:: c++
+
+    void write_checkpoint(Checkpoint const& c, std::string const& filepath) {
+      std::ofstream out(filepath);
+      out << "No: " << c.no
+          << "\n"
+          << "Nv: " << c.nv
+          << "\n"
+          << "Nranks: " << c.nranks
+          << "\n"
+          << "Nnodes: " << c.nnodes
+          << "\n"
+          << "Energy: " << std::setprecision(19) << c.energy
+          << "\n"
+          << "Iteration: " << c.iteration
+          << "\n"
+          << "RankRoundRobin: " << (c.rankRoundRobin ? "true" : "false")
+          << "\n";
+    }
+
+
+    Checkpoint read_checkpoint(std::ifstream& in) {
+      Checkpoint c;
+      // trim chars from the string, to be more sure and not use regexes
+      auto trim = [](std::string& s, std::string const& chars) {
+        s.erase(0, s.find_first_not_of(chars));
+        s.erase(s.find_last_not_of(chars) + 1);
+        return s;
+      };
+      for (std::string header, value; std::getline(in, header, ':');) {
+        std::getline(in, value, '\n');
+        trim(value, " \t"); // trim all whitespaces
+        trim(header, " \t");
+
+        /**/ if (header == "No")        c.no = std::atoi(value.c_str());
+        else if (header == "Nv")        c.nv = std::atoi(value.c_str());
+        else if (header == "Nranks")    c.nranks = std::atoi(value.c_str());
+        else if (header == "Nnodes")    c.nnodes = std::atoi(value.c_str());
+        else if (header == "Energy")    c.energy = std::atof(value.c_str());
+        else if (header == "Iteration") c.iteration = std::atoi(value.c_str());
+        else if (header == "RankRoundRobin") c.rankRoundRobin = (value[0] == 't');
+      }
+      return c;
+    }
+
+
+    Checkpoint read_checkpoint(std::string const& filepath) {
+      std::ifstream in(filepath);
+      return read_checkpoint(in);
+    }
+
+13 Include header
 -----------------
 
 .. code:: c++

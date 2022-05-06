@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="structatrip_1_1Timer" kind="struct" language="C++" prot="public">
     <compoundname>atrip::Timer</compoundname>
     <includes refid="Utils_8hpp" local="no">Utils.hpp</includes>
@@ -9,6 +9,7 @@
         <definition>using atrip::Timer::Clock =  std::chrono::high_resolution_clock</definition>
         <argsstring></argsstring>
         <name>Clock</name>
+        <qualifiedname>atrip::Timer::Clock</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>using atrip::Timer::Event =  std::chrono::time_point&lt;Clock&gt;</definition>
         <argsstring></argsstring>
         <name>Event</name>
+        <qualifiedname>atrip::Timer::Event</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -37,6 +39,7 @@
         <definition>std::chrono::duration&lt;double&gt; atrip::Timer::duration</definition>
         <argsstring></argsstring>
         <name>duration</name>
+        <qualifiedname>atrip::Timer::duration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -44,15 +47,16 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="55" column="25" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="55" bodyend="-1"/>
-        <referencedby refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" compoundref="Utils_8hpp" startline="58" endline="58">stop</referencedby>
         <referencedby refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" compoundref="Utils_8hpp" startline="59" endline="59">clear</referencedby>
         <referencedby refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" compoundref="Utils_8hpp" startline="60" endline="60">count</referencedby>
+        <referencedby refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" compoundref="Utils_8hpp" startline="58" endline="58">stop</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" prot="public" static="no" mutable="no">
         <type><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref></type>
         <definition>Event atrip::Timer::_start</definition>
         <argsstring></argsstring>
         <name>_start</name>
+        <qualifiedname>atrip::Timer::_start</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -70,6 +74,7 @@
         <definition>void atrip::Timer::start</definition>
         <argsstring>() noexcept</argsstring>
         <name>start</name>
+        <qualifiedname>atrip::Timer::start</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -84,6 +89,7 @@
         <definition>void atrip::Timer::stop</definition>
         <argsstring>() noexcept</argsstring>
         <name>stop</name>
+        <qualifiedname>atrip::Timer::stop</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -99,6 +105,7 @@
         <definition>void atrip::Timer::clear</definition>
         <argsstring>() noexcept</argsstring>
         <name>clear</name>
+        <qualifiedname>atrip::Timer::clear</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -113,6 +120,7 @@
         <definition>double atrip::Timer::count</definition>
         <argsstring>() const noexcept</argsstring>
         <name>count</name>
+        <qualifiedname>atrip::Timer::count</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>

@@ -1,16 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="Blas_8hpp" kind="file" language="C++">
     <compoundname>Blas.hpp</compoundname>
     <includedby refid="Equations_8hpp" local="no">Equations.hpp</includedby>
     <includedby refid="Slice_8hpp" local="no">Slice.hpp</includedby>
     <invincdepgraph>
-      <node id="2">
-        <label>Equations.hpp</label>
-        <link refid="Equations_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-      </node>
       <node id="1">
         <label>Blas.hpp</label>
         <link refid="Blas_8hpp"/>
@@ -19,9 +13,25 @@
         <childnode refid="4" relation="include">
         </childnode>
       </node>
+      <node id="2">
+        <label>Equations.hpp</label>
+        <link refid="Equations_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
       <node id="5">
         <label>RankMap.hpp</label>
         <link refid="RankMap_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Slice.hpp</label>
+        <link refid="Slice_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
@@ -37,16 +47,6 @@
         <label>Unions.hpp</label>
         <link refid="Unions_8hpp"/>
         <childnode refid="3" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="3">

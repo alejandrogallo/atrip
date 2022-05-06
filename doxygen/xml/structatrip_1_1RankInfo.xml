@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="structatrip_1_1RankInfo" kind="struct" language="C++" prot="public">
     <compoundname>atrip::RankInfo</compoundname>
     <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
@@ -9,6 +9,7 @@
         <definition>const std::string atrip::RankInfo::name</definition>
         <argsstring></argsstring>
         <name>name</name>
+        <qualifiedname>atrip::RankInfo::name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>const size_t atrip::RankInfo::nodeId</definition>
         <argsstring></argsstring>
         <name>nodeId</name>
+        <qualifiedname>atrip::RankInfo::nodeId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -35,6 +37,7 @@
         <definition>const size_t atrip::RankInfo::globalRank</definition>
         <argsstring></argsstring>
         <name>globalRank</name>
+        <qualifiedname>atrip::RankInfo::globalRank</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -48,6 +51,7 @@
         <definition>const size_t atrip::RankInfo::localRank</definition>
         <argsstring></argsstring>
         <name>localRank</name>
+        <qualifiedname>atrip::RankInfo::localRank</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -61,6 +65,7 @@
         <definition>const size_t atrip::RankInfo::ranksPerNode</definition>
         <argsstring></argsstring>
         <name>ranksPerNode</name>
+        <qualifiedname>atrip::RankInfo::ranksPerNode</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>

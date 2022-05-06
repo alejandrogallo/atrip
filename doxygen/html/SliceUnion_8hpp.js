@@ -1,5 +1,5 @@
 var SliceUnion_8hpp =
 [
-    [ "SliceUnion", "structatrip_1_1SliceUnion.html", "structatrip_1_1SliceUnion" ],
-    [ "unionByName", "SliceUnion_8hpp.html#a24ce996639a89d98eb5c4e31175620f4", null ]
+    [ "atrip::SliceUnion< F >", "structatrip_1_1SliceUnion.html", "structatrip_1_1SliceUnion" ],
+    [ "unionByName", "SliceUnion_8hpp.html#ab93cbc0ed3ae01101d887207e3032916", null ]
 ];

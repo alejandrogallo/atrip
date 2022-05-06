@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="structatrip_1_1IterationDescription" kind="struct" language="C++" prot="public">
     <compoundname>atrip::IterationDescription</compoundname>
     <includes refid="Debug_8hpp" local="no">Debug.hpp</includes>
@@ -9,6 +9,7 @@
         <definition>IterationDescriptor IterationDescription::descriptor</definition>
         <argsstring></argsstring>
         <name>descriptor</name>
+        <qualifiedname>atrip::IterationDescription::descriptor</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -16,8 +17,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="97" column="32" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="97" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1a65234e51491c3fa418fcdfeb6e51ee1d" compoundref="Atrip_8cxx" startline="35" endline="37">atrip::registerIterationDescriptor</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="45" endline="587">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -26,6 +26,7 @@
         <definition>size_t atrip::IterationDescription::currentIteration</definition>
         <argsstring></argsstring>
         <name>currentIteration</name>
+        <qualifiedname>atrip::IterationDescription::currentIteration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -39,6 +40,7 @@
         <definition>size_t atrip::IterationDescription::totalIterations</definition>
         <argsstring></argsstring>
         <name>totalIterations</name>
+        <qualifiedname>atrip::IterationDescription::totalIterations</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -52,6 +54,7 @@
         <definition>double atrip::IterationDescription::currentElapsedTime</definition>
         <argsstring></argsstring>
         <name>currentElapsedTime</name>
+        <qualifiedname>atrip::IterationDescription::currentElapsedTime</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>

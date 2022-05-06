@@ -1,5 +1,5 @@
 <map id="atrip::TuplesDistribution" name="atrip::TuplesDistribution">
-<area shape="rect" id="node1" title=" " alt="" coords="93,5,270,97"/>
-<area shape="rect" id="node2" href="$structatrip_1_1group__and__sort_1_1Distribution.html" title=" " alt="" coords="5,145,165,237"/>
-<area shape="rect" id="node3" href="$structatrip_1_1NaiveDistribution.html" title=" " alt="" coords="190,153,365,230"/>
+<area shape="rect" id="node1" title=" " alt="" coords="100,5,277,97"/>
+<area shape="rect" id="node2" href="$structatrip_1_1NaiveDistribution.html" title=" " alt="" coords="5,153,180,230"/>
+<area shape="rect" id="node3" href="$structatrip_1_1group__and__sort_1_1Distribution.html" title=" " alt="" coords="205,145,365,237"/>
 </map>

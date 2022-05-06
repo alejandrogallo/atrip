@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="SliceUnion_8hpp" kind="file" language="C++">
     <compoundname>SliceUnion.hpp</compoundname>
     <includes refid="Debug_8hpp" local="no">atrip/Debug.hpp</includes>
@@ -8,12 +8,15 @@
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
     <includedby refid="Unions_8hpp" local="no">Unions.hpp</includedby>
     <incdepgraph>
-      <node id="3">
-        <label>functional</label>
-      </node>
       <node id="22">
         <label>atrip/Blas.hpp</label>
         <link refid="Blas_8hpp"/>
+      </node>
+      <node id="2">
+        <label>atrip/Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
       </node>
       <node id="23">
         <label>atrip/RankMap.hpp</label>
@@ -25,6 +28,34 @@
         <childnode refid="4" relation="include">
         </childnode>
         <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>atrip/Slice.hpp</label>
+        <link refid="Slice_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>SliceUnion.hpp</label>
+        <link refid="SliceUnion_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
         </childnode>
       </node>
       <node id="9">
@@ -57,18 +88,6 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="15">
-        <label>cassert</label>
-      </node>
-      <node id="11">
-        <label>numeric</label>
-      </node>
-      <node id="20">
-        <label>string</label>
-      </node>
-      <node id="14">
-        <label>map</label>
-      </node>
       <node id="18">
         <label>atrip/Utils.hpp</label>
         <link refid="Utils_8hpp"/>
@@ -85,72 +104,53 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="2">
-        <label>atrip/Debug.hpp</label>
-        <link refid="Debug_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-      </node>
-      <node id="1">
-        <label>SliceUnion.hpp</label>
-        <link refid="SliceUnion_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="23" relation="include">
-        </childnode>
-      </node>
-      <node id="21">
-        <label>ctf.hpp</label>
-      </node>
-      <node id="7">
-        <label>vector</label>
+      <node id="6">
+        <label>algorithm</label>
       </node>
       <node id="10">
         <label>array</label>
       </node>
-      <node id="19">
-        <label>sstream</label>
-      </node>
-      <node id="13">
-        <label>math.h</label>
-      </node>
-      <node id="5">
-        <label>iostream</label>
-      </node>
-      <node id="4">
-        <label>atrip/Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="22" relation="include">
-        </childnode>
-      </node>
-      <node id="17">
-        <label>climits</label>
+      <node id="15">
+        <label>cassert</label>
       </node>
       <node id="16">
         <label>chrono</label>
       </node>
+      <node id="17">
+        <label>climits</label>
+      </node>
+      <node id="21">
+        <label>ctf.hpp</label>
+      </node>
+      <node id="3">
+        <label>functional</label>
+      </node>
+      <node id="5">
+        <label>iostream</label>
+      </node>
+      <node id="14">
+        <label>map</label>
+      </node>
+      <node id="13">
+        <label>math.h</label>
+      </node>
       <node id="8">
         <label>mpi.h</label>
       </node>
-      <node id="6">
-        <label>algorithm</label>
+      <node id="11">
+        <label>numeric</label>
+      </node>
+      <node id="19">
+        <label>sstream</label>
       </node>
       <node id="12">
         <label>stdio.h</label>
+      </node>
+      <node id="20">
+        <label>string</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
@@ -229,12 +229,12 @@
 <codeline lineno="47"><highlight class="normal"></highlight></codeline>
 <codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="49"><highlight class="normal"></highlight></codeline>
-<codeline lineno="50" refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;typename<sp/>Slice&lt;F&gt;::Ty_x_Tu&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" kindref="member">neededSlices</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
+<codeline lineno="50" refid="structatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;typename<sp/>Slice&lt;F&gt;::Ty_x_Tu&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" kindref="member">neededSlices</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
 <codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;typename<sp/>Slice&lt;F&gt;::Ty_x_Tu&gt;<sp/>needed(<ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>.size());</highlight></codeline>
 <codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>build<sp/>the<sp/>needed<sp/>vector</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>std::transform(<ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>.begin(),<sp/><ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>.end(),</highlight></codeline>
 <codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>needed.begin(),</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;abc](</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kindref="member">Slice&lt;F&gt;::Type</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>type)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;abc](</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Type</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>type)<sp/>{</highlight></codeline>
 <codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>auto<sp/>tuple<sp/>=<sp/>Slice&lt;F&gt;::subtupleBySlice(abc,<sp/>type);</highlight></codeline>
 <codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>std::make_pair(type,<sp/>tuple);</highlight></codeline>
 <codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>});</highlight></codeline>
@@ -261,10 +261,10 @@
 <codeline lineno="79"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*</highlight></codeline>
 <codeline lineno="80"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="82" refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Slice_1a82088d08e7e28f88623fc0253bb0d730" kindref="member">Slice&lt;F&gt;::LocalDatabase</ref><sp/><ref refid="structatrip_1_1SliceUnion_1ab4c658807fae0dc247982250d8eb812f" kindref="member">buildLocalDatabase</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1a82088d08e7e28f88623fc0253bb0d730" kindref="member">Slice&lt;F&gt;::LocalDatabase</ref><sp/>result;</highlight></codeline>
+<codeline lineno="82" refid="structatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::LocalDatabase</ref><sp/><ref refid="structatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" kindref="member">buildLocalDatabase</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::LocalDatabase</ref><sp/>result;</highlight></codeline>
 <codeline lineno="84"><highlight class="normal"></highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>needed<sp/>=<sp/><ref refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" kindref="member">neededSlices</ref>(abc);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>needed<sp/>=<sp/><ref refid="structatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" kindref="member">neededSlices</ref>(abc);</highlight></codeline>
 <codeline lineno="86"><highlight class="normal"></highlight></codeline>
 <codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__db__:needed:&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(needed)<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>BUILD<sp/>THE<sp/>DATABASE</highlight><highlight class="normal"></highlight></codeline>
@@ -304,9 +304,9 @@
 <codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>if<sp/>we<sp/>find<sp/>this<sp/>slice,<sp/>it<sp/>means<sp/>that<sp/>we<sp/>don&apos;t<sp/>have<sp/>to<sp/>do<sp/>anything</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__db__:<sp/>EXACT:<sp/>found<sp/>EXACT<sp/>in<sp/>name=&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref></highlight></codeline>
 <codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>for<sp/>tuple<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>tuple[0]<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>tuple[1]</highlight></codeline>
-<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>ptr<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>it-&gt;data</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>ptr<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>it-&gt;<ref refid="structatrip_1_1Slice_1ab0c99e8ec9e0c84611d7fdec14bdb6ee" kindref="member">data</ref></highlight></codeline>
 <codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>it-&gt;info});</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>it-&gt;<ref refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" kindref="member">info</ref>});</highlight></codeline>
 <codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">continue</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
@@ -329,7 +329,7 @@
 <codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>(which<sp/>should<sp/>exist<sp/>by<sp/>construction<sp/>:THINK)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(recycleIt<sp/>!=<sp/><ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>.end())<sp/>{</highlight></codeline>
-<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>blank<sp/>=<sp/><ref refid="structatrip_1_1Slice_1a237680f772d527a25bbeeff619454230" kindref="member">Slice&lt;F&gt;::findOneByType</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Blank</ref>);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>blank<sp/>=<sp/><ref refid="structatrip_1_1Slice_1a7aa07601e9f23db70b9e97f7bcb3d979" kindref="member">Slice&lt;F&gt;::findOneByType</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Blank</ref>);</highlight></codeline>
 <codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>formalize<sp/>this<sp/>through<sp/>a<sp/>method<sp/>to<sp/>copy<sp/>information</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/>from<sp/>another<sp/>slice</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.data<sp/>=<sp/>recycleIt-&gt;data;</highlight></codeline>
@@ -338,7 +338,7 @@
 <codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.info.state<sp/>=<sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Recycled</ref>;</highlight></codeline>
 <codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.<ref refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" kindref="member">info</ref>.<ref refid="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" kindref="member">from</ref><sp/>=<sp/>from;</highlight></codeline>
 <codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.info.recycling<sp/>=<sp/>recycleIt-&gt;info.type;</highlight></codeline>
-<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>blank.info});</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>blank.<ref refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" kindref="member">info</ref>});</highlight></codeline>
 <codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__db__:<sp/>RECYCLING:<sp/>n&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref></highlight></codeline>
 <codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(abc)</highlight></codeline>
 <codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>get<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(blank.info)</highlight></codeline>
@@ -362,7 +362,7 @@
 <codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>for<sp/>tuple<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>tuple[0]<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>tuple[1]</highlight></codeline>
 <codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>blank<sp/>=<sp/><ref refid="structatrip_1_1Slice_1a237680f772d527a25bbeeff619454230" kindref="member">Slice&lt;F&gt;::findOneByType</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Blank</ref>);</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>blank<sp/>=<sp/><ref refid="structatrip_1_1Slice_1a7aa07601e9f23db70b9e97f7bcb3d979" kindref="member">Slice&lt;F&gt;::findOneByType</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Blank</ref>);</highlight></codeline>
 <codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.info.type<sp/>=<sp/>type;</highlight></codeline>
 <codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.info.tuple<sp/>=<sp/>tuple;</highlight></codeline>
 <codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.info.from<sp/>=<sp/>from;</highlight></codeline>
@@ -388,7 +388,7 @@
 <codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>blank.data<sp/>=<sp/>*dataPointer;</highlight></codeline>
 <codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="208"><highlight class="normal"></highlight></codeline>
-<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>blank.info});</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result.push_back({<ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>,<sp/>blank.<ref refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" kindref="member">info</ref>});</highlight></codeline>
 <codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">continue</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="212"><highlight class="normal"></highlight></codeline>
@@ -411,7 +411,7 @@
 <codeline lineno="229"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/>previously<sp/>unwrapped,<sp/>as<sp/>a<sp/>safety<sp/>mechanism.</highlight></codeline>
 <codeline lineno="230"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="231" refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" kindref="member">clearUnusedSlicesForNext</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
-<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>needed<sp/>=<sp/><ref refid="structatrip_1_1SliceUnion_1a138a408f9cabf097e05c85276af84b93" kindref="member">neededSlices</ref>(abc);</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>needed<sp/>=<sp/><ref refid="structatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" kindref="member">neededSlices</ref>(abc);</highlight></codeline>
 <codeline lineno="233"><highlight class="normal"></highlight></codeline>
 <codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>CLEAN<sp/>UP<sp/>SLICES,<sp/>FREE<sp/>THE<sp/>ONES<sp/>THAT<sp/>ARE<sp/>NOT<sp/>NEEDED<sp/>ANYMORE</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>slice:<sp/><ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>)<sp/>{</highlight></codeline>
@@ -422,7 +422,7 @@
 <codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>try<sp/>to<sp/>find<sp/>the<sp/>slice<sp/>in<sp/>the<sp/>needed<sp/>slices<sp/>list</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>found</highlight></codeline>
 <codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>std::find_if(needed.begin(),<sp/>needed.end(),</highlight></codeline>
-<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;slice]<sp/>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1a9ee6254fe98a83b507ca88ec92dd5227" kindref="member">Slice&lt;F&gt;::Ty_x_Tu</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>tytu)<sp/>{</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;slice]<sp/>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Ty_x_Tu</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>tytu)<sp/>{</highlight></codeline>
 <codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>slice.info.tuple<sp/>==<sp/>tytu.second</highlight></codeline>
 <codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&amp;&amp;<sp/>slice.info.type<sp/>==<sp/>tytu.first</highlight></codeline>
 <codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
@@ -466,7 +466,7 @@
 <codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" kindref="member">WITH_OCD</ref><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref></highlight></codeline>
 <codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__gc__:&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;checking<sp/>for<sp/>data<sp/>recycled<sp/>dependencies\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>recycled</highlight></codeline>
-<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structatrip_1_1Slice_1a74c8f856bc2b0aceca27849900fd8a2f" kindref="member">Slice&lt;F&gt;::hasRecycledReferencingToIt</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>slice.info);</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structatrip_1_1Slice_1a4920626f4572e699367835f9a4be18b2" kindref="member">Slice&lt;F&gt;::hasRecycledReferencingToIt</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>slice.info);</highlight></codeline>
 <codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(recycled.size())<sp/>{</highlight></codeline>
 <codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;</ref>*<sp/>newReady<sp/>=<sp/>recycled[0];</highlight></codeline>
 <codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" kindref="member">WITH_OCD</ref><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref></highlight></codeline>
@@ -520,7 +520,7 @@
 <codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>there<sp/>is<sp/>a<sp/>deduction<sp/>error<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>&lt;&lt;<sp/>&quot;<sp/>info<sp/>&quot;<sp/>&lt;&lt;<sp/>slice.info</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="340"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="341"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>slice.free();</highlight></codeline>
+<codeline lineno="341"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>slice.<ref refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" kindref="member">free</ref>();</highlight></codeline>
 <codeline lineno="342"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="343"><highlight class="normal"></highlight></codeline>
 <codeline lineno="344"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
@@ -528,13 +528,13 @@
 <codeline lineno="346"><highlight class="normal"></highlight></codeline>
 <codeline lineno="347"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>CONSTRUCTOR</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="348" refid="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" kindref="member">SliceUnion</ref>(<sp/><ref refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" kindref="member">Tensor</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>sourceTensor</highlight></codeline>
-<codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kindref="member">Slice&lt;F&gt;::Type</ref>&gt;<sp/>sliceTypes_</highlight></codeline>
+<codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Type</ref>&gt;<sp/>sliceTypes_</highlight></codeline>
 <codeline lineno="350"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;size_t&gt;<sp/>sliceLength_</highlight></codeline>
 <codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;size_t&gt;<sp/>paramLength</highlight></codeline>
 <codeline lineno="352"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>np</highlight></codeline>
 <codeline lineno="353"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>MPI_Comm<sp/>child_world</highlight></codeline>
 <codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>MPI_Comm<sp/>global_world</highlight></codeline>
-<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806" kindref="member">Slice&lt;F&gt;::Name</ref><sp/>name_</highlight></codeline>
+<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Name</ref><sp/>name_</highlight></codeline>
 <codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nSliceBuffers<sp/>=<sp/>4</highlight></codeline>
 <codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
 <codeline lineno="358"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/><ref refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" kindref="member">rankMap</ref>(paramLength,<sp/>np,<sp/>global_world)</highlight></codeline>
@@ -621,8 +621,8 @@
 <codeline lineno="439"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="440"><highlight class="normal"></highlight></codeline>
 <codeline lineno="444" refid="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" kindref="member">send</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>otherRank</highlight></codeline>
-<codeline lineno="445"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1_1LocalDatabaseElement" kindref="compound">Slice&lt;F&gt;::LocalDatabaseElement</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>el</highlight></codeline>
-<codeline lineno="446"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>tag)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>noexcept<sp/>{</highlight></codeline>
+<codeline lineno="445"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::LocalDatabaseElement</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>el</highlight></codeline>
+<codeline lineno="446"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>tag)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">noexcept</highlight><highlight class="normal"><sp/>{</highlight></codeline>
 <codeline lineno="447"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>MPI_Request<sp/>request;</highlight></codeline>
 <codeline lineno="448"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>sendData_p<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="449"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>info<sp/>=<sp/>el.info;</highlight></codeline>
@@ -645,8 +645,8 @@
 <codeline lineno="466"><highlight class="normal"></highlight></codeline>
 <codeline lineno="467"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="468"><highlight class="normal"></highlight></codeline>
-<codeline lineno="472" refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" kindref="member">receive</ref>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1_1Info" kindref="compound">Slice&lt;F&gt;::Info</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>info,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>tag)<sp/>noexcept<sp/>{</highlight></codeline>
-<codeline lineno="473"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>slice<sp/>=<sp/><ref refid="structatrip_1_1Slice_1ac07ca1e076a9efb3fe6ed5a88409c3c5" kindref="member">Slice&lt;F&gt;::findByInfo</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>info);</highlight></codeline>
+<codeline lineno="472" refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" kindref="member">receive</ref>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Info</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>info,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>tag)<sp/></highlight><highlight class="keyword">noexcept</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="473"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>slice<sp/>=<sp/><ref refid="structatrip_1_1Slice_1aac3a4c4281d2ff9e3c2a0060d3a5aa4a" kindref="member">Slice&lt;F&gt;::findByInfo</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>info);</highlight></codeline>
 <codeline lineno="474"><highlight class="normal"></highlight></codeline>
 <codeline lineno="475"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" kindref="member">Atrip::rank</ref><sp/>==<sp/>info.from.rank)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="476"><highlight class="normal"></highlight></codeline>
@@ -668,16 +668,16 @@
 <codeline lineno="492"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="493"><highlight class="normal"></highlight></codeline>
 <codeline lineno="494" refid="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" kindref="member">unwrapAll</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
-<codeline lineno="495"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>type:<sp/><ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>)<sp/><ref refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" kindref="member">unwrapSlice</ref>(type,<sp/>abc);</highlight></codeline>
+<codeline lineno="495"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>type:<sp/><ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>)<sp/><ref refid="structatrip_1_1SliceUnion_1a4818f008af7820a86f8b68669d69b9d0" kindref="member">unwrapSlice</ref>(type,<sp/>abc);</highlight></codeline>
 <codeline lineno="496"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="497"><highlight class="normal"></highlight></codeline>
-<codeline lineno="498" refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>F*<sp/><ref refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" kindref="member">unwrapSlice</ref>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46" kindref="member">Slice&lt;F&gt;::Type</ref><sp/>type,<sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
+<codeline lineno="498" refid="structatrip_1_1SliceUnion_1a4818f008af7820a86f8b68669d69b9d0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>F*<sp/><ref refid="structatrip_1_1SliceUnion_1a4818f008af7820a86f8b68669d69b9d0" kindref="member">unwrapSlice</ref>(</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Type</ref><sp/>type,<sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>abc)<sp/>{</highlight></codeline>
 <codeline lineno="499"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" kindref="member">WITH_CRAZY_DEBUG</ref></highlight></codeline>
 <codeline lineno="500"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__unwrap__:slice<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>type<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>w<sp/>n<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="501"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/><ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref></highlight></codeline>
 <codeline lineno="502"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>abc&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(abc)</highlight></codeline>
 <codeline lineno="503"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="504"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>slice<sp/>=<sp/><ref refid="structatrip_1_1Slice_1a560e50548083cc86b2ed7381ed35fd98" kindref="member">Slice&lt;F&gt;::findByTypeAbc</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>type,<sp/>abc);</highlight></codeline>
+<codeline lineno="504"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>slice<sp/>=<sp/><ref refid="structatrip_1_1Slice_1ab57c0d9c391694a84abe5327cd5fa1b4" kindref="member">Slice&lt;F&gt;::findByTypeAbc</ref>(<ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>,<sp/>type,<sp/>abc);</highlight></codeline>
 <codeline lineno="505"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//WITH_RANK<sp/>&lt;&lt;<sp/>&quot;__unwrap__:info<sp/>&quot;<sp/>&lt;&lt;<sp/>slice.info<sp/>&lt;&lt;<sp/>&quot;\n&quot;;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="506"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/><sp/>(slice.info.state)<sp/>{</highlight></codeline>
 <codeline lineno="507"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Dispatched</ref>:</highlight></codeline>
@@ -703,7 +703,7 @@
 <codeline lineno="527"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;__unwrap__:RECYCLED<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>&amp;slice</highlight></codeline>
 <codeline lineno="528"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>info<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(slice.info)</highlight></codeline>
 <codeline lineno="529"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="530"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1a264ad13b6327ca258a7153384460f9c6" kindref="member">unwrapSlice</ref>(slice.info.recycling,<sp/>abc);</highlight></codeline>
+<codeline lineno="530"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1SliceUnion_1a4818f008af7820a86f8b68669d69b9d0" kindref="member">unwrapSlice</ref>(slice.info.recycling,<sp/>abc);</highlight></codeline>
 <codeline lineno="531"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="532"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Fetch</ref>:</highlight></codeline>
 <codeline lineno="533"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Acceptor</ref>:</highlight></codeline>
@@ -721,7 +721,7 @@
 <codeline lineno="545" refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;size_t&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" kindref="member">sliceLength</ref>;</highlight></codeline>
 <codeline lineno="546" refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;<sp/>std::vector&lt;F&gt;<sp/>&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" kindref="member">sources</ref>;</highlight></codeline>
 <codeline lineno="547" refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;<sp/>Slice&lt;F&gt;<sp/>&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kindref="member">slices</ref>;</highlight></codeline>
-<codeline lineno="548" refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806" kindref="member">Slice&lt;F&gt;::Name</ref><sp/><ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>;</highlight></codeline>
+<codeline lineno="548" refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Name</ref><sp/><ref refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kindref="member">name</ref>;</highlight></codeline>
 <codeline lineno="549" refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;typename<sp/>Slice&lt;F&gt;::Type&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" kindref="member">sliceTypes</ref>;</highlight></codeline>
 <codeline lineno="550" refid="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;<sp/>std::vector&lt;F&gt;<sp/>&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" kindref="member">sliceBuffers</ref>;</highlight></codeline>
 <codeline lineno="551" refid="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::set&lt;F*&gt;<sp/><ref refid="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" kindref="member">freePointers</ref>;</highlight></codeline>
@@ -730,8 +730,8 @@
 <codeline lineno="554"><highlight class="normal"></highlight></codeline>
 <codeline lineno="555"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
 <codeline lineno="556"><highlight class="normal"><sp/><sp/><ref refid="structatrip_1_1SliceUnion" kindref="compound">SliceUnion&lt;F&gt;</ref>&amp;</highlight></codeline>
-<codeline lineno="557" refid="namespaceatrip_1a24ce996639a89d98eb5c4e31175620f4" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a24ce996639a89d98eb5c4e31175620f4" kindref="member">unionByName</ref>(std::vector&lt;<ref refid="structatrip_1_1SliceUnion" kindref="compound">SliceUnion&lt;F&gt;</ref>*&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>unions,</highlight></codeline>
-<codeline lineno="558"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice_1ab62f723a61f7d96ff457aa0980a50806" kindref="member">Slice&lt;F&gt;::Name</ref><sp/>name)<sp/>{</highlight></codeline>
+<codeline lineno="557" refid="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" kindref="member">unionByName</ref>(std::vector&lt;<ref refid="structatrip_1_1SliceUnion" kindref="compound">SliceUnion&lt;F&gt;</ref>*&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>unions,</highlight></codeline>
+<codeline lineno="558"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Slice" kindref="compound">Slice&lt;F&gt;::Name</ref><sp/>name)<sp/>{</highlight></codeline>
 <codeline lineno="559"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>sliceUnionIt</highlight></codeline>
 <codeline lineno="560"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>std::find_if(unions.begin(),<sp/>unions.end(),</highlight></codeline>
 <codeline lineno="561"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;name](<ref refid="structatrip_1_1SliceUnion" kindref="compound">SliceUnion&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>s)<sp/>{</highlight></codeline>

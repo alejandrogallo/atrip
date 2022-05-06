@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="Debug_8hpp" kind="file" language="C++">
     <compoundname>Debug.hpp</compoundname>
     <includes local="no">functional</includes>
@@ -7,17 +7,47 @@
     <includedby refid="Tuples_8hpp" local="no">Tuples.hpp</includedby>
     <includedby refid="Utils_8hpp" local="no">Utils.hpp</includedby>
     <incdepgraph>
-      <node id="2">
-        <label>functional</label>
-      </node>
       <node id="1">
         <label>Debug.hpp</label>
         <link refid="Debug_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
+      <node id="2">
+        <label>functional</label>
+      </node>
     </incdepgraph>
     <invincdepgraph>
+      <node id="12">
+        <label>atrip.hpp</label>
+        <link refid="atrip_8hpp"/>
+      </node>
+      <node id="10">
+        <label>Atrip.hpp</label>
+        <link refid="Atrip_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>Checkpoint.hpp</label>
+        <link refid="Checkpoint_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
       <node id="8">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
@@ -30,12 +60,36 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
+      <node id="7">
+        <label>Slice.hpp</label>
+        <link refid="Slice_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>SliceUnion.hpp</label>
+        <link refid="SliceUnion_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
       <node id="5">
         <label>Tuples.hpp</label>
         <link refid="Tuples_8hpp"/>
         <childnode refid="6" relation="include">
         </childnode>
         <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Unions.hpp</label>
+        <link refid="Unions_8hpp"/>
+        <childnode refid="3" relation="include">
         </childnode>
       </node>
       <node id="9">
@@ -50,55 +104,9 @@
         <childnode refid="5" relation="include">
         </childnode>
       </node>
-      <node id="1">
-        <label>Debug.hpp</label>
-        <link refid="Debug_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>SliceUnion.hpp</label>
-        <link refid="SliceUnion_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>Unions.hpp</label>
-        <link refid="Unions_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-      </node>
-      <node id="7">
-        <label>Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="2" relation="include">
-        </childnode>
-      </node>
-      <node id="10">
-        <label>Atrip.hpp</label>
-        <link refid="Atrip_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-      </node>
       <node id="3">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
-      </node>
-      <node id="11">
-        <label>atrip.hpp</label>
-        <link refid="atrip_8hpp"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1IterationDescription" prot="public">atrip::IterationDescription</innerclass>
@@ -274,8 +282,8 @@
 <codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="30"><highlight class="normal"></highlight></codeline>
 <codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>==<sp/>4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>OCD<sp/>debugging<sp/>ABC<sp/>triples<sp/>&quot;<sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="33"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;expect<sp/>GB<sp/>of<sp/>output<sp/>and<sp/>consult<sp/>your<sp/>therapist&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>OCD<sp/>debugging<sp/>ABC<sp/>triples<sp/>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;expect<sp/>GB<sp/>of<sp/>output<sp/>and<sp/>consult<sp/>your<sp/>therapist&quot;)</highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>HAVE_OCD</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)<sp/>MPI_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
@@ -287,8 +295,8 @@
 <codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>3</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>crazy<sp/>debugging<sp/>ABC<sp/>triples,&quot;<sp/><sp/>\</highlight></codeline>
-<codeline lineno="46"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;<sp/>expect<sp/>GB<sp/>of<sp/>output&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>crazy<sp/>debugging<sp/>ABC<sp/>triples,&quot;</highlight><highlight class="normal"><sp/><sp/>\</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;<sp/>expect<sp/>GB<sp/>of<sp/>output&quot;)</highlight></codeline>
 <codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
@@ -299,7 +307,7 @@
 <codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>some<sp/>debugging<sp/>info<sp/>for<sp/>ABC<sp/>triples&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>some<sp/>debugging<sp/>info<sp/>for<sp/>ABC<sp/>triples&quot;</highlight><highlight class="normal">)</highlight></codeline>
 <codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>

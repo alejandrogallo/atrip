@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structatrip_1_1Checkpoint" kind="struct" language="C++" prot="public">
+    <compoundname>atrip::Checkpoint</compoundname>
+    <includes refid="Checkpoint_8hpp" local="no">Checkpoint.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::Checkpoint::no</definition>
+        <argsstring></argsstring>
+        <name>no</name>
+        <qualifiedname>atrip::Checkpoint::no</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="28" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::Checkpoint::nv</definition>
+        <argsstring></argsstring>
+        <name>nv</name>
+        <qualifiedname>atrip::Checkpoint::nv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="28" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::Checkpoint::nranks</definition>
+        <argsstring></argsstring>
+        <name>nranks</name>
+        <qualifiedname>atrip::Checkpoint::nranks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="29" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::Checkpoint::nnodes</definition>
+        <argsstring></argsstring>
+        <name>nnodes</name>
+        <qualifiedname>atrip::Checkpoint::nnodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="30" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double atrip::Checkpoint::energy</definition>
+        <argsstring></argsstring>
+        <name>energy</name>
+        <qualifiedname>atrip::Checkpoint::energy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="31" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t atrip::Checkpoint::iteration</definition>
+        <argsstring></argsstring>
+        <name>iteration</name>
+        <qualifiedname>atrip::Checkpoint::iteration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="32" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool atrip::Checkpoint::rankRoundRobin</definition>
+        <argsstring></argsstring>
+        <name>rankRoundRobin</name>
+        <qualifiedname>atrip::Checkpoint::rankRoundRobin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="35" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="35" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
+        <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>atrip::Checkpoint</label>
+        <link refid="structatrip_1_1Checkpoint"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="27" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="27" bodyend="36"/>
+    <listofallmembers>
+      <member refid="structatrip_1_1Checkpoint_1a3a8108da62e957ebe63f7a0020b5b055" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>energy</name></member>
+      <member refid="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>iteration</name></member>
+      <member refid="structatrip_1_1Checkpoint_1ace368565e89f5f2532a58e51d0eccd1b" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>nnodes</name></member>
+      <member refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>no</name></member>
+      <member refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>nranks</name></member>
+      <member refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>nv</name></member>
+      <member refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" prot="public" virt="non-virtual"><scope>atrip::Checkpoint</scope><name>rankRoundRobin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

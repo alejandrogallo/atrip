@@ -1,13 +1,14 @@
 <map id="Debug.hpp" name="Debug.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="89,5,181,32"/>
-<area shape="rect" id="node2" href="$SliceUnion_8hpp.html" title=" " alt="" coords="18,379,137,405"/>
-<area shape="rect" id="node5" href="$Tuples_8hpp.html" title=" " alt="" coords="89,155,180,181"/>
-<area shape="rect" id="node9" href="$Utils_8hpp.html" title=" " alt="" coords="177,80,257,107"/>
-<area shape="rect" id="node3" href="$Atrip_8cxx.html" title=" " alt="" coords="208,528,288,555"/>
-<area shape="rect" id="node4" href="$Unions_8hpp.html" title=" " alt="" coords="115,453,210,480"/>
-<area shape="rect" id="node6" href="$RankMap_8hpp.html" title=" " alt="" coords="43,304,154,331"/>
-<area shape="rect" id="node7" href="$Slice_8hpp.html" title=" " alt="" coords="151,229,233,256"/>
-<area shape="rect" id="node8" href="$Equations_8hpp.html" title=" " alt="" coords="161,379,276,405"/>
-<area shape="rect" id="node10" href="$Atrip_8hpp.html" title=" " alt="" coords="351,155,433,181"/>
-<area shape="rect" id="node11" href="$atrip_8hpp.html" title=" " alt="" coords="401,229,481,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="105,5,197,32"/>
+<area shape="rect" id="node2" href="$SliceUnion_8hpp.html" title=" " alt="" coords="101,379,220,405"/>
+<area shape="rect" id="node5" href="$Tuples_8hpp.html" title=" " alt="" coords="106,155,196,181"/>
+<area shape="rect" id="node9" href="$Utils_8hpp.html" title=" " alt="" coords="194,80,274,107"/>
+<area shape="rect" id="node3" href="$Atrip_8cxx.html" title=" " alt="" coords="316,528,396,555"/>
+<area shape="rect" id="node4" href="$Unions_8hpp.html" title=" " alt="" coords="198,453,293,480"/>
+<area shape="rect" id="node6" href="$RankMap_8hpp.html" title=" " alt="" coords="44,304,154,331"/>
+<area shape="rect" id="node7" href="$Slice_8hpp.html" title=" " alt="" coords="152,229,233,256"/>
+<area shape="rect" id="node8" href="$Equations_8hpp.html" title=" " alt="" coords="230,304,344,331"/>
+<area shape="rect" id="node10" href="$Atrip_8hpp.html" title=" " alt="" coords="454,379,536,405"/>
+<area shape="rect" id="node11" href="$Checkpoint_8hpp.html" title=" " alt="" coords="470,453,592,480"/>
+<area shape="rect" id="node12" href="$atrip_8hpp.html" title=" " alt="" coords="616,453,696,480"/>
 </map>

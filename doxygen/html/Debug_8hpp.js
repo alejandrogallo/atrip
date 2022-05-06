@@ -1,6 +1,6 @@
 var Debug_8hpp =
 [
-    [ "IterationDescription", "structatrip_1_1IterationDescription.html", "structatrip_1_1IterationDescription" ],
+    [ "atrip::IterationDescription", "structatrip_1_1IterationDescription.html", "structatrip_1_1IterationDescription" ],
     [ "ATRIP_BENCHMARK", "Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df", null ],
     [ "ATRIP_DEBUG", "Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e", null ],
     [ "ATRIP_USE_DGEMM", "Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf", null ],

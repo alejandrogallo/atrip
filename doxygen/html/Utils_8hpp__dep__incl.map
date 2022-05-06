@@ -1,12 +1,13 @@
 <map id="Utils.hpp" name="Utils.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="107,5,187,32"/>
-<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="111,453,191,480"/>
-<area shape="rect" id="node3" href="$Atrip_8hpp.html" title=" " alt="" coords="67,80,149,107"/>
-<area shape="rect" id="node5" href="$Slice_8hpp.html" title=" " alt="" coords="198,155,279,181"/>
-<area shape="rect" id="node10" href="$Tuples_8hpp.html" title=" " alt="" coords="224,80,315,107"/>
-<area shape="rect" id="node4" href="$atrip_8hpp.html" title=" " alt="" coords="93,155,173,181"/>
-<area shape="rect" id="node6" href="$Equations_8hpp.html" title=" " alt="" coords="93,304,208,331"/>
-<area shape="rect" id="node7" href="$RankMap_8hpp.html" title=" " alt="" coords="262,229,373,256"/>
-<area shape="rect" id="node8" href="$SliceUnion_8hpp.html" title=" " alt="" coords="233,304,351,331"/>
-<area shape="rect" id="node9" href="$Unions_8hpp.html" title=" " alt="" coords="243,379,338,405"/>
+<area shape="rect" id="node1" title=" " alt="" coords="152,5,232,32"/>
+<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="216,453,296,480"/>
+<area shape="rect" id="node3" href="$Atrip_8hpp.html" title=" " alt="" coords="122,304,203,331"/>
+<area shape="rect" id="node6" href="$Slice_8hpp.html" title=" " alt="" coords="314,155,395,181"/>
+<area shape="rect" id="node11" href="$Tuples_8hpp.html" title=" " alt="" coords="309,80,400,107"/>
+<area shape="rect" id="node4" href="$Checkpoint_8hpp.html" title=" " alt="" coords="93,379,216,405"/>
+<area shape="rect" id="node5" href="$atrip_8hpp.html" title=" " alt="" coords="240,379,320,405"/>
+<area shape="rect" id="node7" href="$Equations_8hpp.html" title=" " alt="" coords="209,229,324,256"/>
+<area shape="rect" id="node8" href="$RankMap_8hpp.html" title=" " alt="" coords="399,229,510,256"/>
+<area shape="rect" id="node9" href="$SliceUnion_8hpp.html" title=" " alt="" coords="395,304,514,331"/>
+<area shape="rect" id="node10" href="$Unions_8hpp.html" title=" " alt="" coords="446,379,541,405"/>
 </map>
