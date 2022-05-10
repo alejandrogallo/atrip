@@ -10,6 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WITH_CURRENT_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
+      WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --run"
+
 
     strategy:
       matrix:
@@ -39,24 +43,24 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Install nix dependencies
-      env:
-        WITH_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
-      run: ${WITH_SHELL} 'env'
+      run: $WITH_CURRENT_SHELL 'env'
 
     - name: Make configure script
-      env:
-        WITH_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
-      run: ${WITH_SHELL} 'autoreconf -sfiv'
+      run: $WITH_CURRENT_SHELL 'autoreconf -sfiv'
 
-    - name: Compiler ${{matrix.compiler}}
-      env:
-        WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --run"
+    - name: Compile (${{matrix.compiler}})
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
         $WITH_SHELL '../../configure'
         $WITH_SHELL 'make ctf'
         $WITH_SHELL 'make'
+        $WITH_SHELL 'make -C test'
+
+    - name: Run unit tests (${{matrix.compiler}})
+      run: |
+        cd build/${{matrix.compiler}}/test
+        ./main
 
 
   documentation:
