@@ -1,4 +1,9 @@
-{ compiler ? "gcc", pkgs ? import <nixpkgs> {} , with-mkl ? false, docs ? true }:
+{ compiler ? "gcc"
+, pkgs ? import <nixpkgs> {} 
+, with-mkl ? false
+, cuda ? false
+, docs ? true
+}:
 
 let
 
@@ -8,9 +13,12 @@ let
 
   openblas = import ./etc/nix/openblas.nix { inherit pkgs; }; 
 
+  cuda-pkg = if cuda then (import ./cuda.nix { inherit pkgs; }) else {};
+
 in
 
 pkgs.mkShell rec {
+
 
   compiler-pkg
     = if compiler    == "gcc11" then pkgs.gcc11
@@ -50,7 +58,7 @@ pkgs.mkShell rec {
     = with pkgs; [
 
         coreutils
-        git
+        git vim
 
         openmpi
         llvmPackages.openmp
@@ -74,7 +82,7 @@ pkgs.mkShell rec {
   LD = "${compiler-pkg}/bin/ld";
 
   shellHook
-    = #(if with-mkl then mkl.shellHook else openblas.shellHook)
+    =
     ''
     export OMPI_CXX=${CXX}
     export OMPI_CC=${CC}
@@ -82,6 +90,7 @@ pkgs.mkShell rec {
     CC=${CC}
     LD=${LD}
     ''
+    + (if cuda then cuda-pkg.shellHook else "")
     ;
 
 }

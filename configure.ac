@@ -26,7 +26,6 @@ AC_ARG_ENABLE([docs],
                               [Enable building docs])],
               [build_docs=YES], [build_docs=NO])
 
-
 dnl LIBGC library options
 AC_ARG_WITH(libctf-prefix,
             AS_HELP_STRING([--with-libctf-prefix=path],
@@ -49,6 +48,15 @@ AC_ARG_WITH(dgemm,
             AS_HELP_STRING([--without-dgemm], [Disable dgemm]),
             [with_dgemm=NO],
             [with_dgemm=YES])
+
+AC_ARG_ENABLE([cuda],
+              [AS_HELP_STRING([--enable-cuda],
+                              [Build with cuda])],
+                              [WITH_CUDA=yes],
+                              [WITH_CUDA=no])
+AC_ARG_VAR([NVCC], [Path to the nvidia cuda compiler.])
+AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda and -lcudart.])
+AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
 
 
 
@@ -122,6 +130,21 @@ else
   AC_CHECK_HEADER([ctf.hpp],
                   [],
                   [AC_MSG_ERROR([no ctf.hpp])])
+fi
+
+dnl CUDA NVIDIA -----------------------------------------------------------
+
+AM_CONDITIONAL([WITH_CUDA], [test x${WITH_CUDA} = xyes])
+if test x${WITH_CUDA} = xyes; then
+  AC_MSG_RESULT([
+                     CUDA SUPPORT IS ENABLED
+                     -----------------------
+  ])
+  AC_CHECK_PROGS([NVCC], [nvcc])
+  AC_SUBST([CUDA_LDFLAGS])
+  AC_DEFINE([HAVE_CUDA],1,[Wether we are using CUDA])
+  # TODO: make sure to find cuda and cudart
+  # AC_SEARCH_LIBS([cudaMalloc], [cuda cudart], [FOUND_CUDA=yes])
 fi
 
 dnl -----------------------------------------------------------------------

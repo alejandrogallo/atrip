@@ -15,3 +15,8 @@ main_LDADD += $(CTF_BUILD_PATH)/lib/libctf.a
 else
 main_LDADD += @LIBCTF_LD_LIBRARY_PATH@/libctf.a
 endif
+
+if WITH_CUDA
+main_CXXFLAGS = $(CUDA_CXXFLAGS)
+main_LDADD += $(CUDA_LDFLAGS)
+endif
