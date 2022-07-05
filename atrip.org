@@ -59,22 +59,9 @@ The following section introduces the idea of a slice.
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
-#include <atrip/Blas.hpp>
 
 namespace atrip {
 
-template <typename FF> FF maybeConjugate(const FF a) { return a; }
-template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
-
-namespace traits {
-  template <typename FF> bool isComplex() { return false; }
-  template <> bool isComplex<Complex>() { return true; }
-namespace mpi {
-  template <typename FF> MPI_Datatype datatypeOf(void);
-  template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
-  template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
-}
-}
 
 
 template <typename F=double>
@@ -216,6 +203,31 @@ Again the implementation is a simple enum type.
     Acceptor = 405
   };
 #+end_src
+
+** Data pointer
+
+The data pointer type is an abstraction of where the data
+of the slice are.
+In a CPU architecture it will simply be =F*=,
+otherwise it will be a pointer to a GPU address in the case
+of a GPU architecture.
+
+#+begin_src c++ :tangle (atrip-types-h)
+#pragma once
+
+template <typename F>
+#if defined(HAVE_CUDA)
+using DataPtr = CUdeviceptr;
+#define DataNullPtr 0x00
+#define _AT_(_array, _idx) ((F*)(_array))[(_idx)]
+#else
+using DataPtr = F*;
+#define DataNullPtr nullptr
+#define _AT_(_array, _idx) (_array)[(_idx)]
+#endif
+#+end_src
+
+
 
 ** The Info structure
 
@@ -580,7 +592,10 @@ A pointer to data is also necessary for the =Slice= but not necessary
 to be communicated to other ranks. The =Slice= should never allocate
 or deallocate itself the pointer.
 #+begin_src c++ :tangle (atrip-slice-h)
-    F  *data;
+    DataPtr<F> data;
+#if defined(HAVE_CUDA)
+    F* mpi_data;
+#endif
 #+end_src
 
 An =MPI_Request= handle is also included so that the slices that are
@@ -647,7 +662,7 @@ is done.
       info.state      = Acceptor;
       info.from       = {0, 0};
       info.recycling  = Blank;
-      data            = nullptr;
+      data            = DataNullPtr;
     }
 
     inline bool isFree() const noexcept {
@@ -657,7 +672,7 @@ is done.
           && info.from.rank   == 0
           && info.from.source == 0
           && info.recycling   == Blank
-          && data             == nullptr
+          && data             == DataNullPtr
            ;
     }
 
@@ -695,7 +710,7 @@ or =Blank=, if this is the case then it is a bug.
 
 #+begin_src c++ :tangle (atrip-slice-h)
     inline bool hasValidDataPointer() const noexcept {
-      return data       != nullptr
+      return data       != DataNullPtr
           && info.state != Acceptor
           && info.type  != Blank
           ;
@@ -726,8 +741,16 @@ The main behaviour of the function should
         WITH_RANK << "__slice__:mpi: waiting " << "\n";
 #endif
       const int errorCode = MPI_Wait(&request, &status);
+      if (MPI_SUCCESS != MPI_Request_free(&request))
+        throw "Error freeing MPI request";
       if (errorCode != MPI_SUCCESS)
         throw "MPI ERROR HAPPENED....";
+
+#if defined(HAVE_CUDA)
+      // copy the retrieved mpi data to the device
+      cuMemcpy((DataPtr<F>)mpi_data, data, size);
+      std::free(mpi_data);
+#endif
 
 #ifdef HAVE_OCD
       char errorString[MPI_MAX_ERROR_STRING];
@@ -750,7 +773,10 @@ The main behaviour of the function should
 #+begin_src c++ :tangle (atrip-slice-h)
     Slice(size_t size_)
       : info({})
-      , data(nullptr)
+      , data(DataNullPtr)
+#if defined(HAVE_CUDA)
+      , mpi_data(nullptr)
+#endif
       , size(size_)
       {}
 
@@ -803,6 +829,7 @@ This section presents some utilities
 
 #include <atrip/Debug.hpp>
 
+
 namespace atrip {
 #+end_src
 
@@ -811,6 +838,8 @@ namespace atrip {
 The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]] package.
 
 #+begin_src c++ :tangle (atrip-utils-h)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
   template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
@@ -819,6 +848,7 @@ The pretty printing uses the [[https://github.com/sharkdp/dbg-macro][dbg-macro]]
 #endif
     return stream.str();
   }
+#pragma GCC diagnostic pop
 
 #+end_src
 
@@ -912,7 +942,8 @@ namespace atrip {
           ;
     }
 
-    bool isSourcePadding(size_t rank, size_t source) const noexcept {
+    bool isSourcePadding(const size_t rank, const size_t source)
+      const noexcept {
       return source == nSources() && isPaddingRank(rank);
     }
 
@@ -981,6 +1012,8 @@ namespace atrip {
 #+end_src
 
 * The slice union
+
+** Prolog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-slice-union-h)
 #pragma once
 #include <atrip/Debug.hpp>
@@ -988,20 +1021,23 @@ namespace atrip {
 #include <atrip/RankMap.hpp>
 
 namespace atrip {
+#+end_src
 
+#+begin_src c++ :tangle (atrip-slice-union-h)
   template <typename F=double>
-  struct SliceUnion {
+  class SliceUnion {
+  public:
     using Tensor = CTF::Tensor<F>;
 
     virtual void
     sliceIntoBuffer(size_t iteration, Tensor &to, Tensor const& from) = 0;
 
     /*
-     * This function should enforce an important property of a SliceUnion.
-     * Namely, there can be no two Slices of the same nature.
-     *
-     * This means that there can be at most one slice with a given Ty_x_Tu.
-     */
+     ,* This function should enforce an important property of a SliceUnion.
+     ,* Namely, there can be no two Slices of the same nature.
+     ,*
+     ,* This means that there can be at most one slice with a given Ty_x_Tu.
+     ,*/
     void checkForDuplicates() const {
       std::vector<typename Slice<F>::Ty_x_Tu> tytus;
       for (auto const& s: slices) {
@@ -1160,7 +1196,11 @@ namespace atrip {
                            : Slice<F>::Fetch
                            ;
           if (blank.info.state == Slice<F>::SelfSufficient) {
+#if defined(HAVE_CUDA)
+            blank.mpi_data = sources[from.source].data();
+#else
             blank.data = sources[from.source].data();
+#endif
           } else {
             if (freePointers.size() == 0) {
               std::stringstream stream;
@@ -1314,8 +1354,7 @@ namespace atrip {
     }
 
     // CONSTRUCTOR
-    SliceUnion( Tensor const& sourceTensor
-              , std::vector<typename Slice<F>::Type> sliceTypes_
+    SliceUnion( std::vector<typename Slice<F>::Type> sliceTypes_
               , std::vector<size_t> sliceLength_
               , std::vector<size_t> paramLength
               , size_t np
@@ -1335,11 +1374,18 @@ namespace atrip {
                                            1UL, std::multiplies<size_t>())))
               , name(name_)
               , sliceTypes(sliceTypes_)
-              , sliceBuffers(nSliceBuffers, sources[0])
+              , sliceBuffers(nSliceBuffers)
               //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
+
+      for (auto& ptr: sliceBuffers)
+#if defined(HAVE_CUDA)
+        cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
+#else
+        ptr = (DataPtr<F>)malloc(sizeof(F) * sources[0].size());
+#endif
 
       slices
         = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
@@ -1348,7 +1394,7 @@ namespace atrip {
       // initialize the freePointers with the pointers to the buffers
       std::transform(sliceBuffers.begin(), sliceBuffers.end(),
                      std::inserter(freePointers, freePointers.begin()),
-                     [](std::vector<F> &vec) { return vec.data(); });
+                     [](DataPtr<F> ptr) { return ptr; });
 
 
 
@@ -1366,16 +1412,14 @@ namespace atrip {
                            << freePointers.size() << "\n";
       LOG(1,"Atrip") << "#sliceBuffers "
                            << sliceBuffers.size() << "\n";
-      LOG(1,"Atrip") << "#sliceBuffers[0] "
-                           << sliceBuffers[0].size() << "\n";
       LOG(1,"Atrip") << "#sliceLength "
                            << sliceLength.size() << "\n";
       LOG(1,"Atrip") << "#paramLength "
                            << paramLength.size() << "\n";
       LOG(1,"Atrip") << "GB*" << np << " "
                            << double(sources.size() + sliceBuffers.size())
-                            * sources[0].size()
-                            * 8 * np
+                            ,* sources[0].size()
+                            ,* 8 * np
                             / 1073741824.0
                            << "\n";
     } // constructor ends
@@ -1408,8 +1452,8 @@ namespace atrip {
     }
 
     /**
-     * \brief Send asynchronously only if the state is Fetch
-     */
+     ,* \brief Send asynchronously only if the state is Fetch
+     ,*/
     void send( size_t otherRank
              , typename Slice<F>::LocalDatabaseElement const& el
              , size_t tag) const noexcept {
@@ -1446,9 +1490,12 @@ namespace atrip {
       if (slice.info.state == Slice<F>::Fetch) {
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
-        MPI_Request request;
-        slice.request = request;
+#if defined(HAVE_CUDA)
+        slice.mpi_data = (F*)malloc(sizeof(F) * slice.size);
+        MPI_Irecv( slice.mpi_data
+#else
         MPI_Irecv( slice.data
+#endif
                  , slice.size
                  , traits::mpi::datatypeOf<F>()
                  , info.from.rank
@@ -1464,7 +1511,7 @@ namespace atrip {
       for (auto type: sliceTypes) unwrapSlice(type, abc);
     }
 
-    F* unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
+    DataPtr<F> unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
       WITH_CRAZY_DEBUG
       WITH_RANK << "__unwrap__:slice " << type << " w n "
                 << name
@@ -1508,6 +1555,15 @@ namespace atrip {
       return slice.data;
     }
 
+    ~SliceUnion() {
+      for (auto& ptr: sliceBuffers)
+#if defined(HAVE_CUDA)
+        cuMemFree(ptr);
+#else
+        std::free(ptr);
+#endif
+    }
+
     const RankMap<F> rankMap;
     const MPI_Comm world;
     const MPI_Comm universe;
@@ -1516,8 +1572,8 @@ namespace atrip {
     std::vector< Slice<F> > slices;
     typename Slice<F>::Name name;
     const std::vector<typename Slice<F>::Type> sliceTypes;
-    std::vector< std::vector<F> > sliceBuffers;
-    std::set<F*> freePointers;
+    std::vector< DataPtr<F> > sliceBuffers;
+    std::set< DataPtr<F> > freePointers;
 
   };
 
@@ -1537,7 +1593,10 @@ namespace atrip {
       }
       return **sliceUnionIt;
   }
+#+end_src
 
+** Epilog                                                          :noexport:
+#+begin_src c++ :tangle (atrip-slice-union-h)
 }
 #+end_src
 
@@ -1625,9 +1684,8 @@ std::vector<std::string> getNodeNames(MPI_Comm comm){
   MPI_Comm_size(comm, &np);
 
   std::vector<std::string> nodeList(np);
-  char nodeName[MPI_MAX_PROCESSOR_NAME]
-     , nodeNames[np*MPI_MAX_PROCESSOR_NAME]
-     ;
+  char nodeName[MPI_MAX_PROCESSOR_NAME];
+  char *nodeNames = (char*)malloc(np * MPI_MAX_PROCESSOR_NAME);
   std::vector<int> nameLengths(np)
                  , off(np)
                  ;
@@ -1654,9 +1712,12 @@ std::vector<std::string> getNodeNames(MPI_Comm comm){
     std::string const s(&nodeNames[off[i]], nameLengths[i]);
     nodeList[i] = s;
   }
+  std::free(nodeNames);
   return nodeList;
 }
 #+end_src
+
+
 
 =getNodeInfos=
 #+begin_src c++ :tangle (atrip-tuples-h)
@@ -2295,8 +2356,7 @@ namespace atrip {
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion<F>( sourceTensor
-                          , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+         ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                           , {Nv, No, No} // size of the slices
                           , {Nv}
                           , np
@@ -2333,8 +2393,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+        ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                          , {No, No, No} // size of the slices
                          , {Nv}         // size of the parametrization
                          , np
@@ -2368,8 +2427,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
+        ) : SliceUnion<F>( { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
                            , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
                            }
                          , {Nv, No} // size of the slices
@@ -2409,8 +2467,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+        ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                          , {No, No} // size of the slices
                          , {Nv, Nv} // size of the parametrization
                          , np
@@ -2449,8 +2506,7 @@ namespace atrip {
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion<F>( sourceTensor
-                          , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+         ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                           , {No, No} // size of the slices
                           , {Nv, Nv} // size of the parametrization
                           , np
@@ -2486,24 +2542,82 @@ namespace atrip {
 
 
 * Equations
+
+This section presents on of the main physical contents of the program,
+the equations used.
+
+The equations are of two types, energy equations and intermediate
+tensor contractions.
+
+** Prolog                                                          :noexport:
+
 #+begin_src c++ :tangle (atrip-equations-h)
 #pragma once
 
-#include<atrip/Slice.hpp>
+#include<atrip/Atrip.hpp>
 #include<atrip/Blas.hpp>
+#include<atrip/Utils.hpp>
+
 
 namespace atrip {
+using ABCTuple = std::array<size_t, 3>;
+using PartialTuple = std::array<size_t, 2>;
+using ABCTuples = std::vector<ABCTuple>;
+#+end_src
 
+#+begin_src c++ :tangle (atrip-equations-cxx)
+#include<atrip/Equations.hpp>
+
+#if defined(HAVE_CUDA)
+#include <cuda.h>
+#endif
+
+namespace atrip {
+#+end_src
+
+** Energy
+
+For the energy we have two types of functions,
+a function for when the tuples \( (a,b,c) \)
+are distinct and where they are the same,
+they are accordingly called:
+
+
+#+begin_src c++ :tangle (atrip-equations-h)
   template <typename F=double>
   double getEnergyDistinct
-    ( const F epsabc
-    , std::vector<F> const& epsi
-    , std::vector<F> const& Tijk_
-    , std::vector<F> const& Zijk_
+    ( F const epsabc
+    , size_t const No
+    , F* const epsi
+    , F* const Tijk
+    , F* const Zijk
+    );
+
+  template <typename F=double>
+  double getEnergySame
+    ( F const epsabc
+    , size_t const No
+    , F* const epsi
+    , F* const Tijk
+    , F* const Zijk
+    );
+#+end_src
+
+Their implementations follow, and they are
+written in a cache-friendly style for CPU architectures
+through the =blockSize= variable.
+
+#+begin_src c++ :tangle (atrip-equations-cxx)
+  template <typename F=double>
+  double getEnergyDistinct
+    ( F const epsabc
+    , size_t const No
+    , F* const epsi
+    , F* const Tijk
+    , F* const Zijk
     ) {
     constexpr size_t blockSize=16;
     F energy(0.);
-    const size_t No = epsi.size();
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min(No, kk+blockSize) );
       for (size_t jj(kk); jj<No; jj+=blockSize){
@@ -2522,18 +2636,18 @@ namespace atrip {
                     ei(epsi[i])
                   , facij = i == j ? F(0.5) : F(1.0)
                   , denominator(epsabc - ei - ej - ek)
-                  , U(Zijk_[i + No*j + No*No*k])
-                  , V(Zijk_[i + No*k + No*No*j])
-                  , W(Zijk_[j + No*i + No*No*k])
-                  , X(Zijk_[j + No*k + No*No*i])
-                  , Y(Zijk_[k + No*i + No*No*j])
-                  , Z(Zijk_[k + No*j + No*No*i])
-                  , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
-                  , B(maybeConjugate<F>(Tijk_[i + No*k + No*No*j]))
-                  , C(maybeConjugate<F>(Tijk_[j + No*i + No*No*k]))
-                  , D(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
-                  , E(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
-                  , _F(maybeConjugate<F>(Tijk_[k + No*j + No*No*i]))
+                  , U(Zijk[i + No*j + No*No*k])
+                  , V(Zijk[i + No*k + No*No*j])
+                  , W(Zijk[j + No*i + No*No*k])
+                  , X(Zijk[j + No*k + No*No*i])
+                  , Y(Zijk[k + No*i + No*No*j])
+                  , Z(Zijk[k + No*j + No*No*i])
+                  , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
+                  , B(maybeConjugate<F>(Tijk[i + No*k + No*No*j]))
+                  , C(maybeConjugate<F>(Tijk[j + No*i + No*No*k]))
+                  , D(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
+                  , E(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
+                  , _F(maybeConjugate<F>(Tijk[k + No*j + No*No*i]))
                   , value
                     = 3.0 * ( A * U
                               + B * V
@@ -2561,13 +2675,13 @@ namespace atrip {
 
   template <typename F=double>
   double getEnergySame
-    ( const F epsabc
-    , std::vector<F> const& epsi
-    , std::vector<F> const& Tijk_
-    , std::vector<F> const& Zijk_
+    ( F const epsabc
+    , size_t const No
+    , F* const epsi
+    , F* const Tijk
+    , F* const Zijk
     ) {
     constexpr size_t blockSize = 16;
-    const size_t No = epsi.size();
     F energy = F(0.);
     for (size_t kk=0; kk<No; kk+=blockSize){
       const size_t kend( std::min( kk+blockSize, No) );
@@ -2587,12 +2701,12 @@ namespace atrip {
                   ei(epsi[i])
                 , facij ( i==j ? F(0.5) : F(1.0))
                 , denominator(epsabc - ei - ej - ek)
-                , U(Zijk_[i + No*j + No*No*k])
-                , V(Zijk_[j + No*k + No*No*i])
-                , W(Zijk_[k + No*i + No*No*j])
-                , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
-                , B(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
-                , C(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                , U(Zijk[i + No*j + No*No*k])
+                , V(Zijk[j + No*k + No*No*i])
+                , W(Zijk[k + No*i + No*No*j])
+                , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
+                , B(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
+                , C(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
                 , value
                   = F(3.0) * ( A * U
                              + B * V
@@ -2610,56 +2724,221 @@ namespace atrip {
     return std::real(energy);
   }
 
+#+end_src
+
+And we explicitly instantiate these templated functions:
+
+#+begin_src c++ :tangle (atrip-equations-cxx)
+  // instantiate double
+  template
+  double getEnergyDistinct
+    ( double const epsabc
+    , size_t const No
+    , double* const epsi
+    , double* const Tijk
+    , double* const Zijk
+    );
+
+  template
+  double getEnergySame
+    ( double const epsabc
+    , size_t const No
+    , double* const epsi
+    , double* const Tijk
+    , double* const Zijk
+    );
+
+  // instantiate Complex
+  template
+  double getEnergyDistinct
+    ( Complex const epsabc
+    , size_t const No
+    , Complex* const epsi
+    , Complex* const Tijk
+    , Complex* const Zijk
+    );
+
+  template
+  double getEnergySame
+    ( Complex const epsabc
+    , size_t const No
+    , Complex* const epsi
+    , Complex* const Tijk
+    , Complex* const Zijk
+    );
+#+end_src
+
+** Contractions
+
+*** Singles contribution
+The first contraction we discuss is the one involving \( t_i^a \)
+singles amplitudes.
+
+For every \( (a,b,c) \) we construct the object
+
+\begin{align*}
+Z_{ijk} &= t^a_i V^{bc}_{jk} \\
+        & + t^b_j V^{ac}_{ik} \\
+        & + t^c_k V^{ab}_{ij}
+\end{align*}
+
+and for it we will need the corresponding slices
+of the \( V^{pp}_{ph} \) integrals, i.e., =AB=, =AC= and =BC=.
+
+
+#+begin_src c++ :tangle (atrip-equations-h) :exports none
   template <typename F=double>
   void singlesContribution
     ( size_t No
     , size_t Nv
     , const ABCTuple &abc
-    , F const* Tph
-    , F const* VABij
-    , F const* VACij
-    , F const* VBCij
-    , F *Zijk
+    , F* const Tph
+    , F* const VABij
+    , F* const VACij
+    , F* const VBCij
+    , F* Zijk
+    );
+#+end_src
+
+#+begin_src c++ :tangle (atrip-equations-cxx)
+
+  template <typename F=double>
+  void singlesContribution
+    ( size_t No
+    , size_t Nv
+    , const ABCTuple &abc
+    , F* const Tph
+    , F* const VABij
+    , F* const VACij
+    , F* const VBCij
+    , F* Zijk
     ) {
     const size_t a(abc[0]), b(abc[1]), c(abc[2]);
-    for (size_t k=0; k < No; k++)
-    for (size_t i=0; i < No; i++)
-    for (size_t j=0; j < No; j++) {
-      const size_t ijk = i + j*No + k*No*No
-                ,  jk = j + No * k
-                ;
+    const size_t NoNo = No*No;
+    // TODO: change order of for loops
+    for (size_t k = 0; k < No; k++)
+    for (size_t i = 0; i < No; i++)
+    for (size_t j = 0; j < No; j++) {
+      const size_t ijk = i + j*No + k*NoNo;
       Zijk[ijk] += Tph[ a + i * Nv ] * VBCij[ j + k * No ];
       Zijk[ijk] += Tph[ b + j * Nv ] * VACij[ i + k * No ];
       Zijk[ijk] += Tph[ c + k * Nv ] * VABij[ i + j * No ];
     }
   }
 
+// instantiate
+  template void singlesContribution( size_t No
+                                   , size_t Nv
+                                   , const ABCTuple &abc
+                                   , double* const Tph
+                                   , double* const VABij
+                                   , double* const VACij
+                                   , double* const VBCij
+                                   , double* Zijk
+                                   );
+
+  template void singlesContribution( size_t No
+                                   , size_t Nv
+                                   , const ABCTuple &abc
+                                   , Complex* const Tph
+                                   , Complex* const VABij
+                                   , Complex* const VACij
+                                   , Complex* const VBCij
+                                   , Complex* Zijk
+                                   );
+#+end_src
+
+*** Doubles contribution
+
+Next we build the tensor \( T_{ijk} \) from the contraction
+of the coulomb integrals with the doubles amplitudes \( t^{ab}_{ij} \).
+There are two kinds of contractions, which are differently challenging
+in terms of computation.
+
+\begin{align*}
+T_{ijk}  &=  \\
+\sum_{{\color{red}L} = 0}^{N_\mathrm{o}}
+&- T^{{\color{blue} ab}}_{{\color{red}L}j} V_{ik}^{{\color{red}L}{\color{blue}c}} \\
+&- T^{{\color{blue} ab}}_{i{\color{red}L}} V_{jk}^{{\color{red}L}{\color{blue}c}} \\
+&- T^{{\color{blue} ac}}_{{\color{red}L}k} V_{ij}^{{\color{red}L}{\color{blue}b}} \\
+&- T^{{\color{blue} ac}}_{i{\color{red}L}} V_{kj}^{{\color{red}L}{\color{blue}b}} \\
+&- T^{{\color{blue} bc}}_{{\color{red}L}k} V_{ji}^{{\color{red}L}{\color{blue}a}} \\
+&- T^{{\color{blue} bc}}_{j{\color{red}L}} V_{ki}^{{\color{red}L}{\color{blue}a}}
+\end{align*}
+
+\begin{align*}
+T_{ijk}  &=  \\
+\sum_{{\color{red}e} = 0}^{N_\mathrm{v}}
+ &\phantom{+}
+V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \\
+        &+ V^{{\color{blue}ba}}_{{\color{red}e}j}  T^{{\color{blue}c}{\color{red}e}}_{ji} \\
+        &+ V^{{\color{blue}cb}}_{{\color{red}e}k}  T^{{\color{blue}a}{\color{red}e}}_{kj} \\
+        &+ V^{{\color{blue}ac}}_{{\color{red}e}i}  T^{{\color{blue}b}{\color{red}e}}_{ik} \\
+        &+ V^{{\color{blue}bc}}_{{\color{red}e}j}  T^{{\color{blue}a}{\color{red}e}}_{jk} \\
+        &+ V^{{\color{blue}ca}}_{{\color{red}e}k}  T^{{\color{blue}b}{\color{red}e}}_{ki} \\
+\end{align*}
+
+
+#+begin_src c++ :tangle (atrip-equations-h)
   template <typename F=double>
   void doublesContribution
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
     // -- VABCI
-    , F const* VABph
-    , F const* VACph
-    , F const* VBCph
-    , F const* VBAph
-    , F const* VCAph
-    , F const* VCBph
+    , F* const VABph
+    , F* const VACph
+    , F* const VBCph
+    , F* const VBAph
+    , F* const VCAph
+    , F* const VCBph
     // -- VHHHA
-    , F const* VhhhA
-    , F const* VhhhB
-    , F const* VhhhC
+    , F* const VhhhA
+    , F* const VhhhB
+    , F* const VhhhC
     // -- TA
-    , F const* TAphh
-    , F const* TBphh
-    , F const* TCphh
+    , F* const TAphh
+    , F* const TBphh
+    , F* const TCphh
     // -- TABIJ
-    , F const* TABhh
-    , F const* TAChh
-    , F const* TBChh
+    , F* const TABhh
+    , F* const TAChh
+    , F* const TBChh
     // -- TIJK
-    , F *Tijk
+    , F* Tijk
+    );
+#+end_src
+
+
+
+
+#+begin_src c++ :tangle (atrip-equations-cxx)
+  template <typename F=double>
+  void doublesContribution
+    ( const ABCTuple &abc
+    , size_t const No
+    , size_t const Nv
+    // -- VABCI
+    , F* const VABph
+    , F* const VACph
+    , F* const VBCph
+    , F* const VBAph
+    , F* const VCAph
+    , F* const VCBph
+    // -- VHHHA
+    , F* const VhhhA
+    , F* const VhhhB
+    , F* const VhhhC
+    // -- TA
+    , F* const TAphh
+    , F* const TBphh
+    , F* const TCphh
+    // -- TABIJ
+    , F* const TABhh
+    , F* const TAChh
+    , F* const TBChh
+    // -- TIJK
+    , F* Tijk
     ) {
 
     const size_t a = abc[0], b = abc[1], c = abc[2]
@@ -2852,19 +3131,92 @@ namespace atrip {
 #endif
   }
 
+
+
+  // instantiate templates
+  template
+  void doublesContribution
+    ( const ABCTuple &abc
+    , size_t const No
+    , size_t const Nv
+    // -- VABCI
+    , double* const VABph
+    , double* const VACph
+    , double* const VBCph
+    , double* const VBAph
+    , double* const VCAph
+    , double* const VCBph
+    // -- VHHHA
+    , double* const VhhhA
+    , double* const VhhhB
+    , double* const VhhhC
+    // -- TA
+    , double* const TAphh
+    , double* const TBphh
+    , double* const TCphh
+    // -- TABIJ
+    , double* const TABhh
+    , double* const TAChh
+    , double* const TBChh
+    // -- TIJK
+    , double* Tijk
+    );
+
+  template
+  void doublesContribution
+    ( const ABCTuple &abc
+    , size_t const No
+    , size_t const Nv
+    // -- VABCI
+    , Complex* const VABph
+    , Complex* const VACph
+    , Complex* const VBCph
+    , Complex* const VBAph
+    , Complex* const VCAph
+    , Complex* const VCBph
+    // -- VHHHA
+    , Complex* const VhhhA
+    , Complex* const VhhhB
+    , Complex* const VhhhC
+    // -- TA
+    , Complex* const TAphh
+    , Complex* const TBphh
+    , Complex* const TCphh
+    // -- TABIJ
+    , Complex* const TABhh
+    , Complex* const TAChh
+    , Complex* const TBChh
+    // -- TIJK
+    , Complex* Tijk
+    );
+#+end_src
+
+** Epilog                                                         :noexport:
+#+begin_src c++ :tangle (atrip-equations-h)
 }
 #+end_src
 
+#+begin_src c++ :tangle (atrip-equations-cxx)
+}
+#+end_src
+
+
+
+
 * Blas
+
 The main matrix-matrix multiplication method used in this algorithm
 is mainly using the =DGEMM= function, which we declare as
 =extern= since it should be known only at link-time.
-#+begin_src c++ :tangle (atrip-blas-h)
+#+begin_src c++ :tangle (atrip-blas-h) :exports none
 #pragma once
+
+#include <atrip/Complex.hpp>
+#include "config.h"
+
 namespace atrip {
 
-  using Complex = std::complex<double>;
-
+#if !defined(HAVE_CUDA)
   extern "C" {
     void dgemm_(
       const char *transa,
@@ -2898,9 +3250,9 @@ namespace atrip {
       const int *ldc
     );
   }
+#endif
 
-
-  template <typename F=double>
+  template <typename F>
   void xgemm(const char *transa,
              const char *transb,
              const int *m,
@@ -2913,12 +3265,61 @@ namespace atrip {
              const int *ldb,
              F *beta,
              F *C,
+             const int *ldc);
+}
+#+end_src
+
+#+begin_src c++ :tangle (atrip-blas-cxx)
+#include <atrip/Blas.hpp>
+#include <atrip/Atrip.hpp>
+
+#if defined(HAVE_CUDA)
+#  include <cstring>
+
+  static inline
+  cublasOperation_t char_to_cublasOperation(const char* trans) {
+    if (strncmp("N", trans, 1) == 0)
+      return CUBLAS_OP_N;
+    else if (strncmp("T", trans, 1) == 0)
+      return CUBLAS_OP_T;
+    else
+      return CUBLAS_OP_C;
+  }
+
+#endif
+
+namespace atrip {
+
+
+  template <>
+  void xgemm(const char *transa,
+             const char *transb,
+             const int *m,
+             const int *n,
+             const int *k,
+             double *alpha,
+             const double *A,
+             const int *lda,
+             const double *B,
+             const int *ldb,
+             double *beta,
+             double *C,
              const int *ldc) {
+#if defined(HAVE_CUDA)
+    cublasDgemm(Atrip::cuda.handle,
+                char_to_cublasOperation(transa),
+                char_to_cublasOperation(transb),
+                ,*m, *n, *k,
+                alpha, A, *lda,
+                B, *ldb, beta,
+                C, *ldc);
+#else
     dgemm_(transa, transb,
            m, n, k,
            alpha, A, lda,
            B, ldb, beta,
            C, ldc);
+#endif
   }
 
   template <>
@@ -2935,12 +3336,28 @@ namespace atrip {
              Complex *beta,
              Complex *C,
              const int *ldc) {
+#if defined(HAVE_CUDA)
+    cuDoubleComplex
+      cu_alpha = {std::real(*alpha), std::imag(*alpha)},
+      cu_beta = {std::real(*beta), std::imag(*beta)};
+    cublasZgemm(Atrip::cuda.handle,
+                char_to_cublasOperation(transa),
+                char_to_cublasOperation(transb),
+                ,*m, *n, *k,
+                &cu_alpha,
+                reinterpret_cast<const cuDoubleComplex*>(A), *lda,
+                reinterpret_cast<const cuDoubleComplex*>(B), *ldb,
+                &cu_beta,
+                reinterpret_cast<const cuDoubleComplex*>(C), *ldc);
+#else
     zgemm_(transa, transb,
            m, n, k,
            alpha, A, lda,
            B, ldb, beta,
            C, ldc);
+#endif
   }
+
 }
 #+end_src
 
@@ -2952,9 +3369,17 @@ namespace atrip {
 #include <string>
 #include <map>
 #include <mpi.h>
+#include "config.h"
 
+#if defined(HAVE_CUDA)
+#include <cuda.h>
+#define CUBLASAPI
+#include <cublas_api.h>
+#include <cublas_v2.h>
+#endif
 
 #include <atrip/Utils.hpp>
+#include <atrip/Types.hpp>
 
 #define ADD_ATTRIBUTE(_type, _name, _default)   \
   _type _name = _default;                       \
@@ -2967,11 +3392,20 @@ namespace atrip {
 
   struct Atrip {
 
-    static int rank;
-    static int np;
+    static size_t rank;
+    static size_t np;
     static MPI_Comm communicator;
     static Timings chrono;
+#if defined(HAVE_CUDA)
+    struct CudaContext {
+      cublasStatus_t status;
+      cublasHandle_t handle;
+    };
+    static CudaContext cuda;
+#endif
+
     static void init(MPI_Comm);
+
 
     template <typename F=double>
     struct Input {
@@ -3041,8 +3475,11 @@ using namespace atrip;
 template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
 template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
-int Atrip::rank;
-int Atrip::np;
+size_t Atrip::rank;
+size_t Atrip::np;
+#if defined(HAVE_CUDA)
+typename Atrip::CudaContext Atrip::cuda;
+#endif
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
 
@@ -3054,15 +3491,20 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
 
 void Atrip::init(MPI_Comm world)  {
   Atrip::communicator = world;
-  MPI_Comm_rank(world, &Atrip::rank);
-  MPI_Comm_size(world, &Atrip::np);
+  MPI_Comm_rank(world, (int*)&Atrip::rank);
+  MPI_Comm_size(world, (int*)&Atrip::np);
+
+#if defined(HAVE_CUDA)
+  Atrip::cuda.status = cublasCreate(&Atrip::cuda.handle);
+#endif
+
 }
 
 template <typename F>
 Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
-  const int np = Atrip::np;
-  const int rank = Atrip::rank;
+  const size_t np = Atrip::np;
+  const size_t rank = Atrip::rank;
   MPI_Comm universe = Atrip::communicator;
 
   const size_t No = in.ei->lens[0];
@@ -3072,18 +3514,34 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
-               , Zijk(No*No*No) // singles + doubles (see piecuch)
-               // we need local copies of the following tensors on every
-               // rank
-               , epsi(No)
-               , epsa(Nv)
-               , Tai(No * Nv)
+  // we need local copies of the following tensors on every
+  // rank
+  std::vector<F> _epsi(No)
+               , _epsa(Nv)
+               , _Tai(No * Nv)
                ;
 
-  in.ei->read_all(epsi.data());
-  in.ea->read_all(epsa.data());
-  in.Tph->read_all(Tai.data());
+  in.ei->read_all(_epsi.data());
+  in.ea->read_all(_epsa.data());
+  in.Tph->read_all(_Tai.data());
+
+#if defined(HAVE_CUDA)
+  DataPtr<F> Tai, epsi, epsa;
+  cuMemAlloc(&Tai, sizeof(F) * _Tai.size());
+  cuMemAlloc(&epsi, sizeof(F) * _epsi.size());
+  cuMemAlloc(&epsa, sizeof(F) * _epsa.size());
+
+  cuMemcpy(Tai, (DataPtr<F>)_Tai.data(), sizeof(F) * _Tai.size());
+  cuMemcpy(epsi,(DataPtr<F>)_epsi.data(), sizeof(F) * _epsi.size());
+  cuMemcpy(epsa, (DataPtr<F>)_epsa.data(), sizeof(F) * _epsa.size());
+
+  DataPtr<F> Tijk, Zijk;
+  cuMemAlloc(&Tijk, sizeof(F) * No * No * No);
+  cuMemAlloc(&Zijk, sizeof(F) * No * No * No);
+#else
+  std::vector<F> &Tai = _Tai, &epsi = _epsi, &epsa = _epsa;
+  std::vector<F> Tijk(No*No*No), Zijk(No*No*No);
+#endif
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
   if (RankMap<F>::RANK_ROUND_ROBIN) {
@@ -3153,7 +3611,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     )
   const size_t nIterations = tuplesList.size();
   {
-    const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
     LOG(0,"Atrip") << "#iterations: "
                   << nIterations
                   << "/"
@@ -3473,26 +3930,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_CHRONO("doubles",
         doublesContribution<F>( abc, (size_t)No, (size_t)Nv
                               // -- VABCI
-                              , abph.unwrapSlice(Slice<F>::AB, abc)
-                              , abph.unwrapSlice(Slice<F>::AC, abc)
-                              , abph.unwrapSlice(Slice<F>::BC, abc)
-                              , abph.unwrapSlice(Slice<F>::BA, abc)
-                              , abph.unwrapSlice(Slice<F>::CA, abc)
-                              , abph.unwrapSlice(Slice<F>::CB, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::AB, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::AC, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::BC, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::BA, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::CA, abc)
+                              , (F*)abph.unwrapSlice(Slice<F>::CB, abc)
                               // -- VHHHA
-                              , hhha.unwrapSlice(Slice<F>::A, abc)
-                              , hhha.unwrapSlice(Slice<F>::B, abc)
-                              , hhha.unwrapSlice(Slice<F>::C, abc)
+                              , (F*)hhha.unwrapSlice(Slice<F>::A, abc)
+                              , (F*)hhha.unwrapSlice(Slice<F>::B, abc)
+                              , (F*)hhha.unwrapSlice(Slice<F>::C, abc)
                               // -- TA
-                              , taphh.unwrapSlice(Slice<F>::A, abc)
-                              , taphh.unwrapSlice(Slice<F>::B, abc)
-                              , taphh.unwrapSlice(Slice<F>::C, abc)
+                              , (F*)taphh.unwrapSlice(Slice<F>::A, abc)
+                              , (F*)taphh.unwrapSlice(Slice<F>::B, abc)
+                              , (F*)taphh.unwrapSlice(Slice<F>::C, abc)
                               // -- TABIJ
-                              , tabhh.unwrapSlice(Slice<F>::AB, abc)
-                              , tabhh.unwrapSlice(Slice<F>::AC, abc)
-                              , tabhh.unwrapSlice(Slice<F>::BC, abc)
+                              , (F*)tabhh.unwrapSlice(Slice<F>::AB, abc)
+                              , (F*)tabhh.unwrapSlice(Slice<F>::AC, abc)
+                              , (F*)tabhh.unwrapSlice(Slice<F>::BC, abc)
                               // -- TIJK
+#if defined(HAVE_CUDA)
+                              , (F*)Tijk
+#else
                               , Tijk.data()
+#endif
                               );
         WITH_RANK << iteration << "-th doubles done\n";
       ))
@@ -3507,15 +3968,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         abhh.unwrapAll(abc);
       )))
       WITH_CHRONO("reorder",
-        for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
+        #pragma acc parallel
+        for (size_t I(0); I < No*No*No; I++)
+          ((F*)Zijk)[I] = ((F*)Tijk)[I];
       )
       WITH_CHRONO("singles",
       singlesContribution<F>( No, Nv, abc
+#if defined(HAVE_CUDA)
+                            , (F*)Tai
+#else
                             , Tai.data()
-                            , abhh.unwrapSlice(Slice<F>::AB, abc)
-                            , abhh.unwrapSlice(Slice<F>::AC, abc)
-                            , abhh.unwrapSlice(Slice<F>::BC, abc)
+#endif
+                            , (F*)abhh.unwrapSlice(Slice<F>::AB, abc)
+                            , (F*)abhh.unwrapSlice(Slice<F>::AC, abc)
+                            , (F*)abhh.unwrapSlice(Slice<F>::BC, abc)
+#if defined(HAVE_CUDA)
+                            , (F*)Zijk);
+#else
                             , Zijk.data());
+#endif
       )
     }
 
@@ -3527,13 +3998,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
+      const F epsabc(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
 
       WITH_CHRONO("energy",
         if ( distinct == 0)
-          tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergyDistinct<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
         else
-          tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergySame<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
       )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
@@ -3936,6 +4407,57 @@ using namespace atrip;
 ** Epilog                                                          :noexport:
 #+begin_src c++ :tangle (atrip-checkpoint-h)
 }
+#+end_src
+
+* Miscellaneous
+** Complex numbers
+#+begin_src c++ :tangle (atrip-complex-h)
+#pragma once
+
+#include <complex>
+#include <mpi.h>
+
+namespace atrip {
+
+  using Complex = std::complex<double>;
+
+  template <typename F> F maybeConjugate(const F);
+
+  namespace traits {
+
+    template <typename FF> bool isComplex();
+
+    namespace mpi {
+      template <typename F> MPI_Datatype datatypeOf(void);
+    }
+
+  }
+
+}
+
+#+end_src
+
+#+begin_src c++ :tangle (atrip-complex-cxx)
+#include <atrip/Complex.hpp>
+
+namespace atrip {
+
+  template <> double maybeConjugate(const double a) { return a; }
+  template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
+
+
+  namespace traits {
+    template <typename F> bool isComplex() { return false; }
+    template <> bool isComplex<double>() { return false; }
+    template <> bool isComplex<Complex>() { return true; }
+  namespace mpi {
+    template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
+    template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
+  }
+  }
+
+}
+
 #+end_src
 
 * Include header
