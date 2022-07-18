@@ -4060,7 +4060,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_CHRONO("reorder",
         #pragma acc parallel
         for (size_t I(0); I < No*No*No; I++)
-          ((F*)Zijk)[I] = ((F*)Tijk)[I];
+          ((DataFieldType<F>*)Zijk)[I] = ((DataFieldType<F>*)Tijk)[I];
       )
       WITH_CHRONO("singles",
       singlesContribution<F>( No, Nv, abc
