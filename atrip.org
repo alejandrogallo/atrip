@@ -2996,7 +2996,10 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
     }                                                               \
     )
 #if defined(HAVE_CUDA)
-#define __TO_DEVICEPTR(_v) (DataFieldType<F>*)(CUdeviceptr)thrust::raw_pointer_cast((_v))
+#define __TO_DEVICEPTR(_v)                      \
+    ((DataFieldType<F>*)                        \
+     (CUdeviceptr)                              \
+     thrust::raw_pointer_cast((_v)))
 #define DGEMM_PARTICLES(__A, __B)                   \
   atrip::xgemm<F>("T",                              \
                   "N",                              \
@@ -3028,8 +3031,8 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
                   );
 #define MAYBE_CONJ(_conj, _buffer)                                      \
   for (size_t __i = 0; __i < NoNoNo; ++__i)                             \
-    _conj[__i] =                                                        \
-      maybeConjugate<DataFieldType<F>>(((DataFieldType<F>*)_buffer)[__i]);
+    __TO_DEVICEPTR(_conj.data())[__i] =                                 \
+      maybeConjugate<DataFieldType<F>>(((DataFieldType<F>*)(_buffer))[__i]);
 #else
 #define __TO_DEVICEPTR(_v) (_v)
 #define DGEMM_PARTICLES(__A, __B)               \
@@ -3087,7 +3090,8 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
       { // Holes part %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #ifdef HAVE_CUDA
-        thrust::device_vector< DataFieldType<F> > _vhhh(NoNoNo);
+        thrust::device_vector< DataFieldType<F> > _vhhh;
+        _vhhh.reserve(NoNoNo);
 #else
         std::vector<F> _vhhh(NoNoNo);
 #endif
