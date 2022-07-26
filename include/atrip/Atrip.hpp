@@ -18,9 +18,17 @@
 #include <string>
 #include <map>
 #include <mpi.h>
+#include "config.h"
 
+#if defined(HAVE_CUDA)
+#include <cuda.h>
+#define CUBLASAPI
+#include <cublas_api.h>
+#include <cublas_v2.h>
+#endif
 
 #include <atrip/Utils.hpp>
+#include <atrip/Types.hpp>
 
 #define ADD_ATTRIBUTE(_type, _name, _default)   \
   _type _name = _default;                       \

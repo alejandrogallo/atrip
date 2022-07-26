@@ -18,5 +18,5 @@ endif
 
 if WITH_CUDA
 test_main_CXXFLAGS = $(CUDA_CXXFLAGS)
-test_main_LDADD += $(CUDA_LDFLAGS)
+test_main_LDADD += $(CUDA_LDFLAGS) -lcublas -lcudadevrt -lthrust
 endif

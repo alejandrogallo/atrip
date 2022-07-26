@@ -2916,6 +2916,9 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
 
 
 #+begin_src c++ :tangle (atrip-equations-h)
+#if defined(HAVE_CUDA)
+  __device__
+#endif
   template <typename F=double>
   void doublesContribution
     ( const ABCTuple &abc
@@ -2950,6 +2953,9 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
 
 
 #+begin_src c++ :tangle (atrip-equations-cxx)
+#if defined(HAVE_CUDA)
+  __device__
+#endif
   template <typename F=double>
   void doublesContribution
     ( const ABCTuple &abc
@@ -3225,6 +3231,9 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
 
 
   // instantiate templates
+#if defined(HAVE_CUDA)
+  __device__
+#endif
   template
   void doublesContribution<double>
     ( const ABCTuple &abc
@@ -3253,6 +3262,9 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
     , DataFieldType<double>* Tijk
     );
 
+#if defined(HAVE_CUDA)
+  __device__
+#endif
   template
   void doublesContribution<Complex>
     ( const ABCTuple &abc
@@ -4510,6 +4522,10 @@ using namespace atrip;
 
 #include <complex>
 #include <mpi.h>
+#include "config.h"
+#if defined(HAVE_CUDA)
+#include <cuComplex.h>
+#endif
 
 namespace atrip {
 
@@ -4518,7 +4534,7 @@ namespace atrip {
   template <typename F> F maybeConjugate(const F);
 
 #if defined(HAVE_CUDA)
-  void operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz);
+  cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz);
 #endif
 
   namespace traits {
@@ -4544,9 +4560,31 @@ namespace atrip {
   template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
 
 #if defined(HAVE_CUDA)
-  void operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz) {
+  /*
+  __device__
+  template <> double2
+  maybeConjugate(const double2 a) {
+    return {a.x, -a.y};
+  }
+  ,*/
+  __device__
+  template <> cuDoubleComplex
+  maybeConjugate(const cuDoubleComplex a) {
+    return {a.x, -a.y};
+  }
+  /*
+  __device__
+  double2& operator+=(double2& lz, double2 const& rz) {
     lz.x += rz.x;
     lz.y += rz.y;
+    return lz;
+  }
+  ,*/
+  __device__
+  cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz) {
+    lz.x += rz.x;
+    lz.y += rz.y;
+    return lz;
   }
 #endif
 
