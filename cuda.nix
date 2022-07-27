@@ -13,7 +13,7 @@
 
     # in here is libcuda
     export CUDA_X11LIB="${pkgs.linuxPackages.nvidia_x11}/lib"
-    export CUDA_LDFLAGS="-L$CUDA_X11LIB -L$CUDA_ROOT_PATH/lib -L$CUDA_LIB_PATH/lib -lcuda -lcudart"
+    export CUDA_LDFLAGS="-L$CUDA_X11LIB -L$CUDA_ROOT_PATH/lib -L$CUDA_LIB_PATH/lib -lcuda -lcudart -lcublas"
   '';
 
 }

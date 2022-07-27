@@ -55,7 +55,7 @@ AC_ARG_ENABLE([cuda],
                               [WITH_CUDA=yes],
                               [WITH_CUDA=no])
 AC_ARG_VAR([NVCC], [Path to the nvidia cuda compiler.])
-AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda and -lcudart.])
+AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda, -lcudart, -lcublas.])
 AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
 
 
@@ -145,6 +145,7 @@ if test x${WITH_CUDA} = xyes; then
   AC_DEFINE([HAVE_CUDA],1,[Wether we are using CUDA])
   # TODO: make sure to find cuda and cudart
   # AC_SEARCH_LIBS([cudaMalloc], [cuda cudart], [FOUND_CUDA=yes])
+  ATRIP_CUBLAS
 fi
 
 dnl -----------------------------------------------------------------------
