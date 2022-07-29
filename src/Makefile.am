@@ -7,16 +7,20 @@ lib_LIBRARIES = libatrip.a
 
 libatrip_a_CPPFLAGS = -I$(top_srcdir)/include/
 libatrip_a_SOURCES = ./atrip/Atrip.cxx \
-                     ./atrip/Blas.cxx \
-                     ./atrip/Complex.cxx
+                     ./atrip/Blas.cxx
 
 
 if WITH_CUDA
+NVCC_FILES = ./atrip/Equations.cxx ./atrip/Complex.cxx
+NVCC_OBJS = $(patsubst %.cxx,%.nvcc.o,$(NVCC_FILES))
 libatrip_a_CPPFLAGS += $(CUDA_CXXFLAGS)
-libatrip_a_DEPENDENCIES = ./atrip/Equations.o
-libatrip_a_LIBADD = ./atrip/Equations.o
-./atrip/Equations.o: ./atrip/Equations.cxx
+libatrip_a_DEPENDENCIES = $(NVCC_OBJS)
+libatrip_a_LIBADD = $(NVCC_OBJS)
+%.nvcc.o: %.cxx
 	$(NVCC) -c -I../ $(CPPFLAGS) $(libatrip_a_CPPFLAGS) $< -o $@
+
+#./atrip/Equations.o: ./atrip/Equations.cxx
+#	$(NVCC) -c -I../ $(CPPFLAGS) $(libatrip_a_CPPFLAGS) $< -o $@
 else
 libatrip_a_SOURCES += ./atrip/Equations.cxx
 endif
