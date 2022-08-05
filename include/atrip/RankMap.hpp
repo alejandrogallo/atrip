@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*The rank mapping][The rank mapping:1]]
+// [[file:~/cuda/atrip/atrip.org::*The%20rank%20mapping][The rank mapping:1]]
 #pragma once
 
 #include <vector>
@@ -65,7 +65,8 @@ namespace atrip {
           ;
     }
 
-    bool isSourcePadding(size_t rank, size_t source) const noexcept {
+    bool isSourcePadding(const size_t rank, const size_t source)
+      const noexcept {
       return source == nSources() && isPaddingRank(rank);
     }
 

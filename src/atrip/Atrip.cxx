@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Main][Main:1]]
+// [[file:~/cuda/atrip/atrip.org::*Main][Main:1]]
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
@@ -23,12 +23,24 @@
 #include <atrip/Checkpoint.hpp>
 
 using namespace atrip;
+#if defined(HAVE_CUDA)
+
+namespace atrip {
+namespace cuda {
+  
+};
+};
+
+#endif
 
 template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
 template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
-int Atrip::rank;
-int Atrip::np;
+size_t Atrip::rank;
+size_t Atrip::np;
+#if defined(HAVE_CUDA)
+typename Atrip::CudaContext Atrip::cuda;
+#endif
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
 
@@ -40,15 +52,20 @@ void atrip::registerIterationDescriptor(IterationDescriptor d) {
 
 void Atrip::init(MPI_Comm world)  {
   Atrip::communicator = world;
-  MPI_Comm_rank(world, &Atrip::rank);
-  MPI_Comm_size(world, &Atrip::np);
+  MPI_Comm_rank(world, (int*)&Atrip::rank);
+  MPI_Comm_size(world, (int*)&Atrip::np);
+
+#if defined(HAVE_CUDA)
+  Atrip::cuda.status = cublasCreate(&Atrip::cuda.handle);
+#endif
+
 }
 
 template <typename F>
 Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
-  const int np = Atrip::np;
-  const int rank = Atrip::rank;
+  const size_t np = Atrip::np;
+  const size_t rank = Atrip::rank;
   MPI_Comm universe = Atrip::communicator;
 
   const size_t No = in.ei->lens[0];
@@ -58,18 +75,35 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   LOG(0,"Atrip") << "np: " << np << "\n";
 
   // allocate the three scratches, see piecuch
-  std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
-               , Zijk(No*No*No) // singles + doubles (see piecuch)
-               // we need local copies of the following tensors on every
-               // rank
-               , epsi(No)
-               , epsa(Nv)
-               , Tai(No * Nv)
+  // we need local copies of the following tensors on every
+  // rank
+  std::vector<F> _epsi(No)
+               , _epsa(Nv)
+               , _Tai(No * Nv)
                ;
 
-  in.ei->read_all(epsi.data());
-  in.ea->read_all(epsa.data());
-  in.Tph->read_all(Tai.data());
+  in.ei->read_all(_epsi.data());
+  in.ea->read_all(_epsa.data());
+  in.Tph->read_all(_Tai.data());
+
+#if defined(HAVE_CUDA)
+  DataPtr<F> Tai, epsi, epsa;
+  cuMemAlloc(&Tai, sizeof(F) * _Tai.size());
+  cuMemAlloc(&epsi, sizeof(F) * _epsi.size());
+  cuMemAlloc(&epsa, sizeof(F) * _epsa.size());
+
+  cuMemcpyHtoD(Tai, (void*)_Tai.data(), sizeof(F) * _Tai.size());
+  cuMemcpyHtoD(epsi,(void*)_epsi.data(), sizeof(F) * _epsi.size());
+  cuMemcpyHtoD(epsa, (void*)_epsa.data(), sizeof(F) * _epsa.size());
+
+  DataPtr<F> Tijk, Zijk;
+  //TODO: free memory
+  cuMemAlloc(&Tijk, sizeof(F) * No * No * No);
+  cuMemAlloc(&Zijk, sizeof(F) * No * No * No);
+#else
+  std::vector<F> &Tai = _Tai, &epsi = _epsi, &epsa = _epsa;
+  std::vector<F> Tijk(No*No*No), Zijk(No*No*No);
+#endif
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
   if (RankMap<F>::RANK_ROUND_ROBIN) {
@@ -139,7 +173,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     )
   const size_t nIterations = tuplesList.size();
   {
-    const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
     LOG(0,"Atrip") << "#iterations: "
                   << nIterations
                   << "/"
@@ -338,6 +371,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     }
   }
 
+  LOG(0, "AtripCUDA") <<  "Starting iterations\n";
+  
+
   for ( size_t
           i = first_iteration,
           iteration = first_iteration + 1
@@ -345,6 +381,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ; i++, iteration++
       ) {
     Atrip::chrono["iterations"].start();
+
+    LOG(0, "AtripCUDA") <<  "iteration " << i << "\n";
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
@@ -355,8 +393,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       if (in.barrier) MPI_Barrier(universe);
     ))
 
+
     // write checkpoints
-    if (iteration % checkpoint_mod == 0) {
+    if (iteration % checkpoint_mod == 0 && false) {
+        LOG(0, "AtripCUDA") <<  "checkpoints \n";
         double globalEnergy = 0;
         MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
         Checkpoint out
@@ -368,9 +408,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
              iteration - 1,
              in.rankRoundRobin};
         LOG(0, "Atrip") << "Writing checkpoint\n";
-        if (Atrip::rank == 0) write_checkpoint(out, in.checkpointPath);
+        //if (Atrip::rank == 0) write_checkpoint(out, in.checkpointPath);
     }
 
+    LOG(0, "AtripCUDA") <<  "reporting \n";
     // write reporting
     if (iteration % iterationMod == 0 || iteration == iteration1Percent) {
 
@@ -417,9 +458,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                 << "\n";
     )
 
+    LOG(0, "AtripCUDA") <<  "first database " << i << "\n";
 
     // COMM FIRST DATABASE ================================================{{{1
     if (i == first_iteration) {
+      LOG(0, "AtripCUDA") <<  "first database " << i << "\n";
       WITH_RANK << "__first__:first database ............ \n";
       const auto db = communicateDatabase(abc, universe);
       WITH_RANK << "__first__:first database communicated \n";
@@ -431,6 +474,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_RANK << "__first__::::Unwrapping slices for first database DONE\n";
       MPI_Barrier(universe);
     }
+
+    LOG(0, "AtripCUDA") <<  "next database" << i << "\n";
 
     // COMM NEXT DATABASE ================================================={{{1
     if (abcNext) {
@@ -447,6 +492,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     // COMPUTE DOUBLES ===================================================={{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
+
+      LOG(0, "AtripCUDA") <<  "computing doubles " << i << "\n";
+
       WITH_RANK << iteration << "-th doubles\n";
       WITH_CHRONO("oneshot-unwrap",
       WITH_CHRONO("unwrap",
@@ -478,7 +526,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                               , tabhh.unwrapSlice(Slice<F>::AC, abc)
                               , tabhh.unwrapSlice(Slice<F>::BC, abc)
                               // -- TIJK
+#if defined(HAVE_CUDA)
+                              , (DataFieldType<F>*)Tijk
+#else
                               , Tijk.data()
+#endif
                               );
         WITH_RANK << iteration << "-th doubles done\n";
       ))
@@ -493,16 +545,35 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         abhh.unwrapAll(abc);
       )))
       WITH_CHRONO("reorder",
-        for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
+        LOG(0, "AtripCUDA") <<  "reorder singles" << i << "\n";
+        atrip::xcopy<F>(No*No*No,
+#if defined(HAVE_CUDA)
+                        (DataFieldType<F>*)Tijk, 1,
+                        (DataFieldType<F>*)Zijk, 1);
+#else
+                        (DataFieldType<F>*)Tijk.data(), 1,
+                        (DataFieldType<F>*)Zijk.data(), 1);
+#endif
       )
       WITH_CHRONO("singles",
-      singlesContribution<F>( No, Nv, abc
+      LOG(0, "AtripCUDA") <<  "doing singles" << i << "\n";
+#if defined(HAVE_CUDA)
+      singlesContribution<F><<<1,1>>>( No, Nv, abc[0], abc[1], abc[2]
+                            , (DataFieldType<F>*)Tai
+#else
+      singlesContribution<F>( No, Nv, abc[0], abc[1], abc[2]
                             , Tai.data()
-                            , abhh.unwrapSlice(Slice<F>::AB, abc)
-                            , abhh.unwrapSlice(Slice<F>::AC, abc)
-                            , abhh.unwrapSlice(Slice<F>::BC, abc)
+#endif
+                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AB, abc)
+                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AC, abc)
+                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::BC, abc)
+#if defined(HAVE_CUDA)
+                            , (DataFieldType<F>*)Zijk);
+#else
                             , Zijk.data());
+#endif
       )
+      LOG(0, "AtripCUDA") <<  "singles done" << i << "\n";
     }
 
 
@@ -513,13 +584,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
+      const F epsabc(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
 
+      LOG(0, "AtripCUDA") <<  "doing energy " << i << "distinct " << distinct << "\n";
       WITH_CHRONO("energy",
+/*
+    TODO: think about how to do this on the GPU in the best way possible
         if ( distinct == 0)
-          tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergyDistinct<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
         else
-          tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
+          tupleEnergy = getEnergySame<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
+*/
       )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)

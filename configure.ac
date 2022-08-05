@@ -21,6 +21,27 @@ AC_ARG_ENABLE(shared,
                                      files (default=YES)]),
               [], [enable_shared=yes])
 
+AC_ARG_ENABLE(
+    [slice],
+    [AS_HELP_STRING(
+      [--disable-slice],
+      [Disable the step of slicing tensors for CTF, this is useful for example for benchmarking or testing.])],
+    [atrip_dont_slice=1
+     AC_DEFINE([ATRIP_DONT_SLICE],1,[Wether CTF will slice tensors or skip the step])
+    ],
+    [atrip_dont_slice=0]
+)
+
+AC_ARG_ENABLE(
+    [atrip_dgemm],
+    [AS_HELP_STRING(
+      [--disable-dgemm],
+      [Disable using dgemm for the doubles equations])],
+    [],
+    [AC_DEFINE([ATRIP_USE_DGEMM],1,[Use dgemm for the doubles equations])]
+)
+
+
 AC_ARG_ENABLE([docs],
               [AS_HELP_STRING([--enable-docs],
                               [Enable building docs])],
@@ -28,7 +49,7 @@ AC_ARG_ENABLE([docs],
 
 dnl LIBGC library options
 AC_ARG_WITH(libctf-prefix,
-            AS_HELP_STRING([--with-libctf-prefix=path],
+            AS_HELP_STRING([--with-ctf],
                            [prefix for CTF includes and libraries] ),
             [LIBCTF_PATH="`readlink -f $withval`";
              LIBCTF_CPATH="`readlink -f $withval`/include";
@@ -44,11 +65,6 @@ AC_ARG_WITH([clang-check],
             [clang_check=NO])
 AM_CONDITIONAL([WITH_CLANG_CHECK], [test x${clang_check} = xYES])
 
-AC_ARG_WITH(dgemm,
-            AS_HELP_STRING([--without-dgemm], [Disable dgemm]),
-            [with_dgemm=NO],
-            [with_dgemm=YES])
-
 AC_ARG_ENABLE([cuda],
               [AS_HELP_STRING([--enable-cuda],
                               [Build with cuda])],
@@ -59,6 +75,12 @@ AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda, -lcudart, -lcublas
 AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
 
 
+AC_ARG_WITH([atrip-debug],
+            [AS_HELP_STRING([--with-atrip-debug],
+                            [Debug level for atrip, possible values: 1, 2, 3, 4])],
+            [AC_DEFINE([ATRIP_DEBUG],[atrip-debug],[Atrip debug level])],
+            [AC_DEFINE([ATRIP_DEBUG],[1],[Atrip debug level])]
+            )
 
 dnl -----------------------------------------------------------------------
 

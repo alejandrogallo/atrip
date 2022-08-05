@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Macros][Macros:1]]
+// [[file:~/cuda/atrip/atrip.org::*Macros][Macros:1]]
 #pragma once
 #include <functional>
 #define ATRIP_BENCHMARK
@@ -21,7 +21,6 @@
 #  define ATRIP_DEBUG 1
 #endif
 //#define ATRIP_WORKLOAD_DUMP
-#define ATRIP_USE_DGEMM
 //#define ATRIP_PRINT_TUPLES
 
 #ifndef ATRIP_DEBUG
@@ -75,20 +74,20 @@
 #endif
 // Macros:1 ends here
 
-// [[file:../../atrip.org::*Macros][Macros:2]]
+// [[file:~/cuda/atrip/atrip.org::*Macros][Macros:2]]
 #ifndef LOG
 #define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
 #endif
 // Macros:2 ends here
 
-// [[file:../../atrip.org::*Macros][Macros:3]]
+// [[file:~/cuda/atrip/atrip.org::*Macros][Macros:3]]
 #ifdef ATRIP_NO_OUTPUT
 #  undef LOG
 #  define LOG(level, name) if (false) std::cout << name << ": "
 #endif
 // Macros:3 ends here
 
-// [[file:../../atrip.org::IterationDescriptor][IterationDescriptor]]
+// [[file:~/cuda/atrip/atrip.org::IterationDescriptor][IterationDescriptor]]
 namespace atrip {
 
   struct IterationDescription;

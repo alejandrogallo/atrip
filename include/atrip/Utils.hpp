@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 #include <sstream>
 #include <string>
@@ -29,11 +29,14 @@
 
 #include <atrip/Debug.hpp>
 
+
 namespace atrip {
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::*Pretty printing][Pretty printing:1]]
-template <typename T>
+// [[file:~/cuda/atrip/atrip.org::*Pretty%20printing][Pretty printing:1]]
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+  template <typename T>
   std::string pretty_print(T&& value) {
     std::stringstream stream;
 #if ATRIP_DEBUG > 2
@@ -41,9 +44,10 @@ template <typename T>
 #endif
     return stream.str();
   }
+#pragma GCC diagnostic pop
 // Pretty printing:1 ends here
 
-// [[file:../../atrip.org::*Chrono][Chrono:1]]
+// [[file:~/cuda/atrip/atrip.org::*Chrono][Chrono:1]]
 #define WITH_CHRONO(__chrono_name, ...)         \
   Atrip::chrono[__chrono_name].start();         \
   __VA_ARGS__                                   \
@@ -62,6 +66,6 @@ struct Timer {
 using Timings = std::map<std::string, Timer>;
 // Chrono:1 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
 }
 // Epilog:1 ends here

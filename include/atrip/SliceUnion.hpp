@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*The slice union][The slice union:1]]
+// [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>
 #include <atrip/RankMap.hpp>
 
 namespace atrip {
+// Prolog:1 ends here
 
-  template <typename F=double>
-  struct SliceUnion {
+// [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:2]]
+template <typename F=double>
+  class SliceUnion {
+  public:
     using Tensor = CTF::Tensor<F>;
 
     virtual void
@@ -191,7 +194,11 @@ namespace atrip {
                            : Slice<F>::Fetch
                            ;
           if (blank.info.state == Slice<F>::SelfSufficient) {
+#if defined(HAVE_CUDA)
+            blank.mpi_data = sources[from.source].data();
+#else
             blank.data = sources[from.source].data();
+#endif
           } else {
             if (freePointers.size() == 0) {
               std::stringstream stream;
@@ -345,8 +352,7 @@ namespace atrip {
     }
 
     // CONSTRUCTOR
-    SliceUnion( Tensor const& sourceTensor
-              , std::vector<typename Slice<F>::Type> sliceTypes_
+    SliceUnion( std::vector<typename Slice<F>::Type> sliceTypes_
               , std::vector<size_t> sliceLength_
               , std::vector<size_t> paramLength
               , size_t np
@@ -366,11 +372,18 @@ namespace atrip {
                                            1UL, std::multiplies<size_t>())))
               , name(name_)
               , sliceTypes(sliceTypes_)
-              , sliceBuffers(nSliceBuffers, sources[0])
+              , sliceBuffers(nSliceBuffers)
               //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
+
+      for (auto& ptr: sliceBuffers)
+#if defined(HAVE_CUDA)
+        cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
+#else
+        ptr = (DataPtr<F>)malloc(sizeof(F) * sources[0].size());
+#endif
 
       slices
         = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
@@ -379,7 +392,7 @@ namespace atrip {
       // initialize the freePointers with the pointers to the buffers
       std::transform(sliceBuffers.begin(), sliceBuffers.end(),
                      std::inserter(freePointers, freePointers.begin()),
-                     [](std::vector<F> &vec) { return vec.data(); });
+                     [](DataPtr<F> ptr) { return ptr; });
 
 
 
@@ -397,8 +410,6 @@ namespace atrip {
                            << freePointers.size() << "\n";
       LOG(1,"Atrip") << "#sliceBuffers "
                            << sliceBuffers.size() << "\n";
-      LOG(1,"Atrip") << "#sliceBuffers[0] "
-                           << sliceBuffers[0].size() << "\n";
       LOG(1,"Atrip") << "#sliceLength "
                            << sliceLength.size() << "\n";
       LOG(1,"Atrip") << "#paramLength "
@@ -477,9 +488,12 @@ namespace atrip {
       if (slice.info.state == Slice<F>::Fetch) {
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
-        MPI_Request request;
-        slice.request = request;
+#if defined(HAVE_CUDA)
+        slice.mpi_data = (F*)malloc(sizeof(F) * slice.size);
+        MPI_Irecv( slice.mpi_data
+#else
         MPI_Irecv( slice.data
+#endif
                  , slice.size
                  , traits::mpi::datatypeOf<F>()
                  , info.from.rank
@@ -495,7 +509,7 @@ namespace atrip {
       for (auto type: sliceTypes) unwrapSlice(type, abc);
     }
 
-    F* unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
+    DataPtr<F> unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
       WITH_CRAZY_DEBUG
       WITH_RANK << "__unwrap__:slice " << type << " w n "
                 << name
@@ -539,6 +553,15 @@ namespace atrip {
       return slice.data;
     }
 
+    ~SliceUnion() {
+      for (auto& ptr: sliceBuffers)
+#if defined(HAVE_CUDA)
+        cuMemFree(ptr);
+#else
+        std::free(ptr);
+#endif
+    }
+
     const RankMap<F> rankMap;
     const MPI_Comm world;
     const MPI_Comm universe;
@@ -547,8 +570,8 @@ namespace atrip {
     std::vector< Slice<F> > slices;
     typename Slice<F>::Name name;
     const std::vector<typename Slice<F>::Type> sliceTypes;
-    std::vector< std::vector<F> > sliceBuffers;
-    std::set<F*> freePointers;
+    std::vector< DataPtr<F> > sliceBuffers;
+    std::set< DataPtr<F> > freePointers;
 
   };
 
@@ -568,6 +591,8 @@ namespace atrip {
       }
       return **sliceUnionIt;
   }
+// Prolog:2 ends here
 
+// [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
 }
-// The slice union:1 ends here
+// Epilog:1 ends here

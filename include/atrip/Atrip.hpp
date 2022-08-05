@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Header][Header:1]]
+// [[file:~/cuda/atrip/atrip.org::*Header][Header:1]]
 #pragma once
 #include <sstream>
 #include <string>
@@ -41,11 +41,20 @@ namespace atrip {
 
   struct Atrip {
 
-    static int rank;
-    static int np;
+    static size_t rank;
+    static size_t np;
     static MPI_Comm communicator;
     static Timings chrono;
+#if defined(HAVE_CUDA)
+    struct CudaContext {
+      cublasStatus_t status;
+      cublasHandle_t handle;
+    };
+    static CudaContext cuda;
+#endif
+
     static void init(MPI_Comm);
+
 
     template <typename F=double>
     struct Input {

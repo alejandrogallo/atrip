@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Unions][Unions:1]]
+// [[file:~/cuda/atrip/atrip.org::*Unions][Unions:1]]
 #pragma once
 #include <atrip/SliceUnion.hpp>
 
@@ -65,8 +65,7 @@ namespace atrip {
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion<F>( sourceTensor
-                          , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+         ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                           , {Nv, No, No} // size of the slices
                           , {Nv}
                           , np
@@ -103,8 +102,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+        ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                          , {No, No, No} // size of the slices
                          , {Nv}         // size of the parametrization
                          , np
@@ -138,8 +136,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
+        ) : SliceUnion<F>( { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
                            , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
                            }
                          , {Nv, No} // size of the slices
@@ -179,8 +176,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-        ) : SliceUnion<F>( sourceTensor
-                         , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+        ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                          , {No, No} // size of the slices
                          , {Nv, Nv} // size of the parametrization
                          , np
@@ -219,8 +215,7 @@ namespace atrip {
          , size_t np
          , MPI_Comm child_world
          , MPI_Comm global_world
-         ) : SliceUnion<F>( sourceTensor
-                          , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+         ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                           , {No, No} // size of the slices
                           , {Nv, Nv} // size of the parametrization
                           , np

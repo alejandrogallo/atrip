@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Blas][Blas:1]]
+// [[file:~/cuda/atrip/atrip.org::*Blas][Blas:1]]
 #pragma once
+
+#include <atrip/Complex.hpp>
+#include <atrip/Types.hpp>
+#include "config.h"
+
 namespace atrip {
 
-  using Complex = std::complex<double>;
-
+#if !defined(HAVE_CUDA)
   extern "C" {
     void dgemm_(
       const char *transa,
@@ -50,49 +54,43 @@ namespace atrip {
       Complex *C,
       const int *ldc
     );
+
+  void dcopy_(const int n,
+              const double *x,
+              const int incx,
+              double *y,
+              const int incy);
+
+  void zcopy_(const int n,
+              const void *x,
+              const int incx,
+              void *y,
+              const int incy);
+
+
   }
+#endif
 
+  template <typename F>
+  void xcopy(const int n,
+             const  DataFieldType<F>* x,
+             const int incx,
+             DataFieldType<F>* y,
+             const int incy);
 
-  template <typename F=double>
+  template <typename F>
   void xgemm(const char *transa,
              const char *transb,
              const int *m,
              const int *n,
              const int *k,
              F *alpha,
-             const F *A,
+             const DataFieldType<F> *A,
              const int *lda,
-             const F *B,
+             const DataFieldType<F> *B,
              const int *ldb,
              F *beta,
-             F *C,
-             const int *ldc) {
-    dgemm_(transa, transb,
-           m, n, k,
-           alpha, A, lda,
-           B, ldb, beta,
-           C, ldc);
-  }
-
-  template <>
-  void xgemm(const char *transa,
-             const char *transb,
-             const int *m,
-             const int *n,
-             const int *k,
-             Complex *alpha,
-             const Complex *A,
-             const int *lda,
-             const Complex *B,
-             const int *ldb,
-             Complex *beta,
-             Complex *C,
-             const int *ldc) {
-    zgemm_(transa, transb,
-           m, n, k,
-           alpha, A, lda,
-           B, ldb, beta,
-           C, ldc);
-  }
+             DataFieldType<F> *C,
+             const int *ldc);
 }
 // Blas:1 ends here

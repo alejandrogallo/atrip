@@ -12,8 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:~/cuda/atrip/atrip.org::*Include%20header][Include header:1]]
+// [[file:~/cuda/atrip/atrip.org::*Complex%20numbers][Complex numbers:1]]
 #pragma once
 
-#include <atrip/Atrip.hpp>
-// Include header:1 ends here
+#include <complex>
+#include <mpi.h>
+#include "config.h"
+#if defined(HAVE_CUDA)
+#include <cuComplex.h>
+#endif
+
+namespace atrip {
+
+  using Complex = std::complex<double>;
+
+  template <typename F> F maybeConjugate(const F);
+
+#if defined(HAVE_CUDA)
+  cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz);
+#endif
+
+  namespace traits {
+
+    template <typename FF> bool isComplex();
+
+    namespace mpi {
+      template <typename F> MPI_Datatype datatypeOf(void);
+    }
+
+  }
+
+}
+// Complex numbers:1 ends here

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// [[file:../../atrip.org::*Prolog][Prolog:1]]
+// [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 #include <fstream>
 #include <iomanip>
@@ -22,7 +22,7 @@
 namespace atrip {
 // Prolog:1 ends here
 
-// [[file:../../atrip.org::checkpoint-definition][checkpoint-definition]]
+// [[file:~/cuda/atrip/atrip.org::checkpoint-definition][checkpoint-definition]]
 // template <typename F>
 struct Checkpoint {
   size_t no, nv;
@@ -36,7 +36,7 @@ struct Checkpoint {
 };
 // checkpoint-definition ends here
 
-// [[file:../../atrip.org::*Input and output][Input and output:1]]
+// [[file:~/cuda/atrip/atrip.org::*Input%20and%20output][Input and output:1]]
 void write_checkpoint(Checkpoint const& c, std::string const& filepath) {
   std::ofstream out(filepath);
   out << "No: " << c.no
@@ -87,6 +87,6 @@ Checkpoint read_checkpoint(std::string const& filepath) {
 }
 // Input and output:1 ends here
 
-// [[file:../../atrip.org::*Epilog][Epilog:1]]
+// [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
 }
 // Epilog:1 ends here
