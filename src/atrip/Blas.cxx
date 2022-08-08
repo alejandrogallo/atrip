@@ -105,32 +105,32 @@ namespace atrip {
 
 
   template <>
-  void xcopy<double>(const int n,
+  void xcopy<double>(int *n,
                      const  DataFieldType<double>* x,
-                     const int incx,
+                     int *incx,
                      DataFieldType<double>* y,
-                     const int incy) {
+                     int *incy) {
 #if defined(HAVE_CUDA)
     cublasDcopy(Atrip::cuda.handle,
-                n,
-                x, incx,
-                y, incy);
+                *n,
+                x, *incx,
+                y, *incy);
 #else
     dcopy_(n, x, incx, y, incy);
 #endif
   }
- 
+
   template <>
-  void xcopy<Complex>(const int n,
+  void xcopy<Complex>(int* n,
                      const  DataFieldType<Complex>* x,
-                     const int incx,
+                     int* incx,
                      DataFieldType<Complex>* y,
-                     const int incy) {
+                     int* incy) {
 #if defined(HAVE_CUDA)
     cublasZcopy(Atrip::cuda.handle,
-                n,
-                x, incx,
-                y, incy);
+                *n,
+                x, *incx,
+                y, *incy);
 #else
     zcopy_(n, x, incx, y, incy);
 #endif

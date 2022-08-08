@@ -55,28 +55,28 @@ namespace atrip {
       const int *ldc
     );
 
-  void dcopy_(const int n,
+  void dcopy_(int *n,
               const double *x,
-              const int incx,
+              int *incx,
               double *y,
-              const int incy);
+              int *incy);
 
-  void zcopy_(const int n,
+  void zcopy_(int *n,
               const void *x,
-              const int incx,
+              int *incx,
               void *y,
-              const int incy);
+              int *incy);
 
 
   }
 #endif
 
   template <typename F>
-  void xcopy(const int n,
+  void xcopy(int* n,
              const  DataFieldType<F>* x,
-             const int incx,
+             int* incx,
              DataFieldType<F>* y,
-             const int incy);
+             int* incy);
 
   template <typename F>
   void xgemm(const char *transa,

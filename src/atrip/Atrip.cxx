@@ -27,7 +27,7 @@ using namespace atrip;
 
 namespace atrip {
 namespace cuda {
-  
+
 };
 };
 
@@ -219,9 +219,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         WITH_CHRONO("oneshot-db:comm:allgather",
         WITH_CHRONO("db:comm:allgather",
           MPI_Allgather( ldb.data()
+                       // , ldb.size() * sizeof(typename Slice<F>::LocalDatabaseElement)
                        , ldb.size()
                        , MPI_LDB_ELEMENT
                        , db.data()
+                       // , ldb.size() * sizeof(typename Slice<F>::LocalDatabaseElement)
                        , ldb.size()
                        , MPI_LDB_ELEMENT
                        , c);
@@ -372,7 +374,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   }
 
   LOG(0, "AtripCUDA") <<  "Starting iterations\n";
-  
+
 
   for ( size_t
           i = first_iteration,
@@ -423,12 +425,19 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         });
       }
 
+      const double _doubles_time = Atrip::chrono["doubles"].count(),
+                   _its_time = Atrip::chrono["iterations"].count();
+
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
-        << " (" << doublesFlops * iteration / Atrip::chrono["doubles"].count()
+        << " (" << (_doubles_time > 0.0
+                 ? doublesFlops * iteration / _doubles_time
+                 : -1)
         << "GF)"
-        << " (" << doublesFlops * iteration / Atrip::chrono["iterations"].count()
+        << " (" << (_its_time > 0.0
+                 ? doublesFlops * iteration / _its_time
+                 : -1)
         << "GF)"
         << "\n";
 
@@ -465,14 +474,21 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       LOG(0, "AtripCUDA") <<  "first database " << i << "\n";
       WITH_RANK << "__first__:first database ............ \n";
       const auto db = communicateDatabase(abc, universe);
+      LOG(0, "AtripCUDA") <<  "first database communicated" << i << "\n";
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
+      LOG(0, "AtripCUDA") <<  "doing io " << i << "\n";
       doIOPhase(db);
+      LOG(0, "AtripCUDA") <<  "io done " << i << "\n";
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
+      LOG(0, "AtripCUDA") <<  "unrwapping " << i << "\n";
       for (auto& u: unions) u->unwrapAll(abc);
+      LOG(0, "AtripCUDA") <<  "unwrapped " << i << "\n";
       WITH_RANK << "__first__::::Unwrapping slices for first database DONE\n";
+      LOG(0, "AtripCUDA") <<  "barrier " << i << "\n";
       MPI_Barrier(universe);
+      LOG(0, "AtripCUDA") <<  "barriered " << i << "\n";
     }
 
     LOG(0, "AtripCUDA") <<  "next database" << i << "\n";
@@ -545,14 +561,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         abhh.unwrapAll(abc);
       )))
       WITH_CHRONO("reorder",
-        LOG(0, "AtripCUDA") <<  "reorder singles" << i << "\n";
-        atrip::xcopy<F>(No*No*No,
+        int ooo = No*No*No, stride = 1;
+        atrip::xcopy<F>(&ooo,
 #if defined(HAVE_CUDA)
-                        (DataFieldType<F>*)Tijk, 1,
-                        (DataFieldType<F>*)Zijk, 1);
+                        (DataFieldType<F>*)Tijk, &stride,
+                        (DataFieldType<F>*)Zijk, &stride);
 #else
-                        (DataFieldType<F>*)Tijk.data(), 1,
-                        (DataFieldType<F>*)Zijk.data(), 1);
+                        (DataFieldType<F>*)Tijk.data(), &stride,
+                        (DataFieldType<F>*)Zijk.data(), &stride);
 #endif
       )
       WITH_CHRONO("singles",
