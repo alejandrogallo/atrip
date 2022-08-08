@@ -444,10 +444,16 @@ void unwrapAndMarkReady() {
         WITH_RANK << "__slice__:mpi: waiting " << "\n";
 #endif
       const int errorCode = MPI_Wait(&request, &status);
-      if (MPI_SUCCESS != MPI_Request_free(&request))
-        throw "Error freeing MPI request";
+
+      // FIXME: it appears not to work to free
+      // this request, investigate if this is necessary or not
+      //const auto _mpi_request_free = MPI_Request_free(&request);
+
+      //if (MPI_SUCCESS != _mpi_request_free)
+        //throw "Atrip: Error freeing MPI request";
+
       if (errorCode != MPI_SUCCESS)
-        throw "MPI ERROR HAPPENED....";
+        throw "Atrip: Unexpected error MPI ERROR";
 
 #if defined(HAVE_CUDA)
       // copy the retrieved mpi data to the device
