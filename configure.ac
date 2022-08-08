@@ -48,9 +48,9 @@ AC_ARG_ENABLE([docs],
               [build_docs=YES], [build_docs=NO])
 
 dnl LIBGC library options
-AC_ARG_WITH(libctf-prefix,
-            AS_HELP_STRING([--with-ctf],
-                           [prefix for CTF includes and libraries] ),
+AC_ARG_WITH(ctf,
+            [AS_HELP_STRING([--with-ctf],
+                           [prefix for CTF includes and libraries] )],
             [LIBCTF_PATH="`readlink -f $withval`";
              LIBCTF_CPATH="`readlink -f $withval`/include";
              LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
@@ -145,7 +145,7 @@ dnl -----------------------------------------------------------------------
 dnl CHECK CTF
 if test xYES = x${BUILD_CTF}; then
   AC_MSG_WARN([Sorry, building CTF not supported yet provide a build path
-                      with --with-libctf-prefix=path])
+                      with --with-ctf=path/to/ctf/installation])
 else
   CPPFLAGS="$CPPFLAGS -I${LIBCTF_CPATH}"
   LDFLAGS="$LDFLAGS -L${LIBCTF_LD_LIBRARY_PATH} -lctf"
