@@ -1,6 +1,6 @@
 { compiler ? "gcc"
 , pkgs ? import <nixpkgs> {} 
-, with-mkl ? false
+, mkl ? false
 , cuda ? false
 , docs ? true
 }:
@@ -13,7 +13,7 @@ let
 
   openblas = import ./etc/nix/openblas.nix { inherit pkgs; }; 
 
-  mkl = import ./etc/nix/mkl.nix { pkgs = unfree-pkgs; };
+  mkl-pkg = import ./etc/nix/mkl.nix { pkgs = unfree-pkgs; };
   cuda-pkg = if cuda then (import ./cuda.nix { pkgs = unfree-pkgs; }) else {};
 
 in
@@ -73,7 +73,7 @@ pkgs.mkShell rec {
         automake
         pkg-config
       ]
-    ++ (if with-mkl then mkl.buildInputs else openblas.buildInputs)
+    ++ (if mkl then mkl-pkg.buildInputs else openblas.buildInputs)
     ++ (if docs then docInputs else [])
     ;
 
@@ -90,6 +90,7 @@ pkgs.mkShell rec {
     CC=${CC}
     LD=${LD}
     ''
+    + (if mkl then mkl-pkg.shellHook else openblas.shellHook)
     + (if cuda then cuda-pkg.shellHook else "")
     ;
 
