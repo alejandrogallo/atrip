@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
   size_t checkpoint_it;
-  int no(10), nv(10), itMod(-1), percentageMod(10);
+  int no(10), nv(100), itMod(-1), percentageMod(10);
   float checkpoint_percentage;
   bool
     nochrono(false), barrier(false), rankRoundRobin(false),
