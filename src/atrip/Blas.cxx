@@ -80,7 +80,6 @@ namespace atrip {
              typename DataField<Complex>::type *C,
              const int *ldc) {
 #if defined(HAVE_CUDA)
-#pragma warning HAVE_CUDA
     cuDoubleComplex
       cu_alpha = {std::real(*alpha), std::imag(*alpha)},
       cu_beta = {std::real(*beta), std::imag(*beta)};

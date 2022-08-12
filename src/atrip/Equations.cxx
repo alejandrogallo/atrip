@@ -14,6 +14,7 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:2]]
 #include<atrip/Equations.hpp>
+#include<atrip/CUDA.hpp>
 
 #if defined(HAVE_CUDA)
 #include <cuda.h>
