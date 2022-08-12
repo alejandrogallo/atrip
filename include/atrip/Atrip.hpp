@@ -51,6 +51,9 @@ namespace atrip {
       cublasHandle_t handle;
     };
     static CudaContext cuda;
+    static struct KernelDimensions {
+      struct {size_t blocks, threads;} ooo;
+    } kernelDimensions;
 #endif
 
     static void init(MPI_Comm);
@@ -92,6 +95,10 @@ namespace atrip {
       ADD_ATTRIBUTE(bool, writeCheckpoint, true)
       ADD_ATTRIBUTE(float, checkpointAtPercentage, 10)
       ADD_ATTRIBUTE(size_t, checkpointAtEveryIteration, 0)
+#if defined(HAVE_CUDA)
+      ADD_ATTRIBUTE(size_t, oooThreads, 0)
+      ADD_ATTRIBUTE(size_t, oooBlocks, 0)
+#endif
 
     };
 

@@ -378,12 +378,16 @@ template <typename F=double>
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
 
-      for (auto& ptr: sliceBuffers)
+      for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
         cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
+	if (ptr == 0UL) {
+	  throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
+	}
 #else
         ptr = (DataPtr<F>)malloc(sizeof(F) * sources[0].size());
 #endif
+      }
 
       slices
         = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
@@ -396,24 +400,12 @@ template <typename F=double>
 
 
 
-      LOG(1,"Atrip") << "rankMap.nSources "
-                           << rankMap.nSources() << "\n";
-      LOG(1,"Atrip") << "#slices "
-                           << slices.size() << "\n";
-      LOG(1,"Atrip") << "#slices[0] "
-                           << slices[0].size << "\n";
-      LOG(1,"Atrip") << "#sources "
-                           << sources.size() << "\n";
-      LOG(1,"Atrip") << "#sources[0] "
-                           << sources[0].size() << "\n";
-      LOG(1,"Atrip") << "#freePointers "
-                           << freePointers.size() << "\n";
-      LOG(1,"Atrip") << "#sliceBuffers "
-                           << sliceBuffers.size() << "\n";
-      LOG(1,"Atrip") << "#sliceLength "
-                           << sliceLength.size() << "\n";
-      LOG(1,"Atrip") << "#paramLength "
-                           << paramLength.size() << "\n";
+      LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
+      WITH_RANK << "#slices[0] " << slices[0].size << "\n";
+      LOG(1,"Atrip") << "#sources " << sources.size() << "\n";
+      WITH_RANK << "#sources[0] " << sources[0].size() << "\n";
+      WITH_RANK << "#freePointers " << freePointers.size() << "\n";
+      LOG(1,"Atrip") << "#sliceBuffers " << sliceBuffers.size() << "\n";
       LOG(1,"Atrip") << "GB*" << np << " "
                            << double(sources.size() + sliceBuffers.size())
                             * sources[0].size()
@@ -434,7 +426,8 @@ template <typename F=double>
                          __sliceLength.data(),
                          syms.data(),
                          w);
-      LOG(1,"Atrip") << "slicing... \n";
+
+      WITH_OCD WITH_RANK << "slicing... \n";
 
       // setUp sources
       for (size_t it(0); it < rankMap.nSources(); ++it) {
