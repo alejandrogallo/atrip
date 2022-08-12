@@ -45,6 +45,16 @@ int main(int argc, char** argv) {
                  checkpoint_percentage,
                  "Percentage for checkpoints");
 
+#if defined(HAVE_CUDA)
+  size_t ooo_threads = 0, ooo_blocks = 0;
+  app.add_option("--ooo-blocks",
+		 ooo_blocks,
+		 "CUDA: Number of blocks per block for kernels going through ooo tensors");
+  app.add_option("--ooo-threads",
+		 ooo_threads,
+		 "CUDA: Number of threads per block for kernels going through ooo tensors");
+#endif
+
   CLI11_PARSE(app, argc, argv);
 
   CTF::World world(argc, argv);
@@ -154,15 +164,24 @@ int main(int argc, char** argv) {
        .with_checkpointAtPercentage(checkpoint_percentage)
        .with_checkpointPath(checkpoint_path)
        .with_readCheckpointIfExists(!noCheckpoint)
+#if defined(HAVE_CUDA)
+       .with_oooThreads(ooo_threads)
+       .with_oooBlocks(ooo_blocks)
+#endif
        ;
 
-  auto out = atrip::Atrip::run(in);
+  try {
+    auto out = atrip::Atrip::run(in);
+    if (atrip::Atrip::rank == 0)
+	std::cout << "Energy: " << out.energy << std::endl;
+  } catch (const char* msg) {
+    if (atrip::Atrip::rank == 0)
+      std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";
+  }
 
   if (!in.deleteVppph)
     delete Vppph;
 
-  if (atrip::Atrip::rank == 0)
-    std::cout << "Energy: " << out.energy << std::endl;
 
   MPI_Finalize();
   return 0;
