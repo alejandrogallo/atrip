@@ -71,16 +71,18 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 #if defined(HAVE_CUDA)
   int ngcards;
+  const auto clusterInfo = getClusterInfo(Atrip::communicator);
   cuDeviceGetCount(&ngcards);
   LOG(0,"Atrip") << "ngcards: " << ngcards << "\n";
-  if (np > ngcards) {
-    std::cerr << "ATRIP: You are running on more ranks than the number of graphic cards\n"
+  if (clusterInfo.ranksPerNode > ngcards) {
+    std::cerr << "ATRIP: You are running on more ranks per node than the number of graphic cards\n"
 	      << "You have " << ngcards << " cards at your disposal\n";
     throw "";
   }
-  if (np < ngcards) {
+  if (clusterInfo.ranksPerNode < ngcards) {
     std::cerr << "You have " << ngcards << " cards at your disposal\n"
-	      << "You will be only using " << np << ", i.e., the nubmer of ranks.\n";
+	      << "You will be only using " << clusterInfo.ranksPerNode
+	      << ", i.e., the nubmer of ranks.\n";
   }
 
 
