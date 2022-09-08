@@ -40,7 +40,7 @@ AC_RUN_IFELSE([AC_LANG_SOURCE([_ATRIP_CUDA_MEMORY_OF_DEVICES])],
 	],
 	[
 	atrip_success=no
-	AC_MSG_ERROR([An available device reports zero memory available!])
+	AC_MSG_WARN([An available device reports zero memory available!])
 	])
 
 CXX="$ac_save_CXX"
@@ -79,11 +79,11 @@ int main() {
   cuMemAlloc((CUdeviceptr*)&F_d, els*sizeof(double));
 
   stat = cublasDgemm(handle,
-	 CUBLAS_OP_N,
-	 CUBLAS_OP_N,
-	 oo, No, Nv,
-	 &one,
-	 HHP_d, oo, PH_d, Nv, &one, F_d, oo);
+                    CUBLAS_OP_N,
+                    CUBLAS_OP_N,
+                    oo, No, Nv,
+                    &one,
+                    HHP_d, oo, PH_d, Nv, &one, F_d, oo);
   //cudaSetDevice(rank);
 
   return 0;
@@ -92,6 +92,7 @@ int main() {
 
 
 m4_define([_ATRIP_CUDA_MEMORY_OF_DEVICES], [[
+
 #include <mpi.h>
 #include <iostream>
 #include <cassert>
@@ -124,26 +125,27 @@ int main() {
     cuDeviceTotalMem(&total2, dev);
 
     printf("\n"
-	   "CUDA CARD RANK %d\n"
-	   "=================\n"
-	   "\tname: %s\n"
-	   "\tShared Mem Per Block (KB): %f\n"
-	   "\tFree/Total mem (GB): %f/%f\n"
-	   "\ttotal2 mem (GB): %f\n"
-	   "\n",
-	   dev,
-	   name,
-	   prop.sharedMemPerBlock / 1024.0,
-	   _free / 1024.0 / 1024.0 / 1024.0 ,
-	   total / 1024.0 / 1024.0 / 1024.0 ,
-	   total2 / 1024.0 / 1024.0 / 1024.0
-	   );
+           "CUDA CARD RANK %d\n"
+           "=================\n"
+           "\tname: %s\n"
+           "\tShared Mem Per Block (KB): %f\n"
+           "\tFree/Total mem (GB): %f/%f\n"
+           "\ttotal2 mem (GB): %f\n"
+           "\n",
+           dev,
+           name,
+           prop.sharedMemPerBlock / 1024.0,
+           _free / 1024.0 / 1024.0 / 1024.0 ,
+           total / 1024.0 / 1024.0 / 1024.0 ,
+           total2 / 1024.0 / 1024.0 / 1024.0
+           );
 
     if (_free == 0 || total == 0 || total2 == 0)
-	return 1;
+      return 1;
 
   }
 
   return 0;
 }
+
 ]])
