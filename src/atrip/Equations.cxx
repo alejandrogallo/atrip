@@ -77,7 +77,7 @@ namespace cuda {
       to[i] = maybeConjugateScalar<F>(from[i]);
     }
   }
-  
+
 
   template <typename F>
   __global__
@@ -132,30 +132,29 @@ namespace cuda {
 #endif
 
 #if defined(HAVE_CUDA)
-#define LIMS_KS						\
-  size_t						\
-  kmin = blockIdx.x * blockDim.x + threadIdx.x,		\
-    k = kmin,						\
-    idx = kmin * size * size * size			\
-    ;							\
+#define LIMS_KS()                                       \
+  size_t kmin = blockIdx.x * blockDim.x + threadIdx.x,  \
+    k = kmin,                                           \
+    idx = kmin * size * size * size                     \
+    ;                                                   \
   k < (kmin < size) ? kmin + 1 : size
 #else
 #define LIMS_KS size_t k=0, idx=0; k < size
 #endif
 #define _IJK_(i, j, k) i + j*size + k*size*size
-#define _REORDER_BODY_(...)				\
-  for (LIMS_KS ; k++)					\
-    for (size_t j = 0; j < size; j++)			\
-      for (size_t i = 0; i < size; i++, idx++) {	\
-	__VA_ARGS__					\
-	}
-#define _MAKE_REORDER_(_enum, ...)					\
-  template <typename F>							\
-  __MAYBE_GLOBAL__							\
-  void reorder(reorder_proxy< F, _enum > p,				\
-	       size_t size, F* to, F* from) {				\
-    _REORDER_BODY_(__VA_ARGS__)						\
-  }
+#define _REORDER_BODY_(...)                       \
+  for (LIMS_KS() ; k++)                           \
+    for (size_t j = 0; j < size; j++)             \
+      for (size_t i = 0; i < size; i++, idx++) {  \
+        __VA_ARGS__                               \
+          }
+#define _MAKE_REORDER_(_enum, ...)              \
+  template <typename F>                         \
+  __MAYBE_GLOBAL__                              \
+  void reorder(reorder_proxy< F, _enum > p,     \
+               size_t size, F* to, F* from) {   \
+    _REORDER_BODY_(__VA_ARGS__)                 \
+      }
 #if defined(HAVE_CUDA)
 #define GO(__TO, __FROM) cuda::sum_in_place<F>(&__TO, &__FROM);
 #else
@@ -166,7 +165,7 @@ namespace cuda {
   template <typename F, reordering_t R>
   __MAYBE_GLOBAL__							\
   void reorder(reorder_proxy<F, R> proxy,
-	       size_t size, F* to, F* from);
+               size_t size, F* to, F* from);
 
   _MAKE_REORDER_(IJK, GO(to[idx], from[_IJK_(i, j, k)]))
   _MAKE_REORDER_(IKJ, GO(to[idx], from[_IJK_(i, k, j)]))
@@ -174,7 +173,7 @@ namespace cuda {
   _MAKE_REORDER_(JKI, GO(to[idx], from[_IJK_(j, k, i)]))
   _MAKE_REORDER_(KIJ, GO(to[idx], from[_IJK_(k, i, j)]))
   _MAKE_REORDER_(KJI, GO(to[idx], from[_IJK_(k, j, i)]))
-  
+
 
 #undef LIMS_KS
 #undef _MAKE_REORDER
@@ -446,50 +445,59 @@ double getEnergySame
 
 #if defined(ATRIP_USE_DGEMM)
 #if defined(HAVE_CUDA)
-#define REORDER(__II, __JJ, __KK)					\
-    reorder<<<								\
-      bs, ths								\
-	   >>>(reorder_proxy<DataFieldType<F>, __II ## __JJ ## __KK >{}, \
-		      No, Tijk, _t_buffer);
-#define DGEMM_PARTICLES(__A, __B)                   \
-  atrip::xgemm<F>("T",                              \
-                  "N",                              \
-                  (int const*)&NoNo,                \
-                  (int const*)&No,                  \
-                  (int const*)&Nv,                  \
-                  &one,                             \
-                  (DataFieldType<F>*)__A,           \
-                  (int const*)&Nv,                  \
-                  (DataFieldType<F>*)__B,           \
-                  (int const*)&Nv,                  \
-		  &zero,                            \
-		  _t_buffer,			    \
-		  (int const*)&NoNo);
-#define DGEMM_HOLES(__A, __B, __TRANSB)             \
-  atrip::xgemm<F>("N",                              \
-                  __TRANSB,                         \
-                  (int const*)&NoNo,                \
-                  (int const*)&No,                  \
-                  (int const*)&No,                  \
-                  &m_one,                           \
-		  __A,				    \
-                  (int const*)&NoNo,                \
-                  (DataFieldType<F>*)__B,           \
-                  (int const*)&No,                  \
-                  &zero,                            \
-		  _t_buffer,			    \
-                  (int const*)&NoNo                 \
-		  );
+#define REORDER(__II, __JJ, __KK)                       \
+  reorder<<<bs, ths>>>(reorder_proxy<DataFieldType<F>,  \
+                       __II ## __JJ ## __KK >{},        \
+                       No, Tijk, _t_buffer);
+#define DGEMM_PARTICLES(__A, __B)               \
+  atrip::xgemm<F>("T",                          \
+                  "N",                          \
+                  (int const*)&NoNo,            \
+                  (int const*)&No,              \
+                  (int const*)&Nv,              \
+                  &one,                         \
+                  (DataFieldType<F>*)__A,       \
+                  (int const*)&Nv,              \
+                  (DataFieldType<F>*)__B,       \
+                  (int const*)&Nv,              \
+                  &zero,                        \
+                  _t_buffer,                    \
+                  (int const*)&NoNo);
+#define DGEMM_HOLES(__A, __B, __TRANSB)         \
+  atrip::xgemm<F>("N",                          \
+                  __TRANSB,                     \
+                  (int const*)&NoNo,            \
+                  (int const*)&No,              \
+                  (int const*)&No,              \
+                  &m_one,                       \
+                  __A,                          \
+                  (int const*)&NoNo,            \
+                  (DataFieldType<F>*)__B,       \
+                  (int const*)&No,              \
+                  &zero,                        \
+                  _t_buffer,                    \
+                  (int const*)&NoNo             \
+                  );
 #define MAYBE_CONJ(_conj, _buffer)                                      \
-    cuda::maybeConjugate<<<						\
-      Atrip::kernelDimensions.ooo.blocks,				\
-      Atrip::kernelDimensions.ooo.threads 				\
-		      >>>((DataFieldType<F>*)_conj, (DataFieldType<F>*)_buffer, NoNoNo);
+  cuda::maybeConjugate<<<                                               \
+    Atrip::kernelDimensions.ooo.blocks,                                 \
+    Atrip::kernelDimensions.ooo.threads                                 \
+    >>>((DataFieldType<F>*)_conj, (DataFieldType<F>*)_buffer, NoNoNo);
+
+
+// END CUDA ////////////////////////////////////////////////////////////////////
+
+
 #else
-// NONCUDA //////////////////////////////////////////////////////////////////////
-#define REORDER(__II, __JJ, __KK)					\
-    reorder(reorder_proxy<DataFieldType<F>, __II ## __JJ ## __KK >{},	\
-	    No, Tijk, _t_buffer);
+
+
+// NONCUDA /////////////////////////////////////////////////////////////////////
+
+
+#define REORDER(__II, __JJ, __KK)               \
+  reorder(reorder_proxy<DataFieldType<F>,       \
+          __II ## __JJ ## __KK >{},             \
+          No, Tijk, _t_buffer);
 #define DGEMM_PARTICLES(__A, __B)               \
   atrip::xgemm<F>("T",                          \
                   "N",                          \
@@ -502,7 +510,7 @@ double getEnergySame
                   __B,                          \
                   (int const*)&Nv,              \
                   &zero,                        \
-                  _t_buffer,                  \
+                  _t_buffer,                    \
                   (int const*)&NoNo             \
                   );
 #define DGEMM_HOLES(__A, __B, __TRANSB)         \
@@ -517,8 +525,8 @@ double getEnergySame
                   __B,                          \
                   (int const*)&No,              \
                   &zero,                        \
-		  _t_buffer,			\
-		  (int const*)&NoNo             \
+                  _t_buffer,                    \
+                  (int const*)&NoNo             \
                   );
 #define MAYBE_CONJ(_conj, _buffer)                \
   for (size_t __i = 0; __i < NoNoNo; ++__i)       \
@@ -550,9 +558,10 @@ double getEnergySame
     // Set Tijk to zero
 #ifdef HAVE_CUDA
     WITH_CHRONO("double:reorder",
-		cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk, NoNoNo);
-		// synchronize all initializations to zero
-		)
+                cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
+                                           NoNoNo);
+                // synchronize all initializations to zero
+                )
 #else
     WITH_CHRONO("double:reorder",
       for (size_t k = 0; k < NoNoNo; k++) {
@@ -640,6 +649,8 @@ double getEnergySame
 
   { // free resources
 #ifdef HAVE_CUDA
+    // we need to synchronize here since we need
+    // the Tijk for next process in the pipeline
     cuCtxSynchronize();
     cuMemFree((CUdeviceptr)_vhhh);
     cuMemFree((CUdeviceptr)_t_buffer);
