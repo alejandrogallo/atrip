@@ -58,8 +58,9 @@ int main(int argc, char** argv) {
   CLI11_PARSE(app, argc, argv);
 
   CTF::World world(argc, argv);
-  int rank;
+  int rank, nranks;
   MPI_Comm_rank(world.comm, &rank);
+  MPI_Comm_size(world.comm, &nranks);
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
 
   // USER PRINTING TEST BEGIN
@@ -107,6 +108,43 @@ int main(int argc, char** argv) {
       exit(1);
     }
   }
+
+  size_t
+      f = sizeof(double)
+    , n_tuples = nv * (nv + 1) * (nv + 2) / 6 - nv
+    , atrip_memory
+        = /* tuples_memory */ 3 * sizeof(size_t) * n_tuples
+          //
+          // one dimensional slices (all ranks)
+          //
+        + /* taphh */ f * nranks * 6 * nv * no * no
+        + /* hhha  */ f * nranks * 6 * no * no * no
+          //
+          // two dimensional slices (all ranks)
+          //
+        + /* abph  */ f * nranks * 12 * nv * no
+        + /* abhh  */ f * nranks *  6 * no * no
+        + /* tabhh */ f * nranks *  6 * no * no
+          //
+          // distributed sources (all ranks)
+          //
+        + /* tpphh */ f * nv * nv * no * no
+        + /* vhhhp */ f * no * no * no * nv
+        + /* vppph */ f * nv * nv * nv * no
+        + /* vpphh */ f * nv * nv * no * no
+        + /* tpphh2 */ f * nv * nv * no * no
+          //
+          // tensors in every rank
+          //
+        + /* tijk */ f * nranks * no * no * no
+        + /* zijk */ f * nranks * no * no * no
+        + /* epsp */ f * nranks * (no + nv)
+        + /* tai  */ f * nranks * no * nv
+    ;
+
+  if (atrip::Atrip::rank == 0)
+  std::cout << "Tentative MEMORY USAGE: " << atrip_memory << "\n";
+
 
   std::vector<int> symmetries(4, NS)
                  , vo({nv, no})
@@ -173,7 +211,7 @@ int main(int argc, char** argv) {
   try {
     auto out = atrip::Atrip::run(in);
     if (atrip::Atrip::rank == 0)
-	std::cout << "Energy: " << out.energy << std::endl;
+      std::cout << "Energy: " << out.energy << std::endl;
   } catch (const char* msg) {
     if (atrip::Atrip::rank == 0)
       std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";
