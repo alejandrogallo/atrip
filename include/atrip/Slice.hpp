@@ -457,7 +457,8 @@ void unwrapAndMarkReady() {
 
 #if defined(HAVE_CUDA)
       // copy the retrieved mpi data to the device
-      cuMemcpyHtoD(data, (void*)mpi_data, sizeof(F) * size);
+      WITH_CHRONO("cuda:memcpy",
+                  cuMemcpyHtoD(data, (void*)mpi_data, sizeof(F) * size);)
       std::free(mpi_data);
 #endif
 
