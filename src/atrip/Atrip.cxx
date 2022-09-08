@@ -76,13 +76,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   LOG(0,"Atrip") << "ngcards: " << ngcards << "\n";
   if (clusterInfo.ranksPerNode > ngcards) {
     std::cerr << "ATRIP: You are running on more ranks per node than the number of graphic cards\n"
-	      << "You have " << ngcards << " cards at your disposal\n";
+              << "You have " << ngcards << " cards at your disposal\n";
     throw "";
   }
   if (clusterInfo.ranksPerNode < ngcards) {
     std::cerr << "You have " << ngcards << " cards at your disposal\n"
-	      << "You will be only using " << clusterInfo.ranksPerNode
-	      << ", i.e., the nubmer of ranks.\n";
+              << "You will be only using " << clusterInfo.ranksPerNode
+              << ", i.e., the nubmer of ranks.\n";
   }
 
 
@@ -106,23 +106,23 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       cuDeviceTotalMem(&memory.total, dev);
 
       printf("\n"
-	     "CUDA CARD RANK %d\n"
-	     "=================\n"
-	     "\tnumber: %1$d\n"
-	     "\tname: %s\n"
-	     "\tMem. clock rate (KHz): %d\n"
-	     "\tShared Mem Per Block (KB): %f\n"
-	     "\tAvail. Free/Total mem (GB): %f/%f\n"
-	     "\tFree memory (GB): %f\n"
-	     "\n",
-	     Atrip::rank,
-	     name,
-	     prop.clockRate,
-	     prop.sharedMemPerBlock / 1024.0,
-	     memory.avail.free / 1024.0 / 1024.0 / 1024.0 ,
-	     memory.avail.total / 1024.0 / 1024.0 / 1024.0,
-	     memory.total / 1024.0 / 1024.0 / 1024.0 
-	     );
+             "CUDA CARD RANK %d\n"
+             "=================\n"
+             "\tnumber: %1$d\n"
+             "\tname: %s\n"
+             "\tMem. clock rate (KHz): %d\n"
+             "\tShared Mem Per Block (KB): %f\n"
+             "\tAvail. Free/Total mem (GB): %f/%f\n"
+             "\tFree memory (GB): %f\n"
+             "\n",
+             Atrip::rank,
+             name,
+             prop.clockRate,
+             prop.sharedMemPerBlock / 1024.0,
+             memory.avail.free / 1024.0 / 1024.0 / 1024.0 ,
+             memory.avail.total / 1024.0 / 1024.0 / 1024.0,
+             memory.total / 1024.0 / 1024.0 / 1024.0
+             );
       std::free((void*)name);
     }
     MPI_Barrier(universe);
@@ -249,19 +249,18 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   const size_t nIterations = tuplesList.size();
   {
     LOG(0,"Atrip") << "#iterations: "
-                  << nIterations
-                  << "/"
-                  << nIterations * np
-                  << "\n";
+                   << nIterations
+                   << "/"
+                   << nIterations * np
+                   << "\n";
   }
 
   const size_t
-      iterationMod = (in.percentageMod > 0)
-                  ? nIterations * in.percentageMod / 100.0
-                  : in.iterationMod
-
-    , iteration1Percent = nIterations * 0.01
-    ;
+    iterationMod = (in.percentageMod > 0)
+                 ? nIterations * in.percentageMod / 100.0
+                 : in.iterationMod
+  , iteration1Percent = nIterations * 0.01
+  ;
 
 
 
@@ -293,20 +292,20 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
         WITH_CHRONO("oneshot-db:comm:allgather",
         WITH_CHRONO("db:comm:allgather",
-          MPI_Allgather( ldb.data()
-                       // , ldb.size() * sizeof(typename Slice<F>::LocalDatabaseElement)
-                       , ldb.size()
-                       , MPI_LDB_ELEMENT
-                       , db.data()
-                       // , ldb.size() * sizeof(typename Slice<F>::LocalDatabaseElement)
-                       , ldb.size()
-                       , MPI_LDB_ELEMENT
-                       , c);
+                    MPI_Allgather(ldb.data(),
+                                  /* ldb.size() * sizeof(typename
+                                     Slice<F>::LocalDatabaseElement) */
+                                  ldb.size(),
+                                  MPI_LDB_ELEMENT,
+                                  db.data(),
+                                  /* ldb.size() * sizeof(typename
+                                     Slice<F>::LocalDatabaseElement), */
+                                  ldb.size(),
+                                  MPI_LDB_ELEMENT,
+                                  c);
         ))
 
-        WITH_CHRONO("db:comm:type:free",
-          MPI_Type_free(&MPI_LDB_ELEMENT);
-        )
+        WITH_CHRONO("db:comm:type:free", MPI_Type_free(&MPI_LDB_ELEMENT);)
 
         return db;
       };
@@ -575,30 +574,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       )))
       WITH_CHRONO("oneshot-doubles",
       WITH_CHRONO("doubles",
-        doublesContribution<F>( abc, (size_t)No, (size_t)Nv
-                              // -- VABCI
-                              , abph.unwrapSlice(Slice<F>::AB, abc)
-                              , abph.unwrapSlice(Slice<F>::AC, abc)
-                              , abph.unwrapSlice(Slice<F>::BC, abc)
-                              , abph.unwrapSlice(Slice<F>::BA, abc)
-                              , abph.unwrapSlice(Slice<F>::CA, abc)
-                              , abph.unwrapSlice(Slice<F>::CB, abc)
-                              // -- VHHHA
-                              , hhha.unwrapSlice(Slice<F>::A, abc)
-                              , hhha.unwrapSlice(Slice<F>::B, abc)
-                              , hhha.unwrapSlice(Slice<F>::C, abc)
-                              // -- TA
-                              , taphh.unwrapSlice(Slice<F>::A, abc)
-                              , taphh.unwrapSlice(Slice<F>::B, abc)
-                              , taphh.unwrapSlice(Slice<F>::C, abc)
-                              // -- TABIJ
-                              , tabhh.unwrapSlice(Slice<F>::AB, abc)
-                              , tabhh.unwrapSlice(Slice<F>::AC, abc)
-                              , tabhh.unwrapSlice(Slice<F>::BC, abc)
-                              // -- TIJK
-                              , (DataFieldType<F>*)Tijk
-                              );
-        WITH_RANK << iteration << "-th doubles done\n";
+                  doublesContribution<F>(abc, (size_t)No, (size_t)Nv,
+                                         // -- VABCI
+                                         abph.unwrapSlice(Slice<F>::AB, abc),
+                                         abph.unwrapSlice(Slice<F>::AC, abc),
+                                         abph.unwrapSlice(Slice<F>::BC, abc),
+                                         abph.unwrapSlice(Slice<F>::BA, abc),
+                                         abph.unwrapSlice(Slice<F>::CA, abc),
+                                         abph.unwrapSlice(Slice<F>::CB, abc),
+                                         // -- VHHHA,
+                                         hhha.unwrapSlice(Slice<F>::A, abc),
+                                         hhha.unwrapSlice(Slice<F>::B, abc),
+                                         hhha.unwrapSlice(Slice<F>::C, abc),
+                                         // -- TA,
+                                         taphh.unwrapSlice(Slice<F>::A, abc),
+                                         taphh.unwrapSlice(Slice<F>::B, abc),
+                                         taphh.unwrapSlice(Slice<F>::C, abc),
+                                         // -- TABIJ
+                                         tabhh.unwrapSlice(Slice<F>::AB, abc),
+                                         tabhh.unwrapSlice(Slice<F>::AC, abc),
+                                         tabhh.unwrapSlice(Slice<F>::BC, abc),
+                                         // -- TIJK
+                                         (DataFieldType<F>*)Tijk,
+                                         );
+                  WITH_RANK << iteration << "-th doubles done\n";
       ))
     }
 
@@ -618,16 +617,19 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       )
       WITH_CHRONO("singles",
 #if defined(HAVE_CUDA)
-      singlesContribution<F><<<1,1>>>( No, Nv, abc[0], abc[1], abc[2]
-                            , (DataFieldType<F>*)Tai
+      singlesContribution<F><<<1,1>>>(No, Nv, abc[0], abc[1], abc[2],
+                                      (DataFieldType<F>*)Tai
 #else
-      singlesContribution<F>( No, Nv, abc[0], abc[1], abc[2]
-                            , Tai.data()
+      singlesContribution<F>(No, Nv, abc[0], abc[1], abc[2],
+                             Tai.data(),
 #endif
-                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AB, abc)
-                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AC, abc)
-                            , (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::BC, abc)
-                            , (DataFieldType<F>*)Zijk);
+                             (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AB,
+                                                                 abc),
+                             (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AC,
+                                                                 abc),
+                             (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::BC,
+                                                                 abc),
+                             (DataFieldType<F>*)Zijk);
       )
     }
 
