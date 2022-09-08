@@ -108,9 +108,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       printf("\n"
              "CUDA CARD RANK %d\n"
              "=================\n"
-             "\tnumber: %1$d\n"
+             "\tnumber: %1$ld\n"
              "\tname: %s\n"
-             "\tMem. clock rate (KHz): %d\n"
+             "\tMem. clock rate (KHz): %ld\n"
              "\tShared Mem Per Block (KB): %f\n"
              "\tAvail. Free/Total mem (GB): %f/%f\n"
              "\tFree memory (GB): %f\n"
@@ -595,8 +595,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                                          tabhh.unwrapSlice(Slice<F>::AC, abc),
                                          tabhh.unwrapSlice(Slice<F>::BC, abc),
                                          // -- TIJK
-                                         (DataFieldType<F>*)Tijk,
-                                         );
+                                         (DataFieldType<F>*)Tijk);
                   WITH_RANK << iteration << "-th doubles done\n";
       ))
     }
@@ -618,7 +617,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_CHRONO("singles",
 #if defined(HAVE_CUDA)
       singlesContribution<F><<<1,1>>>(No, Nv, abc[0], abc[1], abc[2],
-                                      (DataFieldType<F>*)Tai
+                                      (DataFieldType<F>*)Tai,
 #else
       singlesContribution<F>(No, Nv, abc[0], abc[1], abc[2],
                              Tai.data(),
