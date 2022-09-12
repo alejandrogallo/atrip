@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd `git rev-parse --show-toplevel`
+
 type -a autoreconf > /dev/null ||
 {
         cat <<EOF && exit

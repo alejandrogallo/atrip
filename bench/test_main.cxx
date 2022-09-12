@@ -142,8 +142,10 @@ int main(int argc, char** argv) {
         + /* tai  */ f * nranks * no * nv
     ;
 
-  if (atrip::Atrip::rank == 0)
-  std::cout << "Tentative MEMORY USAGE: " << atrip_memory << "\n";
+  if (rank == 0) {
+    std::cout << "Tentative MEMORY USAGE (GB): "
+	      << double(atrip_memory) / 1024.0 / 1024.0 / 1024.0 << "\n";
+  }
 
 
   std::vector<int> symmetries(4, NS)
