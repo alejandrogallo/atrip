@@ -1,15 +1,13 @@
 var searchData=
 [
-  ['info_0',['Info',['../structatrip_1_1Slice_1_1Info.html#adbee4f0ea45a68d04f65e572d3bb1196',1,'atrip::Slice::Info']]],
-  ['init_1',['init',['../structatrip_1_1Atrip.html#a43f638f60cb68bf9ccd63c355acbec7f',1,'atrip::Atrip::init()'],['../structatrip_1_1SliceUnion.html#ad017d3fcd96ed11a302502d99f612622',1,'atrip::SliceUnion::init()']]],
-  ['iscomplex_2',['isComplex',['../namespaceatrip_1_1traits.html#ac5c317b719c6ea751a3da3cb11a26a2f',1,'atrip::traits']]],
-  ['iscomplex_3c_20complex_20_3e_3',['isComplex&lt; Complex &gt;',['../namespaceatrip_1_1traits.html#acb15e4dc55bc4d3c9277ac5ed40b8ef4',1,'atrip::traits']]],
-  ['isdirectlyfetchable_4',['isDirectlyFetchable',['../structatrip_1_1Slice.html#adb64c4e0ccabba3313fdd82ac384ff12',1,'atrip::Slice']]],
-  ['isfree_5',['isFree',['../structatrip_1_1Slice.html#a0d405ac787aa47dc3ccb457ffaa6c839',1,'atrip::Slice']]],
-  ['isonnode_6',['isOnNode',['../namespaceatrip_1_1group__and__sort.html#a5835bdc1344efcd309e8d74a9a796299',1,'atrip::group_and_sort']]],
-  ['ispaddingrank_7',['isPaddingRank',['../structatrip_1_1RankMap.html#aeeb8bd03cfc197bbdd7c73245bd956e4',1,'atrip::RankMap']]],
-  ['isrecyclable_8',['isRecyclable',['../structatrip_1_1Slice.html#acf78d7a1f3cdf125c05ff5007c52232f',1,'atrip::Slice']]],
-  ['issourcepadding_9',['isSourcePadding',['../structatrip_1_1RankMap.html#a489ad71146d35a5c2d22b94a04ae3770',1,'atrip::RankMap']]],
-  ['isunwrappable_10',['isUnwrappable',['../structatrip_1_1Slice.html#a47d5e4787f2a9f5122ee7efc27b2565d',1,'atrip::Slice']]],
-  ['isunwrapped_11',['isUnwrapped',['../structatrip_1_1Slice.html#ac87980ccdf02128fee5a3529e32ce346',1,'atrip::Slice']]]
+  ['getalltupleslist_0',['getAllTuplesList',['../namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b',1,'atrip']]],
+  ['getclusterinfo_1',['getClusterInfo',['../namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26',1,'atrip']]],
+  ['getenergydistinct_2',['getEnergyDistinct',['../namespaceatrip.html#a907be16399d76c852af0fb25b84b5f33',1,'atrip::getEnergyDistinct(double const epsabc, size_t const No, double *const epsi, double *const Tijk, double *const Zijk)'],['../namespaceatrip.html#a4af74014d67e0256adfe42f90f727139',1,'atrip::getEnergyDistinct(Complex const epsabc, size_t const No, Complex *const epsi, Complex *const Tijk, Complex *const Zijk)'],['../namespaceatrip.html#adaf0200c976351f46d2fe2b4a8ebe45b',1,'atrip::getEnergyDistinct(F const epsabc, size_t const No, F *const epsi, F *const Tijk, F *const Zijk)']]],
+  ['getenergysame_3',['getEnergySame',['../namespaceatrip.html#aec9dfa406423eb145e2399183b941ca5',1,'atrip::getEnergySame(F const epsabc, size_t const No, F *const epsi, F *const Tijk, F *const Zijk)'],['../namespaceatrip.html#a11bcbcdfc9d59c80e4cbf48586557efd',1,'atrip::getEnergySame(double const epsabc, size_t const No, double *const epsi, double *const Tijk, double *const Zijk)'],['../namespaceatrip.html#a95169ba3b2653b42bfde3e30648bd7d1',1,'atrip::getEnergySame(Complex const epsabc, size_t const No, Complex *const epsi, Complex *const Tijk, Complex *const Zijk)']]],
+  ['getnodeinfos_4',['getNodeInfos',['../namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0',1,'atrip']]],
+  ['getnodenames_5',['getNodeNames',['../namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338',1,'atrip']]],
+  ['gettuplenodes_6',['getTupleNodes',['../namespaceatrip_1_1group__and__sort.html#a64e55f94387e9330b4afdb3e6a6d5556',1,'atrip::group_and_sort']]],
+  ['gettuples_7',['getTuples',['../structatrip_1_1NaiveDistribution.html#aeb41c2a6f7086e9085d0dbd93e103d39',1,'atrip::NaiveDistribution::getTuples()'],['../structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7',1,'atrip::group_and_sort::Distribution::getTuples()'],['../structatrip_1_1TuplesDistribution.html#abb339c6579cbd14147c075ebdabd5e7c',1,'atrip::TuplesDistribution::getTuples()']]],
+  ['gettupleslist_8',['getTuplesList',['../namespaceatrip.html#a6d24cef8b67603413dfae0002a083b95',1,'atrip']]],
+  ['go_9',['GO',['../namespaceatrip.html#a81cc2b0f9795e0d0581b1565f978df25',1,'atrip::GO(to[idx], from[_IJK_(i, k, j)])) _MAKE_REORDER_(JIK'],['../namespaceatrip.html#a762ff7474844b815c7f378df8f7eb702',1,'atrip::GO(to[idx], from[_IJK_(j, i, k)])) _MAKE_REORDER_(JKI'],['../namespaceatrip.html#a90d04c0dba05e536c09371e0edf4546d',1,'atrip::GO(to[idx], from[_IJK_(j, k, i)])) _MAKE_REORDER_(KIJ'],['../namespaceatrip.html#a8eadfd874a25ce3bdc431f68e9c807ab',1,'atrip::GO(to[idx], from[_IJK_(k, i, j)])) _MAKE_REORDER_(KJI'],['../namespaceatrip.html#a6898cbd320b3a099778721e736a56cd9',1,'atrip::GO(to[idx], from[_IJK_(k, j, i)])) template&lt; typename F &gt; double getEnergyDistinct(F const epsabc']]]
 ];

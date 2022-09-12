@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="structatrip_1_1TAPHH" kind="struct" language="C++" prot="public">
     <compoundname>atrip::TAPHH</compoundname>
-    <basecompoundref refid="structatrip_1_1SliceUnion" prot="public" virt="non-virtual">atrip::SliceUnion&lt; double &gt;</basecompoundref>
+    <basecompoundref refid="classatrip_1_1SliceUnion" prot="public" virt="non-virtual">atrip::SliceUnion&lt; double &gt;</basecompoundref>
     <includes refid="Unions_8hpp" local="no">Unions.hpp</includes>
     <templateparamlist>
       <param>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="62" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="62" bodyend="78"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="62" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="62" bodyend="77"/>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -73,12 +73,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="80" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="80" bodyend="93"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="79" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="79" bodyend="92"/>
         <references refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; F &gt;::find</references>
-        <references refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" compoundref="Atrip_8hpp" startline="36">atrip::Atrip::rank</references>
-        <references refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="542">atrip::SliceUnion&lt; double &gt;::rankMap</references>
-        <references refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="545">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
-        <references refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="546">atrip::SliceUnion&lt; double &gt;::sources</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">atrip::No</references>
+        <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
+        <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="597">atrip::SliceUnion&lt; double &gt;::rankMap</references>
+        <references refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="600">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
+        <references refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="601">atrip::SliceUnion&lt; double &gt;::sources</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -88,14 +89,14 @@
     <inheritancegraph>
       <node id="2">
         <label>atrip::SliceUnion&lt; double &gt;</label>
-        <link refid="structatrip_1_1SliceUnion"/>
+        <link refid="classatrip_1_1SliceUnion"/>
         <childnode refid="3" relation="template-instance">
           <edgelabel>&lt; double &gt;</edgelabel>
         </childnode>
       </node>
       <node id="3">
         <label>atrip::SliceUnion&lt; F &gt;</label>
-        <link refid="structatrip_1_1SliceUnion"/>
+        <link refid="classatrip_1_1SliceUnion"/>
       </node>
       <node id="1">
         <label>atrip::TAPHH&lt; F &gt;</label>
@@ -127,7 +128,7 @@
       </node>
       <node id="2">
         <label>atrip::SliceUnion&lt; double &gt;</label>
-        <link refid="structatrip_1_1SliceUnion"/>
+        <link refid="classatrip_1_1SliceUnion"/>
         <childnode refid="3" relation="usage">
           <edgelabel>+rankMap</edgelabel>
         </childnode>
@@ -169,7 +170,7 @@
       </node>
       <node id="10">
         <label>atrip::SliceUnion&lt; F &gt;</label>
-        <link refid="structatrip_1_1SliceUnion"/>
+        <link refid="classatrip_1_1SliceUnion"/>
         <childnode refid="3" relation="usage">
           <edgelabel>+rankMap</edgelabel>
         </childnode>
@@ -184,32 +185,33 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="61" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="61" bodyend="95"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="61" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="61" bodyend="94"/>
     <listofallmembers>
-      <member refid="structatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>buildLocalDatabase</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>checkForDuplicates</name></member>
-      <member refid="structatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>clearUnusedSlicesForNext</name></member>
-      <member refid="structatrip_1_1SliceUnion_1ad0424b251863ec34e43bf65b977d26d2" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>freePointers</name></member>
-      <member refid="structatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>init</name></member>
-      <member refid="structatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>name</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>neededSlices</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>rankMap</name></member>
-      <member refid="structatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>receive</name></member>
-      <member refid="structatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>send</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a3ce1e87ce77c90131de1b647769ec518" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceBuffers</name></member>
+      <member refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>buildLocalDatabase</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>checkForDuplicates</name></member>
+      <member refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>clearUnusedSlicesForNext</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a342face36f62091ce59d0a039fff2991" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>freePointers</name></member>
+      <member refid="classatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>init</name></member>
+      <member refid="classatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>name</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>neededSlices</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>rankMap</name></member>
+      <member refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>receive</name></member>
+      <member refid="classatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>send</name></member>
+      <member refid="classatrip_1_1SliceUnion_1afc17e4ba873e2ebd22b1758920f30e5e" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceBuffers</name></member>
       <member refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceIntoBuffer</name></member>
-      <member refid="structatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" prot="public" virt="pure-virtual" ambiguityscope="SliceUnion&lt; double &gt;::"><scope>atrip::TAPHH</scope><name>sliceIntoBuffer</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceLength</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>slices</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceTypes</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a2146573b2ddf3ac8dae01a5bb70d983b" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>SliceUnion</name></member>
-      <member refid="structatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sources</name></member>
+      <member refid="classatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" prot="public" virt="pure-virtual" ambiguityscope="SliceUnion&lt; double &gt;::"><scope>atrip::TAPHH</scope><name>sliceIntoBuffer</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceLength</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>slices</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sliceTypes</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a2a6d63388ef1dcfb836755285fe2149a" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>SliceUnion</name></member>
+      <member refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>sources</name></member>
       <member refid="structatrip_1_1TAPHH_1aa4be7b8ef10aa7f4fdddf632010da076" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>TAPHH</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>Tensor</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>universe</name></member>
-      <member refid="structatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>unwrapAll</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a4818f008af7820a86f8b68669d69b9d0" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>unwrapSlice</name></member>
-      <member refid="structatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>world</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a39130fcc44d0b5b022e99b5438d714c1" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>Tensor</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>universe</name></member>
+      <member refid="classatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>unwrapAll</name></member>
+      <member refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>unwrapSlice</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>world</name></member>
+      <member refid="classatrip_1_1SliceUnion_1aeb956f245057c50710342754f282655a" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>~SliceUnion</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

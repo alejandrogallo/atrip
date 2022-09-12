@@ -1,9 +1,10 @@
 <map id="atrip::unique" name="atrip::unique">
 <area shape="rect" id="node1" title=" " alt="" coords="853,81,957,108"/>
 <area shape="rect" id="node2" href="$namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26" title=" " alt="" coords="441,5,593,32"/>
-<area shape="rect" id="node3" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="652,56,799,83"/>
-<area shape="rect" id="node4" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " alt="" coords="229,99,389,141"/>
-<area shape="rect" id="node6" href="$namespaceatrip_1_1group__and__sort.html#a64e55f94387e9330b4afdb3e6a6d5556" title=" " alt="" coords="645,158,805,199"/>
-<area shape="rect" id="node5" href="$structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7" title=" " alt="" coords="5,99,181,141"/>
-<area shape="rect" id="node7" href="$namespaceatrip_1_1group__and__sort.html#a9285b4e63c38f7c586f8ba185e5fa2e9" title=" " alt="" coords="437,158,597,199"/>
+<area shape="rect" id="node4" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="652,56,799,83"/>
+<area shape="rect" id="node5" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " alt="" coords="229,99,389,141"/>
+<area shape="rect" id="node7" href="$namespaceatrip_1_1group__and__sort.html#a64e55f94387e9330b4afdb3e6a6d5556" title=" " alt="" coords="645,158,805,199"/>
+<area shape="rect" id="node3" href="$structatrip_1_1Atrip.html#ac414d43de30968cc92a6f7a44e5cd9b6" title=" " alt="" coords="249,5,369,32"/>
+<area shape="rect" id="node6" href="$structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7" title=" " alt="" coords="5,99,181,141"/>
+<area shape="rect" id="node8" href="$namespaceatrip_1_1group__and__sort.html#a9285b4e63c38f7c586f8ba185e5fa2e9" title=" " alt="" coords="437,158,597,199"/>
 </map>

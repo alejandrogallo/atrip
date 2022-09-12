@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="structatrip_1_1IterationDescription" kind="struct" language="C++" prot="public">
     <compoundname>atrip::IterationDescription</compoundname>
     <includes refid="Debug_8hpp" local="no">Debug.hpp</includes>
@@ -16,8 +16,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="97" column="32" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="97" bodyend="-1"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="96" column="32" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="98" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="98" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="97" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="97" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" prot="public" static="no" mutable="no">
         <type>size_t</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="99" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="99" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="98" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="100" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="100" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="99" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -74,7 +74,7 @@
         <link refid="structatrip_1_1IterationDescription"/>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="96" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="96" bodyend="101"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="95" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="95" bodyend="100"/>
     <listofallmembers>
       <member refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" prot="public" virt="non-virtual"><scope>atrip::IterationDescription</scope><name>currentElapsedTime</name></member>
       <member refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" prot="public" virt="non-virtual"><scope>atrip::IterationDescription</scope><name>currentIteration</name></member>

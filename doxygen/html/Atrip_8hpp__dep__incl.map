@@ -1,6 +1,11 @@
 <map id="Atrip.hpp" name="Atrip.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="54,5,135,32"/>
-<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="5,155,85,181"/>
-<area shape="rect" id="node3" href="$Checkpoint_8hpp.html" title=" " alt="" coords="33,80,156,107"/>
-<area shape="rect" id="node4" href="$atrip_8hpp.html" title=" " alt="" coords="180,80,260,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="226,5,308,32"/>
+<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="47,304,127,331"/>
+<area shape="rect" id="node3" href="$Blas_8cxx.html" title=" " alt="" coords="147,229,224,256"/>
+<area shape="rect" id="node4" href="$Checkpoint_8hpp.html" title=" " alt="" coords="26,155,148,181"/>
+<area shape="rect" id="node5" href="$Equations_8hpp.html" title=" " alt="" coords="248,229,363,256"/>
+<area shape="rect" id="node7" href="$Types_8hpp.html" title=" " alt="" coords="224,80,310,107"/>
+<area shape="rect" id="node9" href="$atrip_8hpp.html" title=" " alt="" coords="386,80,466,107"/>
+<area shape="rect" id="node6" href="$Equations_8cxx.html" title=" " alt="" coords="249,304,362,331"/>
+<area shape="rect" id="node8" href="$Blas_8hpp.html" title=" " alt="" coords="228,155,306,181"/>
 </map>

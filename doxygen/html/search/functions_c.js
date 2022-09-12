@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pretty_5fprint_0',['pretty_print',['../namespaceatrip.html#a3178eea10b83bd01a95ca222be291c1f',1,'atrip']]]
+  ['neededslices_0',['neededSlices',['../classatrip_1_1SliceUnion.html#a5c6aff911403f8a09491431863ff842c',1,'atrip::SliceUnion']]],
+  ['nsources_1',['nSources',['../structatrip_1_1RankMap.html#a7ea842103ccde38ba37663002e0089c6',1,'atrip::RankMap']]]
 ];

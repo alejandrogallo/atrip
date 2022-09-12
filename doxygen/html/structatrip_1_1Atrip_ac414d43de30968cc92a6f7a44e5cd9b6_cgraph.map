@@ -1,13 +1,18 @@
 <map id="atrip::Atrip::run" name="atrip::Atrip::run">
-<area shape="rect" id="node1" title=" " alt="" coords="5,231,125,258"/>
-<area shape="rect" id="node2" href="$structatrip_1_1TuplesDistribution.html#abb339c6579cbd14147c075ebdabd5e7c" title=" " alt="" coords="173,5,351,47"/>
-<area shape="rect" id="node3" href="$namespaceatrip.html#a3178eea10b83bd01a95ca222be291c1f" title=" " alt="" coords="845,302,981,329"/>
-<area shape="rect" id="node4" href="$namespaceatrip.html#a0e552094c9b3e3af0d38faf48a47a3db" title=" " alt="" coords="179,122,345,149"/>
-<area shape="rect" id="node5" href="$structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56" title=" " alt="" coords="827,375,999,416"/>
-<area shape="rect" id="node6" href="$structatrip_1_1TuplesDistribution.html#a0767a603e2865fef7d6a8cc9bf41c52a" title=" " alt="" coords="173,224,351,265"/>
-<area shape="rect" id="node7" href="$namespaceatrip.html#ab93cbc0ed3ae01101d887207e3032916" title=" " alt="" coords="186,290,338,317"/>
-<area shape="rect" id="node8" href="$structatrip_1_1SliceUnion.html#afd274dc3bf55ce58ffdae76a8720ba76" title=" " alt="" coords="193,341,331,383"/>
-<area shape="rect" id="node9" href="$structatrip_1_1SliceUnion.html#a4818f008af7820a86f8b68669d69b9d0" title=" " alt="" coords="399,319,536,360"/>
-<area shape="rect" id="node11" href="$namespaceatrip.html#a5b178d65b82630d40ed38d9ccd86e2a8" title=" " alt="" coords="177,458,347,485"/>
-<area shape="rect" id="node10" href="$structatrip_1_1Slice.html#ab57c0d9c391694a84abe5327cd5fa1b4" title=" " alt="" coords="584,353,779,379"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,275,125,301"/>
+<area shape="rect" id="node2" href="$namespaceatrip.html#a0074ac0ca5ed1f3e9d8a3214176252ec" title=" " alt="" coords="209,5,315,32"/>
+<area shape="rect" id="node3" href="$namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26" title=" " alt="" coords="186,56,338,83"/>
+<area shape="rect" id="node7" href="$structatrip_1_1TuplesDistribution.html#abb339c6579cbd14147c075ebdabd5e7c" title=" " alt="" coords="173,107,351,149"/>
+<area shape="rect" id="node8" href="$namespaceatrip.html#a3178eea10b83bd01a95ca222be291c1f" title=" " alt="" coords="869,392,1005,419"/>
+<area shape="rect" id="node9" href="$namespaceatrip.html#a0e552094c9b3e3af0d38faf48a47a3db" title=" " alt="" coords="179,224,345,251"/>
+<area shape="rect" id="node10" href="$structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56" title=" " alt="" coords="851,234,1023,275"/>
+<area shape="rect" id="node11" href="$structatrip_1_1TuplesDistribution.html#a0767a603e2865fef7d6a8cc9bf41c52a" title=" " alt="" coords="173,326,351,367"/>
+<area shape="rect" id="node12" href="$namespaceatrip.html#ab93cbc0ed3ae01101d887207e3032916" title=" " alt="" coords="186,392,338,419"/>
+<area shape="rect" id="node13" href="$classatrip_1_1SliceUnion.html#afd274dc3bf55ce58ffdae76a8720ba76" title=" " alt="" coords="193,443,331,485"/>
+<area shape="rect" id="node14" href="$classatrip_1_1SliceUnion.html#af8b26c4affb8cc43e09315c07272c9d9" title=" " alt="" coords="411,359,548,401"/>
+<area shape="rect" id="node16" href="$namespaceatrip.html#a5b178d65b82630d40ed38d9ccd86e2a8" title=" " alt="" coords="177,560,347,587"/>
+<area shape="rect" id="node4" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="406,5,553,32"/>
+<area shape="rect" id="node5" href="$namespaceatrip.html#a97dd69bc4fe50212652f17f2e6bd04fb" title=" " alt="" coords="653,31,757,57"/>
+<area shape="rect" id="node6" href="$namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338" title=" " alt="" coords="399,107,560,133"/>
+<area shape="rect" id="node15" href="$structatrip_1_1Slice.html#ab57c0d9c391694a84abe5327cd5fa1b4" title=" " alt="" coords="608,341,803,368"/>
 </map>

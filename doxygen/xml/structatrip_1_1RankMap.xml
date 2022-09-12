@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="structatrip_1_1RankMap" kind="struct" language="C++" prot="public">
     <compoundname>atrip::RankMap</compoundname>
     <includes refid="RankMap_8hpp" local="no">RankMap.hpp</includes>
@@ -40,7 +40,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="30" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="30" bodyend="-1"/>
-        <referencedby refid="structatrip_1_1RankMap_1a8f56a9194defc16337a8a773789028dd" compoundref="RankMap_8hpp" startline="73" endline="129">atrip::RankMap&lt; F &gt;::find</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1a8f56a9194defc16337a8a773789028dd" compoundref="RankMap_8hpp" startline="74" endline="130">atrip::RankMap&lt; F &gt;::find</referencedby>
         <referencedby refid="structatrip_1_1RankMap_1a7b770e5c35a4edf4e8fc56bd9a9886e6" compoundref="RankMap_8hpp" startline="34" endline="40">atrip::RankMap&lt; F &gt;::RankMap</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" prot="public" static="no" mutable="no">
@@ -143,11 +143,11 @@
         <references refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" compoundref="RankMap_8hpp" startline="29">atrip::RankMap&lt; F &gt;::RANK_ROUND_ROBIN</references>
         <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="139">atrip::ClusterInfo::rankInfos</references>
         <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::ranksPerNode</references>
-        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="80" endline="93">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="155" endline="170">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="194" endline="209">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="234" endline="250">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="79" endline="92">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="116" endline="128">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="152" endline="167">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="190" endline="205">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="229" endline="245">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>size_t</type>
@@ -164,7 +164,7 @@
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="56" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="56" bodyend="58"/>
         <references refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::np</references>
         <references refid="structatrip_1_1RankMap_1a9446d8e669ada2186bab67c0ada510f3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::size</references>
-        <referencedby refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" compoundref="RankMap_8hpp" startline="68" endline="70">atrip::RankMap&lt; F &gt;::isSourcePadding</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1a7950005cd56f7daaf4e25d813f5ca921" compoundref="RankMap_8hpp" startline="68" endline="71">atrip::RankMap&lt; F &gt;::isSourcePadding</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
@@ -185,20 +185,20 @@
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="61" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="61" bodyend="66"/>
         <references refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::np</references>
         <references refid="structatrip_1_1RankMap_1a9446d8e669ada2186bab67c0ada510f3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::size</references>
-        <referencedby refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" compoundref="RankMap_8hpp" startline="68" endline="70">atrip::RankMap&lt; F &gt;::isSourcePadding</referencedby>
+        <referencedby refid="structatrip_1_1RankMap_1a7950005cd56f7daaf4e25d813f5ca921" compoundref="RankMap_8hpp" startline="68" endline="71">atrip::RankMap&lt; F &gt;::isSourcePadding</referencedby>
       </memberdef>
-      <memberdef kind="function" id="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+      <memberdef kind="function" id="structatrip_1_1RankMap_1a7950005cd56f7daaf4e25d813f5ca921" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>
         <definition>bool atrip::RankMap&lt; F &gt;::isSourcePadding</definition>
-        <argsstring>(size_t rank, size_t source) const noexcept</argsstring>
+        <argsstring>(const size_t rank, const size_t source) const noexcept</argsstring>
         <name>isSourcePadding</name>
         <qualifiedname>atrip::RankMap::isSourcePadding</qualifiedname>
         <param>
-          <type>size_t</type>
+          <type>const size_t</type>
           <declname>rank</declname>
         </param>
         <param>
-          <type>size_t</type>
+          <type>const size_t</type>
           <declname>source</declname>
         </param>
         <briefdescription>
@@ -207,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="68" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="68" bodyend="70"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="68" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="68" bodyend="71"/>
         <references refid="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" compoundref="RankMap_8hpp" startline="61" endline="66">atrip::RankMap&lt; F &gt;::isPaddingRank</references>
         <references refid="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" compoundref="RankMap_8hpp" startline="56" endline="58">atrip::RankMap&lt; F &gt;::nSources</references>
       </memberdef>
@@ -218,7 +218,7 @@
         <name>find</name>
         <qualifiedname>atrip::RankMap::find</qualifiedname>
         <param>
-          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <type><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref> const &amp;</type>
           <declname>abc</declname>
         </param>
         <param>
@@ -231,7 +231,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="73" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="73" bodyend="129"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="74" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="74" bodyend="130"/>
         <references refid="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" compoundref="RankMap_8hpp" startline="32">atrip::RankMap&lt; F &gt;::clusterInfo</references>
         <references refid="structatrip_1_1RankMap_1a265e337d553853bf4c2b15703d9316c8" compoundref="RankMap_8hpp" startline="30">atrip::RankMap&lt; F &gt;::lengths</references>
         <references refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::nNodes</references>
@@ -239,7 +239,7 @@
         <references refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" compoundref="RankMap_8hpp" startline="29">atrip::RankMap&lt; F &gt;::RANK_ROUND_ROBIN</references>
         <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="139">atrip::ClusterInfo::rankInfos</references>
         <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::ranksPerNode</references>
-        <references refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" compoundref="Slice_8hpp" startline="233" endline="246">atrip::Slice&lt; F &gt;::subtupleBySlice</references>
+        <references refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" compoundref="Slice_8hpp" startline="221" endline="234">atrip::Slice&lt; F &gt;::subtupleBySlice</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -272,13 +272,13 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="27" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="27" bodyend="131"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="27" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="27" bodyend="132"/>
     <listofallmembers>
       <member refid="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>clusterInfo</name></member>
       <member refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>find</name></member>
       <member refid="structatrip_1_1RankMap_1a8f56a9194defc16337a8a773789028dd" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>find</name></member>
       <member refid="structatrip_1_1RankMap_1aeeb8bd03cfc197bbdd7c73245bd956e4" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>isPaddingRank</name></member>
-      <member refid="structatrip_1_1RankMap_1a489ad71146d35a5c2d22b94a04ae3770" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>isSourcePadding</name></member>
+      <member refid="structatrip_1_1RankMap_1a7950005cd56f7daaf4e25d813f5ca921" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>isSourcePadding</name></member>
       <member refid="structatrip_1_1RankMap_1a265e337d553853bf4c2b15703d9316c8" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>lengths</name></member>
       <member refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>np</name></member>
       <member refid="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" prot="public" virt="non-virtual"><scope>atrip::RankMap</scope><name>nSources</name></member>

@@ -1,32 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="Equations_8hpp" kind="file" language="C++">
     <compoundname>Equations.hpp</compoundname>
-    <includes refid="Slice_8hpp" local="no">atrip/Slice.hpp</includes>
+    <includes refid="Atrip_8hpp" local="no">atrip/Atrip.hpp</includes>
     <includes refid="Blas_8hpp" local="no">atrip/Blas.hpp</includes>
+    <includes refid="Utils_8hpp" local="no">atrip/Utils.hpp</includes>
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
+    <includedby refid="Equations_8cxx" local="no">Equations.cxx</includedby>
     <incdepgraph>
-      <node id="22">
-        <label>atrip/Blas.hpp</label>
-        <link refid="Blas_8hpp"/>
-      </node>
-      <node id="20">
-        <label>atrip/Debug.hpp</label>
-        <link refid="Debug_8hpp"/>
-        <childnode refid="21" relation="include">
-        </childnode>
-      </node>
-      <node id="1">
-        <label>Equations.hpp</label>
-        <link refid="Equations_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="22" relation="include">
-        </childnode>
-      </node>
       <node id="2">
-        <label>atrip/Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
+        <label>atrip/Atrip.hpp</label>
+        <link refid="Atrip_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
         <childnode refid="4" relation="include">
@@ -37,17 +21,63 @@
         </childnode>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="16" relation="include">
+        <childnode refid="8" relation="include">
         </childnode>
-        <childnode refid="22" relation="include">
+        <childnode refid="13" relation="include">
         </childnode>
       </node>
-      <node id="7">
-        <label>atrip/Tuples.hpp</label>
-        <link refid="Tuples_8hpp"/>
-        <childnode refid="5" relation="include">
+      <node id="16">
+        <label>atrip/Blas.hpp</label>
+        <link refid="Blas_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>atrip/Complex.hpp</label>
+        <link refid="Complex_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>atrip/Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Equations.hpp</label>
+        <link refid="Equations_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>atrip/Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>atrip/Utils.hpp</label>
+        <link refid="Utils_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
@@ -55,86 +85,33 @@
         </childnode>
         <childnode refid="11" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
       </node>
-      <node id="16">
-        <label>atrip/Utils.hpp</label>
-        <link refid="Utils_8hpp"/>
-        <childnode refid="17" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>algorithm</label>
-      </node>
-      <node id="8">
-        <label>array</label>
-      </node>
-      <node id="13">
-        <label>cassert</label>
-      </node>
-      <node id="14">
+      <node id="9">
         <label>chrono</label>
       </node>
       <node id="15">
-        <label>climits</label>
+        <label>complex</label>
       </node>
-      <node id="19">
+      <node id="7">
+        <label>config.h</label>
+      </node>
+      <node id="10">
         <label>ctf.hpp</label>
       </node>
-      <node id="21">
+      <node id="12">
         <label>functional</label>
       </node>
-      <node id="3">
-        <label>iostream</label>
-      </node>
-      <node id="12">
+      <node id="5">
         <label>map</label>
-      </node>
-      <node id="11">
-        <label>math.h</label>
       </node>
       <node id="6">
         <label>mpi.h</label>
       </node>
-      <node id="9">
-        <label>numeric</label>
-      </node>
-      <node id="17">
+      <node id="3">
         <label>sstream</label>
       </node>
-      <node id="10">
-        <label>stdio.h</label>
-      </node>
-      <node id="18">
+      <node id="4">
         <label>string</label>
-      </node>
-      <node id="5">
-        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
@@ -143,116 +120,19 @@
         <link refid="Equations_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
       </node>
       <node id="2">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
       </node>
+      <node id="3">
+        <label>Equations.cxx</label>
+        <link refid="Equations_8cxx"/>
+      </node>
     </invincdepgraph>
     <innernamespace refid="namespaceatrip">atrip</innernamespace>
-      <sectiondef kind="define">
-      <memberdef kind="define" id="Equations_8hpp_1a395c02ccca573561c1c6e5a2145c496b" prot="public" static="no">
-        <name>_IJK_</name>
-        <param><defname>i</defname></param>
-        <param><defname>j</defname></param>
-        <param><defname>k</defname></param>
-        <initializer>i + j*No + k*NoNo</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="196" column="11"/>
-      </memberdef>
-      <memberdef kind="define" id="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" prot="public" static="no">
-        <name>REORDER</name>
-        <param><defname>__II</defname></param>
-        <param><defname>__JJ</defname></param>
-        <param><defname>__KK</defname></param>
-        <initializer>    <ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(&quot;doubles:reorder&quot;,                                  \
-    for (size_t k = 0; k &lt; No; k++)                                 \
-    for (size_t j = 0; j &lt; No; j++)                                 \
-    for (size_t i = 0; i &lt; No; i++) {                               \
-      Tijk[<ref refid="Equations_8hpp_1a395c02ccca573561c1c6e5a2145c496b" kindref="member">_IJK_</ref>(i, j, k)] += _t_buffer[<ref refid="Equations_8hpp_1a395c02ccca573561c1c6e5a2145c496b" kindref="member">_IJK_</ref>(__II, __JJ, __KK)];   \
-    }                                                               \
-    )</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="197" column="11"/>
-      </memberdef>
-      <memberdef kind="define" id="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" prot="public" static="no">
-        <name>DGEMM_PARTICLES</name>
-        <param><defname>__A</defname></param>
-        <param><defname>__B</defname></param>
-        <initializer>    <ref refid="namespaceatrip_1ac816a227aaf7dcd0a1924bcbabedcd05" kindref="member">atrip::xgemm</ref>&lt;F&gt;( &quot;T&quot;                 \
-                   , &quot;N&quot;                 \
-                   , (int const*)&amp;NoNo   \
-                   , (int const*)&amp;No     \
-                   , (int const*)&amp;Nv     \
-                   , &amp;one                \
-                   , __A                 \
-                   , (int const*)&amp;Nv     \
-                   , __B                 \
-                   , (int const*)&amp;Nv     \
-                   , &amp;zero               \
-                   , _t_buffer.data()    \
-                   , (int const*)&amp;NoNo   \
-                   );</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="205" column="11"/>
-      </memberdef>
-      <memberdef kind="define" id="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" prot="public" static="no">
-        <name>DGEMM_HOLES</name>
-        <param><defname>__A</defname></param>
-        <param><defname>__B</defname></param>
-        <param><defname>__TRANSB</defname></param>
-        <initializer>    <ref refid="namespaceatrip_1ac816a227aaf7dcd0a1924bcbabedcd05" kindref="member">atrip::xgemm</ref>&lt;F&gt;( &quot;N&quot;                     \
-                   , __TRANSB                \
-                   , (int const*)&amp;NoNo       \
-                   , (int const*)&amp;No         \
-                   , (int const*)&amp;No         \
-                   , &amp;m_one                  \
-                   , __A                     \
-                   , (int const*)&amp;NoNo       \
-                   , __B                     \
-                   , (int const*)&amp;No         \
-                   , &amp;zero                   \
-                   , _t_buffer.data()        \
-                   , (int const*)&amp;NoNo       \
-                   );</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="220" column="11"/>
-      </memberdef>
-      <memberdef kind="define" id="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" prot="public" static="no">
-        <name>MAYBE_CONJ</name>
-        <param><defname>_conj</defname></param>
-        <param><defname>_buffer</defname></param>
-        <initializer>    for (size_t __i = 0; __i &lt; NoNoNo; ++__i)        \
-      _conj[__i] = maybeConjugate&lt;F&gt;(_buffer[__i]);  \</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="235" column="11"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -272,374 +152,97 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Equations][Equations:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight></codeline>
-<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include&lt;<ref refid="Slice_8hpp" kindref="compound">atrip/Slice.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include&lt;<ref refid="Atrip_8hpp" kindref="compound">atrip/Atrip.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include&lt;<ref refid="Blas_8hpp" kindref="compound">atrip/Blas.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="24" refid="namespaceatrip_1a840b02bd30fe9a856766d3d46549cada" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a840b02bd30fe9a856766d3d46549cada" kindref="member">getEnergyDistinct</ref></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>epsabc</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>epsi</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>Tijk_</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>Zijk_</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>{</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>blockSize=16;</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>F<sp/>energy(0.);</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>No<sp/>=<sp/>epsi.size();</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kk=0;<sp/>kk&lt;No;<sp/>kk+=blockSize){</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kend(<sp/>std::min(No,<sp/>kk+blockSize)<sp/>);</highlight></codeline>
-<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jj(kk);<sp/>jj&lt;No;<sp/>jj+=blockSize){</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jend(<sp/>std::min(<sp/>No,<sp/>jj+blockSize)<sp/>);</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>ii(jj);<sp/>ii&lt;No;<sp/>ii+=blockSize){</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>iend(<sp/>std::min(<sp/>No,<sp/>ii+blockSize)<sp/>);</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>k(kk);<sp/>k<sp/>&lt;<sp/>kend;<sp/>k++){</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>ek(epsi[k]);</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jstart<sp/>=<sp/>jj<sp/>&gt;<sp/>k<sp/>?<sp/>jj<sp/>:<sp/>k;</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>j(jstart);<sp/>j<sp/>&lt;<sp/>jend;<sp/>j++){</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>ej(epsi[j]);</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>facjk<sp/>=<sp/>j<sp/>==<sp/>k<sp/>?<sp/>F(0.5)<sp/>:<sp/>F(1.0);</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>istart<sp/>=<sp/>ii<sp/>&gt;<sp/>j<sp/>?<sp/>ii<sp/>:<sp/>j;</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i(istart);<sp/>i<sp/>&lt;<sp/>iend;<sp/>i++){</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ei(epsi[i])</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>facij<sp/>=<sp/>i<sp/>==<sp/>j<sp/>?<sp/>F(0.5)<sp/>:<sp/>F(1.0)</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>denominator(epsabc<sp/>-<sp/>ei<sp/>-<sp/>ej<sp/>-<sp/>ek)</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>U(Zijk_[i<sp/>+<sp/>No*j<sp/>+<sp/>No*No*k])</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>V(Zijk_[i<sp/>+<sp/>No*k<sp/>+<sp/>No*No*j])</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>W(Zijk_[j<sp/>+<sp/>No*i<sp/>+<sp/>No*No*k])</highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>X(Zijk_[j<sp/>+<sp/>No*k<sp/>+<sp/>No*No*i])</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>Y(Zijk_[k<sp/>+<sp/>No*i<sp/>+<sp/>No*No*j])</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>Z(Zijk_[k<sp/>+<sp/>No*j<sp/>+<sp/>No*No*i])</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>A(maybeConjugate&lt;F&gt;(Tijk_[i<sp/>+<sp/>No*j<sp/>+<sp/>No*No*k]))</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>B(maybeConjugate&lt;F&gt;(Tijk_[i<sp/>+<sp/>No*k<sp/>+<sp/>No*No*j]))</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>C(maybeConjugate&lt;F&gt;(Tijk_[j<sp/>+<sp/>No*i<sp/>+<sp/>No*No*k]))</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>D(maybeConjugate&lt;F&gt;(Tijk_[j<sp/>+<sp/>No*k<sp/>+<sp/>No*No*i]))</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>E(maybeConjugate&lt;F&gt;(Tijk_[k<sp/>+<sp/>No*i<sp/>+<sp/>No*No*j]))</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>_F(maybeConjugate&lt;F&gt;(Tijk_[k<sp/>+<sp/>No*j<sp/>+<sp/>No*No*i]))</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>value</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>3.0<sp/>*<sp/>(<sp/>A<sp/>*<sp/>U</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>B<sp/>*<sp/>V</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>C<sp/>*<sp/>W</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>D<sp/>*<sp/>X</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>E<sp/>*<sp/>Y</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>_F<sp/>*<sp/>Z<sp/>)</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>(<sp/>(<sp/>U<sp/>+<sp/>X<sp/>+<sp/>Y<sp/>)</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-<sp/>2.0<sp/>*<sp/>(<sp/>V<sp/>+<sp/>W<sp/>+<sp/>Z<sp/>)</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)<sp/>*<sp/>(<sp/>A<sp/>+<sp/>D<sp/>+<sp/>E<sp/>)</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>(<sp/>(<sp/>V<sp/>+<sp/>W<sp/>+<sp/>Z<sp/>)</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-<sp/>2.0<sp/>*<sp/>(<sp/>U<sp/>+<sp/>X<sp/>+<sp/>Y<sp/>)</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)<sp/>*<sp/>(<sp/>B<sp/>+<sp/>C<sp/>+<sp/>_F<sp/>)</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>energy<sp/>+=<sp/>2.0<sp/>*<sp/>value<sp/>/<sp/>denominator<sp/>*<sp/>facjk<sp/>*<sp/>facij;</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>i</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>j</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>k</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>ii</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>jj</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>kk</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::real(energy);</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"></highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="89" refid="namespaceatrip_1a793b8f00a013edaba6f2085ef13639b5" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a793b8f00a013edaba6f2085ef13639b5" kindref="member">getEnergySame</ref></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>epsabc</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>epsi</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>Tijk_</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>std::vector&lt;F&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>Zijk_</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>{</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>blockSize<sp/>=<sp/>16;</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>No<sp/>=<sp/>epsi.size();</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>F<sp/>energy<sp/>=<sp/>F(0.);</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kk=0;<sp/>kk&lt;No;<sp/>kk+=blockSize){</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kend(<sp/>std::min(<sp/>kk+blockSize,<sp/>No)<sp/>);</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jj(kk);<sp/>jj&lt;No;<sp/>jj+=blockSize){</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jend(<sp/>std::min(<sp/>jj+blockSize,<sp/>No)<sp/>);</highlight></codeline>
-<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>ii(jj);<sp/>ii&lt;No;<sp/>ii+=blockSize){</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>iend(<sp/>std::min(<sp/>ii+blockSize,<sp/>No)<sp/>);</highlight></codeline>
-<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>k(kk);<sp/>k<sp/>&lt;<sp/>kend;<sp/>k++){</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>ek(epsi[k]);</highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>jstart<sp/>=<sp/>jj<sp/>&gt;<sp/>k<sp/>?<sp/>jj<sp/>:<sp/>k;</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>j(jstart);<sp/>j<sp/>&lt;<sp/>jend;<sp/>j++){</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>facjk(<sp/>j<sp/>==<sp/>k<sp/>?<sp/>F(0.5)<sp/>:<sp/>F(1.0));</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F<sp/>ej(epsi[j]);</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>istart<sp/>=<sp/>ii<sp/>&gt;<sp/>j<sp/>?<sp/>ii<sp/>:<sp/>j;</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i(istart);<sp/>i<sp/>&lt;<sp/>iend;<sp/>i++){</highlight></codeline>
-<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>F</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ei(epsi[i])</highlight></codeline>
-<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>facij<sp/>(<sp/>i==j<sp/>?<sp/>F(0.5)<sp/>:<sp/>F(1.0))</highlight></codeline>
-<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>denominator(epsabc<sp/>-<sp/>ei<sp/>-<sp/>ej<sp/>-<sp/>ek)</highlight></codeline>
-<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>U(Zijk_[i<sp/>+<sp/>No*j<sp/>+<sp/>No*No*k])</highlight></codeline>
-<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>V(Zijk_[j<sp/>+<sp/>No*k<sp/>+<sp/>No*No*i])</highlight></codeline>
-<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>W(Zijk_[k<sp/>+<sp/>No*i<sp/>+<sp/>No*No*j])</highlight></codeline>
-<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>A(maybeConjugate&lt;F&gt;(Tijk_[i<sp/>+<sp/>No*j<sp/>+<sp/>No*No*k]))</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>B(maybeConjugate&lt;F&gt;(Tijk_[j<sp/>+<sp/>No*k<sp/>+<sp/>No*No*i]))</highlight></codeline>
-<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>C(maybeConjugate&lt;F&gt;(Tijk_[k<sp/>+<sp/>No*i<sp/>+<sp/>No*No*j]))</highlight></codeline>
-<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>value</highlight></codeline>
-<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>F(3.0)<sp/>*<sp/>(<sp/>A<sp/>*<sp/>U</highlight></codeline>
-<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>B<sp/>*<sp/>V</highlight></codeline>
-<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>C<sp/>*<sp/>W</highlight></codeline>
-<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-<sp/>(<sp/>A<sp/>+<sp/>B<sp/>+<sp/>C<sp/>)<sp/>*<sp/>(<sp/>U<sp/>+<sp/>V<sp/>+<sp/>W<sp/>)</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>energy<sp/>+=<sp/>F(2.0)<sp/>*<sp/>value<sp/>/<sp/>denominator<sp/>*<sp/>facjk<sp/>*<sp/>facij;</highlight></codeline>
-<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>i</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>j</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>k</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>ii</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>jj</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">//<sp/>kk</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::real(energy);</highlight></codeline>
-<codeline lineno="137"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
-<codeline lineno="138"><highlight class="normal"></highlight></codeline>
-<codeline lineno="139"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="140" refid="namespaceatrip_1a7787d4c4d5eaa1b23f1a38fd77452e91" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a7787d4c4d5eaa1b23f1a38fd77452e91" kindref="member">singlesContribution</ref></highlight></codeline>
-<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>No</highlight></codeline>
-<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv</highlight></codeline>
-<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/>&amp;abc</highlight></codeline>
-<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>Tph</highlight></codeline>
-<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VABij</highlight></codeline>
-<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VACij</highlight></codeline>
-<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VBCij</highlight></codeline>
-<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/>*Zijk</highlight></codeline>
-<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>{</highlight></codeline>
-<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>a(abc[0]),<sp/>b(abc[1]),<sp/>c(abc[2]);</highlight></codeline>
-<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>k=0;<sp/>k<sp/>&lt;<sp/>No;<sp/>k++)</highlight></codeline>
-<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i=0;<sp/>i<sp/>&lt;<sp/>No;<sp/>i++)</highlight></codeline>
-<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>j=0;<sp/>j<sp/>&lt;<sp/>No;<sp/>j++)<sp/>{</highlight></codeline>
-<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>ijk<sp/>=<sp/>i<sp/>+<sp/>j*No<sp/>+<sp/>k*No*No</highlight></codeline>
-<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/><sp/>jk<sp/>=<sp/>j<sp/>+<sp/>No<sp/>*<sp/>k</highlight></codeline>
-<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>Zijk[ijk]<sp/>+=<sp/>Tph[<sp/>a<sp/>+<sp/>i<sp/>*<sp/>Nv<sp/>]<sp/>*<sp/>VBCij[<sp/>j<sp/>+<sp/>k<sp/>*<sp/>No<sp/>];</highlight></codeline>
-<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>Zijk[ijk]<sp/>+=<sp/>Tph[<sp/>b<sp/>+<sp/>j<sp/>*<sp/>Nv<sp/>]<sp/>*<sp/>VACij[<sp/>i<sp/>+<sp/>k<sp/>*<sp/>No<sp/>];</highlight></codeline>
-<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>Zijk[ijk]<sp/>+=<sp/>Tph[<sp/>c<sp/>+<sp/>k<sp/>*<sp/>Nv<sp/>]<sp/>*<sp/>VABij[<sp/>i<sp/>+<sp/>j<sp/>*<sp/>No<sp/>];</highlight></codeline>
-<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="161"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
-<codeline lineno="162"><highlight class="normal"></highlight></codeline>
-<codeline lineno="163"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="164" refid="namespaceatrip_1abf38977bde26414f9921b16ea94e61a9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1abf38977bde26414f9921b16ea94e61a9" kindref="member">doublesContribution</ref></highlight></codeline>
-<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/>&amp;abc</highlight></codeline>
-<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>No</highlight></codeline>
-<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Nv</highlight></codeline>
-<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>VABCI</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VABph</highlight></codeline>
-<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VACph</highlight></codeline>
-<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VBCph</highlight></codeline>
-<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VBAph</highlight></codeline>
-<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VCAph</highlight></codeline>
-<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VCBph</highlight></codeline>
-<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>VHHHA</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VhhhA</highlight></codeline>
-<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VhhhB</highlight></codeline>
-<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>VhhhC</highlight></codeline>
-<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TA</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TAphh</highlight></codeline>
-<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TBphh</highlight></codeline>
-<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TCphh</highlight></codeline>
-<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TABIJ</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TABhh</highlight></codeline>
-<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TAChh</highlight></codeline>
-<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>TBChh</highlight></codeline>
-<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TIJK</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/>F<sp/>*Tijk</highlight></codeline>
-<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>{</highlight></codeline>
-<codeline lineno="190"><highlight class="normal"></highlight></codeline>
-<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>a<sp/>=<sp/>abc[0],<sp/>b<sp/>=<sp/>abc[1],<sp/>c<sp/>=<sp/>abc[2]</highlight></codeline>
-<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>NoNo<sp/>=<sp/>No*No,<sp/>NoNv<sp/>=<sp/>No*Nv</highlight></codeline>
-<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="194"><highlight class="normal"></highlight></codeline>
-<codeline lineno="195"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#if<sp/>defined(ATRIP_USE_DGEMM)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="196"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>_IJK_(i,<sp/>j,<sp/>k)<sp/>i<sp/>+<sp/>j*No<sp/>+<sp/>k*NoNo</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="197"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>REORDER(__II,<sp/>__JJ,<sp/>__KK)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="198"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>WITH_CHRONO(&quot;doubles:reorder&quot;</highlight><highlight class="normal">,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/>for<sp/>(size_t<sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>No;<sp/>k++)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/>for<sp/>(size_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>No;<sp/>j++)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/>for<sp/>(size_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>No;<sp/>i++)<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[_IJK_(i,<sp/>j,<sp/>k)]<sp/>+=<sp/>_t_buffer[_IJK_(__II,<sp/>__JJ,<sp/>__KK)];<sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="205"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>DGEMM_PARTICLES(__A,<sp/>__B)<sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="206"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>atrip::xgemm&lt;F&gt;(<sp/>&quot;T&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>&quot;N&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;NoNo<sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;No<sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;Nv<sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>&amp;one<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>__A<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;Nv<sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>__B<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;Nv<sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>&amp;zero<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>_t_buffer.data()<sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;NoNo<sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="220"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>DGEMM_HOLES(__A,<sp/>__B,<sp/>__TRANSB)<sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="221"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>atrip::xgemm&lt;F&gt;(<sp/>&quot;N&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>__TRANSB<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;NoNo<sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;No<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;No<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>&amp;m_one<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>__A<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;NoNo<sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>__B<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;No<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>&amp;zero<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>_t_buffer.data()<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>(int<sp/>const*)&amp;NoNo<sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="235"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>MAYBE_CONJ(_conj,<sp/>_buffer)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="236"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>for<sp/>(size_t<sp/>__i<sp/>=<sp/>0;<sp/>__i<sp/>&lt;<sp/>NoNoNo;<sp/>++__i)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="237"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/>_conj[__i]<sp/>=<sp/>maybeConjugate&lt;F&gt;(_buffer[__i]);<sp/><sp/>\</highlight></codeline>
-<codeline lineno="238"><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>NoNoNo<sp/>=<sp/>No*NoNo;</highlight></codeline>
-<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;F&gt;<sp/>_t_buffer;</highlight></codeline>
-<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/>_t_buffer.reserve(NoNoNo);</highlight></codeline>
-<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/>F<sp/>one{1.0},<sp/>m_one{-1.0},<sp/>zero{0.0};</highlight></codeline>
-<codeline lineno="243"><highlight class="normal"></highlight></codeline>
-<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;double:reorder&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>NoNoNo;<sp/>k++)<sp/>{</highlight></codeline>
-<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[k]<sp/>=<sp/>0.0;</highlight></codeline>
-<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>})</highlight></codeline>
-<codeline lineno="248"><highlight class="normal"></highlight></codeline>
-<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TOMERGE:<sp/>replace<sp/>chronos</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="comment">//<sp/>Holes<sp/>part<sp/>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="252"><highlight class="normal"></highlight></codeline>
-<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;F&gt;<sp/>_vhhh(NoNoNo);</highlight></codeline>
-<codeline lineno="254"><highlight class="normal"></highlight></codeline>
-<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhC[i<sp/>+<sp/>k*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TABhh[L<sp/>+<sp/>j*No];<sp/>H1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" kindref="member">MAYBE_CONJ</ref>(_vhhh,<sp/>VhhhC)</highlight></codeline>
-<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:1&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TABhh,<sp/></highlight><highlight class="stringliteral">&quot;N&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(i,<sp/>k,<sp/>j)</highlight></codeline>
-<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhC[j<sp/>+<sp/>k*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TABhh[i<sp/>+<sp/>L*No];<sp/>H0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:2&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TABhh,<sp/></highlight><highlight class="stringliteral">&quot;T&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="264"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(j,<sp/>k,<sp/>i)</highlight></codeline>
-<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="266"><highlight class="normal"></highlight></codeline>
-<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhB[i<sp/>+<sp/>j*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TAChh[L<sp/>+<sp/>k*No];<sp/>H5</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" kindref="member">MAYBE_CONJ</ref>(_vhhh,<sp/>VhhhB)</highlight></codeline>
-<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:3&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TAChh,<sp/></highlight><highlight class="stringliteral">&quot;N&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(i,<sp/>j,<sp/>k)</highlight></codeline>
-<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhB[k<sp/>+<sp/>j*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TAChh[i<sp/>+<sp/>L*No];<sp/>H3</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:4&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TAChh,<sp/></highlight><highlight class="stringliteral">&quot;T&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(k,<sp/>j,<sp/>i)</highlight></codeline>
-<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="278"><highlight class="normal"></highlight></codeline>
-<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhA[j<sp/>+<sp/>i*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TBChh[L<sp/>+<sp/>k*No];<sp/>H1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" kindref="member">MAYBE_CONJ</ref>(_vhhh,<sp/>VhhhA)</highlight></codeline>
-<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:5&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TBChh,<sp/></highlight><highlight class="stringliteral">&quot;N&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(j,<sp/>i,<sp/>k)</highlight></codeline>
-<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>VhhhA[k<sp/>+<sp/>i*No<sp/>+<sp/>L*NoNo]<sp/>*<sp/>TBChh[j<sp/>+<sp/>L*No];<sp/>H4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:holes:6&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref>(_vhhh.data(),<sp/>TBChh,<sp/></highlight><highlight class="stringliteral">&quot;T&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(k,<sp/>i,<sp/>j)</highlight></codeline>
-<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="290"><highlight class="normal"></highlight></codeline>
-<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="293"><highlight class="normal"><sp/><sp/>#undef<sp/><ref refid="Equations_8hpp_1ae116a1c74783cc9363dbd6e2eb934ea8" kindref="member">MAYBE_CONJ</ref></highlight></codeline>
-<codeline lineno="294"><highlight class="normal"></highlight></codeline>
-<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="comment">//<sp/>Particle<sp/>part<sp/>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="297"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TAphh[E<sp/>+<sp/>i*Nv<sp/>+<sp/>j*NoNv]<sp/>*<sp/>VBCph[E<sp/>+<sp/>k*Nv];<sp/>P0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:1&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TAphh,<sp/>VBCph)</highlight></codeline>
-<codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(i,<sp/>j,<sp/>k)</highlight></codeline>
-<codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="302"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TAphh[E<sp/>+<sp/>i*Nv<sp/>+<sp/>k*NoNv]<sp/>*<sp/>VCBph[E<sp/>+<sp/>j*Nv];<sp/>P3</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="303"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:2&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="304"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TAphh,<sp/>VCBph)</highlight></codeline>
-<codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(i,<sp/>k,<sp/>j)</highlight></codeline>
-<codeline lineno="306"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="307"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TCphh[E<sp/>+<sp/>k*Nv<sp/>+<sp/>i*NoNv]<sp/>*<sp/>VABph[E<sp/>+<sp/>j*Nv];<sp/>P5</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="308"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:3&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="309"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TCphh,<sp/>VABph)</highlight></codeline>
-<codeline lineno="310"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(k,<sp/>i,<sp/>j)</highlight></codeline>
-<codeline lineno="311"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="312"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TCphh[E<sp/>+<sp/>k*Nv<sp/>+<sp/>j*NoNv]<sp/>*<sp/>VBAph[E<sp/>+<sp/>i*Nv];<sp/>P2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="313"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:4&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="314"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TCphh,<sp/>VBAph)</highlight></codeline>
-<codeline lineno="315"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(k,<sp/>j,<sp/>i)</highlight></codeline>
-<codeline lineno="316"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="317"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TBphh[E<sp/>+<sp/>j*Nv<sp/>+<sp/>i*NoNv]<sp/>*<sp/>VACph[E<sp/>+<sp/>k*Nv];<sp/>P1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="318"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:5&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="319"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TBphh,<sp/>VACph)</highlight></codeline>
-<codeline lineno="320"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(j,<sp/>i,<sp/>k)</highlight></codeline>
-<codeline lineno="321"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="322"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TBphh[E<sp/>+<sp/>j*Nv<sp/>+<sp/>k*NoNv]<sp/>*<sp/>VCAph[E<sp/>+<sp/>i*Nv];<sp/>P4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="323"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" kindref="member">WITH_CHRONO</ref>(</highlight><highlight class="stringliteral">&quot;doubles:particles:6&quot;</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref>(TBphh,<sp/>VCAph)</highlight></codeline>
-<codeline lineno="325"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref>(j,<sp/>k,<sp/>i)</highlight></codeline>
-<codeline lineno="326"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="327"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="328"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
-<codeline lineno="329"><highlight class="normal"></highlight></codeline>
-<codeline lineno="330"><highlight class="normal"><sp/><sp/>#undef<sp/><ref refid="Equations_8hpp_1a8e804de074eaa56f17a152fb93eaae00" kindref="member">REORDER</ref></highlight></codeline>
-<codeline lineno="331"><highlight class="normal"><sp/><sp/>#undef<sp/><ref refid="Equations_8hpp_1a178706b091c61817a72573aea44e95fa" kindref="member">DGEMM_HOLES</ref></highlight></codeline>
-<codeline lineno="332"><highlight class="normal"><sp/><sp/>#undef<sp/><ref refid="Equations_8hpp_1aaa57263b7876787581e36f91522c81e7" kindref="member">DGEMM_PARTICLES</ref></highlight></codeline>
-<codeline lineno="333"><highlight class="normal"><sp/><sp/>#undef<sp/><ref refid="Equations_8hpp_1a395c02ccca573561c1c6e5a2145c496b" kindref="member">_IJK_</ref></highlight></codeline>
-<codeline lineno="334"><highlight class="normal"><sp/><sp/>#</highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="335"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>No;<sp/>k++)</highlight></codeline>
-<codeline lineno="336"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>No;<sp/>j++)</highlight></codeline>
-<codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>No;<sp/>i++){</highlight></codeline>
-<codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>ijk<sp/>=<sp/>i<sp/>+<sp/>j*No<sp/>+<sp/>k*NoNo</highlight></codeline>
-<codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/><sp/>jk<sp/>=<sp/>j<sp/>+<sp/>k*No</highlight></codeline>
-<codeline lineno="340"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="341"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>=<sp/>0.0;<sp/></highlight><highlight class="comment">//<sp/>:important</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="342"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>HOLE<sp/>DIAGRAMS:<sp/>TABHH<sp/>and<sp/>VHHHA</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="343"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>L<sp/>=<sp/>0;<sp/>L<sp/>&lt;<sp/>No;<sp/>L++){</highlight></codeline>
-<codeline lineno="344"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[abLj]<sp/>*<sp/>V[Lcik]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="345"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[baLi]<sp/>*<sp/>V[Lcjk]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H0<sp/><sp/><sp/><sp/><sp/><sp/>TODO:<sp/>conjugate<sp/>T<sp/>for<sp/>complex</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="346"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TABhh[L<sp/>+<sp/>j*No]<sp/>*<sp/>VhhhC[i<sp/>+<sp/>k*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="347"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TABhh[i<sp/>+<sp/>L*No]<sp/>*<sp/>VhhhC[j<sp/>+<sp/>k*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="348"><highlight class="normal"></highlight></codeline>
-<codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[acLk]<sp/>*<sp/>V[Lbij]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H5</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="350"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[caLi]<sp/>*<sp/>V[Lbkj]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H3</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TAChh[L<sp/>+<sp/>k*No]<sp/>*<sp/>VhhhB[i<sp/>+<sp/>j*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="352"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TAChh[i<sp/>+<sp/>L*No]<sp/>*<sp/>VhhhB[k<sp/>+<sp/>j*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="353"><highlight class="normal"></highlight></codeline>
-<codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[bcLk]<sp/>*<sp/>V[Laji]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[cbLj]<sp/>*<sp/>V[Laki]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>H4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TBChh[L<sp/>+<sp/>k*No]<sp/>*<sp/>VhhhA[j<sp/>+<sp/>i*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>-=<sp/>TBChh[j<sp/>+<sp/>L*No]<sp/>*<sp/>VhhhA[k<sp/>+<sp/>i*No<sp/>+<sp/>L*NoNo];</highlight></codeline>
-<codeline lineno="358"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="359"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>PARTILCE<sp/>DIAGRAMS:<sp/>TAPHH<sp/>and<sp/>VABPH</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="360"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>E<sp/>=<sp/>0;<sp/>E<sp/>&lt;<sp/>Nv;<sp/>E++)<sp/>{</highlight></codeline>
-<codeline lineno="361"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[aEij]<sp/>*<sp/>V[bcEk]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="362"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[aEik]<sp/>*<sp/>V[cbEj]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P3<sp/>//<sp/>TODO:<sp/>CHECK<sp/>THIS<sp/>ONE,<sp/>I<sp/>DONT<sp/>KNOW</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="363"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TAphh[E<sp/>+<sp/>i*Nv<sp/>+<sp/>j*NoNv]<sp/>*<sp/>VBCph[E<sp/>+<sp/>k*Nv];</highlight></codeline>
-<codeline lineno="364"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TAphh[E<sp/>+<sp/>i*Nv<sp/>+<sp/>k*NoNv]<sp/>*<sp/>VCBph[E<sp/>+<sp/>j*Nv];</highlight></codeline>
-<codeline lineno="365"><highlight class="normal"></highlight></codeline>
-<codeline lineno="366"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[cEki]<sp/>*<sp/>V[abEj]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P5</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="367"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[cEkj]<sp/>*<sp/>V[baEi]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="368"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TCphh[E<sp/>+<sp/>k*Nv<sp/>+<sp/>i*NoNv]<sp/>*<sp/>VABph[E<sp/>+<sp/>j*Nv];</highlight></codeline>
-<codeline lineno="369"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TCphh[E<sp/>+<sp/>k*Nv<sp/>+<sp/>j*NoNv]<sp/>*<sp/>VBAph[E<sp/>+<sp/>i*Nv];</highlight></codeline>
-<codeline lineno="370"><highlight class="normal"></highlight></codeline>
-<codeline lineno="371"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[bEji]<sp/>*<sp/>V[acEk]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="372"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>t[bEjk]<sp/>*<sp/>V[caEi]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>P4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="373"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TBphh[E<sp/>+<sp/>j*Nv<sp/>+<sp/>i*NoNv]<sp/>*<sp/>VACph[E<sp/>+<sp/>k*Nv];</highlight></codeline>
-<codeline lineno="374"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tijk[ijk]<sp/>+=<sp/>TBphh[E<sp/>+<sp/>j*Nv<sp/>+<sp/>k*NoNv]<sp/>*<sp/>VCAph[E<sp/>+<sp/>i*Nv];</highlight></codeline>
-<codeline lineno="375"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="376"><highlight class="normal"></highlight></codeline>
-<codeline lineno="377"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="378"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="379"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
-<codeline lineno="380"><highlight class="normal"></highlight></codeline>
-<codeline lineno="381"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="382"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Equations:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include&lt;<ref refid="Utils_8hpp" kindref="compound">atrip/Utils.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(HAVE_CUDA)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include&lt;thrust/device_vector.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="28" refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>3&gt;;</highlight></codeline>
+<codeline lineno="29" refid="namespaceatrip_1a3b418cf6a27d7f12bcb3b8e42252ad35" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1a3b418cf6a27d7f12bcb3b8e42252ad35" kindref="member">PartialTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>2&gt;;</highlight></codeline>
+<codeline lineno="30" refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/>=<sp/>std::vector&lt;ABCTuple&gt;;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Energy][Energy:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="35" refid="namespaceatrip_1adaf0200c976351f46d2fe2b4a8ebe45b" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a907be16399d76c852af0fb25b84b5f33" kindref="member">getEnergyDistinct</ref></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/>(<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>epsabc</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" kindref="member">No</ref></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" kindref="member">epsi</ref></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" kindref="member">Tijk</ref></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" kindref="member">Zijk</ref></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" kindref="member">getEnergySame</ref></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/>(<sp/>F<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>epsabc</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" kindref="member">No</ref></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" kindref="member">epsi</ref></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" kindref="member">Tijk</ref></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/>,<sp/>F*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" kindref="member">Zijk</ref></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/>);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Energy:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles<sp/>contribution:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>HAVE_CUDA</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal">__global__</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a40dd04592c08dab33973a8255d270857" kindref="member">singlesContribution</ref></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" kindref="member">No</ref></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>a</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>b</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>c</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Tph</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VABij</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VACij</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VBCij</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/><ref refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" kindref="member">Zijk</ref></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Singles<sp/>contribution:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles<sp/>contribution:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" kindref="member">doublesContribution</ref></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/>&amp;abc</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" kindref="member">No</ref></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Nv</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>VABCI</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VABph</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VACph</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VBCph</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VBAph</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VCAph</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VCBph</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>VHHHA</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VhhhA</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VhhhB</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VhhhC</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TA</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TAphh</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TBphh</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TCphh</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TABIJ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TABhh</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TAChh</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kindref="member">DataPtr&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TBChh</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--<sp/>TIJK</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>,<sp/>DataPtr&lt;F&gt;<sp/>Tijk</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kindref="member">DataFieldType&lt;F&gt;</ref>*<sp/>Tijk_</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Doubles<sp/>contribution:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp"/>
   </compounddef>

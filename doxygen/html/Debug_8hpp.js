@@ -3,7 +3,6 @@ var Debug_8hpp =
     [ "atrip::IterationDescription", "structatrip_1_1IterationDescription.html", "structatrip_1_1IterationDescription" ],
     [ "ATRIP_BENCHMARK", "Debug_8hpp.html#ad0141f91cd5e10e24d6a723624c437df", null ],
     [ "ATRIP_DEBUG", "Debug_8hpp.html#af1c9f39d9f533bf92bcf20f1e925691e", null ],
-    [ "ATRIP_USE_DGEMM", "Debug_8hpp.html#a5cc2051ac37b4867f478c20baa37ebcf", null ],
     [ "DBG", "Debug_8hpp.html#ae8924623ca601364965e3d88fb7f40fa", null ],
     [ "LOG", "Debug_8hpp.html#aab91ba8612c2b67dad4376d30871eb95", null ],
     [ "OCD_Barrier", "Debug_8hpp.html#acd562c2a281e45f3c9e777ee85940952", null ],

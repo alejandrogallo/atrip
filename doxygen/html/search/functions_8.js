@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['localdatabaseelement_0',['localDatabaseElement',['../structatrip_1_1Slice_1_1mpi.html#a683412cfa56e875df04fd82a3530f332',1,'atrip::Slice::mpi']]]
+  ['hasrecycledreferencingtoit_0',['hasRecycledReferencingToIt',['../structatrip_1_1Slice.html#a4920626f4572e699367835f9a4be18b2',1,'atrip::Slice']]],
+  ['hasvaliddatapointer_1',['hasValidDataPointer',['../structatrip_1_1Slice.html#ae9851d6c9cbae126484ad37b2446408c',1,'atrip::Slice']]],
+  ['hhha_2',['HHHA',['../structatrip_1_1HHHA.html#aff728e9a480579582405964457af0d65',1,'atrip::HHHA']]]
 ];

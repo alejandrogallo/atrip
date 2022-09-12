@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="Tuples_8hpp" kind="file" language="C++">
     <compoundname>Tuples.hpp</compoundname>
     <includes local="no">vector</includes>
@@ -117,12 +117,6 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="7">
-        <label>Equations.hpp</label>
-        <link refid="Equations_8hpp"/>
-        <childnode refid="4" relation="include">
-        </childnode>
-      </node>
       <node id="2">
         <label>RankMap.hpp</label>
         <link refid="RankMap_8hpp"/>
@@ -132,8 +126,6 @@
       <node id="6">
         <label>Slice.hpp</label>
         <link refid="Slice_8hpp"/>
-        <childnode refid="7" relation="include">
-        </childnode>
         <childnode refid="2" relation="include">
         </childnode>
         <childnode refid="3" relation="include">
@@ -193,7 +185,7 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
@@ -216,63 +208,63 @@
 <codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
 <codeline lineno="36"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="37"><highlight class="normal"></highlight></codeline>
-<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Tuples<sp/>types][Tuples<sp/>types:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="39" refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>3&gt;;</highlight></codeline>
-<codeline lineno="40" refid="namespaceatrip_1a8b97b58a2469967c1a6da53511879c7b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a8b97b58a2469967c1a6da53511879c7b" kindref="member">PartialTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>2&gt;;</highlight></codeline>
-<codeline lineno="41" refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/>=<sp/>std::vector&lt;ABCTuple&gt;;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Tuples%20types][Tuples<sp/>types:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>3&gt;;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1a3b418cf6a27d7f12bcb3b8e42252ad35" kindref="member">PartialTuple</ref><sp/>=<sp/>std::array&lt;size_t,<sp/>2&gt;;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/>=<sp/>std::vector&lt;ABCTuple&gt;;</highlight></codeline>
 <codeline lineno="42"><highlight class="normal"></highlight></codeline>
-<codeline lineno="43" refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref><sp/>=<sp/>{0,<sp/>0,<sp/>0};</highlight></codeline>
-<codeline lineno="44" refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/><ref refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" kindref="member">INVALID_TUPLE</ref><sp/>=<sp/>{1,<sp/>1,<sp/>1};</highlight></codeline>
+<codeline lineno="43" refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref><sp/>=<sp/>{0,<sp/>0,<sp/>0};</highlight></codeline>
+<codeline lineno="44" refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/><ref refid="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" kindref="member">INVALID_TUPLE</ref><sp/>=<sp/>{1,<sp/>1,<sp/>1};</highlight></codeline>
 <codeline lineno="45"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Tuples<sp/>types:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="46"><highlight class="normal"></highlight></codeline>
-<codeline lineno="47"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Distributing<sp/>the<sp/>tuples][Distributing<sp/>the<sp/>tuples:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Distributing%20the%20tuples][Distributing<sp/>the<sp/>tuples:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="48" refid="structatrip_1_1TuplesDistribution" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref><sp/>{</highlight></codeline>
-<codeline lineno="49" refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="50" refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" kindref="member">tupleIsFake</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>t<sp/>==<sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref>;<sp/>}</highlight></codeline>
+<codeline lineno="49" refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="50" refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" kindref="member">tupleIsFake</ref>(<ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>t<sp/>==<sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref>;<sp/>}</highlight></codeline>
 <codeline lineno="51"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributing<sp/>the<sp/>tuples:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="53"><highlight class="normal"></highlight></codeline>
-<codeline lineno="54"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Node<sp/>information][Node<sp/>information:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Node%20information][Node<sp/>information:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="55" refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" refkind="member"><highlight class="normal">std::vector&lt;std::string&gt;<sp/><ref refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" kindref="member">getNodeNames</ref>(MPI_Comm<sp/>comm){</highlight></codeline>
 <codeline lineno="56"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>rank,<sp/>np;</highlight></codeline>
 <codeline lineno="57"><highlight class="normal"><sp/><sp/>MPI_Comm_rank(comm,<sp/>&amp;rank);</highlight></codeline>
 <codeline lineno="58"><highlight class="normal"><sp/><sp/>MPI_Comm_size(comm,<sp/>&amp;np);</highlight></codeline>
 <codeline lineno="59"><highlight class="normal"></highlight></codeline>
 <codeline lineno="60"><highlight class="normal"><sp/><sp/>std::vector&lt;std::string&gt;<sp/>nodeList(np);</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>nodeName[MPI_MAX_PROCESSOR_NAME]</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>,<sp/>nodeNames[np*MPI_MAX_PROCESSOR_NAME]</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/>nameLengths(np)</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>off(np)</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>nameLength;</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/>MPI_Get_processor_name(nodeName,<sp/>&amp;nameLength);</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/>MPI_Allgather(&amp;nameLength,</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_INT,</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths.data(),</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_INT,</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>comm);</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i(1);<sp/>i<sp/>&lt;<sp/>np;<sp/>i++)</highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>off[i]<sp/>=<sp/>off[i-1]<sp/>+<sp/>nameLengths[i-1];</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/>MPI_Allgatherv(nodeName,</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths[rank],</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_BYTE,</highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nodeNames,</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths.data(),</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>off.data(),</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_BYTE,</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>comm);</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i(0);<sp/>i<sp/>&lt;<sp/>np;<sp/>i++)<sp/>{</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>s(&amp;nodeNames[off[i]],<sp/>nameLengths[i]);</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>nodeList[i]<sp/>=<sp/>s;</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>nodeName[MPI_MAX_PROCESSOR_NAME];</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*nodeNames<sp/>=<sp/>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)malloc(np<sp/>*<sp/>MPI_MAX_PROCESSOR_NAME);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/>nameLengths(np)</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>off(np)</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>nameLength;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/>MPI_Get_processor_name(nodeName,<sp/>&amp;nameLength);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/>MPI_Allgather(&amp;nameLength,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_INT,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths.data(),</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_INT,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>comm);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i(1);<sp/>i<sp/>&lt;<sp/>np;<sp/>i++)</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>off[i]<sp/>=<sp/>off[i-1]<sp/>+<sp/>nameLengths[i-1];</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>MPI_Allgatherv(nodeName,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths[rank],</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_BYTE,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nodeNames,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nameLengths.data(),</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>off.data(),</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MPI_BYTE,</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>comm);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i(0);<sp/>i<sp/>&lt;<sp/>np;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>s(&amp;nodeNames[off[i]],<sp/>nameLengths[i]);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>nodeList[i]<sp/>=<sp/>s;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/>std::free(nodeNames);</highlight></codeline>
 <codeline lineno="90"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>nodeList;</highlight></codeline>
 <codeline lineno="91"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="92"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Node<sp/>information:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="93"><highlight class="normal"></highlight></codeline>
-<codeline lineno="94"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Node<sp/>information][Node<sp/>information:2]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Node%20information][Node<sp/>information:2]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="95" refid="structatrip_1_1RankInfo" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1RankInfo" kindref="compound">RankInfo</ref><sp/>{</highlight></codeline>
 <codeline lineno="96" refid="structatrip_1_1RankInfo_1a4d45ecf2d0af72d23a290b6938bf0fde" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/><ref refid="structatrip_1_1RankInfo_1a4d45ecf2d0af72d23a290b6938bf0fde" kindref="member">name</ref>;</highlight></codeline>
 <codeline lineno="97" refid="structatrip_1_1RankInfo_1ae97c5776e0429f5986ddeca169802813" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1RankInfo_1ae97c5776e0429f5986ddeca169802813" kindref="member">nodeId</ref>;</highlight></codeline>
@@ -335,8 +327,8 @@
 <codeline lineno="154"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="155"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Node<sp/>information:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="156"><highlight class="normal"></highlight></codeline>
-<codeline lineno="157"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Naive<sp/>list][Naive<sp/>list:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="158" refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" kindref="member">getTuplesList</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>rank,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>np)<sp/>{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive<sp/>list:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158" refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" kindref="member">getTuplesList</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>rank,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>np)<sp/>{</highlight></codeline>
 <codeline lineno="159"><highlight class="normal"></highlight></codeline>
 <codeline lineno="160"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>total<sp/>number<sp/>of<sp/>tuples<sp/>for<sp/>the<sp/>problem</highlight><highlight class="normal"></highlight></codeline>
@@ -354,7 +346,7 @@
 <codeline lineno="173"><highlight class="normal"></highlight></codeline>
 <codeline lineno="174"><highlight class="normal"><sp/><sp/><ref refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" kindref="member">LOG</ref>(1,</highlight><highlight class="stringliteral">&quot;Atrip&quot;</highlight><highlight class="normal">)<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;tuples_per_rank<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>tuples_per_rank<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="175"><highlight class="normal"><sp/><sp/><ref refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" kindref="member">WITH_RANK</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;start,<sp/>end<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>start<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>end<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="176"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/>result(tuples_per_rank,<sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref>);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/>result(tuples_per_rank,<sp/><ref refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" kindref="member">FAKE_TUPLE</ref>);</highlight></codeline>
 <codeline lineno="177"><highlight class="normal"></highlight></codeline>
 <codeline lineno="178"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>a(0),<sp/>r(0),<sp/>g(0);<sp/>a<sp/>&lt;<sp/>Nv;<sp/>a++)</highlight></codeline>
 <codeline lineno="179"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>b(a);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>b<sp/>&lt;<sp/>Nv;<sp/>b++)</highlight></codeline>
@@ -369,10 +361,10 @@
 <codeline lineno="188"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="189"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Naive<sp/>list:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="190"><highlight class="normal"></highlight></codeline>
-<codeline lineno="191"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Naive<sp/>list][Naive<sp/>list:2]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="192" refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" kindref="member">getAllTuplesList</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv)<sp/>{</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive<sp/>list:2]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="192" refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" kindref="member">getAllTuplesList</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv)<sp/>{</highlight></codeline>
 <codeline lineno="193"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>=<sp/>Nv<sp/>*<sp/>(Nv<sp/>+<sp/>1)<sp/>*<sp/>(Nv<sp/>+<sp/>2)<sp/>/<sp/>6<sp/>-<sp/>Nv;</highlight></codeline>
-<codeline lineno="194"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/>result(n);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/>result(n);</highlight></codeline>
 <codeline lineno="195"><highlight class="normal"></highlight></codeline>
 <codeline lineno="196"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>a(0),<sp/>u(0);<sp/>a<sp/>&lt;<sp/>Nv;<sp/>a++)</highlight></codeline>
 <codeline lineno="197"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>b(a);<sp/>b<sp/>&lt;<sp/>Nv;<sp/>b++)</highlight></codeline>
@@ -385,9 +377,9 @@
 <codeline lineno="204"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="205"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Naive<sp/>list:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="206"><highlight class="normal"></highlight></codeline>
-<codeline lineno="207"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Naive<sp/>list][Naive<sp/>list:3]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive<sp/>list:3]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="208" refid="structatrip_1_1NaiveDistribution" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1NaiveDistribution" kindref="compound">NaiveDistribution</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref><sp/>{</highlight></codeline>
-<codeline lineno="209" refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)</highlight><highlight class="keyword"><sp/>override<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="209" refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)</highlight><highlight class="keyword"><sp/>override<sp/></highlight><highlight class="normal">{</highlight></codeline>
 <codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>rank,<sp/>np;</highlight></codeline>
 <codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>MPI_Comm_rank(universe,<sp/>&amp;rank);</highlight></codeline>
 <codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/>MPI_Comm_size(universe,<sp/>&amp;np);</highlight></codeline>
@@ -396,11 +388,11 @@
 <codeline lineno="215"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="216"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Naive<sp/>list:3<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="217"><highlight class="normal"></highlight></codeline>
-<codeline lineno="218"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="219" refid="namespaceatrip_1_1group__and__sort" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">group_and_sort<sp/>{</highlight></codeline>
 <codeline lineno="220"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="221"><highlight class="normal"></highlight></codeline>
-<codeline lineno="222"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Utils][Utils:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Utils][Utils:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="223"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Provides<sp/>the<sp/>node<sp/>on<sp/>which<sp/>the<sp/>slice-element<sp/>is<sp/>found</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="224"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Right<sp/>now<sp/>we<sp/>distribute<sp/>the<sp/>slices<sp/>in<sp/>a<sp/>round<sp/>robin<sp/>fashion</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="225"><highlight class="normal"></highlight><highlight class="comment">//<sp/>over<sp/>the<sp/>different<sp/>nodes<sp/>(NOTE:<sp/>not<sp/>mpi<sp/>ranks<sp/>but<sp/>nodes)</highlight><highlight class="normal"></highlight></codeline>
@@ -410,7 +402,7 @@
 <codeline lineno="229"><highlight class="normal"></highlight></codeline>
 <codeline lineno="230"><highlight class="normal"></highlight><highlight class="comment">//<sp/>return<sp/>the<sp/>node<sp/>(or<sp/>all<sp/>nodes)<sp/>where<sp/>the<sp/>elements<sp/>of<sp/>this</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="231"><highlight class="normal"></highlight><highlight class="comment">//<sp/>tuple<sp/>are<sp/>located</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="232" refid="namespaceatrip_1_1group__and__sort_1a64e55f94387e9330b4afdb3e6a6d5556" refkind="member"><highlight class="normal">std::vector&lt;size_t&gt;<sp/><ref refid="namespaceatrip_1_1group__and__sort_1a64e55f94387e9330b4afdb3e6a6d5556" kindref="member">getTupleNodes</ref>(<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nNodes)<sp/>{</highlight></codeline>
+<codeline lineno="232" refid="namespaceatrip_1_1group__and__sort_1a64e55f94387e9330b4afdb3e6a6d5556" refkind="member"><highlight class="normal">std::vector&lt;size_t&gt;<sp/><ref refid="namespaceatrip_1_1group__and__sort_1a64e55f94387e9330b4afdb3e6a6d5556" kindref="member">getTupleNodes</ref>(<ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>nNodes)<sp/>{</highlight></codeline>
 <codeline lineno="233"><highlight class="normal"><sp/><sp/>std::vector&lt;size_t&gt;</highlight></codeline>
 <codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/>nTuple<sp/>=<sp/>{<sp/><ref refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" kindref="member">isOnNode</ref>(t[0],<sp/>nNodes)</highlight></codeline>
 <codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/><ref refid="namespaceatrip_1_1group__and__sort_1a5835bdc1344efcd309e8d74a9a796299" kindref="member">isOnNode</ref>(t[1],<sp/>nNodes)</highlight></codeline>
@@ -425,10 +417,10 @@
 <codeline lineno="244"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="245"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Utils:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="246"><highlight class="normal"></highlight></codeline>
-<codeline lineno="247"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Distribution][Distribution:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="248" refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" kindref="member">specialDistribution</ref>(<ref refid="structatrip_1_1group__and__sort_1_1Info" kindref="compound">Info</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>info,<sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>allTuples)<sp/>{</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Distribution][Distribution:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="248" refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" refkind="member"><highlight class="normal"><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" kindref="member">specialDistribution</ref>(<ref refid="structatrip_1_1group__and__sort_1_1Info" kindref="compound">Info</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>info,<sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>allTuples)<sp/>{</highlight></codeline>
 <codeline lineno="249"><highlight class="normal"></highlight></codeline>
-<codeline lineno="250"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/>nodeTuples;</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/>nodeTuples;</highlight></codeline>
 <codeline lineno="251"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>nNodes(info.<ref refid="structatrip_1_1group__and__sort_1_1Info_1ac66551138125dc11034726633a21d91e" kindref="member">nNodes</ref>);</highlight></codeline>
 <codeline lineno="252"><highlight class="normal"></highlight></codeline>
 <codeline lineno="253"><highlight class="normal"><sp/><sp/>std::vector&lt;ABCTuples&gt;</highlight></codeline>
@@ -597,7 +589,7 @@
 <codeline lineno="416"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>anyInvalid</highlight></codeline>
 <codeline lineno="417"><highlight class="normal"><sp/><sp/><sp/><sp/>=<sp/>std::any_of(nodeTuples.begin(),</highlight></codeline>
 <codeline lineno="418"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nodeTuples.end(),</highlight></codeline>
-<codeline lineno="419"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t)<sp/>{<sp/>return<sp/>t<sp/>==<sp/>INVALID_TUPLE;<sp/>});</highlight></codeline>
+<codeline lineno="419"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>t)<sp/>{<sp/>return<sp/>t<sp/>==<sp/>INVALID_TUPLE;<sp/>});</highlight></codeline>
 <codeline lineno="420"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(anyInvalid)<sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;Some<sp/>tuple<sp/>is<sp/>invalid<sp/>in<sp/>group-and-sort<sp/>algorithm&quot;</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="421"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="422"><highlight class="normal"></highlight></codeline>
@@ -607,7 +599,7 @@
 <codeline lineno="426"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="427"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distribution:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="428"><highlight class="normal"></highlight></codeline>
-<codeline lineno="429"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Main][Main:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="429"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Main][Main:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="430" refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" refkind="member"><highlight class="normal">std::vector&lt;ABCTuple&gt;<sp/><ref refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" kindref="member">main</ref>(MPI_Comm<sp/>universe,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv)<sp/>{</highlight></codeline>
 <codeline lineno="431"><highlight class="normal"></highlight></codeline>
 <codeline lineno="432"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>rank,<sp/>np;</highlight></codeline>
@@ -647,7 +639,7 @@
 <codeline lineno="466"><highlight class="normal"><sp/><sp/>MPI_Comm_split(universe,<sp/>color,<sp/>key,<sp/>&amp;INTRA_COMM);</highlight></codeline>
 <codeline lineno="467"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Main:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="468"><highlight class="normal"></highlight></codeline>
-<codeline lineno="469"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Main][Main:2]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="469"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Main][Main:2]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="470"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="471"><highlight class="normal"><sp/><sp/>tuplesPerRankLocal</highlight></codeline>
 <codeline lineno="472"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>=<sp/>nodeTuples.size()<sp/>/<sp/>nodeInfos[rank].ranksPerNode</highlight></codeline>
@@ -675,7 +667,7 @@
 <codeline lineno="494"><highlight class="normal"><ref refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" kindref="member">LOG</ref>(1,</highlight><highlight class="stringliteral">&quot;Atrip&quot;</highlight><highlight class="normal">)<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;#nodes<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>nNodes<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="495"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Main:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="496"><highlight class="normal"></highlight></codeline>
-<codeline lineno="497"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Main][Main:3]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="497"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Main][Main:3]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="498"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>totalTuples</highlight></codeline>
 <codeline lineno="499"><highlight class="normal"><sp/><sp/>=<sp/>tuplesPerRankGlobal<sp/>*<sp/>nodeInfos[rank].ranksPerNode;</highlight></codeline>
 <codeline lineno="500"><highlight class="normal"></highlight></codeline>
@@ -687,7 +679,7 @@
 <codeline lineno="506"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="507"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Main:3<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="508"><highlight class="normal"></highlight></codeline>
-<codeline lineno="509"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Main][Main:4]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="509"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Main][Main:4]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="510"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="511"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>construct<sp/>mpi<sp/>type<sp/>for<sp/>abctuple</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="512"><highlight class="normal"><sp/><sp/>MPI_Datatype<sp/>MPI_ABCTUPLE;</highlight></codeline>
@@ -711,25 +703,25 @@
 <codeline lineno="530"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="531"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Main:4<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="532"><highlight class="normal"></highlight></codeline>
-<codeline lineno="533"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Main][Main:5]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="533"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Main][Main:5]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="534"><highlight class="normal"></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>result;</highlight></codeline>
 <codeline lineno="535"><highlight class="normal"></highlight></codeline>
 <codeline lineno="536"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="537"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Main:5<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="538"><highlight class="normal"></highlight></codeline>
-<codeline lineno="539"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Interface][Interface:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="539"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Interface][Interface:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="540" refid="structatrip_1_1group__and__sort_1_1Distribution" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1group__and__sort_1_1Distribution" kindref="compound">Distribution</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref><sp/>{</highlight></codeline>
-<codeline lineno="541" refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)</highlight><highlight class="keyword"><sp/>override<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="541" refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref><sp/><ref refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" kindref="member">getTuples</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Nv,<sp/>MPI_Comm<sp/>universe)</highlight><highlight class="keyword"><sp/>override<sp/></highlight><highlight class="normal">{</highlight></codeline>
 <codeline lineno="542"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" kindref="member">main</ref>(universe,<sp/>Nv);</highlight></codeline>
 <codeline lineno="543"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
 <codeline lineno="544"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="545"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Interface:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="546"><highlight class="normal"></highlight></codeline>
-<codeline lineno="547"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="547"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="548"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>group_and_sort</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="549"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="550"><highlight class="normal"></highlight></codeline>
-<codeline lineno="551"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="551"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="552"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="553"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>

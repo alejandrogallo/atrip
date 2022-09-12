@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['naive_0',['NAIVE',['../structatrip_1_1Atrip_1_1Input.html#a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7',1,'atrip::Atrip::Input']]]
+  ['ijk_0',['IJK',['../namespaceatrip.html#a75f77db93d0a312ab4b85fbe7c5918b5a546afa311eeed473d1c3e187a7b41e03',1,'atrip']]],
+  ['ikj_1',['IKJ',['../namespaceatrip.html#a75f77db93d0a312ab4b85fbe7c5918b5a2f84610a3867d339bbb19a0a8eaa0323',1,'atrip']]]
 ];

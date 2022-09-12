@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
   <compounddef id="structatrip_1_1NaiveDistribution" kind="struct" language="C++" prot="public">
     <compoundname>atrip::NaiveDistribution</compoundname>
     <basecompoundref refid="structatrip_1_1TuplesDistribution" prot="public" virt="non-virtual">atrip::TuplesDistribution</basecompoundref>
     <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref></type>
+        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
         <definition>ABCTuples atrip::NaiveDistribution::getTuples</definition>
         <argsstring>(size_t Nv, MPI_Comm universe) override</argsstring>
         <name>getTuples</name>
