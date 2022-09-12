@@ -195,7 +195,28 @@ template <typename F=double>
                            ;
           if (blank.info.state == Slice<F>::SelfSufficient) {
 #if defined(HAVE_CUDA)
-            blank.mpi_data = sources[from.source].data();
+            const size_t _size = sizeof(F) * sources[from.source].size();
+            // TODO: this is code duplication with downstairs
+            if (freePointers.size() == 0) {
+              std::stringstream stream;
+              stream << "No more free pointers "
+                     << "for type " << type
+                     << " and name " << name
+                      ;
+              throw std::domain_error(stream.str());
+            }
+            auto dataPointer = freePointers.begin();
+            freePointers.erase(dataPointer);
+            blank.data = *dataPointer;
+            //
+            //
+            // TODO [#A]: do cuMemcpy of
+            //      sources[from.source].data() ⇒ blank.data
+            // Do this when everything else is working.
+            // This will probably be a bottleneck of the H-to-D communication,
+            // as most slices are SelfSufficient.
+            //
+            //
 #else
             blank.data = sources[from.source].data();
 #endif
@@ -316,6 +337,16 @@ template <typename F=double>
             }
           }
 
+#if defined(HAVE_CUDA)
+          // In cuda, SelfSufficient slices have an ad-hoc pointer
+          // since it is a pointer on the device and has to be
+          // brought back to the free pointer bucket of the SliceUnion.
+          // Therefore, only in the Recycled case it should not be
+          // put back the pointer.
+          if (slice.info.state == Slice<F>::Recycled) {
+            freeSlicePointer = false;
+          }
+#else
           // if the slice is self sufficient, do not dare touching the
           // pointer, since it is a pointer to our sources in our rank.
           if (  slice.info.state == Slice<F>::SelfSufficient
@@ -323,6 +354,7 @@ template <typename F=double>
              ) {
             freeSlicePointer = false;
           }
+#endif
 
           // make sure we get its data pointer to be used later
           // only for non-recycled, since it can be that we need
@@ -346,7 +378,7 @@ template <typename F=double>
                     // << " info " << slice.info
                     << "\n";
           slice.free();
-        }
+        }  // we did not find the slice
 
       }
     }
