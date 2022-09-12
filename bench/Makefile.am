@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = subdir-objects
 include $(top_srcdir)/atrip.mk
 
 AM_CPPFLAGS = -I$(top_srcdir)/include/ $(CTF_CPPFLAGS)
@@ -19,4 +20,13 @@ endif
 if WITH_CUDA
 test_main_CXXFLAGS = $(CUDA_CXXFLAGS)
 test_main_LDADD += $(CUDA_LDFLAGS)
+
+AM_CXXFLAGS = $(CUDA_CXXFLAGS)
+AM_LDFLAGS += $(CUDA_LDFLAGS)
+
+bin_PROGRAMS += test-cublas-parallel-atrip
+test_cublas_parallel_SOURCES = test-cublas-parallel-atrip.cxx
+
+bin_PROGRAMS += test-cuda-sanity
+test_cuda_sanity_SOURCES = test-cuda-sanity.cxx
 endif
