@@ -33,9 +33,9 @@ jobs:
           - clang7
           - clang6
           - clang5
-	cuda:
-	  - false
-	  - true
+        cuda:
+          - false
+          - true
 
     steps:
     - uses: actions/checkout@v2.3.4
