@@ -21,6 +21,7 @@
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/CUDA.hpp>
 
 namespace atrip {
 
@@ -458,7 +459,11 @@ void unwrapAndMarkReady() {
 #if defined(HAVE_CUDA)
       // copy the retrieved mpi data to the device
       WITH_CHRONO("cuda:memcpy",
-                  cuMemcpyHtoD(data, (void*)mpi_data, sizeof(F) * size);)
+                  _CHECK_CUDA_SUCCESS("copying mpi data to device",
+                                      cuMemcpyHtoD(data,
+                                                   (void*)mpi_data,
+                                                   sizeof(F) * size));
+                  )
       std::free(mpi_data);
 #endif
 
