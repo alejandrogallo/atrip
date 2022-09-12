@@ -412,10 +412,17 @@ template <typename F=double>
 
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
-        cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
-	if (ptr == 0UL) {
-	  throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
-	}
+        const CUresult error =
+          cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
+        if (ptr == 0UL) {
+          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
+        }
+        if (error != CUDA_SUCCESS) {
+          std::stringstream s;
+          s << "Error allocating memory for slice buffers "
+            << "code " << error << "\n";
+          throw s.str();
+        }
 #else
         ptr = (DataPtr<F>)malloc(sizeof(F) * sources[0].size());
 #endif
