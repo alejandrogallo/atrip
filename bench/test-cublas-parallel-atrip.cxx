@@ -137,7 +137,7 @@ int main(int  argc, char** argv) {
   printf("no: %ld\n", no);
   printf("nv: %ld\n", nv);
   printf("SIZE %f GB\n", (3 * nv * oo
-                          + 6 * oo * nv
+                          + 6 * no * nv
                           + 3 * oo
                           + 3 * ooo
                           + 1 * ooo
