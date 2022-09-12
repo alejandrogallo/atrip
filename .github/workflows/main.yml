@@ -11,8 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      WITH_CURRENT_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --run"
-      WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --run"
+      WITH_CURRENT_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --arg cuda ${{matrix.cuda}} --run"
+      WITH_SHELL: "nix-shell ../../shell.nix --argstr compiler ${{matrix.compiler}} --arg cuda ${{matrix.cuda}} --run"
 
 
     strategy:
@@ -33,6 +33,9 @@ jobs:
           - clang7
           - clang6
           - clang5
+	cuda:
+	  - false
+	  - true
 
     steps:
     - uses: actions/checkout@v2.3.4
