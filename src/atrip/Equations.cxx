@@ -14,31 +14,13 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:2]]
 #include<atrip/Equations.hpp>
-#include<atrip/CUDA.hpp>
 
-#if defined(HAVE_CUDA)
-#include <cuda.h>
-#endif
+#include<atrip/CUDA.hpp>
 
 namespace atrip {
 // Prolog:2 ends here
 
 
-  // These are just help structures
-  // to help with the templating of reorder
-  // function
-  enum reordering_t
-    {
-     IJK,
-     IKJ,
-     JIK,
-     JKI,
-     KIJ,
-     KJI
-    };
-
-  template <typename F, reordering_t R>
-  struct reorder_proxy {};
 
 #ifdef HAVE_CUDA
 namespace cuda {
@@ -101,49 +83,42 @@ namespace cuda {
   template <>
   __device__
   cuDoubleComplex multiply(const cuDoubleComplex &a, const cuDoubleComplex &b) {
-   return
-     {a.x * b.x - a.y * b.y,
-      a.x * b.y + a.y * b.x};
+    return
+      {a.x * b.x - a.y * b.y,
+       a.x * b.y + a.y * b.x};
   }
 
   template <typename F>
   __device__
-  void sum_in_place(F* to, const F* b);
+  void sum_in_place(F* to, const F* from);
 
   template <>
   __device__
-  void sum_in_place(double* to, const double *b) { *to += *b; }
+  void sum_in_place(double* to, const double *from) { *to += *from; }
 
   template <>
   __device__
-  void sum_in_place(cuDoubleComplex* to, const cuDoubleComplex* b) {
-   to->x += b->x;
-   to->y += b->y;
-  }
-
-  __device__
-  cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz) {
-    lz.x += rz.x;
-    lz.y += rz.y;
-    return lz;
+  void sum_in_place(cuDoubleComplex* to, const cuDoubleComplex* from) {
+    to->x += from->x;
+    to->y += from->y;
   }
 
 };
 #endif
 
 #if defined(HAVE_CUDA)
-#define LIMS_KS()                                       \
-  size_t kmin = blockIdx.x * blockDim.x + threadIdx.x,  \
-    k = kmin,                                           \
-    idx = kmin * size * size * size                     \
-    ;                                                   \
-  k < (kmin < size) ? kmin + 1 : size
+#define FOR_K()                                             \
+  for (size_t kmin = blockIdx.x * blockDim.x + threadIdx.x, \
+         k = kmin,                                          \
+         idx = kmin * size * size * size;                   \
+       k < (kmin < size) ? kmin + 1 : size;                 \
+       k++)
 #else
-#define LIMS_KS size_t k=0, idx=0; k < size
+#define FOR_K() for (size_t k=0, idx=0; k < size; k++)
 #endif
 #define _IJK_(i, j, k) i + j*size + k*size*size
 #define _REORDER_BODY_(...)                       \
-  for (LIMS_KS() ; k++)                           \
+  FOR_K()                                         \
     for (size_t j = 0; j < size; j++)             \
       for (size_t i = 0; i < size; i++, idx++) {  \
         __VA_ARGS__                               \
@@ -152,7 +127,9 @@ namespace cuda {
   template <typename F>                         \
   __MAYBE_GLOBAL__                              \
   void reorder(reorder_proxy< F, _enum > p,     \
-               size_t size, F* to, F* from) {   \
+               size_t size,                     \
+               F* to,                           \
+               F* from) {                       \
     _REORDER_BODY_(__VA_ARGS__)                 \
       }
 #if defined(HAVE_CUDA)
@@ -161,9 +138,31 @@ namespace cuda {
 #define GO(__TO, __FROM) __TO += __FROM;
 #endif
 
+  // These are just help structures
+  // to help with the templating of reorder
+  // function
+  enum reordering_t
+    {
+     IJK,
+     IKJ,
+     JIK,
+     JKI,
+     KIJ,
+     KJI
+    };
+
+  /* 
+   * Please the c++ type checker and template creator
+   * in order to have an argument in the signature of
+   * the function  that helps the compiler know which
+   * instantiation it should take.
+   * 
+   */
+  template <typename F, reordering_t R>
+  struct reorder_proxy {};
 
   template <typename F, reordering_t R>
-  __MAYBE_GLOBAL__							\
+  __MAYBE_GLOBAL__
   void reorder(reorder_proxy<F, R> proxy,
                size_t size, F* to, F* from);
 
@@ -445,10 +444,14 @@ double getEnergySame
 
 #if defined(ATRIP_USE_DGEMM)
 #if defined(HAVE_CUDA)
-#define REORDER(__II, __JJ, __KK)                       \
-  reorder<<<bs, ths>>>(reorder_proxy<DataFieldType<F>,  \
-                       __II ## __JJ ## __KK >{},        \
-                       No, Tijk, _t_buffer);
+#define REORDER(__II, __JJ, __KK)                           \
+  reorder<<<bs, ths>>>(reorder_proxy<                       \
+                       DataFieldType<F>,                    \
+                       __II ## __JJ ## __KK                 \
+                       >{},                                 \
+                       No,                                  \
+                       Tijk,                                \
+                       _t_buffer);
 #define DGEMM_PARTICLES(__A, __B)               \
   atrip::xgemm<F>("T",                          \
                   "N",                          \
@@ -462,7 +465,7 @@ double getEnergySame
                   (int const*)&Nv,              \
                   &zero,                        \
                   _t_buffer,                    \
-                  (int const*)&NoNo);
+                  (int const*)&NoNo)
 #define DGEMM_HOLES(__A, __B, __TRANSB)         \
   atrip::xgemm<F>("N",                          \
                   __TRANSB,                     \
@@ -477,7 +480,7 @@ double getEnergySame
                   &zero,                        \
                   _t_buffer,                    \
                   (int const*)&NoNo             \
-                  );
+                  )
 #define MAYBE_CONJ(_conj, _buffer)                                      \
   cuda::maybeConjugate<<<                                               \
     Atrip::kernelDimensions.ooo.blocks,                                 \
@@ -512,7 +515,7 @@ double getEnergySame
                   &zero,                        \
                   _t_buffer,                    \
                   (int const*)&NoNo             \
-                  );
+                  )
 #define DGEMM_HOLES(__A, __B, __TRANSB)         \
   atrip::xgemm<F>("N",                          \
                   __TRANSB,                     \
@@ -527,7 +530,7 @@ double getEnergySame
                   &zero,                        \
                   _t_buffer,                    \
                   (int const*)&NoNo             \
-                  );
+                  )
 #define MAYBE_CONJ(_conj, _buffer)                \
   for (size_t __i = 0; __i < NoNoNo; ++__i)       \
     _conj[__i] = maybeConjugate<F>(_buffer[__i]);
@@ -538,13 +541,19 @@ double getEnergySame
 #ifdef HAVE_CUDA
     DataFieldType<F>* _t_buffer;
     DataFieldType<F>* _vhhh;
-    cuMemAlloc((CUdeviceptr*)&_t_buffer, NoNoNo * sizeof(DataFieldType<F>));
-    cuMemAlloc((CUdeviceptr*)&_vhhh, NoNoNo * sizeof(DataFieldType<F>));
+    WITH_CHRONO("double:cuda:alloc",
+    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
+                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
+                                   NoNoNo * sizeof(DataFieldType<F>)));
+    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
+                        cuMemAlloc((CUdeviceptr*)&_vhhh,
+                                   NoNoNo * sizeof(DataFieldType<F>)));
+                )
     const size_t
       bs = Atrip::kernelDimensions.ooo.blocks,
       ths = Atrip::kernelDimensions.ooo.threads;
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+    // cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    // cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #else
     DataFieldType<F>* _t_buffer = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
     DataFieldType<F>* _vhhh = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
@@ -651,9 +660,12 @@ double getEnergySame
 #ifdef HAVE_CUDA
     // we need to synchronize here since we need
     // the Tijk for next process in the pipeline
-    cuCtxSynchronize();
-    cuMemFree((CUdeviceptr)_vhhh);
-    cuMemFree((CUdeviceptr)_t_buffer);
+    _CHECK_CUDA_SUCCESS("Synchronizing",
+                        cuCtxSynchronize());
+    _CHECK_CUDA_SUCCESS("Freeing _vhhh",
+                        cuMemFree((CUdeviceptr)_vhhh));
+    _CHECK_CUDA_SUCCESS("Freeing _t_buffer",
+                        cuMemFree((CUdeviceptr)_t_buffer));
 #else
     free(_vhhh);
     free(_t_buffer);
