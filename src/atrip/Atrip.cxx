@@ -24,7 +24,7 @@
 
 using namespace atrip;
 #if defined(HAVE_CUDA)
-#include <cuda.h>
+#include <atrip/CUDA.hpp>
 #endif
 
 template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
@@ -49,11 +49,6 @@ void Atrip::init(MPI_Comm world)  {
   Atrip::communicator = world;
   MPI_Comm_rank(world, (int*)&Atrip::rank);
   MPI_Comm_size(world, (int*)&Atrip::np);
-
-#if defined(HAVE_CUDA)
-  Atrip::cuda.status = cublasCreate(&Atrip::cuda.handle);
-#endif
-
 }
 
 template <typename F>
@@ -71,18 +66,24 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 #if defined(HAVE_CUDA)
   int ngcards;
+  _CHECK_CUDA_SUCCESS("initializing cuda",
+                      cuInit(0));
+  _CHECK_CUDA_SUCCESS("getting device count",
+                      cuDeviceGetCount(&ngcards));
   const auto clusterInfo = getClusterInfo(Atrip::communicator);
-  cuDeviceGetCount(&ngcards);
   LOG(0,"Atrip") << "ngcards: " << ngcards << "\n";
   if (clusterInfo.ranksPerNode > ngcards) {
-    std::cerr << "ATRIP: You are running on more ranks per node than the number of graphic cards\n"
-              << "You have " << ngcards << " cards at your disposal\n";
-    throw "";
-  }
-  if (clusterInfo.ranksPerNode < ngcards) {
-    std::cerr << "You have " << ngcards << " cards at your disposal\n"
-              << "You will be only using " << clusterInfo.ranksPerNode
-              << ", i.e., the nubmer of ranks.\n";
+    const auto msg
+      = _FORMAT("ATRIP: You are running on more ranks per node than the number of graphic cards\n"
+                "You have %d cards at your disposal\n", ngcards);
+    std::cerr << msg;
+    throw msg;
+  } else if (clusterInfo.ranksPerNode < ngcards) {
+    const auto msg
+      = _FORMAT("You have %d cards at your disposal.\n"
+                "You will be only using %d, i.e, the number of ranks\n",
+                ngcards, clusterInfo.ranksPerNode);
+    std::cerr << msg;
   }
 
 
@@ -94,16 +95,27 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       struct { struct { size_t free, total; } avail; size_t total; } memory;
       char *name = (char*)malloc(256);
 
+      // - TODO :: we should check that the Zuweisung of graphic cards
+      //           to nodes works as expected, i.e., node k should get from 0
+      //           to ngcards with the formula =rank % ngcards=.
+
       // set current device
-      cuDeviceGet(&dev, rank);
-      cuCtxCreate(&ctx, 0, dev);
-      cuCtxSetCurrent(ctx);
+      _CHECK_CUDA_SUCCESS("getting device for index <rank>",
+                          cuDeviceGet(&dev, rank % ngcards));
+      _CHECK_CUDA_SUCCESS("creating a cuda context",
+                          cuCtxCreate(&ctx, 0, dev));
+      _CHECK_CUDA_SUCCESS("setting the context",
+                          cuCtxSetCurrent(ctx));
 
       // get information of the device
-      cuDeviceGetProperties(&prop, dev);
-      cuMemGetInfo(&memory.avail.free, &memory.avail.total);
-      cuDeviceGetName(name, 256, dev);
-      cuDeviceTotalMem(&memory.total, dev);
+      _CHECK_CUDA_SUCCESS("getting  properties of current device",
+                          cuDeviceGetProperties(&prop, dev));
+      _CHECK_CUDA_SUCCESS("getting memory information",
+                          cuMemGetInfo(&memory.avail.free, &memory.avail.total));
+      _CHECK_CUDA_SUCCESS("getting name",
+                          cuDeviceGetName(name, 256, dev));
+      _CHECK_CUDA_SUCCESS("getting total memory",
+                          cuDeviceTotalMem(&memory.total, dev));
 
       printf("\n"
              "CUDA CARD RANK %d\n"
@@ -124,6 +136,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
              memory.total / 1024.0 / 1024.0 / 1024.0
              );
       std::free((void*)name);
+
+      _CHECK_CUBLAS_SUCCESS("creating a cublas handle",
+                            cublasCreate(&Atrip::cuda.handle));
+
     }
     MPI_Barrier(universe);
   }
@@ -163,17 +179,27 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 #if defined(HAVE_CUDA)
   DataPtr<F> Tai, epsi, epsa;
-  //TODO: free memory pointers in the end of the algorithm
-  cuMemAlloc(&Tai, sizeof(F) * _Tai.size());
-  cuMemAlloc(&epsi, sizeof(F) * _epsi.size());
-  cuMemAlloc(&epsa, sizeof(F) * _epsa.size());
 
-  cuMemcpyHtoD(Tai, (void*)_Tai.data(), sizeof(F) * _Tai.size());
-  cuMemcpyHtoD(epsi,(void*)_epsi.data(), sizeof(F) * _epsi.size());
-  cuMemcpyHtoD(epsa, (void*)_epsa.data(), sizeof(F) * _epsa.size());
+  // TODO: free memory pointers in the end of the algorithm
 
-  cuMemAlloc(&Tijk, sizeof(F) * No * No * No);
-  cuMemAlloc(&Zijk, sizeof(F) * No * No * No);
+  _CHECK_CUDA_SUCCESS("Tai",
+                      cuMemAlloc(&Tai, sizeof(F) * _Tai.size()));
+  _CHECK_CUDA_SUCCESS("epsi",
+                      cuMemAlloc(&epsi, sizeof(F) * _epsi.size()));
+  _CHECK_CUDA_SUCCESS("epsa",
+                      cuMemAlloc(&epsa, sizeof(F) * _epsa.size()));
+
+  _CHECK_CUDA_SUCCESS("memcpy Tai",
+                      cuMemcpyHtoD(Tai, (void*)_Tai.data(), sizeof(F) * _Tai.size()));
+  _CHECK_CUDA_SUCCESS("memcpy epsi",
+                      cuMemcpyHtoD(epsi,(void*)_epsi.data(), sizeof(F) * _epsi.size()));
+  _CHECK_CUDA_SUCCESS("memcpy epsa",
+                      cuMemcpyHtoD(epsa, (void*)_epsa.data(), sizeof(F) * _epsa.size()));
+
+  _CHECK_CUDA_SUCCESS("Tijk",
+                      cuMemAlloc(&Tijk, sizeof(F) * No * No * No));
+  _CHECK_CUDA_SUCCESS("Zijk",
+                      cuMemAlloc(&Zijk, sizeof(F) * No * No * No));
 #else
   std::vector<F> &Tai = _Tai, &epsi = _epsi, &epsa = _epsa;
   Zijk = (DataFieldType<F>*)malloc(No*No*No * sizeof(DataFieldType<F>));
@@ -266,8 +292,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   auto const isFakeTuple
     = [&tuplesList, distribution](size_t const i) {
-      return distribution->tupleIsFake(tuplesList[i]);
-    };
+        return distribution->tupleIsFake(tuplesList[i]);
+      };
 
 
   using Database = typename Slice<F>::Database;
