@@ -55,7 +55,11 @@ jobs:
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
-        $WITH_SHELL '../../configure'
+        if [[ ${{matrix.cuda}} == true ]]; then
+          $WITH_SHELL '../../configure --enable-cuda'
+        else
+          $WITH_SHELL '../../configure'
+        fi
 
     - name: CTF (${{matrix.compiler}})
       run: |
