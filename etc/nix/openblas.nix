@@ -13,7 +13,8 @@ let
   );
   */
 
-  myopenblas = pkgs.enableDebugging pkgs.openblas;
+  #myopenblas = pkgs.enableDebugging pkgs.openblas;
+  myopenblas = pkgs.openblas;
 
 in
 
