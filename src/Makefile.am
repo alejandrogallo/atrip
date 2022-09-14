@@ -16,7 +16,7 @@ libatrip_a_CPPFLAGS += $(CUDA_CXXFLAGS)
 libatrip_a_DEPENDENCIES = $(NVCC_OBJS)
 libatrip_a_LIBADD = $(NVCC_OBJS)
 %.nvcc.o: %.cxx
-	$(NVCC) -c -x cu -I../ $(CPPFLAGS) $(CTF_CPPFLAGS) $(DEFS) $(libatrip_a_CPPFLAGS) $< -o $@
+	$(NVCC) -c -x cu -ccbin="${MPICXX}" -I../ $(CPPFLAGS) $(CTF_CPPFLAGS) $(DEFS) $(libatrip_a_CPPFLAGS) $< -o $@
 
 #./atrip/Equations.o: ./atrip/Equations.cxx
 #	$(NVCC) -c -I../ $(CPPFLAGS) $(libatrip_a_CPPFLAGS) $< -o $@

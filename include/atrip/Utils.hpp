@@ -52,11 +52,13 @@ namespace atrip {
 #pragma GCC diagnostic ignored "-Wunused-parameter"
   template <typename T>
   std::string pretty_print(T&& value) {
-    std::stringstream stream;
 #if ATRIP_DEBUG > 2
+    std::stringstream stream;
     dbg::pretty_print(stream, std::forward<T>(value));
-#endif
     return stream.str();
+#else
+    return "";
+#endif
   }
 #pragma GCC diagnostic pop
 // Pretty printing:1 ends here
