@@ -282,7 +282,7 @@
         <references refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" compoundref="Slice_8hpp" startline="350">atrip::Slice&lt; F &gt;::info</references>
         <references refid="classatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" compoundref="SliceUnion_8hpp" startline="603">atrip::SliceUnion&lt; F &gt;::name</references>
         <references refid="classatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" compoundref="SliceUnion_8hpp" startline="53" endline="63">atrip::SliceUnion&lt; F &gt;::neededSlices</references>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
         <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="597">atrip::SliceUnion&lt; F &gt;::rankMap</references>
         <references refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" compoundref="SliceUnion_8hpp" startline="602">atrip::SliceUnion&lt; F &gt;::slices</references>
@@ -314,7 +314,7 @@
         <references refid="structatrip_1_1Slice_1aea2369215b927bc117bbad21e4aa2b35" compoundref="Slice_8hpp" startline="369" endline="372">atrip::Slice&lt; F &gt;::markReady</references>
         <references refid="classatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" compoundref="SliceUnion_8hpp" startline="603">atrip::SliceUnion&lt; F &gt;::name</references>
         <references refid="classatrip_1_1SliceUnion_1a5c6aff911403f8a09491431863ff842c" compoundref="SliceUnion_8hpp" startline="53" endline="63">atrip::SliceUnion&lt; F &gt;::neededSlices</references>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" compoundref="SliceUnion_8hpp" startline="602">atrip::SliceUnion&lt; F &gt;::slices</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
         <references refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" compoundref="Debug_8hpp" startline="67">WITH_OCD</references>
@@ -502,7 +502,7 @@
         <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="544" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="544" bodyend="586"/>
         <references refid="structatrip_1_1Slice_1ab57c0d9c391694a84abe5327cd5fa1b4" compoundref="Slice_8hpp" startline="298" endline="323">atrip::Slice&lt; F &gt;::findByTypeAbc</references>
         <references refid="classatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" compoundref="SliceUnion_8hpp" startline="603">atrip::SliceUnion&lt; F &gt;::name</references>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" compoundref="SliceUnion_8hpp" startline="602">atrip::SliceUnion&lt; F &gt;::slices</references>
         <references refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="544" endline="586">atrip::SliceUnion&lt; F &gt;::unwrapSlice</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>

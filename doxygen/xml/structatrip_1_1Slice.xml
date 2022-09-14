@@ -444,7 +444,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="272" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="272" bodyend="293"/>
         <references refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" compoundref="Slice_8hpp" startline="350">atrip::Slice&lt; F &gt;::info</references>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
@@ -474,7 +474,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="297" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="298" bodyend="323"/>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
         <references refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" compoundref="Slice_8hpp" startline="221" endline="234">atrip::Slice&lt; F &gt;::subtupleBySlice</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
@@ -503,7 +503,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="327" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="327" bodyend="346"/>
         <references refid="structatrip_1_1Slice_1a5d20248fbeeed357af5abfa31c9f0d1b" compoundref="Slice_8hpp" startline="350">atrip::Slice&lt; F &gt;::info</references>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="60">atrip::pretty_print</references>
+        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
         <referencedby refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="515" endline="538">atrip::SliceUnion&lt; F &gt;::receive</referencedby>
@@ -702,7 +702,7 @@
         <references refid="structatrip_1_1Slice_1a0a10dbe08bdaca9682f640be8f8ae736" compoundref="Slice_8hpp" startline="361">atrip::Slice&lt; F &gt;::request</references>
         <references refid="structatrip_1_1Slice_1a7e16150ff4f60689556a1b9ca139a22d" compoundref="Slice_8hpp" startline="365">atrip::Slice&lt; F &gt;::size</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
-        <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="65">WITH_CHRONO</references>
+        <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="67">WITH_CHRONO</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a00a827ca8fcc5c1caa383b2798e10e5c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
