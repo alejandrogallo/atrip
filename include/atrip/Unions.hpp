@@ -52,6 +52,8 @@ namespace atrip {
                  , origin_.up.data()
                  , 1.0);
     memcpy(v.data(), toSlice.data, sizeof(F) * v.size());
+#else
+#  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
 #endif
 
   }
