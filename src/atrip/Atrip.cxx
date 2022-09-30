@@ -628,6 +628,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     OCD_Barrier(universe);
+    if (false)
     if (!isFakeTuple(i)) {
       WITH_CHRONO("oneshot-unwrap",
       WITH_CHRONO("unwrap",
