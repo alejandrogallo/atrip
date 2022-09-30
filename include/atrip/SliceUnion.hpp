@@ -208,15 +208,14 @@ template <typename F=double>
             auto dataPointer = freePointers.begin();
             freePointers.erase(dataPointer);
             blank.data = *dataPointer;
-            //
-            //
-            // TODO [#A]: do cuMemcpy of
-            //      sources[from.source].data() ⇒ blank.data
-            // Do this when everything else is working.
-            // This will probably be a bottleneck of the H-to-D communication,
-            // as most slices are SelfSufficient.
-            //
-            //
+            WITH_CHRONO("cuda:memcpy",
+            WITH_CHRONO("cuda:memcpy:self-sufficient",
+                        _CHECK_CUDA_SUCCESS("copying mpi data to device",
+                                            cuMemcpyHtoD(blank.data,
+                                                         (void*)sources[from.source].data(),
+                                                         sizeof(F) * sources[from.source].size()));
+                        ))
+
 #else
             blank.data = sources[from.source].data();
 #endif
