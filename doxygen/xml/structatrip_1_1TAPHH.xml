@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="62" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="62" bodyend="77"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="64" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="64" bodyend="79"/>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -73,13 +73,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="79" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="79" bodyend="92"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="81" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="81" bodyend="94"/>
         <references refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; F &gt;::find</references>
         <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">atrip::No</references>
         <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
-        <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="597">atrip::SliceUnion&lt; double &gt;::rankMap</references>
-        <references refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="600">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
-        <references refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="601">atrip::SliceUnion&lt; double &gt;::sources</references>
+        <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="596">atrip::SliceUnion&lt; double &gt;::rankMap</references>
+        <references refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="599">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
+        <references refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="600">atrip::SliceUnion&lt; double &gt;::sources</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -185,7 +185,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="61" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="61" bodyend="94"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="63" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="63" bodyend="96"/>
     <listofallmembers>
       <member refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>buildLocalDatabase</name></member>
       <member refid="classatrip_1_1SliceUnion_1a1f8df7551088267451baa50402eb6101" prot="public" virt="non-virtual"><scope>atrip::TAPHH</scope><name>checkForDuplicates</name></member>

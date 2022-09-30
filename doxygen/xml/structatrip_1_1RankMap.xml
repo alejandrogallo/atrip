@@ -143,11 +143,11 @@
         <references refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" compoundref="RankMap_8hpp" startline="29">atrip::RankMap&lt; F &gt;::RANK_ROUND_ROBIN</references>
         <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="139">atrip::ClusterInfo::rankInfos</references>
         <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::ranksPerNode</references>
-        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="79" endline="92">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="116" endline="128">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="152" endline="167">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="190" endline="205">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="229" endline="245">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="81" endline="94">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="154" endline="169">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="192" endline="207">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="231" endline="247">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>size_t</type>

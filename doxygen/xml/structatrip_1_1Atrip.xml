@@ -19,18 +19,18 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="44" column="19" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="44" bodyend="-1"/>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="251">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ab57c0d9c391694a84abe5327cd5fa1b4" compoundref="Slice_8hpp" startline="298" endline="323">atrip::Slice&lt; F &gt;::findByTypeAbc</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a48b37b45f3c9c1bd7b74d0370354a12b" compoundref="Slice_8hpp" startline="272" endline="293">atrip::Slice&lt; F &gt;::findRecycledSource</referencedby>
         <referencedby refid="structatrip_1_1Atrip_1a43f638f60cb68bf9ccd63c355acbec7f" compoundref="Atrip_8cxx" startline="48" endline="52">init</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" compoundref="SliceUnion_8hpp" startline="456" endline="482">atrip::SliceUnion&lt; F &gt;::init</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="515" endline="538">atrip::SliceUnion&lt; F &gt;::receive</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1ad017d3fcd96ed11a302502d99f612622" compoundref="SliceUnion_8hpp" startline="455" endline="481">atrip::SliceUnion&lt; F &gt;::init</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="514" endline="537">atrip::SliceUnion&lt; F &gt;::receive</referencedby>
         <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">run</referencedby>
-        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="79" endline="92">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="116" endline="128">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="152" endline="167">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="190" endline="205">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="229" endline="245">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="81" endline="94">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="154" endline="169">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="192" endline="207">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="231" endline="247">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
         <referencedby refid="namespaceatrip_1ae0be26b9684b07e88f48676188f0347a" compoundref="Blas_8cxx" startline="41" endline="79">atrip::xgemm&lt; double &gt;</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Atrip_1a991a8e5d4ad9b4e3fee02ec2b36b1661" prot="public" static="yes" mutable="no">
@@ -161,9 +161,9 @@
         <references refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" compoundref="Slice_8hpp" startline="70">atrip::Slice&lt; F &gt;::Info::tuple</references>
         <references refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" compoundref="Tuples_8hpp" startline="50" endline="50">atrip::TuplesDistribution::tupleIsFake</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" compoundref="Slice_8hpp" startline="72">atrip::Slice&lt; F &gt;::Info::type</references>
-        <references refid="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" compoundref="SliceUnion_8hpp" startline="612" endline="625">atrip::unionByName</references>
-        <references refid="classatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" compoundref="SliceUnion_8hpp" startline="540" endline="542">atrip::SliceUnion&lt; F &gt;::unwrapAll</references>
-        <references refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="544" endline="586">atrip::SliceUnion&lt; F &gt;::unwrapSlice</references>
+        <references refid="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" compoundref="SliceUnion_8hpp" startline="611" endline="624">atrip::unionByName</references>
+        <references refid="classatrip_1_1SliceUnion_1afd274dc3bf55ce58ffdae76a8720ba76" compoundref="SliceUnion_8hpp" startline="539" endline="541">atrip::SliceUnion&lt; F &gt;::unwrapAll</references>
+        <references refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="543" endline="585">atrip::SliceUnion&lt; F &gt;::unwrapSlice</references>
         <references refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" compoundref="Atrip_8hpp" startline="69">atrip::Atrip::Input&lt; F &gt;::Vhhhp</references>
         <references refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" compoundref="Atrip_8hpp" startline="68">atrip::Atrip::Input&lt; F &gt;::Vpphh</references>
         <references refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" compoundref="Atrip_8hpp" startline="70">atrip::Atrip::Input&lt; F &gt;::Vppph</references>

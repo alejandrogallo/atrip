@@ -54,7 +54,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="74" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="74" bodyend="-1"/>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="259" endline="384">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="395" endline="402">atrip::Slice&lt; F &gt;::free</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ae9851d6c9cbae126484ad37b2446408c" compoundref="Slice_8hpp" startline="428" endline="433">atrip::Slice&lt; F &gt;::hasValidDataPointer</referencedby>
         <referencedby refid="structatrip_1_1Slice_1adb64c4e0ccabba3313fdd82ac384ff12" compoundref="Slice_8hpp" startline="391" endline="393">atrip::Slice&lt; F &gt;::isDirectlyFetchable</referencedby>
@@ -79,7 +79,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="76" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="76" bodyend="-1"/>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="251">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="395" endline="402">atrip::Slice&lt; F &gt;::free</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="404" endline="413">atrip::Slice&lt; F &gt;::isFree</referencedby>
         <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
