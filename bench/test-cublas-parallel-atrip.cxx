@@ -158,8 +158,8 @@ int main(int  argc, char** argv) {
       MPI_Barrier(MPI_COMM_WORLD);
       timings["memcpy"].start();
       for (size_t _s = 0; _s < slices_d.size(); _s++) {
-        // for (size_t _b = 0; _b < slices_h[_s].size(); _b++) {
-        for (size_t _b = 0; _b < 1 ; _b++) {
+        for (size_t _b = 0; _b < slices_h[_s].size(); _b++) {
+        // for (size_t _b = 0; _b < 1 ; _b++) {
           auto device = (*slices_d[_s])[_b];
           auto host   = slices_h[_s][_b].data();
           cuMemcpyHtoD(device, host, sizes[_s]);

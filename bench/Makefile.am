@@ -29,4 +29,7 @@ test_cublas_parallel_atrip_SOURCES = test-cublas-parallel-atrip.cxx
 
 bin_PROGRAMS += test-cuda-sanity
 test_cuda_sanity_SOURCES = test-cuda-sanity.cxx
+
+bin_PROGRAMS += test-cublas-parallel
+test_cublas_parallel_SOURCES = test-cublas-parallel.cxx
 endif
