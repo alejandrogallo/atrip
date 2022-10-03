@@ -11,7 +11,8 @@ let
     config.allowUnfree = true;
   };
 
-  openblas = import ./etc/nix/openblas.nix { inherit pkgs; }; 
+  openblas = import ./etc/nix/openblas.nix { inherit pkgs; };
+  vendor = import ./etc/nix/vendor-shell.nix;
 
   mkl-pkg = import ./etc/nix/mkl.nix { pkgs = unfree-pkgs; };
   cuda-pkg = if cuda then (import ./cuda.nix { pkgs = unfree-pkgs; }) else {};
@@ -57,14 +58,15 @@ pkgs.mkShell rec {
   buildInputs
     = with pkgs; [
 
+        gdb
         coreutils
-        git vim
+        git
+        vim
 
         openmpi
         llvmPackages.openmp
 
         binutils
-        emacs
         gfortran
 
         gnumake
@@ -84,6 +86,15 @@ pkgs.mkShell rec {
   shellHook
     =
     ''
+
+    ${vendor.src}
+
+    ${vendor.cpath "${pkgs.openmpi.out}/include"}
+    ${vendor.cpath "${openblas.pkg.dev}/include"}
+
+    ${vendor.lib "${pkgs.openmpi.out}/lib"}
+    ${vendor.lib "${openblas.pkg.out}/lib"}
+
     export OMPI_CXX=${CXX}
     export OMPI_CC=${CC}
     CXX=${CXX}

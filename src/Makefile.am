@@ -7,7 +7,7 @@ AM_CPPFLAGS = $(CTF_CPPFLAGS)
 lib_LIBRARIES = libatrip.a
 
 libatrip_a_CPPFLAGS = -I$(top_srcdir)/include/
-libatrip_a_SOURCES = ./atrip/Blas.cxx
+libatrip_a_SOURCES = ./atrip/Blas.cxx ./atrip/Tuples.cxx
 NVCC_FILES = ./atrip/Equations.cxx ./atrip/Complex.cxx ./atrip/Atrip.cxx
 
 if WITH_CUDA
