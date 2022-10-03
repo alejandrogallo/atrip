@@ -25,3 +25,6 @@ config.mk
 /atrip.html
 /TAGS
 /config.h.in
+/result
+/result-dev
+/vendor/
