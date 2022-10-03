@@ -1,5 +1,5 @@
 { compiler ? "gcc"
-, pkgs ? import <nixpkgs> {} 
+, pkgs ? import <nixpkgs> {}
 , mkl ? false
 , cuda ? false
 , docs ? true

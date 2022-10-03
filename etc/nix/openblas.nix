@@ -20,6 +20,8 @@ in
 
 {
 
+  pkg = myopenblas;
+
   buildInputs = with pkgs; [
     myopenblas
     scalapack

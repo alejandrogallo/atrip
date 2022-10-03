@@ -16,7 +16,7 @@ $(CTF_SRC_PATH)/configure:
 
 # Here make sure that ctf does not builld with CUDA support
 # since it is broken anyways
-# 
+#
 # Also we patch the file kernel.h because it mostl
 # doesn't work when we try to include ctf in a CUDACC
 # compiler code.

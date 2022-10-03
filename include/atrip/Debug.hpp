@@ -76,7 +76,7 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Macros][Macros:2]]
 #ifndef LOG
-#define LOG(level, name) if (Atrip::rank == 0) std::cout << name << ": "
+#define LOG(level, name) if (atrip::Atrip::rank == 0) std::cout << name << ": "
 #endif
 // Macros:2 ends here
 
