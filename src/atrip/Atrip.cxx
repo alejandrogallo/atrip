@@ -21,6 +21,7 @@
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Unions.hpp>
 #include <atrip/Checkpoint.hpp>
+#include <atrip/DatabaseCommunicator.hpp>
 
 using namespace atrip;
 #if defined(HAVE_CUDA)
@@ -299,9 +300,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
     = [ &unions
+      , &in
+      , Nv
       , np
-      ] (ABCTuple const& abc, MPI_Comm const& c) -> Database {
+      ] (ABCTuple const& abc, MPI_Comm const& c, size_t iteration) -> Database {
 
+      if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
+
+        return naiveDatabase<F>(unions, Nv, np, iteration, c);
+
+      } else {
         WITH_CHRONO("db:comm:type:do",
           auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
         )
@@ -334,6 +342,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         WITH_CHRONO("db:comm:type:free", MPI_Type_free(&MPI_LDB_ELEMENT);)
 
         return db;
+      }
+
       };
 
   auto doIOPhase
@@ -564,7 +574,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     // COMM FIRST DATABASE ================================================{{{1
     if (i == first_iteration) {
       WITH_RANK << "__first__:first database ............ \n";
-      const auto db = communicateDatabase(abc, universe);
+      const auto db = communicateDatabase(abc, universe, i);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
       doIOPhase(db);
@@ -579,7 +589,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     if (abcNext) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       WITH_CHRONO("db:comm",
-        const auto db = communicateDatabase(*abcNext, universe);
+        const auto db = communicateDatabase(*abcNext, universe, i);
       )
       WITH_CHRONO("db:io",
         doIOPhase(db);
