@@ -230,6 +230,11 @@ void unwrapSlice(Slice<F>::Type t, ABCTuple abc, SliceUnion<F> *u) {
   }
 }
 
+#define PRINT_VARIABLE(v)                                         \
+  do {                                                            \
+    if (!rank) std::cout << "# " << #v << ": " << v << std::endl; \
+  } while (0)
+
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
@@ -239,6 +244,7 @@ int main(int argc, char** argv) {
   CLI::App app{"Main bench for atrip"};
   app.add_option("--no", no, "Occupied orbitals");
   app.add_option("--nv", nv, "Virtual orbitals");
+  app.add_option("--dist", tuplesDistributionString, "Which distribution");
   CLI11_PARSE(app, argc, argv);
 
   CTF::World world(argc, argv);
@@ -247,6 +253,7 @@ int main(int argc, char** argv) {
   MPI_Comm_rank(kaun, &rank);
   MPI_Comm_size(kaun, &np);
   Atrip::init(world.comm);
+
 
 
   atrip::ABCTuples tuplesList;
@@ -265,9 +272,17 @@ int main(int argc, char** argv) {
     }
   }
 
-  LOG(0, "bench:") << "We have "
-                   << tuplesList.size()
-                   << " tuples" << std::endl;
+  double tuplesListGb
+    = tuplesList.size() * sizeof(tuplesList[0])
+    / 1024.0 / 1024.0 / 1024.0;
+
+  std::cout << "\n";
+  PRINT_VARIABLE(tuplesDistributionString);
+  PRINT_VARIABLE(np);
+  PRINT_VARIABLE(no);
+  PRINT_VARIABLE(nv);
+  PRINT_VARIABLE(tuplesList.size());
+  PRINT_VARIABLE(tuplesListGb);
 
   // create a fake dry tensor
   Tr t_abph, t_abhh, t_tabhh, t_taphh, t_hhha;
@@ -383,9 +398,6 @@ int main(int argc, char** argv) {
     const ABCTuple abc = dist->tupleIsFake(tuplesList[it])
                        ? tuplesList[tuplesList.size() - 1]
                        : tuplesList[it]
-                 , *abcNext = it == (tuplesList.size() - 1)
-                            ? nullptr
-                            : &tuplesList[it + 1]
                  ;
 
     if (it > 0) {
@@ -398,13 +410,13 @@ int main(int argc, char** argv) {
     doIOPhase(db, to_send);
 
     if (it % 1000 == 0)
-      std::cout << _FORMAT("%ld :it(%ld) %f %% ∷ %ld ∷ %f GB\n",
+      std::cout << _FORMAT("%ld :it %ld  %f %% ∷ %ld ∷ %f GB\n",
                            rank,
                            it,
-                           100 * to_send.size() / tuplesList.size(),
+                           100.0 * double(to_send.size()) / double(tuplesList.size()),
                            to_send.size(),
-                           double(to_send.size()) * 8 /
-                           1024.0 / 1024.0 / 1024.0);
+                           double(to_send.size()) * sizeof(to_send[0])
+                           / 1024.0 / 1024.0 / 1024.0);
 
 
     for (auto const& u: unions) {
