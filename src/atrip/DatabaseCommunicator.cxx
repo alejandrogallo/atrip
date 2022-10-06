@@ -5,7 +5,7 @@
 namespace atrip {
 
   static
-  ABCTuples get_nth_naive_tuples(size_t Nv, size_t np) {
+  ABCTuples get_nth_naive_tuples(size_t Nv, size_t np, int64_t i) {
 
     const size_t
       // total number of tuples for the problem
@@ -17,6 +17,9 @@ namespace atrip {
 
 
     ABCTuples result(np);
+    if (i < 0) return result;
+    std::vector<size_t>
+      rank_indices(np, 0);
 
     for (size_t a(0), g(0); a < Nv; a++)
     for (size_t b(a);       b < Nv; b++)
@@ -32,7 +35,12 @@ namespace atrip {
           , end = tuples_per_rank * (rank + 1)
           ;
 
-        if ( start <= g && g < end) result[rank] = {a, b, c};
+        if ( start <= g && g < end) {
+          if (rank_indices[rank] == i) {
+            result[rank] = {a, b, c};
+          }
+          rank_indices[rank] += 1;
+        }
 
       }
       g++;
@@ -120,8 +128,12 @@ namespace atrip {
 
     using Database = typename Slice<F>::Database;
     Database db;
-    const auto tuples = get_nth_naive_tuples(nv, np);
-    const auto prev_tuples = get_nth_naive_tuples(nv, np);
+    const auto tuples = get_nth_naive_tuples(nv,
+                                             np,
+                                             iteration);
+    const auto prev_tuples = get_nth_naive_tuples(nv,
+                                                  np,
+                                                  (int64_t)iteration - 1);
 
     for (size_t rank = 0; rank < np; rank++) {
       auto abc = tuples[rank];
