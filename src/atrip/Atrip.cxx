@@ -307,7 +307,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
       if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
 
-        return naiveDatabase<F>(unions, Nv, np, iteration, c);
+        WITH_CHRONO("db:comm:naive",
+                    auto const& db = naiveDatabase<F>(unions,
+                                                      Nv,
+                                                      np,
+                                                      iteration,
+                                                      c);
+                    )
+        return db;
 
       } else {
         WITH_CHRONO("db:comm:type:do",

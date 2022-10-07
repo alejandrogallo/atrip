@@ -4,6 +4,9 @@
 
 namespace atrip {
 
+  /*   This function is really too slow, below are more performant
+   functions to get tuples.
+   */
   static
   ABCTuples get_nth_naive_tuples(size_t Nv, size_t np, int64_t i) {
 
@@ -48,6 +51,106 @@ namespace atrip {
 
     return result;
 
+  }
+
+  static
+  inline
+  size_t a_block_atrip(size_t a, size_t nv) {
+    return (nv - 1) * (nv - (a - 1))
+         - ((nv - 1) * nv) / 2
+         + ((a - 1) * (a - 2)) / 2
+         - 1;
+  }
+
+  static
+  inline
+  size_t a_block_sum_atrip(size_t T, size_t nv) {
+    size_t nv1 = nv - 1, tplus1 = T + 1;
+    return tplus1 * nv1 * nv
+         + nv1 * tplus1
+         - (nv1 * (T * (T + 1)) / 2)
+         - (tplus1 * (nv1 * nv) / 2)
+         + (((T * (T + 1) * (1 + 2 * T)) / 6) - 3 * ((T * (T + 1)) / 2)) / 2
+         ;
+         // + tplus1;
+  }
+
+  static
+  inline
+  size_t b_block_sum_atrip (size_t a, size_t T, size_t nv) {
+
+    return nv * ((T - a) + 1)
+         - (T * (T + 1) - a * (a - 1)) / 2
+         - 1;
+  }
+
+  static std::vector<size_t> a_sums;
+  static
+  inline
+  ABCTuple nth_atrip(size_t it, size_t nv) {
+
+    // build the sums if necessary
+    if (!a_sums.size()) {
+      a_sums.resize(nv);
+      for (size_t _i = 0; _i < nv; _i++) {
+        a_sums[_i] = a_block_sum_atrip(_i, nv);
+      }
+    }
+
+    int a = -1, block_a = 0;
+    for (const auto& sum: a_sums) {
+      ++a;
+      if (sum > it) {
+        break;
+      } else {
+        block_a = sum;
+      }
+    }
+
+    // build the b_sums
+    std::vector<size_t> b_sums(nv - a);
+    for (size_t t = a, i=0; t < nv; t++) {
+      b_sums[i++] = b_block_sum_atrip(a, t, nv);
+    }
+    int b = a - 1, block_b = block_a;
+    for (const auto& sum: b_sums) {
+      ++b;
+      if (sum > it) {
+        break;
+      } else {
+        block_b = sum;
+      }
+    }
+
+    const size_t
+      c = b + it - block_b + (a == b);
+
+    return {a, b, c};
+
+  }
+
+  static
+  inline
+  ABCTuples nth_atrip_distributed(size_t it, size_t nv, size_t np) {
+
+    ABCTuples result(np);
+
+    const size_t
+      // total number of tuples for the problem
+      n = nv * (nv + 1) * (nv + 2) / 6 - nv
+
+      // all ranks should have the same number of tuples_per_rank
+      , tuples_per_rank = n / np + size_t(n % np != 0)
+      ;
+
+
+    for (size_t rank = 0; rank < np; rank++) {
+      const size_t
+        global_iteration = tuples_per_rank * rank + it;
+      result[rank] = nth_atrip(global_iteration, nv);
+    }
+
+    return result;
   }
 
 
@@ -128,12 +231,26 @@ namespace atrip {
 
     using Database = typename Slice<F>::Database;
     Database db;
+
+#ifdef NAIVE_SLOW
+    WITH_CHRONO("db:comm:naive:tuples",
     const auto tuples = get_nth_naive_tuples(nv,
                                              np,
                                              iteration);
     const auto prev_tuples = get_nth_naive_tuples(nv,
                                                   np,
                                                   (int64_t)iteration - 1);
+                )
+#else
+    WITH_CHRONO("db:comm:naive:tuples",
+    const auto tuples = nth_atrip_distributed(iteration,
+                                              nv,
+                                              np);
+    const auto prev_tuples = nth_atrip_distributed(iteration - 1,
+                                                   nv,
+                                                   np);
+                )
+#endif
 
     for (size_t rank = 0; rank < np; rank++) {
       auto abc = tuples[rank];
@@ -160,7 +277,7 @@ namespace atrip {
     return db;
   }
 
-  template 
+  template
   typename Slice<double>::Database
   naiveDatabase<double>(Unions<double> &unions,
                 size_t nv,
@@ -168,7 +285,7 @@ namespace atrip {
                 size_t iteration,
                 MPI_Comm const& c);
 
-  template 
+  template
   typename Slice<Complex>::Database
   naiveDatabase<Complex>(Unions<Complex> &unions,
                 size_t nv,
