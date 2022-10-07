@@ -64,8 +64,8 @@ namespace atrip {
 
   static
   inline
-  size_t a_block_sum_atrip(size_t T, size_t nv) {
-    size_t nv1 = nv - 1, tplus1 = T + 1;
+  size_t a_block_sum_atrip(int64_t T, int64_t nv) {
+    int64_t nv1 = nv - 1, tplus1 = T + 1;
     return tplus1 * nv1 * nv
          + nv1 * tplus1
          - (nv1 * (T * (T + 1)) / 2)
@@ -77,7 +77,7 @@ namespace atrip {
 
   static
   inline
-  size_t b_block_sum_atrip (size_t a, size_t T, size_t nv) {
+  int64_t b_block_sum_atrip (int64_t a, int64_t T, int64_t nv) {
 
     return nv * ((T - a) + 1)
          - (T * (T + 1) - a * (a - 1)) / 2
@@ -94,10 +94,13 @@ namespace atrip {
       a_sums.resize(nv);
       for (size_t _i = 0; _i < nv; _i++) {
         a_sums[_i] = a_block_sum_atrip(_i, nv);
+        /*
+        std::cout << Atrip::rank << ": " << _i << " " << a_sums[_i] << std::endl;
+        */
       }
     }
 
-    int a = -1, block_a = 0;
+    int64_t a = -1, block_a = 0;
     for (const auto& sum: a_sums) {
       ++a;
       if (sum > it) {
@@ -108,30 +111,40 @@ namespace atrip {
     }
 
     // build the b_sums
-    std::vector<size_t> b_sums(nv - a);
+    std::vector<int64_t> b_sums(nv - a);
     for (size_t t = a, i=0; t < nv; t++) {
       b_sums[i++] = b_block_sum_atrip(a, t, nv);
+      /*
+      std::cout << Atrip::rank << ": b-sum " << i-1 << " "
+                << ":a " << a << " :t " << t  << " = " << b_sums[i-1] << std::endl;
+      */
     }
-    int b = a - 1, block_b = block_a;
+    int64_t b = a - 1, block_b = block_a;
     for (const auto& sum: b_sums) {
       ++b;
-      if (sum > it) {
+      if (sum + block_a > it) {
         break;
       } else {
-        block_b = sum;
+        block_b = sum + block_a;
       }
     }
 
-    const size_t
+
+    const int64_t
       c = b + it - block_b + (a == b);
 
-    return {a, b, c};
+    return {(size_t)a, (size_t)b, (size_t)c};
 
   }
 
   static
   inline
-  ABCTuples nth_atrip_distributed(size_t it, size_t nv, size_t np) {
+  ABCTuples nth_atrip_distributed(int64_t it, size_t nv, size_t np) {
+
+    if (it < 0) {
+      ABCTuples result(np, {nv, nv, nv});
+      return result;
+    }
 
     ABCTuples result(np);
 
@@ -147,6 +160,9 @@ namespace atrip {
     for (size_t rank = 0; rank < np; rank++) {
       const size_t
         global_iteration = tuples_per_rank * rank + it;
+      /*
+      std::cout << Atrip::rank << ":" << "global_bit " <<  global_iteration << "\n";
+      */
       result[rank] = nth_atrip(global_iteration, nv);
     }
 
@@ -243,13 +259,27 @@ namespace atrip {
                 )
 #else
     WITH_CHRONO("db:comm:naive:tuples",
-    const auto tuples = nth_atrip_distributed(iteration,
-                                              nv,
-                                              np);
-    const auto prev_tuples = nth_atrip_distributed(iteration - 1,
-                                                   nv,
-                                                   np);
+                const auto tuples = nth_atrip_distributed((int64_t)iteration,
+                                                          nv,
+                                                          np);
+                const auto prev_tuples = nth_atrip_distributed((int64_t)iteration - 1,
+                                                               nv,
+                                                               np);
                 )
+
+      if (false)
+      for (size_t rank = 0; rank < np; rank++) {
+        std::cout << Atrip::rank << ":"
+                  << " :tuples< " << rank << ">" << iteration
+                  << " :abc " << tuples[rank][0]
+                  << ", " << tuples[rank][1]
+                  << ", " << tuples[rank][2] << "\n";
+        std::cout << Atrip::rank << ":"
+                  << " :prev-tuples< " << rank << ">" << iteration
+                  << " :abc-prev " << prev_tuples[rank][0]
+                  << ", " << prev_tuples[rank][1]
+                  << ", " << prev_tuples[rank][2] << "\n";
+      }
 #endif
 
     for (size_t rank = 0; rank < np; rank++) {
