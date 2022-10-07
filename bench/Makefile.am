@@ -4,25 +4,39 @@ include $(top_srcdir)/atrip.mk
 AM_CPPFLAGS = -I$(top_srcdir)/include/ -I$(top_srcdir) $(CTF_CPPFLAGS)
 AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 
-bin_PROGRAMS = test_main tuples-distribution
-test_main_SOURCES = test_main.cxx
-tuples_distribution_SOURCES = tuples-distribution.cxx
-
-
-test_main_LDADD  = $(top_builddir)/src/libatrip.a
-tuples_distribution_LDADD  = $(top_builddir)/src/libatrip.a
-
 if WITH_BUILD_CTF
-test_main_LDADD += $(CTF_BUILD_PATH)/lib/libctf.a
-tuples_distribution_LDADD  += $(CTF_BUILD_PATH)/lib/libctf.a
+ATRIP_CTF = $(CTF_BUILD_PATH)/lib/libctf.a
 else
-test_main_LDADD += @LIBCTF_LD_LIBRARY_PATH@/libctf.a
-tuples_distribution_LDADD  += @LIBCTF_LD_LIBRARY_PATH@/libctf.a
+ATRIP_CTF = @LIBCTF_LD_LIBRARY_PATH@/libctf.a
+endif
+ATRIP_LIB = $(top_builddir)/src/libatrip.a $(ATRIP_CTF)
+
+bin_PROGRAMS =
+BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF)
+
+
+##
+## main entry point and bench
+##
+bin_PROGRAMS += atrip
+atrip_SOURCES = test_main.cxx
+atrip_CPPFLAGS = $(AM_CPPFLAGS)
+atrip_LDADD = $(BENCHES_LDADD)
+
+
+if !WITH_CUDA
+##
+## tuples distribution
+##
+bin_PROGRAMS += tuples-distribution
+tuples_distribution_LDADD  = $(BENCHES_LDADD)
+tuples_distribution_SOURCES = tuples-distribution.cxx
 endif
 
+
 if WITH_CUDA
-test_main_CXXFLAGS = $(CUDA_CXXFLAGS)
-test_main_LDADD += $(CUDA_LDFLAGS)
+AM_CPPFLAGS += $(CUDA_CXXFLAGS)
+BENCHES_LDADD += $(CUDA_LDFLAGS)
 
 AM_CXXFLAGS = $(CUDA_CXXFLAGS)
 AM_LDFLAGS += $(CUDA_LDFLAGS)
