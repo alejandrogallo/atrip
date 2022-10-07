@@ -250,12 +250,12 @@ namespace atrip {
 
 #ifdef NAIVE_SLOW
     WITH_CHRONO("db:comm:naive:tuples",
-    const auto tuples = get_nth_naive_tuples(nv,
-                                             np,
-                                             iteration);
-    const auto prev_tuples = get_nth_naive_tuples(nv,
-                                                  np,
-                                                  (int64_t)iteration - 1);
+                const auto tuples = get_nth_naive_tuples(nv,
+                                                         np,
+                                                         iteration);
+                const auto prev_tuples = get_nth_naive_tuples(nv,
+                                                              np,
+                                                              (int64_t)iteration - 1);
                 )
 #else
     WITH_CHRONO("db:comm:naive:tuples",

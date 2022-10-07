@@ -454,6 +454,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   // START MAIN LOOP ======================================================{{{1
 
+  MPI_Barrier(universe);
   double energy(0.);
   size_t first_iteration = 0;
   Checkpoint c;
