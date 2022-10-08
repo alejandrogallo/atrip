@@ -4,8 +4,10 @@
 
 namespace atrip {
 
-  /*   This function is really too slow, below are more performant
-   functions to get tuples.
+#if defined(ATRIP_NAIVE_SLOW)
+  /*
+   * This function is really too slow, below are more performant
+   * functions to get tuples.
    */
   static
   ABCTuples get_nth_naive_tuples(size_t Nv, size_t np, int64_t i) {
@@ -248,38 +250,25 @@ namespace atrip {
     using Database = typename Slice<F>::Database;
     Database db;
 
-#ifdef NAIVE_SLOW
+#ifdef ATRIP_NAIVE_SLOW
     WITH_CHRONO("db:comm:naive:tuples",
                 const auto tuples = get_nth_naive_tuples(nv,
                                                          np,
                                                          iteration);
                 const auto prev_tuples = get_nth_naive_tuples(nv,
                                                               np,
-                                                              (int64_t)iteration - 1);
+                                                              iteration - 1);
                 )
 #else
     WITH_CHRONO("db:comm:naive:tuples",
-                const auto tuples = nth_atrip_distributed((int64_t)iteration,
+                const auto tuples = nth_atrip_distributed(iteration,
                                                           nv,
                                                           np);
-                const auto prev_tuples = nth_atrip_distributed((int64_t)iteration - 1,
+                const auto prev_tuples = nth_atrip_distributed(iteration - 1,
                                                                nv,
                                                                np);
                 )
 
-      if (false)
-      for (size_t rank = 0; rank < np; rank++) {
-        std::cout << Atrip::rank << ":"
-                  << " :tuples< " << rank << ">" << iteration
-                  << " :abc " << tuples[rank][0]
-                  << ", " << tuples[rank][1]
-                  << ", " << tuples[rank][2] << "\n";
-        std::cout << Atrip::rank << ":"
-                  << " :prev-tuples< " << rank << ">" << iteration
-                  << " :abc-prev " << prev_tuples[rank][0]
-                  << ", " << prev_tuples[rank][1]
-                  << ", " << prev_tuples[rank][2] << "\n";
-      }
 #endif
 
     for (size_t rank = 0; rank < np; rank++) {
