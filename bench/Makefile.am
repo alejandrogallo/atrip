@@ -19,7 +19,7 @@ BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF)
 ## main entry point and bench
 ##
 bin_PROGRAMS += atrip
-atrip_SOURCES = test_main.cxx
+atrip_SOURCES = main.cxx
 atrip_CPPFLAGS = $(AM_CPPFLAGS)
 atrip_LDADD = $(BENCHES_LDADD)
 
