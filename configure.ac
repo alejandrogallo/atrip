@@ -21,26 +21,6 @@ AC_ARG_ENABLE(shared,
                                      files (default=YES)]),
               [], [enable_shared=yes])
 
-AC_ARG_ENABLE(
-    [slice],
-    [AS_HELP_STRING(
-      [--disable-slice],
-      [Disable the step of slicing tensors for CTF, this is useful for example for benchmarking or testing.])],
-    [atrip_dont_slice=1
-     AC_DEFINE([ATRIP_DONT_SLICE],1,[Wether CTF will slice tensors or skip the step])
-    ],
-    [atrip_dont_slice=0]
-)
-
-AC_ARG_ENABLE(
-    [atrip_dgemm],
-    [AS_HELP_STRING(
-      [--disable-dgemm],
-      [Disable using dgemm for the doubles equations])],
-    [],
-    [AC_DEFINE([ATRIP_USE_DGEMM],1,[Use dgemm for the doubles equations])]
-)
-
 
 AC_ARG_ENABLE([docs],
               [AS_HELP_STRING([--enable-docs],
@@ -74,13 +54,42 @@ AC_ARG_VAR([NVCC], [Path to the nvidia cuda compiler.])
 AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda, -lcudart, -lcublas.])
 AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
 
+dnl -----------------------------------------------------------------------
+dnl ATRIP CPP DEFINES
+dnl -----------------------------------------------------------------------
 
 AC_ARG_WITH([atrip-debug],
             [AS_HELP_STRING([--with-atrip-debug],
-                            [Debug level for atrip, possible values: 1, 2, 3, 4])],
+                            [Debug level for atrip, possible values:
+                                   1, 2, 3, 4])],
             [AC_DEFINE([ATRIP_DEBUG],[atrip-debug],[Atrip debug level])],
-            [AC_DEFINE([ATRIP_DEBUG],[1],[Atrip debug level])]
-            )
+            [AC_DEFINE([ATRIP_DEBUG],[1],[Atrip debug level])])
+
+
+AC_ARG_ENABLE([atrip_dgemm],
+              [AS_HELP_STRING([--disable-dgemm],
+                              [Disable using dgemm for the doubles equations])],
+              [],
+              [AC_DEFINE([ATRIP_USE_DGEMM],
+                         1,
+                         [Use dgemm for the doubles equations])])
+
+ATRIP_DEF([slice], [disable],
+          [ATRIP_DONT_SLICE],
+          [Disable the step of slicing tensors for CTF, this is useful
+          for example for benchmarking or testing.])
+
+ATRIP_DEF([only-dgemm], [enable],
+          [ATRIP_ONLY_DGEMM],
+          [Run only the parts of atrip that involve dgemm calls, this
+          is useful for benchmarking and testing the code, it is
+          intended for developers of Atrip.])
+
+ATRIP_DEF([naive-slow], [enable],
+          [ATRIP_NAIVE_SLOW],
+          [Run slow but correct code for the mapping of (iteration,
+          rank) to tuple of the naive tuple distribution.])
+
 
 dnl -----------------------------------------------------------------------
 
