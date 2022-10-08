@@ -646,6 +646,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
     OCD_Barrier(universe);
+#if defined(ATRIP_ONLY_DGEMM)
+    if (false)
+#endif
     if (!isFakeTuple(i)) {
       WITH_CHRONO("oneshot-unwrap",
       WITH_CHRONO("unwrap",
@@ -678,6 +681,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
     // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
+#if defined(ATRIP_ONLY_DGEMM)
+    if (false)
+#endif
     if (!isFakeTuple(i)) {
       double tupleEnergy(0.);
 
