@@ -54,33 +54,26 @@ namespace atrip {
     return result;
 
   }
-
-  static
-  inline
-  size_t a_block_atrip(size_t a, size_t nv) {
-    return (nv - 1) * (nv - (a - 1))
-         - ((nv - 1) * nv) / 2
-         + ((a - 1) * (a - 2)) / 2
-         - 1;
-  }
+#endif
 
   static
   inline
   size_t a_block_sum_atrip(int64_t T, int64_t nv) {
-    int64_t nv1 = nv - 1, tplus1 = T + 1;
-    return tplus1 * nv1 * nv
-         + nv1 * tplus1
-         - (nv1 * (T * (T + 1)) / 2)
-         - (tplus1 * (nv1 * nv) / 2)
-         + (((T * (T + 1) * (1 + 2 * T)) / 6) - 3 * ((T * (T + 1)) / 2)) / 2
+    const int64_t nv_min_1 = nv - 1, t_plus_1 = T + 1;
+    return t_plus_1 * nv_min_1 * nv
+         + nv_min_1 * t_plus_1
+         - (nv_min_1 * (T * t_plus_1) / 2)
+         - (t_plus_1 * (nv_min_1 * nv) / 2)
+        // do not simplify this expression, only the addition of both parts
+        // is a pair integer, prepare to endure the consequences of
+        // simplifying otherwise
+         + (((T * t_plus_1 * (1 + 2 * T)) / 6) - 3 * ((T * t_plus_1) / 2)) / 2
          ;
-         // + tplus1;
   }
 
   static
   inline
   int64_t b_block_sum_atrip (int64_t a, int64_t T, int64_t nv) {
-
     return nv * ((T - a) + 1)
          - (T * (T + 1) - a * (a - 1)) / 2
          - 1;
@@ -96,9 +89,6 @@ namespace atrip {
       a_sums.resize(nv);
       for (size_t _i = 0; _i < nv; _i++) {
         a_sums[_i] = a_block_sum_atrip(_i, nv);
-        /*
-        std::cout << Atrip::rank << ": " << _i << " " << a_sums[_i] << std::endl;
-        */
       }
     }
 
@@ -116,10 +106,6 @@ namespace atrip {
     std::vector<int64_t> b_sums(nv - a);
     for (size_t t = a, i=0; t < nv; t++) {
       b_sums[i++] = b_block_sum_atrip(a, t, nv);
-      /*
-      std::cout << Atrip::rank << ": b-sum " << i-1 << " "
-                << ":a " << a << " :t " << t  << " = " << b_sums[i-1] << std::endl;
-      */
     }
     int64_t b = a - 1, block_b = block_a;
     for (const auto& sum: b_sums) {
@@ -143,6 +129,11 @@ namespace atrip {
   inline
   ABCTuples nth_atrip_distributed(int64_t it, size_t nv, size_t np) {
 
+    // If we are getting the previous tuples in the first iteration,
+    // then just return an impossible tuple, different from the FAKE_TUPLE,
+    // because if FAKE_TUPLE is defined as {0,0,0} slices thereof
+    // are actually attainable.
+    //
     if (it < 0) {
       ABCTuples result(np, {nv, nv, nv});
       return result;
@@ -162,9 +153,6 @@ namespace atrip {
     for (size_t rank = 0; rank < np; rank++) {
       const size_t
         global_iteration = tuples_per_rank * rank + it;
-      /*
-      std::cout << Atrip::rank << ":" << "global_bit " <<  global_iteration << "\n";
-      */
       result[rank] = nth_atrip(global_iteration, nv);
     }
 
