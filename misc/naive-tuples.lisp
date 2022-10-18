@@ -1,3 +1,11 @@
+#+quicklisp
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (ql:quickload '(vgplot fiveam)))
+
+(defpackage :naive-tuples
+  (:use :cl :vgplot))
+(in-package :naive-tuples)
+
 (defun tuples-atrip (nv)
   (declare (optimize (speed 3) (safety 0) (debug 0)))
   (loop :for a :below nv
@@ -218,58 +226,3 @@
             cheaper
             (print (equal (nth i tuples)
                    cheaper)))))
-
-(let* ((l 101)
-       (tuples (tuples-atrip l)))
-  (loop :for a below l
-        :do (print (let ((s (a-block-atrip a l))
-                         (c (count-if (lambda (x) (eq (car x) a))
-                                      tuples)))
-                     (list :a a
-                           :size s
-                           :real c
-                           :? (eq c s))))))
-
-(ql:quickload 'vgplot)
-(import 'vgplot:plot)
-(import 'vgplot:replot)
-
-(let ((l 10))
-  (plot (mapcar (lambda (x) (getf x :size))
-                (loop :for a upto l
-                      collect (list :a a :size (a-block a l))))
-        "penis"))
-
-(let* ((l 50)
-       (tuples (tuples-half l)))
-  (loop :for a below l
-        :do (print (let ((s (a-block a l))
-                         (c (count-if (lambda (x) (eq (car x) a))
-                                      tuples)))
-                     (list :a a
-                           :size s
-                           :real c
-                           :? (eq c s))))))
-
-(defun range (from to) (loop for i :from from :to to collect i))
-
-(defun half-again (i nv)
-  (let ((a-block-list (let ((ll (mapcar (lambda (i) (a-block i nv))
-                                        (range 0 (- nv 1)))))
-                        (loop :for i :from 1 :to (length ll)
-                              :collect
-                              (reduce #'+
-                                      ll
-                                      :end i)))))
-    (loop :for blk :in a-block-list
-          :with a = 0
-          :with total-blk = 0
-          :if (eq 0 (floor i blk))
-            :do
-               (let ((i (mod i blk)))
-                 (print (list i (- i total-blk) blk a))
-                 (return))
-          :else
-            :do (progn
-                  (incf a)
-                  (setq total-blk blk)))))
