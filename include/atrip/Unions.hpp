@@ -19,8 +19,14 @@
 namespace atrip {
 
   template <typename F=double>
+  static
   void sliceIntoVector
-    ( std::vector<F> &v
+#if defined(ATRIP_SOURCES_IN_GPU)
+    ( DataPtr<F> &source
+#else
+    ( std::vector<F> &source
+#endif
+    , size_t sliceSize
     , CTF::Tensor<F> &toSlice
     , std::vector<int64_t> const low
     , std::vector<int64_t> const up
@@ -44,16 +50,28 @@ namespace atrip {
               << "\n";
 
 #ifndef ATRIP_DONT_SLICE
-    toSlice.slice( toSlice_.low.data()
-                 , toSlice_.up.data()
-                 , 0.0
-                 , origin
-                 , origin_.low.data()
-                 , origin_.up.data()
-                 , 1.0);
-    memcpy(v.data(), toSlice.data, sizeof(F) * v.size());
+    toSlice.slice(toSlice_.low.data(),
+                  toSlice_.up.data(),
+                  0.0,
+                  origin,
+                  origin_.low.data(),
+                  origin_.up.data(),
+                  1.0);
 #else
 #  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
+#endif
+
+#if defined(ATRIP_SOURCES_IN_GPU)
+    WITH_CHRONO("cuda:sources",
+                _CHECK_CUDA_SUCCESS("copying sources data to device",
+                                    cuMemcpyHtoD(source,
+                                                 toSlice.data,
+                                                 sliceSize));
+                )
+#else
+    memcpy(source.data(),
+           toSlice.data,
+           sizeof(F) * sliceSize);
 #endif
 
   }
@@ -80,16 +98,15 @@ namespace atrip {
 
     void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
-      const int Nv = this->sliceLength[0]
-              , No = this->sliceLength[1]
-              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
-              ;
 
+      const int
+        Nv = this->sliceLength[0],
+        No = this->sliceLength[1],
+        a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
 
-      sliceIntoVector<F>( this->sources[it]
-                        , to,   {0, 0, 0},    {Nv, No, No}
-                        , from, {a, 0, 0, 0}, {a+1, Nv, No, No}
-                        );
+      sliceIntoVector<F>(this->sources[it], this->sliceSize,
+                         to,   {0, 0, 0},    {Nv, No, No},
+                         from, {a, 0, 0, 0}, {a+1, Nv, No, No});
 
     }
 
@@ -118,14 +135,13 @@ namespace atrip {
     void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override
     {
 
-      const int No = this->sliceLength[0]
-              , a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
-              ;
+      const int
+        No = this->sliceLength[0],
+        a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
 
-      sliceIntoVector<F>( this->sources[it]
-                        , to,   {0, 0, 0},    {No, No, No}
-                        , from, {0, 0, 0, a}, {No, No, No, a+1}
-                        );
+      sliceIntoVector<F>(this->sources[it], this->sliceSize,
+                         to,   {0, 0, 0},    {No, No, No},
+                         from, {0, 0, 0, a}, {No, No, No, a+1});
 
     }
   };
@@ -153,18 +169,17 @@ namespace atrip {
 
     void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
-      const int Nv = this->sliceLength[0]
-              , No = this->sliceLength[1]
-              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
-              , a = el % Nv
-              , b = el / Nv
-              ;
+      const int
+        Nv = this->sliceLength[0],
+        No = this->sliceLength[1],
+        el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+        a = el % Nv,
+        b = el / Nv;
 
 
-      sliceIntoVector<F>( this->sources[it]
-                        , to,   {0, 0},       {Nv, No}
-                        , from, {a, b, 0, 0}, {a+1, b+1, Nv, No}
-                        );
+      sliceIntoVector<F>(this->sources[it], this->sliceSize,
+                         to,   {0, 0},       {Nv, No},
+                         from, {a, b, 0, 0}, {a+1, b+1, Nv, No});
 
     }
 
@@ -191,17 +206,17 @@ namespace atrip {
 
     void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
 
-      const int Nv = from.lens[0]
-              , No = this->sliceLength[1]
-              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
-              , a = el % Nv
-              , b = el / Nv
-              ;
+      const int
+        Nv = from.lens[0],
+        No = this->sliceLength[1],
+        el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+        a = el % Nv,
+        b = el / Nv;
 
-      sliceIntoVector<F>( this->sources[it]
-                        , to,   {0, 0},       {No, No}
-                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                        );
+
+      sliceIntoVector<F>(this->sources[it], this->sliceSize,
+                         to,   {0, 0},       {No, No},
+                         from, {a, b, 0, 0}, {a+1, b+1, No, No});
 
 
     }
@@ -231,17 +246,16 @@ namespace atrip {
     void sliceIntoBuffer(size_t it, CTF::Tensor<F> &to, CTF::Tensor<F> const& from) override {
       // TODO: maybe generalize this with ABHH
 
-      const int Nv = from.lens[0]
-              , No = this->sliceLength[1]
-              , el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it})
-              , a = el % Nv
-              , b = el / Nv
-              ;
+      const int
+        Nv = from.lens[0],
+        No = this->sliceLength[1],
+        el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+        a = el % Nv,
+        b = el / Nv;
 
-      sliceIntoVector<F>( this->sources[it]
-                        , to,   {0, 0},       {No, No}
-                        , from, {a, b, 0, 0}, {a+1, b+1, No, No}
-                        );
+      sliceIntoVector<F>(this->sources[it], this->sliceSize,
+                         to,   {0, 0},       {No, No},
+                         from, {a, b, 0, 0}, {a+1, b+1, No, No});
 
 
     }

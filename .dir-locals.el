@@ -13,7 +13,9 @@
                                      (format "%s/include/" root)
                                      (format "%s/" root)
                                      (format "%s/bench/" root)
-                                     (format "%s/build/main/" root)))))
+                                     (format "%s/build/main/" root)))
+                        (setq-local flycheck-clang-include-path
+                                    flycheck-gcc-include-path)))
               (eval . (flycheck-mode))
               (eval . (outline-minor-mode))
               (indent-tabs-mode . nil)
