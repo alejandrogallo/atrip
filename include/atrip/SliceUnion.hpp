@@ -18,6 +18,12 @@
 #include <atrip/Slice.hpp>
 #include <atrip/RankMap.hpp>
 
+#if defined(ATRIP_SOURCES_IN_GPU)
+#  define SOURCES_DATA(s) (s)
+#else
+#  define SOURCES_DATA(s) (s).data()
+#endif
+
 namespace atrip {
 // Prolog:1 ends here
 
@@ -195,7 +201,7 @@ template <typename F=double>
                            ;
           if (blank.info.state == Slice<F>::SelfSufficient) {
 #if defined(HAVE_CUDA)
-            const size_t _size = sizeof(F) * sources[from.source].size();
+            const size_t _size = sizeof(F) * sliceSize;
             // TODO: this is code duplication with downstairs
             if (freePointers.size() == 0) {
               std::stringstream stream;
@@ -212,12 +218,12 @@ template <typename F=double>
             WITH_CHRONO("cuda:memcpy:self-sufficient",
                         _CHECK_CUDA_SUCCESS("copying mpi data to device",
                                             cuMemcpyHtoD(blank.data,
-                                                         (void*)sources[from.source].data(),
-                                                         sizeof(F) * sources[from.source].size()));
+                                                         (void*)SOURCES_DATA(sources[from.source]),
+                                                         sizeof(F) * sliceSize));
                         ))
 
 #else
-            blank.data = sources[from.source].data();
+            blank.data = SOURCES_DATA(sources[from.source]);
 #endif
           } else {
             if (freePointers.size() == 0) {
@@ -396,15 +402,18 @@ template <typename F=double>
               , world(child_world)
               , universe(global_world)
               , sliceLength(sliceLength_)
+              , sliceSize(std::accumulate(sliceLength.begin(),
+                                          sliceLength.end(),
+                                          1UL, std::multiplies<size_t>()))
+#if defined(ATRIP_SOURCES_IN_GPU)
+              , sources(rankMap.nSources())
+#else
               , sources(rankMap.nSources(),
-                        std::vector<F>
-                          (std::accumulate(sliceLength.begin(),
-                                           sliceLength.end(),
-                                           1UL, std::multiplies<size_t>())))
+                        std::vector<F>(sliceSize))
+#endif
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers)
-              //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
@@ -412,7 +421,7 @@ template <typename F=double>
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
         const CUresult error =
-          cuMemAlloc(&ptr, sizeof(F) * sources[0].size());
+          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
         if (ptr == 0UL) {
           throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
         }
@@ -423,12 +432,12 @@ template <typename F=double>
           throw s.str();
         }
 #else
-        ptr = (DataPtr<F>)malloc(sizeof(F) * sources[0].size());
+        ptr = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
 #endif
       }
 
       slices
-        = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
+        = std::vector<Slice<F>>(2 * sliceTypes.size(), { sliceSize });
       // TODO: think exactly    ^------------------- about this number
 
       // initialize the freePointers with the pointers to the buffers
@@ -441,12 +450,12 @@ template <typename F=double>
       LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
       WITH_RANK << "#slices[0] " << slices[0].size << "\n";
       LOG(1,"Atrip") << "#sources " << sources.size() << "\n";
-      WITH_RANK << "#sources[0] " << sources[0].size() << "\n";
+      WITH_RANK << "#sources[0] " << sliceSize << "\n";
       WITH_RANK << "#freePointers " << freePointers.size() << "\n";
       LOG(1,"Atrip") << "#sliceBuffers " << sliceBuffers.size() << "\n";
       LOG(1,"Atrip") << "GB*" << np << " "
                            << double(sources.size() + sliceBuffers.size())
-                            * sources[0].size()
+                            * sliceSize
                             * 8 * np
                             / 1073741824.0
                            << "\n";
@@ -495,14 +504,13 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-      MPI_Isend( sources[info.from.source].data()
-               , sources[info.from.source].size()
-               , traits::mpi::datatypeOf<F>()
-               , otherRank
-               , tag
-               , universe
-               , &request
-               );
+      MPI_Isend((void*)SOURCES_DATA(sources[info.from.source]),
+                sliceSize,
+                traits::mpi::datatypeOf<F>(),
+                otherRank,
+                tag,
+                universe,
+                &request);
       WITH_CRAZY_DEBUG
       WITH_RANK << "sent to " << otherRank << "\n";
 
@@ -516,25 +524,26 @@ template <typename F=double>
 
       if (Atrip::rank == info.from.rank) return;
 
-      if (slice.info.state == Slice<F>::Fetch) {
+      if (slice.info.state == Slice<F>::Fetch) { // if-1
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
 #if defined(HAVE_CUDA)
+#  if !defined(ATRIP_CUDA_AWARE_MPI) && defined(ATRIP_SOURCES_IN_GPU)
+#    error "You need CUDA aware MPI to have slices on the GPU"
+#  endif
         slice.mpi_data = (F*)malloc(sizeof(F) * slice.size);
-        MPI_Irecv( slice.mpi_data
+        MPI_Irecv(slice.mpi_data,
 #else
-        MPI_Irecv( slice.data
+        MPI_Irecv(slice.data,
 #endif
-                 , slice.size
-                 , traits::mpi::datatypeOf<F>()
-                 , info.from.rank
-                 , tag
-                 , universe
-                 , &slice.request
-                //, MPI_STATUS_IGNORE
-                 );
-      }
-    }
+                  slice.size,
+                  traits::mpi::datatypeOf<F>(),
+                  info.from.rank,
+                  tag,
+                  universe,
+                  &slice.request);
+       } // if-1
+    } // receive
 
     void unwrapAll(ABCTuple const& abc) {
       for (auto type: sliceTypes) unwrapSlice(type, abc);
@@ -597,7 +606,12 @@ template <typename F=double>
     const MPI_Comm world;
     const MPI_Comm universe;
     const std::vector<size_t> sliceLength;
+    const size_t sliceSize;
+#if defined(ATRIP_SOURCES_IN_GPU)
+    std::vector< DataPtr<F> > sources;
+#else
     std::vector< std::vector<F> > sources;
+#endif
     std::vector< Slice<F> > slices;
     typename Slice<F>::Name name;
     const std::vector<typename Slice<F>::Type> sliceTypes;
