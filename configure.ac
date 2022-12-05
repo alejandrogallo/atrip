@@ -90,6 +90,17 @@ ATRIP_DEF([naive-slow], [enable],
           [Run slow but correct code for the mapping of (iteration,
           rank) to tuple of the naive tuple distribution.])
 
+ATRIP_DEF([sources-in-gpu], [enable],
+          [ATRIP_SOURCES_IN_GPU],
+          [When using CUDA, activate storing all sources (slices of
+          the input tensors) in the GPU. This means that a lot of GPUs
+          will be needed.])
+
+ATRIP_DEF([cuda-aware-mpi], [enable],
+          [ATRIP_CUDA_AWARE_MPI],
+          [When using MPI, assume support for CUDA aware mpi by the
+          given MPI implementation.])
+
 
 dnl -----------------------------------------------------------------------
 
