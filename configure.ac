@@ -164,8 +164,7 @@ AC_TYPE_SIZE_T
 dnl -----------------------------------------------------------------------
 dnl CHECK CTF
 if test xYES = x${BUILD_CTF}; then
-  AC_MSG_WARN([Sorry, building CTF not supported yet provide a build path
-                      with --with-ctf=path/to/ctf/installation])
+  AC_MSG_WARN([You will have to do make ctf before building the project.])
 else
   CPPFLAGS="$CPPFLAGS -I${LIBCTF_CPATH}"
   LDFLAGS="$LDFLAGS -L${LIBCTF_LD_LIBRARY_PATH} -lctf"

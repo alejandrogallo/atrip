@@ -69,10 +69,10 @@ And then you can see the =configure= options
 ../../configure --help
 #+end_src
 
-** Benchmarks
+** Benches
 
 The script =tools/configure-benches.sh= can be used to create
-a couple of configurations for benchmarks:
+a couple of configurations for benches:
 
 #+begin_src sh :exports results :results verbatim org   :results verbatim drawer replace output 
 awk '/begin +doc/,/end +doc/ { print $NL }' tools/configure-benches.sh |
@@ -92,3 +92,20 @@ sed "s/^# //; s/^# *$//; /^$/d"
   and it should use a CUDA aware MPI implementation.
   It also only uses the routines that involve dgemm.
 :end:
+
+In order to generate the benches just create a suitable directory for it
+
+#+begin_src sh :eval no
+mkdir -p build/benches
+cd buid/benches
+../../tools/configure-benches.sh CXX=g++ ...
+#+end_src
+
+and you will get a Makefile together with several project folders.
+You can either configure all projects with =make all= or
+then go in each folder.
+
+Notice that you can give a path for ctf for all of them by doing
+#+begin_src sh :eval no
+../../tools/configure-benches.sh --with-ctf=/absolute/path/to/ctf
+#+end_src
