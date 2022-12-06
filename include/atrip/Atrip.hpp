@@ -86,7 +86,7 @@ namespace atrip {
       ADD_ATTRIBUTE(bool, rankRoundRobin, false)
       ADD_ATTRIBUTE(bool, chrono, false)
       ADD_ATTRIBUTE(bool, barrier, false)
-      ADD_ATTRIBUTE(int, maxIterations, 0)
+      ADD_ATTRIBUTE(size_t, maxIterations, 0)
       ADD_ATTRIBUTE(int, iterationMod, -1)
       ADD_ATTRIBUTE(int, percentageMod, -1)
       ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)

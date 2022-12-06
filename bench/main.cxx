@@ -16,7 +16,7 @@
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
-  size_t checkpoint_it;
+  size_t checkpoint_it, max_iterations;
   int no(10), nv(100), itMod(-1), percentageMod(10);
   float checkpoint_percentage;
   bool
@@ -30,6 +30,9 @@ int main(int argc, char** argv) {
   app.add_option("--no", no, "Occupied orbitals");
   app.add_option("--nv", nv, "Virtual orbitals");
   app.add_option("--mod", itMod, "Iteration modifier");
+  app.add_option("--max-iterations",
+                 max_iterations,
+                 "Maximum number of iterations to run");
   app.add_flag("--keep-vppph", keepVppph, "Do not delete Vppph");
   app.add_flag("--nochrono", nochrono, "Do not print chrono");
   app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
@@ -48,11 +51,11 @@ int main(int argc, char** argv) {
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
   app.add_option("--ooo-blocks",
-		 ooo_blocks,
-		 "CUDA: Number of blocks per block for kernels going through ooo tensors");
+                 ooo_blocks,
+                 "CUDA: Number of blocks per block for kernels going through ooo tensors");
   app.add_option("--ooo-threads",
-		 ooo_threads,
-		 "CUDA: Number of threads per block for kernels going through ooo tensors");
+                 ooo_threads,
+                 "CUDA: Number of threads per block for kernels going through ooo tensors");
 #endif
 
   CLI11_PARSE(app, argc, argv);
@@ -199,6 +202,7 @@ int main(int argc, char** argv) {
        .with_iterationMod(itMod)
        .with_percentageMod(percentageMod)
        .with_tuplesDistribution(tuplesDistribution)
+       .with_maxIterations(max_iterations)
        // checkpoint options
        .with_checkpointAtEveryIteration(checkpoint_it)
        .with_checkpointAtPercentage(checkpoint_percentage)

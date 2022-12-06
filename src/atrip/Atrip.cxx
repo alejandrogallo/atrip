@@ -773,6 +773,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     Atrip::chrono["iterations"].stop();
     // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
+    if (in.maxIterations != 0 && i >= in.maxIterations) break;
+
   }
     // END OF MAIN LOOP
 
