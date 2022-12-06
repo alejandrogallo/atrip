@@ -26,3 +26,69 @@ before the proper paper is released please contact me.
 
 In the mean time the code has been used in
 [[https://aip.scitation.org/doi/10.1063/5.0074936][this publication]] and can therefore been cited.
+
+* Building
+
+Atrip uses autotools to build the system.
+Autotools works by first creating a =configure= script from
+a =configure.ac= file.
+
+Atrip should be built out of source, this means that
+you have to create a build directory other that the root
+directory, for instance in the =build/tutorial= directory
+
+#+begin_src sh :exports code 
+mkdir -p build/tutorial/
+cd build/tutorial
+#+end_src
+
+First you have to build the =configure= script by doing
+
+#+begin_src sh :dir build/tutorial :exports code :results raw drawer
+../../bootstrap.sh
+#+end_src
+
+#+RESULTS:
+:results:
+
+  Creating configure script
+
+
+  Now you can build by doing
+
+  mkdir build
+  cd build
+  ../configure
+  make extern
+  make all
+
+:end:
+
+And then you can see the =configure= options
+#+begin_src sh :dir build/tutorial :results raw drawer :eval no 
+../../configure --help
+#+end_src
+
+** Benchmarks
+
+The script =tools/configure-benches.sh= can be used to create
+a couple of configurations for benchmarks:
+
+#+begin_src sh :exports results :results verbatim org   :results verbatim drawer replace output 
+awk '/begin +doc/,/end +doc/ { print $NL }' tools/configure-benches.sh |
+grep -v -e "begin \+doc" -e "end \+doc" |
+sed "s/^# //; s/^# *$//; /^$/d"
+#+end_src
+
+#+RESULTS:
+:results:
+- default ::
+  This configuration uses a CPU code with dgemm
+  and without computing slices.
+- only-dgemm ::
+  This only runs the computation part that involves dgemms.
+- slices-on-gpu-only-dgemm ::
+  This configuration tests that slices reside completely on the gpu
+  and it should use a CUDA aware MPI implementation.
+  It also only uses the routines that involve dgemm.
+:end:

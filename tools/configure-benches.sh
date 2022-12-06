@@ -6,6 +6,7 @@ set -eu
 flags=("${@}")
 PROJECTS=()
 
+############################################################
 #
 ## Check root directory
 #
@@ -35,6 +36,7 @@ EOF
     exit 1
 }
 
+############################################################
 #
 ## Create configuration function
 #
@@ -48,7 +50,8 @@ create_config () {
     echo "> creating: $name"
     cat <<SH > configure
 #!/usr/bin/env bash
-# created by $0 on $(date)
+# creator: $0
+# date: $(date)
 
 $root_project/configure $(cat $file | paste -s) \\
 $(for word in "${flags[@]}"; do
@@ -62,9 +65,14 @@ SH
     cd - > /dev/null
 }
 
+############################################################
+# begin doc
 #
-## default configuration
+# - default ::
+#   This configuration uses a CPU code with dgemm
+#   and without computing slices.
 #
+# end doc
 
 tmp=`mktemp`
 cat <<EOF > $tmp
@@ -74,9 +82,12 @@ EOF
 create_config $tmp default
 rm $tmp
 
+# begin doc
 #
-## only-dgemm configuration
+# - only-dgemm ::
+#   This only runs the computation part that involves dgemms.
 #
+# end doc
 
 tmp=`mktemp`
 cat <<EOF > $tmp
@@ -87,6 +98,29 @@ EOF
 create_config $tmp only-dgemm
 rm $tmp
 
+#
+# begin doc
+#
+# - slices-on-gpu-only-dgemm ::
+#   This configuration tests that slices reside completely on the gpu
+#   and it should use a CUDA aware MPI implementation.
+#   It also only uses the routines that involve dgemm.
+#
+# end doc
+
+tmp=`mktemp`
+cat <<EOF > $tmp
+--enable-cuda
+--enable-sources-in-gpu
+--enable-cuda-aware-mpi
+--enable-only-dgemm
+--disable-slice
+EOF
+
+create_config $tmp sources-in-gpu
+rm $tmp
+
+############################################################
 #
 ## Create makefile
 #
@@ -128,5 +162,5 @@ EOF
 ## Emacs stuff
 # Local Variables:
 # eval: (outline-minor-mode)
-# outline-regexp: "## "
+# outline-regexp: "############################################################"
 # End:
