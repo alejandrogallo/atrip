@@ -87,7 +87,10 @@ sed "s/^# //; s/^# *$//; /^$/d"
   and without computing slices.
 - only-dgemm ::
   This only runs the computation part that involves dgemms.
-- slices-on-gpu-only-dgemm ::
+- cuda-only-dgemm ::
+  This is the naive CUDA implementation compiling only the dgemm parts
+  of the compute.
+- cuda-slices-on-gpu-only-dgemm ::
   This configuration tests that slices reside completely on the gpu
   and it should use a CUDA aware MPI implementation.
   It also only uses the routines that involve dgemm.

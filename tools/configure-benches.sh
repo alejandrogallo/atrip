@@ -98,10 +98,27 @@ EOF
 create_config $tmp only-dgemm
 rm $tmp
 
-#
 # begin doc
 #
-# - slices-on-gpu-only-dgemm ::
+# - cuda-only-dgemm ::
+#   This is the naive CUDA implementation compiling only the dgemm parts
+#   of the compute.
+#
+# end doc
+
+tmp=`mktemp`
+cat <<EOF > $tmp
+--enable-cuda
+--enable-only-dgemm
+--disable-slice
+EOF
+
+create_config $tmp cuda-only-dgemm
+rm $tmp
+
+# begin doc
+#
+# - cuda-slices-on-gpu-only-dgemm ::
 #   This configuration tests that slices reside completely on the gpu
 #   and it should use a CUDA aware MPI implementation.
 #   It also only uses the routines that involve dgemm.
@@ -117,7 +134,7 @@ cat <<EOF > $tmp
 --disable-slice
 EOF
 
-create_config $tmp sources-in-gpu
+create_config $tmp cuda-slices-on-gpu-only-dgemm
 rm $tmp
 
 ############################################################
