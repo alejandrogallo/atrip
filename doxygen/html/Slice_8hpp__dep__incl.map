@@ -1,7 +1,9 @@
 <map id="Slice.hpp" name="Slice.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="67,5,148,32"/>
-<area shape="rect" id="node2" href="$RankMap_8hpp.html" title=" " alt="" coords="5,80,116,107"/>
-<area shape="rect" id="node3" href="$SliceUnion_8hpp.html" title=" " alt="" coords="48,155,167,181"/>
-<area shape="rect" id="node4" href="$Atrip_8cxx.html" title=" " alt="" coords="67,304,147,331"/>
-<area shape="rect" id="node5" href="$Unions_8hpp.html" title=" " alt="" coords="103,229,197,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="67,5,148,31"/>
+<area shape="rect" id="node2" href="$RankMap_8hpp.html" title=" " alt="" coords="5,79,116,104"/>
+<area shape="rect" id="node3" href="$SliceUnion_8hpp.html" title=" " alt="" coords="48,152,167,177"/>
+<area shape="rect" id="node4" href="$Atrip_8cxx.html" title=" " alt="" coords="9,372,89,397"/>
+<area shape="rect" id="node5" href="$DatabaseCommunicator_8hpp.html" title=" " alt="" coords="100,299,307,324"/>
+<area shape="rect" id="node7" href="$Unions_8hpp.html" title=" " alt="" coords="60,225,155,251"/>
+<area shape="rect" id="node6" href="$DatabaseCommunicator_8cxx.html" title=" " alt="" coords="113,372,320,397"/>
 </map>

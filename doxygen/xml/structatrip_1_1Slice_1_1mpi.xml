@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1Slice_1_1mpi" kind="struct" language="C++" prot="public">
     <compoundname>atrip::Slice::mpi</compoundname>
     <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
@@ -41,6 +41,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="123" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="123" bodyend="147"/>
+        <references refid="structatrip_1_1Slice_1_1Location_1adafd6595edf2739cd0a2a31eb1bf57e6" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::rank</references>
+        <references refid="structatrip_1_1Slice_1_1Location_1a4ae8c64c9ef47d9ebebd04598b1bb35f" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::source</references>
         <references refid="structatrip_1_1Slice_1_1mpi_1a86502ca13faa0b4238c6c8c8c2c834a7" compoundref="Slice_8hpp" startline="149" endline="149">atrip::Slice&lt; F &gt;::mpi::usizeDt</references>
         <referencedby refid="structatrip_1_1Slice_1_1mpi_1ae2b01fb82834442096abf8d020b3cbf1" compoundref="Slice_8hpp" startline="151" endline="185">atrip::Slice&lt; F &gt;::mpi::sliceInfo</referencedby>
       </memberdef>
@@ -73,7 +75,12 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="151" column="23" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="151" bodyend="185"/>
+        <references refid="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" compoundref="Slice_8hpp" startline="76">atrip::Slice&lt; F &gt;::Info::from</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" compoundref="Slice_8hpp" startline="78">atrip::Slice&lt; F &gt;::Info::recycling</references>
         <references refid="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" compoundref="Slice_8hpp" startline="123" endline="147">atrip::Slice&lt; F &gt;::mpi::sliceLocation</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" compoundref="Slice_8hpp" startline="70">atrip::Slice&lt; F &gt;::Info::tuple</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" compoundref="Slice_8hpp" startline="72">atrip::Slice&lt; F &gt;::Info::type</references>
         <references refid="structatrip_1_1Slice_1_1mpi_1a86502ca13faa0b4238c6c8c8c2c834a7" compoundref="Slice_8hpp" startline="149" endline="149">atrip::Slice&lt; F &gt;::mpi::usizeDt</references>
         <references refid="structatrip_1_1Slice_1_1mpi_1a320eaefea6f5238ac8f490ba85c9bdb0" compoundref="Slice_8hpp" startline="116" endline="121">atrip::Slice&lt; F &gt;::mpi::vector</references>
         <referencedby refid="structatrip_1_1Slice_1_1mpi_1a683412cfa56e875df04fd82a3530f332" compoundref="Slice_8hpp" startline="187" endline="214">atrip::Slice&lt; F &gt;::mpi::localDatabaseElement</referencedby>

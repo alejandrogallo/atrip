@@ -1,8 +1,8 @@
 var searchData=
 [
   ['unionbyname_0',['unionByName',['../namespaceatrip.html#ab93cbc0ed3ae01101d887207e3032916',1,'atrip']]],
-  ['unions_2ehpp_1',['Unions.hpp',['../Unions_8hpp.html',1,'']]],
-  ['unique_2',['unique',['../namespaceatrip.html#a97dd69bc4fe50212652f17f2e6bd04fb',1,'atrip']]],
+  ['unions_1',['Unions',['../namespaceatrip.html#a606a2a10760977991e480fdb413d7bbb',1,'atrip']]],
+  ['unions_2ehpp_2',['Unions.hpp',['../Unions_8hpp.html',1,'']]],
   ['universe_3',['universe',['../classatrip_1_1SliceUnion.html#a0d658b0a4e8989473fd51a9ccaf9f166',1,'atrip::SliceUnion']]],
   ['unwrapall_4',['unwrapAll',['../classatrip_1_1SliceUnion.html#afd274dc3bf55ce58ffdae76a8720ba76',1,'atrip::SliceUnion']]],
   ['unwrapandmarkready_5',['unwrapAndMarkReady',['../structatrip_1_1Slice.html#ad9e60cbb9fe27fdd22edaf94dd46fa5e',1,'atrip::Slice']]],

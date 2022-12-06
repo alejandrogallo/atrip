@@ -5,6 +5,7 @@ var dir_f49edc0362c5951c56e897d397fa5ee8 =
     [ "Checkpoint.hpp", "Checkpoint_8hpp.html", "Checkpoint_8hpp" ],
     [ "Complex.hpp", "Complex_8hpp.html", "Complex_8hpp" ],
     [ "CUDA.hpp", "CUDA_8hpp.html", "CUDA_8hpp" ],
+    [ "DatabaseCommunicator.hpp", "DatabaseCommunicator_8hpp.html", "DatabaseCommunicator_8hpp" ],
     [ "Debug.hpp", "Debug_8hpp.html", "Debug_8hpp" ],
     [ "Equations.hpp", "Equations_8hpp.html", "Equations_8hpp" ],
     [ "RankMap.hpp", "RankMap_8hpp.html", "RankMap_8hpp" ],

@@ -4,8 +4,9 @@ var searchData=
   ['slicebuffers_1',['sliceBuffers',['../classatrip_1_1SliceUnion.html#afc17e4ba873e2ebd22b1758920f30e5e',1,'atrip::SliceUnion']]],
   ['slicelength_2',['sliceLength',['../classatrip_1_1SliceUnion.html#a62e3f6bd006b32bf7045d49baba4f8bb',1,'atrip::SliceUnion']]],
   ['slices_3',['slices',['../classatrip_1_1SliceUnion.html#a41082ca178c5fe8d391a3f48a3121651',1,'atrip::SliceUnion']]],
-  ['slicetypes_4',['sliceTypes',['../classatrip_1_1SliceUnion.html#a03c48b80d33fc123f36c091be480dd99',1,'atrip::SliceUnion']]],
-  ['source_5',['source',['../structatrip_1_1Slice_1_1Location.html#a4ae8c64c9ef47d9ebebd04598b1bb35f',1,'atrip::Slice::Location']]],
-  ['sources_6',['sources',['../classatrip_1_1SliceUnion.html#afc72b5575b3e9d5d9f3be4e645537a62',1,'atrip::SliceUnion']]],
-  ['state_7',['state',['../structatrip_1_1Slice_1_1Info.html#a95ae928785594ad332204f3377cd241e',1,'atrip::Slice::Info']]]
+  ['slicesize_4',['sliceSize',['../classatrip_1_1SliceUnion.html#a5b59b6f36eb558f52656222d18bc1add',1,'atrip::SliceUnion']]],
+  ['slicetypes_5',['sliceTypes',['../classatrip_1_1SliceUnion.html#a03c48b80d33fc123f36c091be480dd99',1,'atrip::SliceUnion']]],
+  ['source_6',['source',['../structatrip_1_1Slice_1_1Location.html#a4ae8c64c9ef47d9ebebd04598b1bb35f',1,'atrip::Slice::Location']]],
+  ['sources_7',['sources',['../classatrip_1_1SliceUnion.html#afc72b5575b3e9d5d9f3be4e645537a62',1,'atrip::SliceUnion']]],
+  ['state_8',['state',['../structatrip_1_1Slice_1_1Info.html#a95ae928785594ad332204f3377cd241e',1,'atrip::Slice::Info']]]
 ];

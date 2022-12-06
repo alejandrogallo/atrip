@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1IterationDescription" kind="struct" language="C++" prot="public">
     <compoundname>atrip::IterationDescription</compoundname>
     <includes refid="Debug_8hpp" local="no">Debug.hpp</includes>
@@ -17,7 +17,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="96" column="32" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="96" bodyend="-1"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a65234e51491c3fa418fcdfeb6e51ee1d" compoundref="Atrip_8cxx" startline="45" endline="47">atrip::registerIterationDescriptor</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">

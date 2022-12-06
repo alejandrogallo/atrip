@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1Slice_1_1Location" kind="struct" language="C++" prot="public">
     <compoundname>atrip::Slice::Location</compoundname>
     <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
@@ -18,7 +18,8 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="35" column="22" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="35" bodyend="-1"/>
         <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="404" endline="413">atrip::Slice&lt; F &gt;::isFree</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a36ea310b3a29e6d68402251cedf5e542" compoundref="Slice_8hpp" startline="503" endline="507">atrip::operator&lt;&lt;</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" compoundref="Slice_8hpp" startline="123" endline="147">atrip::Slice&lt; F &gt;::mpi::sliceLocation</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Slice_1_1Location_1a4ae8c64c9ef47d9ebebd04598b1bb35f" prot="public" static="no" mutable="no">
         <type>size_t</type>
@@ -34,7 +35,8 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="35" column="34" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="35" bodyend="-1"/>
         <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="404" endline="413">atrip::Slice&lt; F &gt;::isFree</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a36ea310b3a29e6d68402251cedf5e542" compoundref="Slice_8hpp" startline="503" endline="507">atrip::operator&lt;&lt;</referencedby>
+        <referencedby refid="structatrip_1_1Slice_1_1mpi_1aa975c4dfa6d925bcac1e0e305de882b7" compoundref="Slice_8hpp" startline="123" endline="147">atrip::Slice&lt; F &gt;::mpi::sliceLocation</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>

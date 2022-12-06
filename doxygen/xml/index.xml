@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.4" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.5" xml:lang="en-US">
   <compound refid="structatrip_1_1ABHH" kind="struct"><name>atrip::ABHH</name>
     <member refid="structatrip_1_1ABHH_1a170266890dd623dc1a4711c98b5455c6" kind="function"><name>ABHH</name></member>
     <member refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" kind="function"><name>sliceIntoBuffer</name></member>
@@ -181,6 +181,7 @@
     <member refid="classatrip_1_1SliceUnion_1a377c5f96161a857289606dd6adfa7632" kind="variable"><name>world</name></member>
     <member refid="classatrip_1_1SliceUnion_1a0d658b0a4e8989473fd51a9ccaf9f166" kind="variable"><name>universe</name></member>
     <member refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" kind="variable"><name>sliceLength</name></member>
+    <member refid="classatrip_1_1SliceUnion_1a5b59b6f36eb558f52656222d18bc1add" kind="variable"><name>sliceSize</name></member>
     <member refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" kind="variable"><name>sources</name></member>
     <member refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" kind="variable"><name>slices</name></member>
     <member refid="classatrip_1_1SliceUnion_1ade6e6d7ee37e541213ec57fde50f9855" kind="variable"><name>name</name></member>
@@ -231,6 +232,7 @@
     <member refid="namespaceatrip_1a75f77db93d0a312ab4b85fbe7c5918b5a6b9d43d299dd901c3252c7ac566888ed" kind="enumvalue"><name>KIJ</name></member>
     <member refid="namespaceatrip_1a75f77db93d0a312ab4b85fbe7c5918b5aa395a635cdba9cce51189474f7759680" kind="enumvalue"><name>KJI</name></member>
     <member refid="namespaceatrip_1aa4158a2e7e79c518dcb11d7ccfc1c82f" kind="typedef"><name>Complex</name></member>
+    <member refid="namespaceatrip_1a606a2a10760977991e480fdb413d7bbb" kind="typedef"><name>Unions</name></member>
     <member refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kind="typedef"><name>IterationDescriptor</name></member>
     <member refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kind="typedef"><name>ABCTuple</name></member>
     <member refid="namespaceatrip_1a3b418cf6a27d7f12bcb3b8e42252ad35" kind="typedef"><name>PartialTuple</name></member>
@@ -238,6 +240,7 @@
     <member refid="namespaceatrip_1a58948ccd67c60d4ec8ae0058af5ac658" kind="typedef"><name>DataPtr</name></member>
     <member refid="namespaceatrip_1a01ed999c96d78ffcac1a0ac0258ae07b" kind="typedef"><name>DataFieldType</name></member>
     <member refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kind="typedef"><name>Timings</name></member>
+    <member refid="namespaceatrip_1a7fb44be1b928f491eed7722febd3bc64" kind="variable"><name>a_sums</name></member>
     <member refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" kind="variable"><name>No</name></member>
     <member refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" kind="variable"><name>epsi</name></member>
     <member refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" kind="variable"><name>Tijk</name></member>
@@ -250,6 +253,14 @@
     <member refid="namespaceatrip_1adae32c9110a18e8819b0aede563514c5" kind="function"><name>xcopy&lt; Complex &gt;</name></member>
     <member refid="namespaceatrip_1aa73c739b1d3c24701db9a2af1fc0cdc3" kind="function"><name>maybeConjugate</name></member>
     <member refid="namespaceatrip_1a3109af0495d84e38227d528cd87b4bbb" kind="function"><name>maybeConjugate</name></member>
+    <member refid="namespaceatrip_1a250e4d03daa59a61aa112d854b8b5dc8" kind="function"><name>a_block_sum_atrip</name></member>
+    <member refid="namespaceatrip_1a01bb85c518777cc57d432c7fc03eaf0e" kind="function"><name>b_block_sum_atrip</name></member>
+    <member refid="namespaceatrip_1a60e828b36d58d8f4f0338d4068789fc3" kind="function"><name>nth_atrip</name></member>
+    <member refid="namespaceatrip_1a32a3d60445c5b8b35ed8561b8b0c9c34" kind="function"><name>nth_atrip_distributed</name></member>
+    <member refid="namespaceatrip_1aabc1bbbd6162d19634e206a56e480ae9" kind="function"><name>build_local_database_fake</name></member>
+    <member refid="namespaceatrip_1aaadb41de1ea6573c463846be9ffc2312" kind="function"><name>naiveDatabase</name></member>
+    <member refid="namespaceatrip_1ae3d47352e06bd21bfa8fce64d5c6373d" kind="function"><name>naiveDatabase&lt; double &gt;</name></member>
+    <member refid="namespaceatrip_1a28ca6fdc6a24abfdc8ec3ad6b8958f32" kind="function"><name>naiveDatabase&lt; Complex &gt;</name></member>
     <member refid="namespaceatrip_1a3e24927f1ad25d7485c846cb1cfe9626" kind="function"><name>reorder</name></member>
     <member refid="namespaceatrip_1a07602e56e5aa7d64d9afd4deaa63da6f" kind="function"><name>_MAKE_REORDER_</name></member>
     <member refid="namespaceatrip_1a81cc2b0f9795e0d0581b1565f978df25" kind="function"><name>GO</name></member>
@@ -270,6 +281,12 @@
     <member refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" kind="function"><name>doublesContribution</name></member>
     <member refid="namespaceatrip_1ad062d14940160e453a20e95adda30860" kind="function"><name>doublesContribution&lt; double &gt;</name></member>
     <member refid="namespaceatrip_1a8ae659da324c41f7f5a2204767bb32bd" kind="function"><name>doublesContribution&lt; Complex &gt;</name></member>
+    <member refid="namespaceatrip_1add9c677b29e91c3c06549475110474cd" kind="function"><name>unique</name></member>
+    <member refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" kind="function"><name>getNodeNames</name></member>
+    <member refid="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" kind="function"><name>getNodeInfos</name></member>
+    <member refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" kind="function"><name>getClusterInfo</name></member>
+    <member refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" kind="function"><name>getTuplesList</name></member>
+    <member refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" kind="function"><name>getAllTuplesList</name></member>
     <member refid="namespaceatrip_1a302b648f916e8ad102dd42072cca699f" kind="function"><name>dgemm_</name></member>
     <member refid="namespaceatrip_1a7dbace53db67d2fe7117fd8d401a714a" kind="function"><name>zgemm_</name></member>
     <member refid="namespaceatrip_1a3c50f63737df805d0a20ee9aa9edf5ab" kind="function"><name>dcopy_</name></member>
@@ -286,13 +303,7 @@
     <member refid="namespaceatrip_1a36ea310b3a29e6d68402251cedf5e542" kind="function"><name>operator&lt;&lt;</name></member>
     <member refid="namespaceatrip_1a425e1a9ba33666dec82fd4575664a48f" kind="function"><name>operator&lt;&lt;</name></member>
     <member refid="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" kind="function"><name>unionByName</name></member>
-    <member refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" kind="function"><name>getNodeNames</name></member>
-    <member refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" kind="function"><name>unique</name></member>
-    <member refid="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" kind="function"><name>getNodeInfos</name></member>
-    <member refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" kind="function"><name>getClusterInfo</name></member>
-    <member refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" kind="function"><name>getTuplesList</name></member>
-    <member refid="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" kind="function"><name>getAllTuplesList</name></member>
-    <member refid="namespaceatrip_1a6a50c8632daf83dc3a61bbc6c2eb122a" kind="function"><name>sliceIntoVector</name></member>
+    <member refid="namespaceatrip_1a5958e803b11be13b9c0d9eb7b8e10a5a" kind="function"><name>sliceIntoVector</name></member>
     <member refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kind="function"><name>pretty_print</name></member>
   </compound>
   <compound refid="namespaceatrip_1_1group__and__sort" kind="namespace"><name>atrip::group_and_sort</name>
@@ -328,6 +339,8 @@
     <member refid="CUDA_8hpp_1a2e6d5173a73fe3fdffed8acc4909f87e" kind="define"><name>_CHECK_CUDA_SUCCESS</name></member>
     <member refid="CUDA_8hpp_1afe5c45d5511dca8939dbba25a99b98d2" kind="define"><name>_CHECK_CUBLAS_SUCCESS</name></member>
   </compound>
+  <compound refid="DatabaseCommunicator_8hpp" kind="file"><name>DatabaseCommunicator.hpp</name>
+  </compound>
   <compound refid="Debug_8hpp" kind="file"><name>Debug.hpp</name>
     <member refid="Debug_8hpp_1ad0141f91cd5e10e24d6a723624c437df" kind="define"><name>ATRIP_BENCHMARK</name></member>
     <member refid="Debug_8hpp_1af1c9f39d9f533bf92bcf20f1e925691e" kind="define"><name>ATRIP_DEBUG</name></member>
@@ -348,6 +361,7 @@
   <compound refid="Slice_8hpp" kind="file"><name>Slice.hpp</name>
   </compound>
   <compound refid="SliceUnion_8hpp" kind="file"><name>SliceUnion.hpp</name>
+    <member refid="SliceUnion_8hpp_1acb82a526c84a9d293b9f6268e46dc388" kind="define"><name>SOURCES_DATA</name></member>
   </compound>
   <compound refid="Tuples_8hpp" kind="file"><name>Tuples.hpp</name>
   </compound>
@@ -366,6 +380,8 @@
   </compound>
   <compound refid="Complex_8cxx" kind="file"><name>Complex.cxx</name>
   </compound>
+  <compound refid="DatabaseCommunicator_8cxx" kind="file"><name>DatabaseCommunicator.cxx</name>
+  </compound>
   <compound refid="Equations_8cxx" kind="file"><name>Equations.cxx</name>
     <member refid="Equations_8cxx_1a52d23b643e1eac621883b37b007945a2" kind="define"><name>FOR_K</name></member>
     <member refid="Equations_8cxx_1a395c02ccca573561c1c6e5a2145c496b" kind="define"><name>_IJK_</name></member>
@@ -373,6 +389,8 @@
     <member refid="Equations_8cxx_1aa87a45e95558aa42c5daca3d0e886b10" kind="define"><name>_MAKE_REORDER_</name></member>
     <member refid="Equations_8cxx_1a4e85c46f94209db02d1e8f185096e27b" kind="define"><name>GO</name></member>
     <member refid="Equations_8cxx_1a2cdee9d116da91c80436685625726583" kind="define"><name>GO</name></member>
+  </compound>
+  <compound refid="Tuples_8cxx" kind="file"><name>Tuples.cxx</name>
   </compound>
   <compound refid="dir_f49edc0362c5951c56e897d397fa5ee8" kind="dir"><name>atrip</name>
   </compound>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1Slice" kind="struct" language="C++" prot="public">
     <compoundname>atrip::Slice</compoundname>
     <includes refid="Slice_8hpp" local="no">Slice.hpp</includes>
@@ -268,8 +268,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="350" column="6" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="350" bodyend="-1"/>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="91" endline="256">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1aac3a4c4281d2ff9e3c2a0060d3a5aa4a" compoundref="Slice_8hpp" startline="327" endline="346">atrip::Slice&lt; F &gt;::findByInfo</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a48b37b45f3c9c1bd7b74d0370354a12b" compoundref="Slice_8hpp" startline="272" endline="293">atrip::Slice&lt; F &gt;::findRecycledSource</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="395" endline="402">atrip::Slice&lt; F &gt;::free</referencedby>
@@ -281,7 +281,6 @@
         <referencedby refid="structatrip_1_1Slice_1a47d5e4787f2a9f5122ee7efc27b2565d" compoundref="Slice_8hpp" startline="384" endline="389">atrip::Slice&lt; F &gt;::isUnwrappable</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ac87980ccdf02128fee5a3529e32ce346" compoundref="Slice_8hpp" startline="376" endline="380">atrip::Slice&lt; F &gt;::isUnwrapped</referencedby>
         <referencedby refid="structatrip_1_1Slice_1aea2369215b927bc117bbad21e4aa2b35" compoundref="Slice_8hpp" startline="369" endline="372">atrip::Slice&lt; F &gt;::markReady</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" compoundref="Slice_8hpp" startline="437" endline="484">atrip::Slice&lt; F &gt;::unwrapAndMarkReady</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Slice_1a6a91e8f8b4520104947fcbce8733f7a6" prot="public" static="no" mutable="no">
@@ -297,8 +296,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="354" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="354" bodyend="-1"/>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="91" endline="256">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a44cca23ee01b498d8b9b725555f31481" compoundref="Slice_8hpp" startline="395" endline="402">atrip::Slice&lt; F &gt;::free</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ae9851d6c9cbae126484ad37b2446408c" compoundref="Slice_8hpp" startline="428" endline="433">atrip::Slice&lt; F &gt;::hasValidDataPointer</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" compoundref="Slice_8hpp" startline="404" endline="413">atrip::Slice&lt; F &gt;::isFree</referencedby>
@@ -368,7 +367,7 @@
         <references refid="structatrip_1_1Slice_1a4932aa32235b09b0a8220fc9ec3f3e46a1781b62e2b19583ea840692812d17cea" compoundref="Slice_8hpp" startline="48">atrip::Slice&lt; F &gt;::CB</references>
         <referencedby refid="structatrip_1_1RankMap_1a8f56a9194defc16337a8a773789028dd" compoundref="RankMap_8hpp" startline="74" endline="130">atrip::RankMap&lt; F &gt;::find</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ab57c0d9c391694a84abe5327cd5fa1b4" compoundref="Slice_8hpp" startline="298" endline="323">atrip::Slice&lt; F &gt;::findByTypeAbc</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a4920626f4572e699367835f9a4be18b2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::vector&lt; <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; * &gt;</type>
@@ -395,7 +394,7 @@
         <references refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0af916232db704e602917e8b38720e5863" compoundref="Slice_8hpp" startline="62">atrip::Slice&lt; F &gt;::Recycled</references>
         <references refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" compoundref="Slice_8hpp" startline="70">atrip::Slice&lt; F &gt;::Info::tuple</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" compoundref="Slice_8hpp" startline="72">atrip::Slice&lt; F &gt;::Info::type</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a7aa07601e9f23db70b9e97f7bcb3d979" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -420,7 +419,7 @@
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="255" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="255" bodyend="267"/>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="91" endline="256">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a48b37b45f3c9c1bd7b74d0370354a12b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -479,7 +478,7 @@
         <references refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" compoundref="Slice_8hpp" startline="221" endline="234">atrip::Slice&lt; F &gt;::subtupleBySlice</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="543" endline="585">atrip::SliceUnion&lt; F &gt;::unwrapSlice</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="552" endline="594">atrip::SliceUnion&lt; F &gt;::unwrapSlice</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1aac3a4c4281d2ff9e3c2a0060d3a5aa4a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt; &amp;</type>
@@ -506,7 +505,7 @@
         <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">atrip::pretty_print</references>
         <references refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" compoundref="Debug_8hpp" startline="72">WITH_CRAZY_DEBUG</references>
         <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="514" endline="537">atrip::SliceUnion&lt; F &gt;::receive</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" compoundref="SliceUnion_8hpp" startline="522" endline="546">atrip::SliceUnion&lt; F &gt;::receive</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -528,7 +527,7 @@
         <references refid="structatrip_1_1Slice_1ade9f7c874828268e1cc03d5da85734a0a08aec9b7b59e8a3ee12a965bf4d7afd9" compoundref="Slice_8hpp" startline="60">atrip::Slice&lt; F &gt;::Ready</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" compoundref="Slice_8hpp" startline="78">atrip::Slice&lt; F &gt;::Info::recycling</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ad9e60cbb9fe27fdd22edaf94dd46fa5e" compoundref="Slice_8hpp" startline="437" endline="484">atrip::Slice&lt; F &gt;::unwrapAndMarkReady</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1ac87980ccdf02128fee5a3529e32ce346" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
@@ -610,7 +609,7 @@
         <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
         <references refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" compoundref="Slice_8hpp" startline="70">atrip::Slice&lt; F &gt;::Info::tuple</references>
         <references refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" compoundref="Slice_8hpp" startline="72">atrip::Slice&lt; F &gt;::Info::type</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1Slice_1a0d405ac787aa47dc3ccb457ffaa6c839" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>bool</type>

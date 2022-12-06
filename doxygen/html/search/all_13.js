@@ -13,10 +13,11 @@ var searchData=
   ['tpphh_10',['Tpphh',['../structatrip_1_1Atrip_1_1Input.html#a325375bd6757a376825fa06f446e8e60',1,'atrip::Atrip::Input']]],
   ['tuple_11',['tuple',['../structatrip_1_1Slice_1_1Info.html#aead2cf6df57d78d19df52bcde0ec2054',1,'atrip::Slice::Info']]],
   ['tupleisfake_12',['tupleIsFake',['../structatrip_1_1TuplesDistribution.html#a0767a603e2865fef7d6a8cc9bf41c52a',1,'atrip::TuplesDistribution']]],
-  ['tuples_2ehpp_13',['Tuples.hpp',['../Tuples_8hpp.html',1,'']]],
-  ['tuplesdistribution_14',['TuplesDistribution',['../structatrip_1_1TuplesDistribution.html',1,'atrip::TuplesDistribution'],['../structatrip_1_1Atrip_1_1Input.html#a4a4349822442475c3ef3eadc9f1d9e58',1,'atrip::Atrip::Input::TuplesDistribution()']]],
-  ['ty_5fx_5ftu_15',['Ty_x_Tu',['../structatrip_1_1Slice.html#a9ee6254fe98a83b507ca88ec92dd5227',1,'atrip::Slice']]],
-  ['type_16',['type',['../structatrip_1_1DataField_3_01double_01_4.html#a0fcb16eb5bd749ecd239984eab2e78ba',1,'atrip::DataField&lt; double &gt;::type()'],['../structatrip_1_1DataField_3_01Complex_01_4.html#a3901eb252c1f20f9280e9f7937c08820',1,'atrip::DataField&lt; Complex &gt;::type()'],['../structatrip_1_1Slice_1_1Info.html#a906b399e728a367f9c64cdb87ec53dc0',1,'atrip::Slice::Info::type()']]],
+  ['tuples_2ecxx_13',['Tuples.cxx',['../Tuples_8cxx.html',1,'']]],
+  ['tuples_2ehpp_14',['Tuples.hpp',['../Tuples_8hpp.html',1,'']]],
+  ['tuplesdistribution_15',['TuplesDistribution',['../structatrip_1_1TuplesDistribution.html',1,'atrip::TuplesDistribution'],['../structatrip_1_1Atrip_1_1Input.html#a4a4349822442475c3ef3eadc9f1d9e58',1,'atrip::Atrip::Input::TuplesDistribution()']]],
+  ['ty_5fx_5ftu_16',['Ty_x_Tu',['../structatrip_1_1Slice.html#a9ee6254fe98a83b507ca88ec92dd5227',1,'atrip::Slice']]],
   ['type_17',['Type',['../structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46',1,'atrip::Slice']]],
-  ['types_2ehpp_18',['Types.hpp',['../Types_8hpp.html',1,'']]]
+  ['type_18',['type',['../structatrip_1_1DataField_3_01double_01_4.html#a0fcb16eb5bd749ecd239984eab2e78ba',1,'atrip::DataField&lt; double &gt;::type()'],['../structatrip_1_1DataField_3_01Complex_01_4.html#a3901eb252c1f20f9280e9f7937c08820',1,'atrip::DataField&lt; Complex &gt;::type()'],['../structatrip_1_1Slice_1_1Info.html#a906b399e728a367f9c64cdb87ec53dc0',1,'atrip::Slice::Info::type()']]],
+  ['types_2ehpp_19',['Types.hpp',['../Types_8hpp.html',1,'']]]
 ];

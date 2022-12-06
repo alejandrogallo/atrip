@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1group__and__sort_1_1Distribution" kind="struct" language="C++" prot="public">
     <compoundname>atrip::group_and_sort::Distribution</compoundname>
     <basecompoundref refid="structatrip_1_1TuplesDistribution" prot="public" virt="non-virtual">atrip::TuplesDistribution</basecompoundref>
     <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+      <memberdef kind="function" id="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
         <definition>ABCTuples atrip::group_and_sort::Distribution::getTuples</definition>
         <argsstring>(size_t Nv, MPI_Comm universe) override</argsstring>
@@ -26,8 +26,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="541" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="541" bodyend="543"/>
-        <references refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="124" column="13" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="458" bodyend="460"/>
+        <references refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8cxx" startline="351" endline="455">atrip::group_and_sort::main</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -58,7 +58,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="540" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="540" bodyend="544"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="123" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="123" bodyend="125"/>
     <listofallmembers>
       <member refid="structatrip_1_1group__and__sort_1_1Distribution_1ac5d7ab656681adfe542fcddfa57ac2a7" prot="public" virt="virtual"><scope>atrip::group_and_sort::Distribution</scope><name>getTuples</name></member>
       <member refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" prot="public" virt="virtual"><scope>atrip::group_and_sort::Distribution</scope><name>tupleIsFake</name></member>

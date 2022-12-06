@@ -19,6 +19,7 @@ var classatrip_1_1SliceUnion =
     [ "sliceBuffers", "classatrip_1_1SliceUnion.html#afc17e4ba873e2ebd22b1758920f30e5e", null ],
     [ "sliceLength", "classatrip_1_1SliceUnion.html#a62e3f6bd006b32bf7045d49baba4f8bb", null ],
     [ "slices", "classatrip_1_1SliceUnion.html#a41082ca178c5fe8d391a3f48a3121651", null ],
+    [ "sliceSize", "classatrip_1_1SliceUnion.html#a5b59b6f36eb558f52656222d18bc1add", null ],
     [ "sliceTypes", "classatrip_1_1SliceUnion.html#a03c48b80d33fc123f36c091be480dd99", null ],
     [ "sources", "classatrip_1_1SliceUnion.html#afc72b5575b3e9d5d9f3be4e645537a62", null ],
     [ "universe", "classatrip_1_1SliceUnion.html#a0d658b0a4e8989473fd51a9ccaf9f166", null ],

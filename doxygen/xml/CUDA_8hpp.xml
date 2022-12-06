@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="CUDA_8hpp" kind="file" language="C++">
     <compoundname>CUDA.hpp</compoundname>
     <includes refid="Utils_8hpp" local="no">atrip/Utils.hpp</includes>
@@ -71,6 +71,14 @@
         <childnode refid="5" relation="include">
         </childnode>
       </node>
+      <node id="9">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
       <node id="6">
         <label>RankMap.hpp</label>
         <link refid="RankMap_8hpp"/>
@@ -92,11 +100,15 @@
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
       </node>
-      <node id="9">
+      <node id="11">
         <label>Unions.hpp</label>
         <link refid="Unions_8hpp"/>
         <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
         </childnode>
       </node>
       <node id="8">
@@ -110,6 +122,10 @@
       <node id="3">
         <label>Complex.cxx</label>
         <link refid="Complex_8cxx"/>
+      </node>
+      <node id="10">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
       </node>
       <node id="4">
         <label>Equations.cxx</label>

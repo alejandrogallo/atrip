@@ -21,14 +21,14 @@ var hierarchy =
     [ "atrip::Slice< F >", "structatrip_1_1Slice.html", null ],
     [ "atrip::Slice< double >", "structatrip_1_1Slice.html", null ],
     [ "atrip::Slice< F >", "structatrip_1_1Slice.html", null ],
-    [ "atrip::SliceUnion< F >", "classatrip_1_1SliceUnion.html", null ],
-    [ "atrip::SliceUnion< double >", "classatrip_1_1SliceUnion.html", [
+    [ "atrip::SliceUnion< F >", "classatrip_1_1SliceUnion.html", [
       [ "atrip::ABHH< F >", "structatrip_1_1ABHH.html", null ],
       [ "atrip::ABPH< F >", "structatrip_1_1ABPH.html", null ],
       [ "atrip::HHHA< F >", "structatrip_1_1HHHA.html", null ],
       [ "atrip::TABHH< F >", "structatrip_1_1TABHH.html", null ],
       [ "atrip::TAPHH< F >", "structatrip_1_1TAPHH.html", null ]
     ] ],
+    [ "atrip::SliceUnion< double >", "classatrip_1_1SliceUnion.html", null ],
     [ "atrip::Timer", "structatrip_1_1Timer.html", null ],
     [ "atrip::TuplesDistribution", "structatrip_1_1TuplesDistribution.html", [
       [ "atrip::NaiveDistribution", "structatrip_1_1NaiveDistribution.html", null ],

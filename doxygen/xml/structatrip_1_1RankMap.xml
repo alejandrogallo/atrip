@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1RankMap" kind="struct" language="C++" prot="public">
     <compoundname>atrip::RankMap</compoundname>
     <includes refid="RankMap_8hpp" local="no">RankMap.hpp</includes>
@@ -138,16 +138,11 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="42" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="42" bodyend="54"/>
         <references refid="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" compoundref="RankMap_8hpp" startline="32">atrip::RankMap&lt; F &gt;::clusterInfo</references>
-        <references refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::nNodes</references>
+        <references refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" compoundref="Tuples_8hpp" startline="71">atrip::ClusterInfo::nNodes</references>
         <references refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::np</references>
         <references refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" compoundref="RankMap_8hpp" startline="29">atrip::RankMap&lt; F &gt;::RANK_ROUND_ROBIN</references>
-        <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="139">atrip::ClusterInfo::rankInfos</references>
-        <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::ranksPerNode</references>
-        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="81" endline="94">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="154" endline="169">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="192" endline="207">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="231" endline="247">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="72">atrip::ClusterInfo::rankInfos</references>
+        <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="71">atrip::ClusterInfo::ranksPerNode</references>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1RankMap_1a7ea842103ccde38ba37663002e0089c6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
         <type>size_t</type>
@@ -234,11 +229,11 @@
         <location file="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" line="74" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/RankMap.hpp" bodystart="74" bodyend="130"/>
         <references refid="structatrip_1_1RankMap_1af73c05557a7b53fd7524e60ed462b35e" compoundref="RankMap_8hpp" startline="32">atrip::RankMap&lt; F &gt;::clusterInfo</references>
         <references refid="structatrip_1_1RankMap_1a265e337d553853bf4c2b15703d9316c8" compoundref="RankMap_8hpp" startline="30">atrip::RankMap&lt; F &gt;::lengths</references>
-        <references refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::nNodes</references>
+        <references refid="structatrip_1_1ClusterInfo_1a237c0bdaac8aff12e5e8c03fc0840177" compoundref="Tuples_8hpp" startline="71">atrip::ClusterInfo::nNodes</references>
         <references refid="structatrip_1_1RankMap_1af64b2ce415e825b25000ab9e5f2a09e3" compoundref="RankMap_8hpp" startline="31">atrip::RankMap&lt; F &gt;::np</references>
         <references refid="structatrip_1_1RankMap_1ac0b8c9cc718d102197f4c373500c898a" compoundref="RankMap_8hpp" startline="29">atrip::RankMap&lt; F &gt;::RANK_ROUND_ROBIN</references>
-        <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="139">atrip::ClusterInfo::rankInfos</references>
-        <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="138">atrip::ClusterInfo::ranksPerNode</references>
+        <references refid="structatrip_1_1ClusterInfo_1a6ad5fdc3b6e91f33582348725661722b" compoundref="Tuples_8hpp" startline="72">atrip::ClusterInfo::rankInfos</references>
+        <references refid="structatrip_1_1ClusterInfo_1a636df31115df9361e5d787fca0b32817" compoundref="Tuples_8hpp" startline="71">atrip::ClusterInfo::ranksPerNode</references>
         <references refid="structatrip_1_1Slice_1a07166aae255c90bcbb117bf1e8e2fb56" compoundref="Slice_8hpp" startline="221" endline="234">atrip::Slice&lt; F &gt;::subtupleBySlice</references>
       </memberdef>
       </sectiondef>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="Blas_8hpp" kind="file" language="C++">
     <compoundname>Blas.hpp</compoundname>
     <includes refid="Complex_8hpp" local="no">atrip/Complex.hpp</includes>
@@ -113,12 +113,22 @@
         <childnode refid="3" relation="include">
         </childnode>
       </node>
+      <node id="5">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
       <node id="3">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
         <childnode refid="4" relation="include">
         </childnode>
         <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="4">
@@ -129,7 +139,11 @@
         <label>Blas.cxx</label>
         <link refid="Blas_8cxx"/>
       </node>
-      <node id="5">
+      <node id="6">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="7">
         <label>Equations.cxx</label>
         <link refid="Equations_8cxx"/>
       </node>

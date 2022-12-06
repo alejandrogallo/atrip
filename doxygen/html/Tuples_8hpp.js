@@ -15,7 +15,6 @@ var Tuples_8hpp =
     [ "isOnNode", "Tuples_8hpp.html#a5835bdc1344efcd309e8d74a9a796299", null ],
     [ "main", "Tuples_8hpp.html#a4e0708f21a913d72d93cc5feb5bd9328", null ],
     [ "specialDistribution", "Tuples_8hpp.html#a9285b4e63c38f7c586f8ba185e5fa2e9", null ],
-    [ "unique", "Tuples_8hpp.html#a97dd69bc4fe50212652f17f2e6bd04fb", null ],
     [ "FAKE_TUPLE", "Tuples_8hpp.html#a341e9614e55178a8e9537898f42ac636", null ],
     [ "INVALID_TUPLE", "Tuples_8hpp.html#a4eb1a1b9186ce3cd1fae39cd044aaf29", null ]
 ];

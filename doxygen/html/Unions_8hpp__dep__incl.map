@@ -1,4 +1,6 @@
 <map id="Unions.hpp" name="Unions.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,100,32"/>
-<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="13,80,93,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="69,5,163,31"/>
+<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " alt="" coords="5,152,85,177"/>
+<area shape="rect" id="node3" href="$DatabaseCommunicator_8hpp.html" title=" " alt="" coords="83,79,290,104"/>
+<area shape="rect" id="node4" href="$DatabaseCommunicator_8cxx.html" title=" " alt="" coords="110,152,317,177"/>
 </map>

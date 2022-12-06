@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="Atrip_8hpp" kind="file" language="C++">
     <compoundname>Atrip.hpp</compoundname>
     <includes local="no">sstream</includes>
@@ -13,6 +13,7 @@
     <includedby refid="Blas_8cxx" local="no">Blas.cxx</includedby>
     <includedby refid="Checkpoint_8hpp" local="no">Checkpoint.hpp</includedby>
     <includedby refid="Equations_8hpp" local="no">Equations.hpp</includedby>
+    <includedby refid="Tuples_8cxx" local="no">Tuples.cxx</includedby>
     <includedby refid="Types_8hpp" local="no">Types.hpp</includedby>
     <includedby refid="atrip_8hpp" local="no">atrip.hpp</includedby>
     <incdepgraph>
@@ -103,7 +104,7 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="9">
+      <node id="12">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
@@ -118,12 +119,14 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
         <childnode refid="9" relation="include">
         </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
       </node>
-      <node id="8">
+      <node id="11">
         <label>Blas.hpp</label>
         <link refid="Blas_8hpp"/>
         <childnode refid="3" relation="include">
@@ -137,6 +140,14 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
+      <node id="6">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
       <node id="5">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
@@ -144,13 +155,15 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
-      <node id="7">
+      <node id="10">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
         <childnode refid="1" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -161,9 +174,17 @@
         <label>Blas.cxx</label>
         <link refid="Blas_8cxx"/>
       </node>
-      <node id="6">
+      <node id="7">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="8">
         <label>Equations.cxx</label>
         <link refid="Equations_8cxx"/>
+      </node>
+      <node id="9">
+        <label>Tuples.cxx</label>
+        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1Atrip" prot="public">atrip::Atrip</innerclass>
@@ -283,7 +304,7 @@
 <codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>rankRoundRobin,<sp/>false)</highlight></codeline>
 <codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/><ref refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kindref="member">chrono</ref>,<sp/>false)</highlight></codeline>
 <codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>barrier,<sp/>false)</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>maxIterations,<sp/>0)</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>maxIterations,<sp/>0)</highlight></codeline>
 <codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>iterationMod,<sp/>-1)</highlight></codeline>
 <codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>percentageMod,<sp/>-1)</highlight></codeline>
 <codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(<ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref>,<sp/>tuplesDistribution,<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kindref="member">NAIVE</ref>)</highlight></codeline>

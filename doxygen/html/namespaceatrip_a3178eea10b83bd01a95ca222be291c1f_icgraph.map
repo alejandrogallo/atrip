@@ -1,13 +1,12 @@
 <map id="atrip::pretty_print" name="atrip::pretty_print">
-<area shape="rect" id="node1" title=" " alt="" coords="787,213,923,239"/>
-<area shape="rect" id="node2" href="$classatrip_1_1SliceUnion.html#acd3fd6a31d2e3157805f1b1e0f281276" title=" " alt="" coords="566,5,717,47"/>
-<area shape="rect" id="node3" href="$classatrip_1_1SliceUnion.html#aca27aa90aacd05da2449e6744f74d135" title=" " alt="" coords="545,71,737,112"/>
-<area shape="rect" id="node4" href="$structatrip_1_1Slice.html#aac3a4c4281d2ff9e3c2a0060d3a5aa4a" title=" " alt="" coords="559,137,724,163"/>
-<area shape="rect" id="node6" href="$structatrip_1_1Slice.html#ab57c0d9c391694a84abe5327cd5fa1b4" title=" " alt="" coords="544,187,739,214"/>
-<area shape="rect" id="node7" href="$classatrip_1_1SliceUnion.html#af8b26c4affb8cc43e09315c07272c9d9" title=" " alt="" coords="359,221,496,263"/>
-<area shape="rect" id="node8" href="$structatrip_1_1Atrip.html#ac414d43de30968cc92a6f7a44e5cd9b6" title=" " alt="" coords="5,230,125,257"/>
-<area shape="rect" id="node10" href="$structatrip_1_1Slice.html#a48b37b45f3c9c1bd7b74d0370354a12b" title=" " alt="" coords="550,340,733,381"/>
-<area shape="rect" id="node11" href="$namespaceatrip.html#a6a50c8632daf83dc3a61bbc6c2eb122a" title=" " alt="" coords="563,406,719,433"/>
-<area shape="rect" id="node5" href="$classatrip_1_1SliceUnion.html#ac467f8809abe557f7b19ac47dc39a3c5" title="Receive asynchronously only if the state is Fetch." alt="" coords="359,129,496,171"/>
-<area shape="rect" id="node9" href="$classatrip_1_1SliceUnion.html#afd274dc3bf55ce58ffdae76a8720ba76" title=" " alt="" coords="173,223,311,264"/>
+<area shape="rect" id="node1" title=" " alt="" coords="787,183,923,209"/>
+<area shape="rect" id="node2" href="$classatrip_1_1SliceUnion.html#acd3fd6a31d2e3157805f1b1e0f281276" title=" " alt="" coords="566,5,717,45"/>
+<area shape="rect" id="node3" href="$classatrip_1_1SliceUnion.html#aca27aa90aacd05da2449e6744f74d135" title=" " alt="" coords="545,69,737,109"/>
+<area shape="rect" id="node4" href="$structatrip_1_1Slice.html#aac3a4c4281d2ff9e3c2a0060d3a5aa4a" title=" " alt="" coords="559,134,724,159"/>
+<area shape="rect" id="node6" href="$structatrip_1_1Slice.html#ab57c0d9c391694a84abe5327cd5fa1b4" title=" " alt="" coords="544,183,739,209"/>
+<area shape="rect" id="node7" href="$classatrip_1_1SliceUnion.html#af8b26c4affb8cc43e09315c07272c9d9" title=" " alt="" coords="359,217,496,257"/>
+<area shape="rect" id="node8" href="$structatrip_1_1Atrip.html#ac414d43de30968cc92a6f7a44e5cd9b6" title=" " alt="" coords="5,227,125,253"/>
+<area shape="rect" id="node10" href="$structatrip_1_1Slice.html#a48b37b45f3c9c1bd7b74d0370354a12b" title=" " alt="" coords="550,335,733,375"/>
+<area shape="rect" id="node5" href="$classatrip_1_1SliceUnion.html#ac467f8809abe557f7b19ac47dc39a3c5" title="Receive asynchronously only if the state is Fetch." alt="" coords="359,127,496,167"/>
+<area shape="rect" id="node9" href="$classatrip_1_1SliceUnion.html#afd274dc3bf55ce58ffdae76a8720ba76" title=" " alt="" coords="173,220,311,260"/>
 </map>

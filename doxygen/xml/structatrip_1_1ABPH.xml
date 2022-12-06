@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="structatrip_1_1ABPH" kind="struct" language="C++" prot="public">
     <compoundname>atrip::ABPH</compoundname>
     <basecompoundref refid="classatrip_1_1SliceUnion" prot="public" virt="non-virtual">atrip::SliceUnion&lt; double &gt;</basecompoundref>
@@ -47,14 +47,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="135" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="135" bodyend="152"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="151" column="5" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="151" bodyend="168"/>
       </memberdef>
-      <memberdef kind="function" id="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>void</type>
         <definition>void atrip::ABPH&lt; F &gt;::sliceIntoBuffer</definition>
         <argsstring>(size_t it, CTF::Tensor&lt; F &gt; &amp;to, CTF::Tensor&lt; F &gt; const &amp;from) override</argsstring>
         <name>sliceIntoBuffer</name>
         <qualifiedname>atrip::ABPH::sliceIntoBuffer</qualifiedname>
+        <reimplements refid="classatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c">sliceIntoBuffer</reimplements>
         <param>
           <type>size_t</type>
           <declname>it</declname>
@@ -73,13 +74,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="154" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="154" bodyend="169"/>
-        <references refid="structatrip_1_1RankMap_1a6d5becc3ba428aa4d7ac26c5c6b1114a" compoundref="RankMap_8hpp" startline="42" endline="54">atrip::RankMap&lt; F &gt;::find</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">atrip::No</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="170" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="170" bodyend="184"/>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">atrip::No</references>
         <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
-        <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="596">atrip::SliceUnion&lt; double &gt;::rankMap</references>
-        <references refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="599">atrip::SliceUnion&lt; double &gt;::sliceLength</references>
-        <references refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="600">atrip::SliceUnion&lt; double &gt;::sources</references>
+        <references refid="classatrip_1_1SliceUnion_1a71dac63ae681b56cf15387867cacad67" compoundref="SliceUnion_8hpp" startline="605">atrip::SliceUnion&lt; F &gt;::rankMap</references>
+        <references refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" compoundref="SliceUnion_8hpp" startline="608">atrip::SliceUnion&lt; F &gt;::sliceLength</references>
+        <references refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" compoundref="SliceUnion_8hpp" startline="613">atrip::SliceUnion&lt; F &gt;::sources</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -87,20 +87,13 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2">
-        <label>atrip::SliceUnion&lt; double &gt;</label>
-        <link refid="classatrip_1_1SliceUnion"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; double &gt;</edgelabel>
-        </childnode>
-      </node>
       <node id="1">
         <label>atrip::ABPH&lt; F &gt;</label>
         <link refid="structatrip_1_1ABPH"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3">
+      <node id="2">
         <label>atrip::SliceUnion&lt; F &gt;</label>
         <link refid="classatrip_1_1SliceUnion"/>
       </node>
@@ -123,19 +116,6 @@
           <edgelabel>+info</edgelabel>
         </childnode>
         <childnode refid="9" relation="template-instance">
-          <edgelabel>&lt; double &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2">
-        <label>atrip::SliceUnion&lt; double &gt;</label>
-        <link refid="classatrip_1_1SliceUnion"/>
-        <childnode refid="3" relation="usage">
-          <edgelabel>+rankMap</edgelabel>
-        </childnode>
-        <childnode refid="6" relation="usage">
-          <edgelabel>+name</edgelabel>
-        </childnode>
-        <childnode refid="10" relation="template-instance">
           <edgelabel>&lt; double &gt;</edgelabel>
         </childnode>
       </node>
@@ -174,7 +154,7 @@
         <label>atrip::Slice&lt; F &gt;::Location</label>
         <link refid="structatrip_1_1Slice_1_1Location"/>
       </node>
-      <node id="10">
+      <node id="2">
         <label>atrip::SliceUnion&lt; F &gt;</label>
         <link refid="classatrip_1_1SliceUnion"/>
         <childnode refid="3" relation="usage">
@@ -185,7 +165,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="134" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="134" bodyend="171"/>
+    <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="150" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="150" bodyend="186"/>
     <listofallmembers>
       <member refid="structatrip_1_1ABPH_1a1f8b1183e719c256ff2de4e181c84594" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>ABPH</name></member>
       <member refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>buildLocalDatabase</name></member>
@@ -199,10 +179,10 @@
       <member refid="classatrip_1_1SliceUnion_1ac467f8809abe557f7b19ac47dc39a3c5" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>receive</name></member>
       <member refid="classatrip_1_1SliceUnion_1aec090bd8f9274c1dc4696eb18ac20366" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>send</name></member>
       <member refid="classatrip_1_1SliceUnion_1afc17e4ba873e2ebd22b1758920f30e5e" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sliceBuffers</name></member>
-      <member refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sliceIntoBuffer</name></member>
-      <member refid="classatrip_1_1SliceUnion_1afa84b93605e0b2a88c96e1380774f67c" prot="public" virt="pure-virtual" ambiguityscope="SliceUnion&lt; double &gt;::"><scope>atrip::ABPH</scope><name>sliceIntoBuffer</name></member>
+      <member refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" prot="public" virt="virtual"><scope>atrip::ABPH</scope><name>sliceIntoBuffer</name></member>
       <member refid="classatrip_1_1SliceUnion_1a62e3f6bd006b32bf7045d49baba4f8bb" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sliceLength</name></member>
       <member refid="classatrip_1_1SliceUnion_1a41082ca178c5fe8d391a3f48a3121651" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>slices</name></member>
+      <member refid="classatrip_1_1SliceUnion_1a5b59b6f36eb558f52656222d18bc1add" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sliceSize</name></member>
       <member refid="classatrip_1_1SliceUnion_1a03c48b80d33fc123f36c091be480dd99" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sliceTypes</name></member>
       <member refid="classatrip_1_1SliceUnion_1a2a6d63388ef1dcfb836755285fe2149a" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>SliceUnion</name></member>
       <member refid="classatrip_1_1SliceUnion_1afc72b5575b3e9d5d9f3be4e645537a62" prot="public" virt="non-virtual"><scope>atrip::ABPH</scope><name>sources</name></member>

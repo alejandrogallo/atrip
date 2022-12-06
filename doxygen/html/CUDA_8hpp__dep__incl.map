@@ -1,11 +1,13 @@
 <map id="CUDA.hpp" name="CUDA.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="183,5,271,32"/>
-<area shape="rect" id="node2" href="$Blas_8cxx.html" title=" " alt="" coords="5,80,83,107"/>
-<area shape="rect" id="node3" href="$Complex_8cxx.html" title=" " alt="" coords="107,80,213,107"/>
-<area shape="rect" id="node4" href="$Equations_8cxx.html" title=" " alt="" coords="238,80,351,107"/>
-<area shape="rect" id="node5" href="$Slice_8hpp.html" title=" " alt="" coords="375,80,457,107"/>
-<area shape="rect" id="node6" href="$RankMap_8hpp.html" title=" " alt="" coords="314,155,425,181"/>
-<area shape="rect" id="node7" href="$SliceUnion_8hpp.html" title=" " alt="" coords="357,229,475,256"/>
-<area shape="rect" id="node8" href="$Atrip_8cxx.html" title=" " alt="" coords="376,379,456,405"/>
-<area shape="rect" id="node9" href="$Unions_8hpp.html" title=" " alt="" coords="411,304,506,331"/>
+<area shape="rect" id="node1" title=" " alt="" coords="183,5,271,31"/>
+<area shape="rect" id="node2" href="$Blas_8cxx.html" title=" " alt="" coords="5,79,83,104"/>
+<area shape="rect" id="node3" href="$Complex_8cxx.html" title=" " alt="" coords="107,79,213,104"/>
+<area shape="rect" id="node4" href="$Equations_8cxx.html" title=" " alt="" coords="238,79,351,104"/>
+<area shape="rect" id="node5" href="$Slice_8hpp.html" title=" " alt="" coords="375,79,457,104"/>
+<area shape="rect" id="node6" href="$RankMap_8hpp.html" title=" " alt="" coords="314,152,425,177"/>
+<area shape="rect" id="node7" href="$SliceUnion_8hpp.html" title=" " alt="" coords="357,225,475,251"/>
+<area shape="rect" id="node8" href="$Atrip_8cxx.html" title=" " alt="" coords="317,445,397,471"/>
+<area shape="rect" id="node9" href="$DatabaseCommunicator_8hpp.html" title=" " alt="" coords="409,372,615,397"/>
+<area shape="rect" id="node11" href="$Unions_8hpp.html" title=" " alt="" coords="369,299,463,324"/>
+<area shape="rect" id="node10" href="$DatabaseCommunicator_8cxx.html" title=" " alt="" coords="422,445,629,471"/>
 </map>

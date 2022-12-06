@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="Debug_8hpp" kind="file" language="C++">
     <compoundname>Debug.hpp</compoundname>
     <includes local="no">functional</includes>
@@ -18,50 +18,60 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="16">
+      <node id="19">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
-      <node id="9">
+      <node id="12">
         <label>Atrip.hpp</label>
         <link refid="Atrip_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
+        <childnode refid="13" relation="include">
         </childnode>
         <childnode refid="14" relation="include">
         </childnode>
-        <childnode refid="16" relation="include">
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
         </childnode>
       </node>
-      <node id="15">
+      <node id="18">
         <label>Blas.hpp</label>
         <link refid="Blas_8hpp"/>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-      </node>
-      <node id="17">
-        <label>CUDA.hpp</label>
-        <link refid="CUDA_8hpp"/>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
         <childnode refid="13" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="15" relation="include">
         </childnode>
       </node>
-      <node id="11">
+      <node id="20">
+        <label>CUDA.hpp</label>
+        <link refid="CUDA_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
         <label>Checkpoint.hpp</label>
         <link refid="Checkpoint_8hpp"/>
         <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -69,29 +79,31 @@
         <link refid="Debug_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="5" relation="include">
+        <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="12">
+      <node id="15">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="13" relation="include">
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
         </childnode>
       </node>
-      <node id="6">
+      <node id="8">
         <label>RankMap.hpp</label>
         <link refid="RankMap_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="7">
+      <node id="9">
         <label>Slice.hpp</label>
         <link refid="Slice_8hpp"/>
-        <childnode refid="6" relation="include">
+        <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="2" relation="include">
         </childnode>
@@ -103,60 +115,76 @@
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
-      </node>
-      <node id="5">
-        <label>Tuples.hpp</label>
-        <link refid="Tuples_8hpp"/>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
       </node>
-      <node id="14">
-        <label>Types.hpp</label>
-        <link refid="Types_8hpp"/>
+      <node id="7">
+        <label>Tuples.hpp</label>
+        <link refid="Tuples_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
         <childnode refid="9" relation="include">
         </childnode>
-        <childnode refid="15" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
       </node>
-      <node id="4">
+      <node id="17">
+        <label>Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
         <label>Unions.hpp</label>
         <link refid="Unions_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
       </node>
-      <node id="8">
+      <node id="11">
         <label>Utils.hpp</label>
         <link refid="Utils_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
-        </childnode>
         <childnode refid="12" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="20" relation="include">
         </childnode>
-        <childnode refid="5" relation="include">
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="3">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
       </node>
-      <node id="10">
+      <node id="13">
         <label>Blas.cxx</label>
         <link refid="Blas_8cxx"/>
       </node>
-      <node id="18">
+      <node id="21">
         <label>Complex.cxx</label>
         <link refid="Complex_8cxx"/>
       </node>
-      <node id="13">
+      <node id="5">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="16">
         <label>Equations.cxx</label>
         <link refid="Equations_8cxx"/>
+      </node>
+      <node id="10">
+        <label>Tuples.cxx</label>
+        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1IterationDescription" prot="public">atrip::IterationDescription</innerclass>
@@ -276,7 +304,7 @@
         <name>LOG</name>
         <param><defname>level</defname></param>
         <param><defname>name</defname></param>
-        <initializer>if (Atrip::rank == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</initializer>
+        <initializer>if (<ref refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" kindref="member">atrip::Atrip::rank</ref> == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -369,7 +397,7 @@
 <codeline lineno="76"><highlight class="normal"></highlight></codeline>
 <codeline lineno="77"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Macros][Macros:2]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="78"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LOG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="79" refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(Atrip::rank<sp/>==<sp/>0)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79" refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="80"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="81"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="82"><highlight class="normal"></highlight></codeline>

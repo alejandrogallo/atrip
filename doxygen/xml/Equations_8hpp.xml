@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="Equations_8hpp" kind="file" language="C++">
     <compoundname>Equations.hpp</compoundname>
     <includes refid="Atrip_8hpp" local="no">atrip/Atrip.hpp</includes>
     <includes refid="Blas_8hpp" local="no">atrip/Blas.hpp</includes>
     <includes refid="Utils_8hpp" local="no">atrip/Utils.hpp</includes>
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
+    <includedby refid="DatabaseCommunicator_8hpp" local="no">DatabaseCommunicator.hpp</includedby>
     <includedby refid="Equations_8cxx" local="no">Equations.cxx</includedby>
     <incdepgraph>
       <node id="2">
@@ -115,6 +116,14 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
+      <node id="3">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
       <node id="1">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
@@ -122,12 +131,18 @@
         </childnode>
         <childnode refid="3" relation="include">
         </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
       </node>
       <node id="2">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
       </node>
-      <node id="3">
+      <node id="4">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="5">
         <label>Equations.cxx</label>
         <link refid="Equations_8cxx"/>
       </node>

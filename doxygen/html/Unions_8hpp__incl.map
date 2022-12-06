@@ -1,26 +1,26 @@
 <map id="Unions.hpp" name="Unions.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="515,5,610,32"/>
-<area shape="rect" id="node2" href="$SliceUnion_8hpp.html" title=" " alt="" coords="486,80,639,107"/>
-<area shape="rect" id="node3" href="$Debug_8hpp.html" title=" " alt="" coords="986,453,1113,480"/>
-<area shape="rect" id="node5" href="$Slice_8hpp.html" title=" " alt="" coords="343,229,457,256"/>
-<area shape="rect" id="node24" href="$RankMap_8hpp.html" title=" " alt="" coords="490,155,635,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="1006,528,1093,555"/>
-<area shape="rect" id="node6" title=" " alt="" coords="304,304,384,331"/>
-<area shape="rect" id="node7" title=" " alt="" coords="1087,379,1172,405"/>
-<area shape="rect" id="node8" title=" " alt="" coords="218,379,281,405"/>
-<area shape="rect" id="node9" title=" " alt="" coords="305,379,364,405"/>
-<area shape="rect" id="node10" href="$Tuples_8hpp.html" title=" " alt="" coords="532,304,657,331"/>
-<area shape="rect" id="node19" href="$Utils_8hpp.html" title=" " alt="" coords="79,379,193,405"/>
-<area shape="rect" id="node23" href="$CUDA_8hpp.html" title=" " alt="" coords="56,304,179,331"/>
-<area shape="rect" id="node11" title=" " alt="" coords="857,379,913,405"/>
-<area shape="rect" id="node12" title=" " alt="" coords="937,379,1012,405"/>
-<area shape="rect" id="node13" title=" " alt="" coords="388,379,455,405"/>
-<area shape="rect" id="node14" title=" " alt="" coords="530,379,598,405"/>
-<area shape="rect" id="node15" title=" " alt="" coords="583,453,633,480"/>
-<area shape="rect" id="node16" title=" " alt="" coords="623,379,692,405"/>
-<area shape="rect" id="node17" title=" " alt="" coords="369,453,436,480"/>
-<area shape="rect" id="node18" title=" " alt="" coords="767,379,833,405"/>
-<area shape="rect" id="node20" title=" " alt="" coords="5,453,80,480"/>
-<area shape="rect" id="node21" title=" " alt="" coords="105,453,164,480"/>
-<area shape="rect" id="node22" title=" " alt="" coords="188,453,255,480"/>
+<area shape="rect" id="node1" title=" " alt="" coords="515,5,610,31"/>
+<area shape="rect" id="node2" href="$SliceUnion_8hpp.html" title=" " alt="" coords="486,79,639,104"/>
+<area shape="rect" id="node3" href="$Debug_8hpp.html" title=" " alt="" coords="986,445,1113,471"/>
+<area shape="rect" id="node5" href="$Slice_8hpp.html" title=" " alt="" coords="343,225,457,251"/>
+<area shape="rect" id="node24" href="$RankMap_8hpp.html" title=" " alt="" coords="490,152,635,177"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1006,519,1093,544"/>
+<area shape="rect" id="node6" title=" " alt="" coords="304,299,384,324"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1087,372,1172,397"/>
+<area shape="rect" id="node8" title=" " alt="" coords="218,372,281,397"/>
+<area shape="rect" id="node9" title=" " alt="" coords="305,372,364,397"/>
+<area shape="rect" id="node10" href="$Tuples_8hpp.html" title=" " alt="" coords="532,299,657,324"/>
+<area shape="rect" id="node19" href="$Utils_8hpp.html" title=" " alt="" coords="79,372,193,397"/>
+<area shape="rect" id="node23" href="$CUDA_8hpp.html" title=" " alt="" coords="56,299,179,324"/>
+<area shape="rect" id="node11" title=" " alt="" coords="857,372,913,397"/>
+<area shape="rect" id="node12" title=" " alt="" coords="937,372,1012,397"/>
+<area shape="rect" id="node13" title=" " alt="" coords="388,372,455,397"/>
+<area shape="rect" id="node14" title=" " alt="" coords="530,372,598,397"/>
+<area shape="rect" id="node15" title=" " alt="" coords="583,445,633,471"/>
+<area shape="rect" id="node16" title=" " alt="" coords="623,372,692,397"/>
+<area shape="rect" id="node17" title=" " alt="" coords="369,445,436,471"/>
+<area shape="rect" id="node18" title=" " alt="" coords="767,372,833,397"/>
+<area shape="rect" id="node20" title=" " alt="" coords="5,445,80,471"/>
+<area shape="rect" id="node21" title=" " alt="" coords="105,445,164,471"/>
+<area shape="rect" id="node22" title=" " alt="" coords="188,445,255,471"/>
 </map>

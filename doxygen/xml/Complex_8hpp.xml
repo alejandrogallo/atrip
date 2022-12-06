@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="Complex_8hpp" kind="file" language="C++">
     <compoundname>Complex.hpp</compoundname>
     <includes local="no">complex</includes>
@@ -7,6 +7,7 @@
     <includes local="yes">config.h</includes>
     <includedby refid="Blas_8hpp" local="no">Blas.hpp</includedby>
     <includedby refid="Complex_8cxx" local="no">Complex.cxx</includedby>
+    <includedby refid="DatabaseCommunicator_8cxx" local="no">DatabaseCommunicator.cxx</includedby>
     <includedby refid="Types_8hpp" local="no">Types.hpp</includedby>
     <incdepgraph>
       <node id="1">
@@ -30,24 +31,26 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="11">
+      <node id="14">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
-      <node id="9">
+      <node id="11">
         <label>Atrip.hpp</label>
         <link refid="Atrip_8hpp"/>
         <childnode refid="5" relation="include">
         </childnode>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="13" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -58,7 +61,7 @@
         <childnode refid="4" relation="include">
         </childnode>
       </node>
-      <node id="10">
+      <node id="12">
         <label>Checkpoint.hpp</label>
         <link refid="Checkpoint_8hpp"/>
         <childnode refid="5" relation="include">
@@ -69,9 +72,19 @@
         <link refid="Complex_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="4">
@@ -81,11 +94,13 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
-      <node id="8">
+      <node id="10">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="9" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
         <childnode refid="2" relation="include">
         </childnode>
@@ -98,13 +113,21 @@
         <label>Blas.cxx</label>
         <link refid="Blas_8cxx"/>
       </node>
-      <node id="7">
+      <node id="9">
         <label>Complex.cxx</label>
         <link refid="Complex_8cxx"/>
       </node>
-      <node id="6">
+      <node id="7">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="8">
         <label>Equations.cxx</label>
         <link refid="Equations_8cxx"/>
+      </node>
+      <node id="13">
+        <label>Tuples.cxx</label>
+        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innernamespace refid="namespaceatrip">atrip</innernamespace>

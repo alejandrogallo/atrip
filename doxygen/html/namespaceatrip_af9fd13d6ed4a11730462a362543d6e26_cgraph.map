@@ -1,6 +1,5 @@
 <map id="atrip::getClusterInfo" name="atrip::getClusterInfo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,56,157,83"/>
-<area shape="rect" id="node2" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="213,5,359,32"/>
-<area shape="rect" id="node3" href="$namespaceatrip.html#a97dd69bc4fe50212652f17f2e6bd04fb" title=" " alt="" coords="415,31,519,57"/>
-<area shape="rect" id="node4" href="$namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338" title=" " alt="" coords="205,107,367,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,157,56"/>
+<area shape="rect" id="node2" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="213,5,359,31"/>
+<area shape="rect" id="node3" href="$namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338" title=" " alt="" coords="205,55,367,80"/>
 </map>

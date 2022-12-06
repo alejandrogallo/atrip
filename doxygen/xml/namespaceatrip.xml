@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.4" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.5" xml:lang="en-US">
   <compounddef id="namespaceatrip" kind="namespace" language="C++">
     <compoundname>atrip</compoundname>
     <innerclass refid="structatrip_1_1ABHH" prot="public">atrip::ABHH</innerclass>
@@ -94,6 +94,25 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Complex.hpp" line="27" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Complex.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespaceatrip_1a606a2a10760977991e480fdb413d7bbb" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename F</type>
+          </param>
+        </templateparamlist>
+        <type>std::vector&lt; <ref refid="classatrip_1_1SliceUnion" kindref="compound">SliceUnion</ref>&lt; F &gt; * &gt;</type>
+        <definition>using atrip::Unions = typedef std::vector&lt;SliceUnion&lt;F&gt;*&gt;</definition>
+        <argsstring></argsstring>
+        <name>Unions</name>
+        <qualifiedname>atrip::Unions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/DatabaseCommunicator.hpp" line="10" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/DatabaseCommunicator.hpp" bodystart="10" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" prot="public" static="no">
         <type>std::function&lt; void(<ref refid="structatrip_1_1IterationDescription" kindref="compound">IterationDescription</ref> const  &amp;)&gt;</type>
@@ -205,6 +224,20 @@
       </memberdef>
       </sectiondef>
       <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceatrip_1a7fb44be1b928f491eed7722febd3bc64" prot="public" static="yes" mutable="no">
+        <type>std::vector&lt; size_t &gt;</type>
+        <definition>std::vector&lt;size_t&gt; atrip::a_sums</definition>
+        <argsstring></argsstring>
+        <name>a_sums</name>
+        <qualifiedname>atrip::a_sums</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="82" column="22" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="82" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" prot="public" static="no" mutable="no">
         <type>size_t const</type>
         <definition>size_t const atrip::No</definition>
@@ -217,17 +250,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="188" column="17" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="189" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" compoundref="Equations_8cxx" startline="412" endline="723">doublesContribution</referencedby>
-        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="195" endline="245">for</referencedby>
-        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="252" endline="299">getEnergySame</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
-        <referencedby refid="namespaceatrip_1a40dd04592c08dab33973a8255d270857" compoundref="Equations_8cxx" startline="345" endline="378">singlesContribution</referencedby>
-        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="81" endline="94">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="118" endline="130">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="154" endline="169">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="192" endline="207">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
-        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="231" endline="247">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="187" column="17" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="188" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" compoundref="Equations_8cxx" startline="411" endline="745">doublesContribution</referencedby>
+        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="194" endline="244">for</referencedby>
+        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="251" endline="298">getEnergySame</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
+        <referencedby refid="namespaceatrip_1a40dd04592c08dab33973a8255d270857" compoundref="Equations_8cxx" startline="344" endline="377">singlesContribution</referencedby>
+        <referencedby refid="structatrip_1_1TAPHH_1a4456102eedd76dd1aa09adc66b2882c6" compoundref="Unions_8hpp" startline="99" endline="111">atrip::TAPHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1HHHA_1aa1e0d1b558a5f2683742262857c72072" compoundref="Unions_8hpp" startline="135" endline="146">atrip::HHHA&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABPH_1adfbf9bb767c29498ca52ef495e8d5a9e" compoundref="Unions_8hpp" startline="170" endline="184">atrip::ABPH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1ABHH_1ac862567131b2bcc5b7a4c46e2acb4a89" compoundref="Unions_8hpp" startline="207" endline="222">atrip::ABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
+        <referencedby refid="structatrip_1_1TABHH_1ac72a79ea1fa38bbd1e5a459e9b795eb9" compoundref="Unions_8hpp" startline="246" endline="261">atrip::TABHH&lt; F &gt;::sliceIntoBuffer</referencedby>
       </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" prot="public" static="no" mutable="no">
         <type>size_t const F *const</type>
@@ -241,10 +274,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="189" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="190" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="195" endline="245">for</referencedby>
-        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="252" endline="299">getEnergySame</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="188" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="189" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="194" endline="244">for</referencedby>
+        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="251" endline="298">getEnergySame</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1a42b933930dd992983f0b748d33361417" prot="public" static="no" mutable="no">
         <type>size_t const F *const F *const</type>
@@ -258,11 +291,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="190" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="191" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" compoundref="Equations_8cxx" startline="412" endline="723">doublesContribution</referencedby>
-        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="195" endline="245">for</referencedby>
-        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="252" endline="299">getEnergySame</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="189" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="190" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" compoundref="Equations_8cxx" startline="411" endline="745">doublesContribution</referencedby>
+        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="194" endline="244">for</referencedby>
+        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="251" endline="298">getEnergySame</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" prot="public" static="no" mutable="no">
         <type>size_t const F *const F *const F *const</type>
@@ -278,10 +311,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="191" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="192" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="195" endline="245">for</referencedby>
-        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="252" endline="299">getEnergySame</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="190" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="191" bodyend="-1"/>
+        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="194" endline="244">for</referencedby>
+        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="251" endline="298">getEnergySame</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" prot="public" static="no" constexpr="yes" mutable="no">
         <type>constexpr <ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref></type>
@@ -297,8 +330,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="43" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="43" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" compoundref="Tuples_8hpp" startline="158" endline="188">getTuplesList</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
+        <referencedby refid="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" compoundref="Tuples_8cxx" startline="97" endline="127">getTuplesList</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8cxx" startline="351" endline="455">atrip::group_and_sort::main</referencedby>
         <referencedby refid="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" compoundref="Tuples_8hpp" startline="50" endline="50">atrip::TuplesDistribution::tupleIsFake</referencedby>
       </memberdef>
       <memberdef kind="variable" id="namespaceatrip_1a4eb1a1b9186ce3cd1fae39cd044aaf29" prot="public" static="no" constexpr="yes" mutable="no">
@@ -315,7 +348,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="44" column="20" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="44" bodyend="-1"/>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8hpp" startline="248" endline="426">atrip::group_and_sort::specialDistribution</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a9285b4e63c38f7c586f8ba185e5fa2e9" compoundref="Tuples_8cxx" startline="170" endline="348">atrip::group_and_sort::specialDistribution</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="func">
@@ -573,6 +606,246 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" line="22" column="22" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" bodystart="22" bodyend="22"/>
       </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a250e4d03daa59a61aa112d854b8b5dc8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t atrip::a_block_sum_atrip</definition>
+        <argsstring>(int64_t T, int64_t nv)</argsstring>
+        <name>a_block_sum_atrip</name>
+        <qualifiedname>atrip::a_block_sum_atrip</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>T</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="61" column="10" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="61" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a01bb85c518777cc57d432c7fc03eaf0e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int64_t</type>
+        <definition>static int64_t atrip::b_block_sum_atrip</definition>
+        <argsstring>(int64_t a, int64_t T, int64_t nv)</argsstring>
+        <name>b_block_sum_atrip</name>
+        <qualifiedname>atrip::b_block_sum_atrip</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>T</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="76" column="11" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="76" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a60e828b36d58d8f4f0338d4068789fc3" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref></type>
+        <definition>static ABCTuple atrip::nth_atrip</definition>
+        <argsstring>(size_t it, size_t nv)</argsstring>
+        <name>nth_atrip</name>
+        <qualifiedname>atrip::nth_atrip</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="85" column="12" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="85" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a32a3d60445c5b8b35ed8561b8b0c9c34" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
+        <definition>static ABCTuples atrip::nth_atrip_distributed</definition>
+        <argsstring>(int64_t it, size_t nv, size_t np)</argsstring>
+        <name>nth_atrip_distributed</name>
+        <qualifiedname>atrip::nth_atrip_distributed</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="130" column="13" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="130" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1aabc1bbbd6162d19634e206a56e480ae9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename F</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::LocalDatabase</type>
+        <definition>static Slice&lt; F &gt;::LocalDatabase atrip::build_local_database_fake</definition>
+        <argsstring>(ABCTuple const &amp;abc_prev, ABCTuple const &amp;abc, size_t rank, SliceUnion&lt; F &gt; *u)</argsstring>
+        <name>build_local_database_fake</name>
+        <qualifiedname>atrip::build_local_database_fake</qualifiedname>
+        <param>
+          <type><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc_prev</declname>
+        </param>
+        <param>
+          <type><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref> const &amp;</type>
+          <declname>abc</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>rank</declname>
+        </param>
+        <param>
+          <type><ref refid="classatrip_1_1SliceUnion" kindref="compound">SliceUnion</ref>&lt; F &gt; *</type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="166" column="3" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="166" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1aaadb41de1ea6573c463846be9ffc2312" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename F</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; F &gt;::Database</type>
+        <definition>Slice&lt; F &gt;::Database atrip::naiveDatabase</definition>
+        <argsstring>(Unions&lt; F &gt; &amp;unions, size_t nv, size_t np, size_t iteration, MPI_Comm const &amp;c)</argsstring>
+        <name>naiveDatabase</name>
+        <qualifiedname>atrip::naiveDatabase</qualifiedname>
+        <param>
+          <type><ref refid="namespaceatrip_1a606a2a10760977991e480fdb413d7bbb" kindref="member">Unions</ref>&lt; F &gt; &amp;</type>
+          <declname>unions</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>iteration</declname>
+        </param>
+        <param>
+          <type>MPI_Comm const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="232" column="3" bodyfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" bodystart="232" bodyend="285" declfile="/home/runner/work/atrip/atrip/include/atrip/DatabaseCommunicator.hpp" declline="14" declcolumn="3"/>
+        <references refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" compoundref="Atrip_8hpp" startline="44">atrip::Atrip::rank</references>
+        <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="67">WITH_CHRONO</references>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1ae3d47352e06bd21bfa8fce64d5c6373d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; double &gt;::Database</type>
+        <definition>template Slice&lt; double &gt;::Database atrip::naiveDatabase&lt; double &gt;</definition>
+        <argsstring>(Unions&lt; double &gt; &amp;unions, size_t nv, size_t np, size_t iteration, MPI_Comm const &amp;c)</argsstring>
+        <name>naiveDatabase&lt; double &gt;</name>
+        <qualifiedname>atrip::naiveDatabase&lt; double &gt;</qualifiedname>
+        <param>
+          <type><ref refid="namespaceatrip_1a606a2a10760977991e480fdb413d7bbb" kindref="member">Unions</ref>&lt; double &gt; &amp;</type>
+          <declname>unions</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>iteration</declname>
+        </param>
+        <param>
+          <type>MPI_Comm const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="288" column="18" declfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" declline="288" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a28ca6fdc6a24abfdc8ec3ad6b8958f32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structatrip_1_1Slice" kindref="compound">Slice</ref>&lt; <ref refid="namespaceatrip_1aa4158a2e7e79c518dcb11d7ccfc1c82f" kindref="member">Complex</ref> &gt;::Database</type>
+        <definition>template Slice&lt; Complex &gt;::Database atrip::naiveDatabase&lt; Complex &gt;</definition>
+        <argsstring>(Unions&lt; Complex &gt; &amp;unions, size_t nv, size_t np, size_t iteration, MPI_Comm const &amp;c)</argsstring>
+        <name>naiveDatabase&lt; Complex &gt;</name>
+        <qualifiedname>atrip::naiveDatabase&lt; Complex &gt;</qualifiedname>
+        <param>
+          <type><ref refid="namespaceatrip_1a606a2a10760977991e480fdb413d7bbb" kindref="member">Unions</ref>&lt; <ref refid="namespaceatrip_1aa4158a2e7e79c518dcb11d7ccfc1c82f" kindref="member">Complex</ref> &gt; &amp;</type>
+          <declname>unions</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nv</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>iteration</declname>
+        </param>
+        <param>
+          <type>MPI_Comm const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" line="296" column="18" declfile="/home/runner/work/atrip/atrip/src/atrip/DatabaseCommunicator.cxx" declline="296" declcolumn="18"/>
+      </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a3e24927f1ad25d7485c846cb1cfe9626" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
@@ -611,7 +884,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="166" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="166" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="165" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="165" declcolumn="8"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a07602e56e5aa7d64d9afd4deaa63da6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -631,7 +904,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="169" column="3"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="168" column="3"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a81cc2b0f9795e0d0581b1565f978df25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -653,8 +926,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="170" column="4"/>
-        <referencedby refid="namespaceatrip_1a40dd04592c08dab33973a8255d270857" compoundref="Equations_8cxx" startline="345" endline="378">singlesContribution</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="169" column="4"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a762ff7474844b815c7f378df8f7eb702" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -676,7 +948,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="171" column="4"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="170" column="4"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a90d04c0dba05e536c09371e0edf4546d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -698,7 +970,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="172" column="4"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="171" column="4"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a8eadfd874a25ce3bdc431f68e9c807ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -720,7 +992,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="173" column="4"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="172" column="4"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a6898cbd320b3a099778721e736a56cd9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -742,7 +1014,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="174" column="4"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="173" column="4"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a0074ac0ca5ed1f3e9d8a3214176252ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>F</type>
@@ -759,10 +1031,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="194" column="5" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="194" declcolumn="5"/>
-        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="195" endline="245">for</referencedby>
-        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="252" endline="299">getEnergySame</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="193" column="5" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="193" declcolumn="5"/>
+        <referencedby refid="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" compoundref="Equations_8cxx" startline="194" endline="244">for</referencedby>
+        <referencedby refid="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" compoundref="Equations_8cxx" startline="251" endline="298">getEnergySame</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a0b2fa57a463a73c9389aa67e4961122a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -776,12 +1048,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="195" column="3" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="195" bodyend="245"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="194" column="3" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="194" bodyend="244"/>
         <references refid="namespaceatrip_1a0074ac0ca5ed1f3e9d8a3214176252ec">energy</references>
-        <references refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" compoundref="Equations_8cxx" startline="190">epsi</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">No</references>
-        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="191">Tijk</references>
-        <references refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" compoundref="Equations_8cxx" startline="192">Zijk</references>
+        <references refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" compoundref="Equations_8cxx" startline="189">epsi</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">No</references>
+        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="190">Tijk</references>
+        <references refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" compoundref="Equations_8cxx" startline="191">Zijk</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1aec9dfa406423eb145e2399183b941ca5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -820,12 +1092,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="251" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="252" bodyend="299" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="44" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="250" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="251" bodyend="298" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="44" declcolumn="8"/>
         <references refid="namespaceatrip_1a0074ac0ca5ed1f3e9d8a3214176252ec">energy</references>
-        <references refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" compoundref="Equations_8cxx" startline="190">epsi</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">No</references>
-        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="191">Tijk</references>
-        <references refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" compoundref="Equations_8cxx" startline="192">Zijk</references>
+        <references refid="namespaceatrip_1a3d1858f73f742a66de6531bec311554c" compoundref="Equations_8cxx" startline="189">epsi</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">No</references>
+        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="190">Tijk</references>
+        <references refid="namespaceatrip_1a96d51119991f52c17210d4bd93df27b2" compoundref="Equations_8cxx" startline="191">Zijk</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a907be16399d76c852af0fb25b84b5f33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template double</type>
@@ -859,7 +1131,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="305" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="305" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="304" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="304" declcolumn="8"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a11bcbcdfc9d59c80e4cbf48586557efd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template double</type>
@@ -893,7 +1165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="314" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="314" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="313" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="313" declcolumn="8"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a4af74014d67e0256adfe42f90f727139" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template double</type>
@@ -927,7 +1199,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="324" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="324" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="323" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="323" declcolumn="8"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a95169ba3b2653b42bfde3e30648bd7d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template double</type>
@@ -961,7 +1233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="333" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="333" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="332" column="8" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="332" declcolumn="8"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a40dd04592c08dab33973a8255d270857" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -1020,9 +1292,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="344" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="345" bodyend="378"/>
-        <references refid="namespaceatrip_1a81cc2b0f9795e0d0581b1565f978df25">GO</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">No</references>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="343" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="344" bodyend="377"/>
+        <references refid="Equations_8cxx_1a4e85c46f94209db02d1e8f185096e27b" compoundref="Equations_8cxx" startline="138">GO</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">No</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a47f1d4ba55c964f1bce05a73e191c3bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template <ref refid="CUDA_8hpp_1ab67f2150568dc3c433e9d8d03da6734c" kindref="member">__MAYBE_GLOBAL__</ref> void</type>
@@ -1076,7 +1348,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="383" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="383" declcolumn="3"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="382" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="382" declcolumn="3"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a6683090df36592ae76a384e80ef938e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template <ref refid="CUDA_8hpp_1ab67f2150568dc3c433e9d8d03da6734c" kindref="member">__MAYBE_GLOBAL__</ref> void</type>
@@ -1130,7 +1402,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="396" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="396" declcolumn="3"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="395" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="395" declcolumn="3"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1ab1387203a9c668ad0980a5288a3fe97d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -1225,10 +1497,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="411" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="412" bodyend="723" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="74" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="410" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="411" bodyend="745" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="74" declcolumn="8"/>
         <references refid="CUDA_8hpp_1a2e6d5173a73fe3fdffed8acc4909f87e" compoundref="CUDA_8hpp" startline="19">_CHECK_CUDA_SUCCESS</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">No</references>
-        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="191">Tijk</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">No</references>
+        <references refid="namespaceatrip_1a42b933930dd992983f0b748d33361417" compoundref="Equations_8cxx" startline="190">Tijk</references>
         <references refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" compoundref="Utils_8hpp" startline="67">WITH_CHRONO</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1ad062d14940160e453a20e95adda30860" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
@@ -1319,7 +1591,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="729" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="729" declcolumn="3"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="751" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="751" declcolumn="3"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a8ae659da324c41f7f5a2204767bb32bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>template void</type>
@@ -1409,7 +1681,140 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="757" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="757" declcolumn="3"/>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" line="779" column="3" declfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" declline="779" declcolumn="3"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1add9c677b29e91c3c06549475110474cd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename A</type>
+          </param>
+        </templateparamlist>
+        <type>A</type>
+        <definition>static A atrip::unique</definition>
+        <argsstring>(A const &amp;xs)</argsstring>
+        <name>unique</name>
+        <qualifiedname>atrip::unique</qualifiedname>
+        <param>
+          <type>A const &amp;</type>
+          <declname>xs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="7" column="10" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="7" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt; std::string &gt; atrip::getNodeNames</definition>
+        <argsstring>(MPI_Comm comm)</argsstring>
+        <name>getNodeNames</name>
+        <qualifiedname>atrip::getNodeNames</qualifiedname>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>comm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="16" column="13" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="16" bodyend="52" declfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" declline="55" declcolumn="15"/>
+        <referencedby refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" compoundref="Tuples_8cxx" startline="82" endline="93">getClusterInfo</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8cxx" startline="351" endline="455">atrip::group_and_sort::main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="structatrip_1_1RankInfo" kindref="compound">RankInfo</ref> &gt;</type>
+        <definition>std::vector&lt; RankInfo &gt; atrip::getNodeInfos</definition>
+        <argsstring>(std::vector&lt; string &gt; const &amp;nodeNames)</argsstring>
+        <name>getNodeInfos</name>
+        <qualifiedname>atrip::getNodeInfos</qualifiedname>
+        <param>
+          <type>std::vector&lt; string &gt; const &amp;</type>
+          <declname>nodeNames</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="57" column="1" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="57" bodyend="79" declfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" declline="68" declcolumn="1"/>
+        <referencedby refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" compoundref="Tuples_8cxx" startline="82" endline="93">getClusterInfo</referencedby>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8cxx" startline="351" endline="455">atrip::group_and_sort::main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structatrip_1_1ClusterInfo" kindref="compound">ClusterInfo</ref></type>
+        <definition>ClusterInfo atrip::getClusterInfo</definition>
+        <argsstring>(MPI_Comm comm)</argsstring>
+        <name>getClusterInfo</name>
+        <qualifiedname>atrip::getClusterInfo</qualifiedname>
+        <param>
+          <type>MPI_Comm</type>
+          <declname>comm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="82" column="1" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="82" bodyend="93" declfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" declline="75" declcolumn="13"/>
+        <references refid="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" compoundref="Tuples_8cxx" startline="57" endline="79">getNodeInfos</references>
+        <references refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" compoundref="Tuples_8cxx" startline="16" endline="52">getNodeNames</references>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
+        <definition>ABCTuples atrip::getTuplesList</definition>
+        <argsstring>(size_t Nv, size_t rank, size_t np)</argsstring>
+        <name>getTuplesList</name>
+        <qualifiedname>atrip::getTuplesList</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>Nv</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>rank</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>np</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="97" column="11" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="97" bodyend="127" declfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" declline="79" declcolumn="11"/>
+        <references refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" compoundref="Tuples_8hpp" startline="43">FAKE_TUPLE</references>
+        <references refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" compoundref="Debug_8hpp" startline="79">LOG</references>
+        <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
+        <referencedby refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" compoundref="Tuples_8cxx" startline="145" endline="150">atrip::NaiveDistribution::getTuples</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
+        <definition>ABCTuples atrip::getAllTuplesList</definition>
+        <argsstring>(const size_t Nv)</argsstring>
+        <name>getAllTuplesList</name>
+        <qualifiedname>atrip::getAllTuplesList</qualifiedname>
+        <param>
+          <type>const size_t</type>
+          <declname>Nv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" line="130" column="11" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Tuples.cxx" bodystart="130" bodyend="142" declfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" declline="83" declcolumn="11"/>
+        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8cxx" startline="351" endline="455">atrip::group_and_sort::main</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a302b648f916e8ad102dd42072cca699f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1753,7 +2158,7 @@
         <references refid="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" compoundref="Checkpoint_8hpp" startline="29">atrip::Checkpoint::nranks</references>
         <references refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" compoundref="Checkpoint_8hpp" startline="28">atrip::Checkpoint::nv</references>
         <references refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" compoundref="Checkpoint_8hpp" startline="35">atrip::Checkpoint::rankRoundRobin</references>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref></type>
@@ -1780,7 +2185,7 @@
         <references refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" compoundref="Checkpoint_8hpp" startline="28">atrip::Checkpoint::nv</references>
         <references refid="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" compoundref="Checkpoint_8hpp" startline="35">atrip::Checkpoint::rankRoundRobin</references>
         <referencedby refid="namespaceatrip_1acb8c08d5972eb89777650317e5b765d2" compoundref="Checkpoint_8hpp" startline="84" endline="87">read_checkpoint</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1acb8c08d5972eb89777650317e5b765d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref></type>
@@ -1840,7 +2245,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="102" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Atrip.cxx" bodystart="44" bodyend="46" declfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" declline="102" declcolumn="8"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="102" column="8" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Atrip.cxx" bodystart="45" bodyend="47" declfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" declline="102" declcolumn="8"/>
+        <references refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" compoundref="Debug_8hpp" startline="96">atrip::IterationDescription::descriptor</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1adaf0200c976351f46d2fe2b4a8ebe45b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -1940,9 +2346,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="58" column="6" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="345" bodyend="378" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="58" declcolumn="6"/>
-        <references refid="namespaceatrip_1a81cc2b0f9795e0d0581b1565f978df25">GO</references>
-        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="189">No</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" line="58" column="6" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Equations.cxx" bodystart="344" bodyend="377" declfile="/home/runner/work/atrip/atrip/include/atrip/Equations.hpp" declline="58" declcolumn="6"/>
+        <references refid="Equations_8cxx_1a4e85c46f94209db02d1e8f185096e27b" compoundref="Equations_8cxx" startline="138">GO</references>
+        <references refid="namespaceatrip_1ac382a0e309a4bd41a81731bbaf8839bd" compoundref="Equations_8cxx" startline="188">No</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a36ea310b3a29e6d68402251cedf5e542" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -1971,6 +2377,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="503" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="503" bodyend="507"/>
+        <references refid="structatrip_1_1Slice_1_1Location_1adafd6595edf2739cd0a2a31eb1bf57e6" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::rank</references>
+        <references refid="structatrip_1_1Slice_1_1Location_1a4ae8c64c9ef47d9ebebd04598b1bb35f" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::source</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a425e1a9ba33666dec82fd4575664a48f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -1999,6 +2407,13 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="510" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="510" bodyend="517"/>
+        <references refid="structatrip_1_1Slice_1_1Info_1ab096637d74752ff7c072bc34812618b6" compoundref="Slice_8hpp" startline="76">atrip::Slice&lt; F &gt;::Info::from</references>
+        <references refid="structatrip_1_1Slice_1_1Location_1adafd6595edf2739cd0a2a31eb1bf57e6" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::rank</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a3ddb161e7d7f645840f671df30ac4888" compoundref="Slice_8hpp" startline="78">atrip::Slice&lt; F &gt;::Info::recycling</references>
+        <references refid="structatrip_1_1Slice_1_1Location_1a4ae8c64c9ef47d9ebebd04598b1bb35f" compoundref="Slice_8hpp" startline="35">atrip::Slice&lt; F &gt;::Location::source</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a95ae928785594ad332204f3377cd241e" compoundref="Slice_8hpp" startline="74">atrip::Slice&lt; F &gt;::Info::state</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1aead2cf6df57d78d19df52bcde0ec2054" compoundref="Slice_8hpp" startline="70">atrip::Slice&lt; F &gt;::Info::tuple</references>
+        <references refid="structatrip_1_1Slice_1_1Info_1a906b399e728a367f9c64cdb87ec53dc0" compoundref="Slice_8hpp" startline="72">atrip::Slice&lt; F &gt;::Info::type</references>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1ab93cbc0ed3ae01101d887207e3032916" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2026,151 +2441,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="611" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="611" bodyend="624"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" line="625" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/SliceUnion.hpp" bodystart="625" bodyend="638"/>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::vector&lt; std::string &gt;</type>
-        <definition>std::vector&lt; std::string &gt; atrip::getNodeNames</definition>
-        <argsstring>(MPI_Comm comm)</argsstring>
-        <name>getNodeNames</name>
-        <qualifiedname>atrip::getNodeNames</qualifiedname>
-        <param>
-          <type>MPI_Comm</type>
-          <declname>comm</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="55" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="55" bodyend="91"/>
-        <referencedby refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" compoundref="Tuples_8hpp" startline="143" endline="154">getClusterInfo</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename A</type>
-          </param>
-        </templateparamlist>
-        <type>A</type>
-        <definition>A atrip::unique</definition>
-        <argsstring>(A const &amp;xs)</argsstring>
-        <name>unique</name>
-        <qualifiedname>atrip::unique</qualifiedname>
-        <param>
-          <type>A const &amp;</type>
-          <declname>xs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="104" column="3" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="104" bodyend="110"/>
-        <references refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">unique</references>
-        <referencedby refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" compoundref="Tuples_8hpp" startline="143" endline="154">getClusterInfo</referencedby>
-        <referencedby refid="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" compoundref="Tuples_8hpp" startline="113" endline="135">getNodeInfos</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a64e55f94387e9330b4afdb3e6a6d5556" compoundref="Tuples_8hpp" startline="232" endline="239">atrip::group_and_sort::getTupleNodes</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
-        <referencedby refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">unique</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::vector&lt; <ref refid="structatrip_1_1RankInfo" kindref="compound">RankInfo</ref> &gt;</type>
-        <definition>std::vector&lt; RankInfo &gt; atrip::getNodeInfos</definition>
-        <argsstring>(std::vector&lt; string &gt; const &amp;nodeNames)</argsstring>
-        <name>getNodeInfos</name>
-        <qualifiedname>atrip::getNodeInfos</qualifiedname>
-        <param>
-          <type>std::vector&lt; string &gt; const &amp;</type>
-          <declname>nodeNames</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="113" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="113" bodyend="135"/>
-        <references refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">unique</references>
-        <referencedby refid="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" compoundref="Tuples_8hpp" startline="143" endline="154">getClusterInfo</referencedby>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1af9fd13d6ed4a11730462a362543d6e26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="structatrip_1_1ClusterInfo" kindref="compound">ClusterInfo</ref></type>
-        <definition>ClusterInfo atrip::getClusterInfo</definition>
-        <argsstring>(MPI_Comm comm)</argsstring>
-        <name>getClusterInfo</name>
-        <qualifiedname>atrip::getClusterInfo</qualifiedname>
-        <param>
-          <type>MPI_Comm</type>
-          <declname>comm</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="143" column="1" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="143" bodyend="154"/>
-        <references refid="namespaceatrip_1a3cdba26c5e1b49fd5a9359658484e1f0" compoundref="Tuples_8hpp" startline="113" endline="135">getNodeInfos</references>
-        <references refid="namespaceatrip_1adf9f0314b16a7dc5e7c7d47c622a1338" compoundref="Tuples_8hpp" startline="55" endline="91">getNodeNames</references>
-        <references refid="namespaceatrip_1a97dd69bc4fe50212652f17f2e6bd04fb" compoundref="Tuples_8hpp" startline="104" endline="110">unique</references>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1a6d24cef8b67603413dfae0002a083b95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
-        <definition>ABCTuples atrip::getTuplesList</definition>
-        <argsstring>(size_t Nv, size_t rank, size_t np)</argsstring>
-        <name>getTuplesList</name>
-        <qualifiedname>atrip::getTuplesList</qualifiedname>
-        <param>
-          <type>size_t</type>
-          <declname>Nv</declname>
-        </param>
-        <param>
-          <type>size_t</type>
-          <declname>rank</declname>
-        </param>
-        <param>
-          <type>size_t</type>
-          <declname>np</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="158" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="158" bodyend="188"/>
-        <references refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" compoundref="Tuples_8hpp" startline="43">FAKE_TUPLE</references>
-        <references refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" compoundref="Debug_8hpp" startline="79">LOG</references>
-        <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
-        <referencedby refid="structatrip_1_1NaiveDistribution_1aeb41c2a6f7086e9085d0dbd93e103d39" compoundref="Tuples_8hpp" startline="209" endline="214">atrip::NaiveDistribution::getTuples</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1ad3b6dffd6ea5627cfb04fbc5653d0e3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
-        <definition>ABCTuples atrip::getAllTuplesList</definition>
-        <argsstring>(const size_t Nv)</argsstring>
-        <name>getAllTuplesList</name>
-        <qualifiedname>atrip::getAllTuplesList</qualifiedname>
-        <param>
-          <type>const size_t</type>
-          <declname>Nv</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="192" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="192" bodyend="204"/>
-        <referencedby refid="namespaceatrip_1_1group__and__sort_1a4e0708f21a913d72d93cc5feb5bd9328" compoundref="Tuples_8hpp" startline="430" endline="536">atrip::group_and_sort::main</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1a6a50c8632daf83dc3a61bbc6c2eb122a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespaceatrip_1a5958e803b11be13b9c0d9eb7b8e10a5a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename F</type>
@@ -2178,13 +2452,17 @@
           </param>
         </templateparamlist>
         <type>void</type>
-        <definition>void atrip::sliceIntoVector</definition>
-        <argsstring>(std::vector&lt; F &gt; &amp;v, CTF::Tensor&lt; F &gt; &amp;toSlice, std::vector&lt; int64_t &gt; const low, std::vector&lt; int64_t &gt; const up, CTF::Tensor&lt; F &gt; const &amp;origin, std::vector&lt; int64_t &gt; const originLow, std::vector&lt; int64_t &gt; const originUp)</argsstring>
+        <definition>static void atrip::sliceIntoVector</definition>
+        <argsstring>(std::vector&lt; F &gt; &amp;source, size_t sliceSize, CTF::Tensor&lt; F &gt; &amp;toSlice, std::vector&lt; int64_t &gt; const low, std::vector&lt; int64_t &gt; const up, CTF::Tensor&lt; F &gt; const &amp;origin, std::vector&lt; int64_t &gt; const originLow, std::vector&lt; int64_t &gt; const originUp)</argsstring>
         <name>sliceIntoVector</name>
         <qualifiedname>atrip::sliceIntoVector</qualifiedname>
         <param>
           <type>std::vector&lt; F &gt; &amp;</type>
-          <declname>v</declname>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sliceSize</declname>
         </param>
         <param>
           <type>CTF::Tensor&lt; F &gt; &amp;</type>
@@ -2216,10 +2494,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="22" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="23" bodyend="59"/>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">pretty_print</references>
-        <references refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" compoundref="Debug_8hpp" startline="67">WITH_OCD</references>
-        <references refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" compoundref="Debug_8hpp" startline="70">WITH_RANK</references>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" line="23" column="8" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Unions.hpp" bodystart="27" bodyend="77"/>
       </memberdef>
       <memberdef kind="function" id="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2243,16 +2518,13 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="54" column="15" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="54" bodyend="62"/>
-        <references refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">pretty_print</references>
-        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="85" endline="250">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="258" endline="383">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1acd3fd6a31d2e3157805f1b1e0f281276" compoundref="SliceUnion_8hpp" startline="91" endline="256">atrip::SliceUnion&lt; F &gt;::buildLocalDatabase</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1aca27aa90aacd05da2449e6744f74d135" compoundref="SliceUnion_8hpp" startline="264" endline="389">atrip::SliceUnion&lt; F &gt;::clearUnusedSlicesForNext</referencedby>
         <referencedby refid="structatrip_1_1Slice_1aac3a4c4281d2ff9e3c2a0060d3a5aa4a" compoundref="Slice_8hpp" startline="327" endline="346">atrip::Slice&lt; F &gt;::findByInfo</referencedby>
         <referencedby refid="structatrip_1_1Slice_1ab57c0d9c391694a84abe5327cd5fa1b4" compoundref="Slice_8hpp" startline="298" endline="323">atrip::Slice&lt; F &gt;::findByTypeAbc</referencedby>
         <referencedby refid="structatrip_1_1Slice_1a48b37b45f3c9c1bd7b74d0370354a12b" compoundref="Slice_8hpp" startline="272" endline="293">atrip::Slice&lt; F &gt;::findRecycledSource</referencedby>
-        <referencedby refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" compoundref="Utils_8hpp" startline="54" endline="62">pretty_print</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="55" endline="811">atrip::Atrip::run</referencedby>
-        <referencedby refid="namespaceatrip_1a6a50c8632daf83dc3a61bbc6c2eb122a" compoundref="Unions_8hpp" startline="23" endline="59">sliceIntoVector</referencedby>
-        <referencedby refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="543" endline="585">atrip::SliceUnion&lt; F &gt;::unwrapSlice</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
+        <referencedby refid="classatrip_1_1SliceUnion_1af8b26c4affb8cc43e09315c07272c9d9" compoundref="SliceUnion_8hpp" startline="552" endline="594">atrip::SliceUnion&lt; F &gt;::unwrapSlice</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
