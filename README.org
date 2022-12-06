@@ -109,3 +109,24 @@ Notice that you can give a path for ctf for all of them by doing
 #+begin_src sh :eval no
 ../../tools/configure-benches.sh --with-ctf=/absolute/path/to/ctf
 #+end_src
+
+* Running benches
+
+** Main benchmark
+
+The main benchmark gets built in =bench/main= and is used to run an
+atrip run with random tensors.
+
+A common run of this script will be the following
+
+#+begin_src sh
+bench/main \
+  --no 100 \
+  --nv 1000 \
+  --mod 1 \
+  --% 0 \
+  --dist group \
+  --nocheckpoint \
+  --max-iterations 1000
+#+end_src
+
