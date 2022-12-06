@@ -117,13 +117,13 @@ Notice that you can give a path for ctf for all of them by doing
 
 ** Main benchmark
 
-The main benchmark gets built in =bench/main= and is used to run an
+The main benchmark gets built in =bench/atrip= and is used to run an
 atrip run with random tensors.
 
 A common run of this script will be the following
 
 #+begin_src sh
-bench/main \
+bench/atrip \
   --no 100 \
   --nv 1000 \
   --mod 1 \

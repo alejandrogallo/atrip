@@ -5,13 +5,15 @@
 #include <CLI11.hpp>
 
 #define _print_size(what, size)                 \
-  if (rank == 0) {                              \
-    std::cout << #what                          \
-              << " => "                         \
-              << (double)size * elem_to_gb      \
-              << "GB"                           \
-              << std::endl;                     \
-  }
+  do {                                          \
+    if (rank == 0) {                            \
+      std::cout << #what                        \
+                << " => "                       \
+                << (double)size * elem_to_gb    \
+                << "GB"                         \
+                << std::endl;                   \
+    }                                           \
+  } while (0)
 
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
@@ -47,6 +49,19 @@ int main(int argc, char** argv) {
   app.add_option("--checkpoint-%",
                  checkpoint_percentage,
                  "Percentage for checkpoints");
+
+  // Optional tensor files
+  std::string
+    ei_path, ea_path,
+    Tph_path, Tpphh_path,
+    Vpphh_path, Vhhhp_path, Vppph_path;
+  app.add_option("--ei", ei_path, "Path for ei");
+  app.add_option("--ea", ea_path, "Path for ea");
+  app.add_option("--Tpphh", Tpphh_path, "Path for Tpphh");
+  app.add_option("--Tph", Tph_path, "Path for Tph");
+  app.add_option("--Vpphh", Vpphh_path, "Path for Vpphh");
+  app.add_option("--Vhhhp", Vhhhp_path, "Path for Vhhhp");
+  app.add_option("--Vppph", Vppph_path, "Path for Vppph");
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
@@ -151,37 +166,64 @@ int main(int argc, char** argv) {
   }
 
 
-  std::vector<int> symmetries(4, NS)
-                 , vo({nv, no})
-                 , vvoo({nv, nv, no, no})
-                 , ooov({no, no, no, nv})
-                 , vvvo({nv, nv, nv, no})
-                 ;
+  std::vector<int>
+    symmetries(4, NS),
+    vo({nv, no}),
+    vvoo({nv, nv, no, no}),
+    ooov({no, no, no, nv}),
+    vvvo({nv, nv, nv, no});
 
   CTF::Tensor<double>
-      ei(1, ooov.data(), symmetries.data(), world)
-    , ea(1, vo.data(), symmetries.data(), world)
-    , Tph(2, vo.data(), symmetries.data(), world)
-    , Tpphh(4, vvoo.data(), symmetries.data(), world)
-    , Vpphh(4, vvoo.data(), symmetries.data(), world)
-    , Vhhhp(4, ooov.data(), symmetries.data(), world)
-    ;
+    ei(1, ooov.data(), symmetries.data(), world),
+    ea(1, vo.data(), symmetries.data(), world),
+    Tph(2, vo.data(), symmetries.data(), world),
+    Tpphh(4, vvoo.data(), symmetries.data(), world),
+    Vpphh(4, vvoo.data(), symmetries.data(), world),
+    Vhhhp(4, ooov.data(), symmetries.data(), world);
 
   // initialize deletable tensors in heap
   auto Vppph
     = new CTF::Tensor<double>(4, vvvo.data(), symmetries.data(), world);
 
-  _print_size(Vabci, no*nv*nv*nv)
-  _print_size(Vabij, no*no*nv*nv)
-  _print_size(Vijka, no*no*no*nv)
+  _print_size(Vabci, no*nv*nv*nv);
+  _print_size(Vabij, no*no*nv*nv);
+  _print_size(Vijka, no*no*no*nv);
 
-  ei.fill_random(-40.0, -2);
-  ea.fill_random(2, 50);
-  Tpphh.fill_random(0, 1);
-  Tph.fill_random(0, 1);
-  Vpphh.fill_random(0, 1);
-  Vhhhp.fill_random(0, 1);
-  Vppph->fill_random(0, 1);
+  if (ei_path.size()) {
+    ei.read_dense_from_file(ei_path.c_str());
+  } else {
+    ei.fill_random(-40.0, -2);
+  }
+  if (ea_path.size()) {
+    ea.read_dense_from_file(ea_path.c_str());
+  } else {
+    ea.fill_random(2, 50);
+  }
+  if (Tpphh_path.size()) {
+    Tpphh.read_dense_from_file(Tpphh_path.c_str());
+  } else {
+    Tpphh.fill_random(0, 1);
+  }
+  if (Tph_path.size()) {
+    Tph.read_dense_from_file(Tph_path.c_str());
+  } else {
+    Tph.fill_random(0, 1);
+  }
+  if (Vpphh_path.size()) {
+    Vpphh.read_dense_from_file(Vpphh_path.c_str());
+  } else {
+    Vpphh.fill_random(0, 1);
+  }
+  if (Vhhhp_path.size()) {
+    Vhhhp.read_dense_from_file(Vhhhp_path.c_str());
+  } else {
+    Vhhhp.fill_random(0, 1);
+  }
+  if (Vppph_path.size()) {
+    Vppph->read_dense_from_file(Vppph_path.c_str());
+  } else {
+    Vppph->fill_random(0, 1);
+  }
 
   atrip::Atrip::init(MPI_COMM_WORLD);
   const auto in
