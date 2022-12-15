@@ -23,6 +23,8 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 
+#include <nvToolsExt.h>
+
 using namespace atrip;
 #if defined(HAVE_CUDA)
 #include <atrip/CUDA.hpp>
@@ -54,7 +56,7 @@ void Atrip::init(MPI_Comm world)  {
 
 template <typename F>
 Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
-
+  nvtxRangePushA("Atrip::run");
   const size_t np = Atrip::np;
   const size_t rank = Atrip::rank;
   MPI_Comm universe = Atrip::communicator;
@@ -498,6 +500,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ; i++, iteration++
       ) {
     Atrip::chrono["iterations"].start();
+    char nvtx_name[60];
+    sprintf(nvtx_name, "iteration: %d", i);
+    nvtxRangePushA(nvtx_name);
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
@@ -507,6 +512,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     WITH_CHRONO("mpi:barrier",
       if (in.barrier) MPI_Barrier(universe);
     ))
+
 
 
     // write checkpoints
@@ -775,6 +781,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     if (in.maxIterations != 0 && i >= in.maxIterations) break;
 
+    //AMB: debugging only
+    WITH_CHRONO("mpi:barrier",
+      MPI_Barrier(universe);
+    );
+    cudaDeviceSynchronize();
+
+    nvtxRangePop();
   }
     // END OF MAIN LOOP
 
@@ -830,6 +843,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     << nIterations * doublesFlops / Atrip::chrono["doubles"].count() << "\n";
   LOG(0, "atrip:flops(iterations)")
     << nIterations * doublesFlops / Atrip::chrono["iterations"].count() << "\n";
+
+  nvtxRangePop();
 
   // TODO: change the sign in  the getEnergy routines
   return { - globalEnergy };
