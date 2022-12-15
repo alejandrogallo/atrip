@@ -352,7 +352,7 @@ Info info;
 
 // [[file:~/cuda/atrip/atrip.org::*Attributes][Attributes:2]]
 DataPtr<F> data;
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA && !defined ATRIP_SOURCES_IN_GPU)
     F* mpi_data;
 #endif
 // Attributes:2 ends here
@@ -456,7 +456,7 @@ void unwrapAndMarkReady() {
       if (errorCode != MPI_SUCCESS)
         throw "Atrip: Unexpected error MPI ERROR";
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA && !defined ATRIP_SOURCES_IN_GPU)
       // copy the retrieved mpi data to the device
       WITH_CHRONO("cuda:memcpy",
                   _CHECK_CUDA_SUCCESS("copying mpi data to device",
@@ -488,7 +488,7 @@ void unwrapAndMarkReady() {
 Slice(size_t size_)
       : info({})
       , data(DataNullPtr)
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA && !defined ATRIP_SOURCES_IN_GPU)
       , mpi_data(nullptr)
 #endif
       , size(size_)
