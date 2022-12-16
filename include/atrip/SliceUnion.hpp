@@ -464,6 +464,35 @@ template <typename F=double>
                      [](DataPtr<F> ptr) { return ptr; });
 
 
+#if defined(HAVE_CUDA)
+
+      WITH_CHRONO("cuda:warmup",
+              int nRanks=4, requestCount=0;
+              int nSends=sliceBuffers.size()*nRanks;
+              MPI_Request *requests = (MPI_Request*) malloc(nSends*2 * sizeof(MPI_Request));
+              MPI_Status *statuses = (MPI_Status*) malloc(nSends*2 * sizeof(MPI_Status));
+              for (int sliceId=0; sliceId<sliceBuffers.size(); sliceId++){
+                for (int rankId=0; rankId<nRanks; rankId++){
+                      MPI_Isend((void*)SOURCES_DATA(sources[0]),
+                                sliceSize,
+                                traits::mpi::datatypeOf<F>(),
+                                rankId,
+                                100,
+                                universe,
+                                &requests[requestCount++]);
+                        MPI_Irecv((void*)sliceBuffers[sliceId],
+                                  sliceSize,
+                                  traits::mpi::datatypeOf<F>(),
+                                  rankId,
+                                  100,
+                                  universe,
+                                  &requests[requestCount++]);
+                  }
+               }
+              MPI_Waitall(nSends*2, requests, statuses);
+      )
+
+#endif 
 
       LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
       WITH_RANK << "#slices[0] " << slices[0].size << "\n";
@@ -522,7 +551,7 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-      MPI_Isend((void*)SOURCES_DATA(sources[info.from.source]),
+      MPI_Isend((void*)SOURCES_DATA(sources[0]),
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),
                 otherRank,
