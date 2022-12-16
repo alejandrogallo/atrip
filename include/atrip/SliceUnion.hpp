@@ -405,6 +405,7 @@ template <typename F=double>
               , sliceSize(std::accumulate(sliceLength.begin(),
                                           sliceLength.end(),
                                           1UL, std::multiplies<size_t>()))
+
 #if defined(ATRIP_SOURCES_IN_GPU)
               , sources(rankMap.nSources())
 #else
@@ -417,6 +418,7 @@ template <typename F=double>
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
+        printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
 
 #if defined(ATRIP_SOURCES_IN_GPU)
       for (auto& ptr: sources) {
@@ -543,7 +545,7 @@ template <typename F=double>
       if (slice.info.state == Slice<F>::Fetch) { // if-1
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
-#if defined(HAVE_CUDA && defined ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
 #  if !defined(ATRIP_CUDA_AWARE_MPI) 
 #    error "You need CUDA aware MPI to have slices on the GPU"
 #  endif
