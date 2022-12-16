@@ -258,6 +258,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   // all tensors
   std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
+#ifdef HAVE_CUDA
+    // TODO: free buffers
+    DataFieldType<F>* _t_buffer;
+    DataFieldType<F>* _vhhh;
+    WITH_CHRONO("double:cuda:alloc",
+    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
+                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
+                                   No*No*No * sizeof(DataFieldType<F>)));
+    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
+                        cuMemAlloc((CUdeviceptr*)&_vhhh,
+                                   No*No*No * sizeof(DataFieldType<F>)));
+                )
+    //const size_t
+     // bs = Atrip::kernelDimensions.ooo.blocks,
+      //ths = Atrip::kernelDimensions.ooo.threads;
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+#endif
+
   // get tuples for the current rank
   TuplesDistribution *distribution;
 
@@ -639,7 +658,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                                          tabhh.unwrapSlice(Slice<F>::AC, abc),
                                          tabhh.unwrapSlice(Slice<F>::BC, abc),
                                          // -- TIJK
-                                         (DataFieldType<F>*)Tijk);
+                                         (DataFieldType<F>*)Tijk
+#if defined(HAVE_CUDA)
+                                         // -- tmp buffers
+                                         ,(DataFieldType<F>*)_t_buffer
+                                         ,(DataFieldType<F>*)_vhhh
+#endif
+                                         );
+
                   WITH_RANK << iteration << "-th doubles done\n";
       ))
     }

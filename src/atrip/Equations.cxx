@@ -401,9 +401,15 @@ void getEnergySame
     // -- TIJK
     // , DataPtr<F> Tijk_
     , DataFieldType<F>* Tijk_
-    ) {
-
-    const size_t NoNo = No*No;
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<F>* _t_buffer
+    , DataFieldType<F>* _vhhh 
+#endif
+     ) {
+    const size_t a = abc[0], b = abc[1], c = abc[2]
+              , NoNo = No*No
+              ;
 
     DataFieldType<F>* Tijk = (DataFieldType<F>*)Tijk_;
 
@@ -517,25 +523,21 @@ void getEnergySame
     F one{1.0}, m_one{-1.0}, zero{0.0};
     const size_t NoNoNo = No*NoNo;
 #ifdef HAVE_CUDA
-    DataFieldType<F>* _t_buffer;
-    DataFieldType<F>* _vhhh;
-    WITH_CHRONO("double:cuda:alloc",
-    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
-                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
-                                   NoNoNo * sizeof(DataFieldType<F>)));
-    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
-                        cuMemAlloc((CUdeviceptr*)&_vhhh,
-                                   NoNoNo * sizeof(DataFieldType<F>)));
-                )
-    const size_t
-      bs = Atrip::kernelDimensions.ooo.blocks,
-      ths = Atrip::kernelDimensions.ooo.threads;
-
-#if !defined(ATRIP_ONLY_DGEMM)
-    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
-#endif
-
+//    DataFieldType<F>* _t_buffer;
+//    DataFieldType<F>* _vhhh;
+//    WITH_CHRONO("double:cuda:alloc",
+//    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
+//                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
+//                                   NoNoNo * sizeof(DataFieldType<F>)));
+//    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
+//                        cuMemAlloc((CUdeviceptr*)&_vhhh,
+//                                   NoNoNo * sizeof(DataFieldType<F>)));
+//                )
+//    const size_t
+//      bs = Atrip::kernelDimensions.ooo.blocks,
+//      ths = Atrip::kernelDimensions.ooo.threads;
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #else
     DataFieldType<F>* _t_buffer = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
     DataFieldType<F>* _vhhh = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
@@ -649,12 +651,12 @@ void getEnergySame
 #ifdef HAVE_CUDA
     // we need to synchronize here since we need
     // the Tijk for next process in the pipeline
-    _CHECK_CUDA_SUCCESS("Synchronizing",
-                        cuCtxSynchronize());
-    _CHECK_CUDA_SUCCESS("Freeing _vhhh",
-                        cuMemFree((CUdeviceptr)_vhhh));
-    _CHECK_CUDA_SUCCESS("Freeing _t_buffer",
-                        cuMemFree((CUdeviceptr)_t_buffer));
+    //_CHECK_CUDA_SUCCESS("Synchronizing",
+    //                    cuCtxSynchronize());
+    //_CHECK_CUDA_SUCCESS("Freeing _vhhh",
+    //                    cuMemFree((CUdeviceptr)_vhhh));
+    //_CHECK_CUDA_SUCCESS("Freeing _t_buffer",
+    //                    cuMemFree((CUdeviceptr)_t_buffer));
 #else
     free(_vhhh);
     free(_t_buffer);
@@ -741,6 +743,12 @@ void getEnergySame
     , DataPtr<double> const TBChh
     // -- TIJK
     , DataFieldType<double>* Tijk
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<double>* _t_buffer
+    , DataFieldType<double>* _vhhh 
+#endif
+
     );
 
   template
@@ -769,6 +777,12 @@ void getEnergySame
     , DataPtr<Complex> const TBChh
     // -- TIJK
     , DataFieldType<Complex>* Tijk
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<Complex>* _t_buffer
+    , DataFieldType<Complex>* _vhhh 
+#endif
+
     );
 // Doubles contribution:2 ends here
 
