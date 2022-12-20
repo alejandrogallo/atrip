@@ -23,6 +23,7 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 
+#include <nccl.h>
 #include <nvToolsExt.h>
 
 using namespace atrip;
@@ -40,6 +41,7 @@ typename Atrip::CudaContext Atrip::cuda;
 typename Atrip::KernelDimensions Atrip::kernelDimensions;
 #endif
 MPI_Comm Atrip::communicator;
+ncclComm_t Atrip::nccl_communicator;
 Timings Atrip::chrono;
 
 // user printing block
@@ -52,6 +54,14 @@ void Atrip::init(MPI_Comm world)  {
   Atrip::communicator = world;
   MPI_Comm_rank(world, (int*)&Atrip::rank);
   MPI_Comm_size(world, (int*)&Atrip::np);
+}
+
+// TODO -- is there a better place for these?
+ncclDataType_t Atrip::getNcclType(const double &t) {
+    return ncclFloat32;
+}
+ncclDataType_t Atrip::getNcclType(const float &t) {
+    return ncclFloat64;
 }
 
 template <typename F>
@@ -146,6 +156,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     }
     MPI_Barrier(universe);
   }
+
+  // Initialise nccl. This needs to be after the gpu initialisation above
+  ncclUniqueId id;
+  if (Atrip::rank == 0) ncclGetUniqueId(&id);
+  MPI_Bcast(&id, sizeof(id), MPI_BYTE, 0, universe);
+  ncclCommInitRank(&Atrip::nccl_communicator, Atrip::np, id, Atrip::rank);
 
   if (in.oooThreads > 0) {
     Atrip::kernelDimensions.ooo.threads = in.oooThreads;
@@ -317,7 +333,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         return distribution->tupleIsFake(tuplesList[i]);
       };
 
-
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
     = [ &unions
@@ -376,6 +391,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   auto doIOPhase
     = [&unions, &rank, &np, &universe] (Database const& db) {
+    // matching ncclGroupEnd goes where MPI_Wait is used for non-nccl version
+    ncclGroupStart();
 
     const size_t localDBLength = db.size() / np;
 
@@ -455,6 +472,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     } // otherRank
 
+    ncclGroupEnd();
 
   };
 
@@ -811,11 +829,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     WITH_CHRONO("mpi:barrier",
       MPI_Barrier(universe);
     );
-    cudaDeviceSynchronize();
 
     nvtxRangePop();
   }
     // END OF MAIN LOOP
+
 
 #if defined(HAVE_CUDA)
   cuMemFree(Tai);
@@ -873,10 +891,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   nvtxRangePop();
 
   // TODO: change the sign in  the getEnergy routines
+
+  // TODO: move to cleanup routine?
+  ncclCommDestroy(Atrip::nccl_communicator);
+
   return { - globalEnergy };
 
 }
 // instantiate
 template Atrip::Output Atrip::run(Atrip::Input<double> const& in);
-template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
+
+// TODO: nccl doesn't use Complex type, need to handle with cast 
+//template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
 // Main:1 ends here

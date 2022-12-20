@@ -20,6 +20,7 @@
 #include <chrono>
 
 #include <nvToolsExt.h>
+#include <nccl.h>
 
 #if defined(__NVCC__)
 #  pragma nv_diagnostic_push

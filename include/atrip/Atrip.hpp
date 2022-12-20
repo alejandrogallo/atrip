@@ -20,6 +20,8 @@
 #include <mpi.h>
 #include "config.h"
 
+#include <nccl.h>
+
 #if defined(HAVE_CUDA)
 #include <cuda.h>
 #define CUBLASAPI
@@ -44,6 +46,7 @@ namespace atrip {
     static size_t rank;
     static size_t np;
     static MPI_Comm communicator;
+    static ncclComm_t nccl_communicator;
     static Timings chrono;
 #if defined(HAVE_CUDA)
     struct CudaContext {
@@ -107,6 +110,9 @@ namespace atrip {
     };
     template <typename F=double>
     static Output run(Input<F> const& in);
+
+    static ncclDataType_t getNcclType(const double &t);
+    static ncclDataType_t getNcclType(const float &t);
   };
 
 }

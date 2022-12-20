@@ -23,6 +23,8 @@
 #include <atrip/Utils.hpp>
 #include <atrip/CUDA.hpp>
 
+#include <nccl.h>
+
 namespace atrip {
 
 
@@ -444,6 +446,10 @@ void unwrapAndMarkReady() {
 #ifdef HAVE_OCD
         WITH_RANK << "__slice__:mpi: waiting " << "\n";
 #endif
+#if defined(HAVE_CUDA)
+      //ncclGroupEnd();
+      cudaDeviceSynchronize();
+#else
       const int errorCode = MPI_Wait(&request, &status);
 
       // FIXME: it appears not to work to free
@@ -455,6 +461,7 @@ void unwrapAndMarkReady() {
 
       if (errorCode != MPI_SUCCESS)
         throw "Atrip: Unexpected error MPI ERROR";
+#endif
 
 #if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
       // copy the retrieved mpi data to the device

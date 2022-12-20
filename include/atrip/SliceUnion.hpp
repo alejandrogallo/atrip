@@ -465,33 +465,33 @@ template <typename F=double>
 
 
 #if defined(HAVE_CUDA)
-
-      WITH_CHRONO("cuda:warmup",
-              int nRanks=4, requestCount=0;
-              int nSends=sliceBuffers.size()*nRanks;
-              MPI_Request *requests = (MPI_Request*) malloc(nSends*2 * sizeof(MPI_Request));
-              MPI_Status *statuses = (MPI_Status*) malloc(nSends*2 * sizeof(MPI_Status));
-              for (int sliceId=0; sliceId<sliceBuffers.size(); sliceId++){
-                for (int rankId=0; rankId<nRanks; rankId++){
-                      MPI_Isend((void*)SOURCES_DATA(sources[0]),
-                                sliceSize,
-                                traits::mpi::datatypeOf<F>(),
-                                rankId,
-                                100,
-                                universe,
-                                &requests[requestCount++]);
-                        MPI_Irecv((void*)sliceBuffers[sliceId],
-                                  sliceSize,
-                                  traits::mpi::datatypeOf<F>(),
-                                  rankId,
-                                  100,
-                                  universe,
-                                  &requests[requestCount++]);
-                  }
-               }
-              MPI_Waitall(nSends*2, requests, statuses);
-      )
-
+//
+//      WITH_CHRONO("cuda:warmup",
+//              int nRanks=4, requestCount=0;
+//              int nSends=sliceBuffers.size()*nRanks;
+//              MPI_Request *requests = (MPI_Request*) malloc(nSends*2 * sizeof(MPI_Request));
+//              MPI_Status *statuses = (MPI_Status*) malloc(nSends*2 * sizeof(MPI_Status));
+//              for (int sliceId=0; sliceId<sliceBuffers.size(); sliceId++){
+//                for (int rankId=0; rankId<nRanks; rankId++){
+//                      MPI_Isend((void*)SOURCES_DATA(sources[0]),
+//                                sliceSize,
+//                                traits::mpi::datatypeOf<F>(),
+//                                rankId,
+//                                100,
+//                                universe,
+//                                &requests[requestCount++]);
+//                        MPI_Irecv((void*)sliceBuffers[sliceId],
+//                                  sliceSize,
+//                                  traits::mpi::datatypeOf<F>(),
+//                                  rankId,
+//                                  100,
+//                                  universe,
+//                                  &requests[requestCount++]);
+//                  }
+//               }
+//              MPI_Waitall(nSends*2, requests, statuses);
+//      )
+//
 #endif 
 
       LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
@@ -551,13 +551,24 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-      MPI_Isend((void*)SOURCES_DATA(sources[0]),
+#if defined(HAVE_CUDA)
+      ncclResult_t ncclError;
+      ncclError = ncclSend((void*)SOURCES_DATA(sources[info.from.source]),
+                sliceSize,
+                Atrip::getNcclType(F {}),
+                otherRank,
+                Atrip::nccl_communicator,
+                0);
+#else
+      MPI_Isend((void*)SOURCES_DATA(sources[info.from.source]),
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),
                 otherRank,
                 tag,
                 universe,
                 &request);
+
+#endif
       WITH_CRAZY_DEBUG
       WITH_RANK << "sent to " << otherRank << "\n";
 
@@ -578,16 +589,22 @@ template <typename F=double>
 #  if !defined(ATRIP_CUDA_AWARE_MPI) 
 #    error "You need CUDA aware MPI to have slices on the GPU"
 #  endif
-        MPI_Irecv((void*)slice.data,
+      ncclResult_t ncclError;
+      ncclError = ncclRecv((void*)slice.data,
+                slice.size,
+                Atrip::getNcclType(F {}),
+                info.from.rank,
+                Atrip::nccl_communicator,
+                0);
 #else
         MPI_Irecv(slice.data,
-#endif
                   slice.size,
                   traits::mpi::datatypeOf<F>(),
                   info.from.rank,
                   tag,
                   universe,
                   &slice.request);
+#endif
        } // if-1
     } // receive
 
