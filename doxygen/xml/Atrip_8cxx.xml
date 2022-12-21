@@ -519,7 +519,7 @@
 <codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>double(No)</highlight></codeline>
 <codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>(double(No)<sp/>+<sp/>double(Nv))</highlight></codeline>
 <codeline lineno="297"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>2.0</highlight></codeline>
-<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>(traits::isComplex&lt;F&gt;()<sp/>?<sp/>3.0<sp/>:<sp/>1.0)</highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>(traits::isComplex&lt;F&gt;()<sp/>?<sp/>4.0<sp/>:<sp/>1.0)</highlight></codeline>
 <codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/><sp/>*<sp/>6.0</highlight></codeline>
 <codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/><sp/>/<sp/>1e9</highlight></codeline>
 <codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/>;</highlight></codeline>
