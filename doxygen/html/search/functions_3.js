@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['checkforduplicates_0',['checkForDuplicates',['../classatrip_1_1SliceUnion.html#a1f8df7551088267451baa50402eb6101',1,'atrip::SliceUnion']]],
-  ['clear_1',['clear',['../structatrip_1_1Timer.html#a5a87a1d2a74e7b70a0f4f11fd211508c',1,'atrip::Timer']]],
-  ['clearunusedslicesfornext_2',['clearUnusedSlicesForNext',['../classatrip_1_1SliceUnion.html#aca27aa90aacd05da2449e6744f74d135',1,'atrip::SliceUnion']]],
-  ['count_3',['count',['../structatrip_1_1Timer.html#acad7c5d85e5f77af899840933b6e4f9e',1,'atrip::Timer']]]
+  ['datatypeof_0',['datatypeOf',['../namespaceatrip_1_1traits_1_1mpi.html#ac5cddb4841206f9704c515491f9b7892',1,'atrip::traits::mpi']]],
+  ['datatypeof_3c_20complex_20_3e_1',['datatypeOf&lt; Complex &gt;',['../namespaceatrip_1_1traits_1_1mpi.html#a95ed3fa24afbdb708d2e4525f6abe027',1,'atrip::traits::mpi']]],
+  ['datatypeof_3c_20double_20_3e_2',['datatypeOf&lt; double &gt;',['../namespaceatrip_1_1traits_1_1mpi.html#ab2b7059ea380f3639caeae806f3255b5',1,'atrip::traits::mpi']]],
+  ['dgemm_5f_3',['dgemm_',['../namespaceatrip.html#a302b648f916e8ad102dd42072cca699f',1,'atrip']]],
+  ['doublescontribution_4',['doublesContribution',['../namespaceatrip.html#abf38977bde26414f9921b16ea94e61a9',1,'atrip']]]
 ];

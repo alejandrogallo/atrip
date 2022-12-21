@@ -1,4 +1,4 @@
 <map id="atrip::Slice::findByInfo" name="atrip::Slice::findByInfo">
-<area shape="rect" id="node1" title=" " alt="" coords="191,13,356,38"/>
-<area shape="rect" id="node2" href="$classatrip_1_1SliceUnion.html#ac467f8809abe557f7b19ac47dc39a3c5" title="Receive asynchronously only if the state is Fetch." alt="" coords="5,5,143,45"/>
+<area shape="rect" id="node1" title=" " coords="191,13,356,38"/>
+<area shape="rect" id="node2" href="$structatrip_1_1SliceUnion.html#ac467f8809abe557f7b19ac47dc39a3c5" title="Receive asynchronously only if the state is Fetch." coords="5,5,143,45"/>
 </map>

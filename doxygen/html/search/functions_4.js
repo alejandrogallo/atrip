@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['datatypeof_0',['datatypeOf',['../namespaceatrip_1_1traits_1_1mpi.html#ac5cddb4841206f9704c515491f9b7892',1,'atrip::traits::mpi']]],
-  ['datatypeof_3c_20complex_20_3e_1',['datatypeOf&lt; Complex &gt;',['../namespaceatrip_1_1traits_1_1mpi.html#a95ed3fa24afbdb708d2e4525f6abe027',1,'atrip::traits::mpi']]],
-  ['datatypeof_3c_20double_20_3e_2',['datatypeOf&lt; double &gt;',['../namespaceatrip_1_1traits_1_1mpi.html#ab2b7059ea380f3639caeae806f3255b5',1,'atrip::traits::mpi']]],
-  ['dcopy_5f_3',['dcopy_',['../namespaceatrip.html#a3c50f63737df805d0a20ee9aa9edf5ab',1,'atrip']]],
-  ['dgemm_5f_4',['dgemm_',['../namespaceatrip.html#a302b648f916e8ad102dd42072cca699f',1,'atrip']]],
-  ['doublescontribution_5',['doublesContribution',['../namespaceatrip.html#ab1387203a9c668ad0980a5288a3fe97d',1,'atrip']]],
-  ['doublescontribution_3c_20complex_20_3e_6',['doublesContribution&lt; Complex &gt;',['../namespaceatrip.html#a8ae659da324c41f7f5a2204767bb32bd',1,'atrip']]],
-  ['doublescontribution_3c_20double_20_3e_7',['doublesContribution&lt; double &gt;',['../namespaceatrip.html#ad062d14940160e453a20e95adda30860',1,'atrip']]]
+  ['find_0',['find',['../structatrip_1_1RankMap.html#a6d5becc3ba428aa4d7ac26c5c6b1114a',1,'atrip::RankMap::find(typename Slice&lt; F &gt;::Location const &amp;p) const noexcept'],['../structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd',1,'atrip::RankMap::find(ABCTuple const &amp;abc, typename Slice&lt; F &gt;::Type sliceType) const']]],
+  ['findbyinfo_1',['findByInfo',['../structatrip_1_1Slice.html#aac3a4c4281d2ff9e3c2a0060d3a5aa4a',1,'atrip::Slice']]],
+  ['findbytypeabc_2',['findByTypeAbc',['../structatrip_1_1Slice.html#ab57c0d9c391694a84abe5327cd5fa1b4',1,'atrip::Slice']]],
+  ['findonebytype_3',['findOneByType',['../structatrip_1_1Slice.html#a7aa07601e9f23db70b9e97f7bcb3d979',1,'atrip::Slice']]],
+  ['findrecycledsource_4',['findRecycledSource',['../structatrip_1_1Slice.html#a48b37b45f3c9c1bd7b74d0370354a12b',1,'atrip::Slice']]],
+  ['free_5',['free',['../structatrip_1_1Slice.html#a44cca23ee01b498d8b9b725555f31481',1,'atrip::Slice']]]
 ];

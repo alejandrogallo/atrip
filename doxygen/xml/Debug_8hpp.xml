@@ -18,60 +18,24 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="19">
+      <node id="12">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
-      <node id="12">
+      <node id="10">
         <label>Atrip.hpp</label>
         <link refid="Atrip_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="13" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
       </node>
-      <node id="18">
-        <label>Blas.hpp</label>
-        <link refid="Blas_8hpp"/>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-      </node>
-      <node id="20">
-        <label>CUDA.hpp</label>
-        <link refid="CUDA_8hpp"/>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="21" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-      </node>
-      <node id="14">
+      <node id="11">
         <label>Checkpoint.hpp</label>
         <link refid="Checkpoint_8hpp"/>
         <childnode refid="3" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>DatabaseCommunicator.hpp</label>
-        <link refid="DatabaseCommunicator_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -79,31 +43,29 @@
         <link refid="Debug_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
+        <childnode refid="9" relation="include">
         </childnode>
       </node>
-      <node id="15">
+      <node id="8">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
       </node>
-      <node id="8">
+      <node id="6">
         <label>RankMap.hpp</label>
         <link refid="RankMap_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="9">
+      <node id="7">
         <label>Slice.hpp</label>
         <link refid="Slice_8hpp"/>
         <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
         </childnode>
         <childnode refid="2" relation="include">
         </childnode>
@@ -115,76 +77,36 @@
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
       </node>
-      <node id="7">
+      <node id="5">
         <label>Tuples.hpp</label>
         <link refid="Tuples_8hpp"/>
-        <childnode refid="8" relation="include">
+        <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
-      <node id="17">
-        <label>Types.hpp</label>
-        <link refid="Types_8hpp"/>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-      </node>
-      <node id="6">
+      <node id="4">
         <label>Unions.hpp</label>
         <link refid="Unions_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
       </node>
-      <node id="11">
+      <node id="9">
         <label>Utils.hpp</label>
         <link refid="Utils_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
         <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="3">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
-      </node>
-      <node id="13">
-        <label>Blas.cxx</label>
-        <link refid="Blas_8cxx"/>
-      </node>
-      <node id="21">
-        <label>Complex.cxx</label>
-        <link refid="Complex_8cxx"/>
-      </node>
-      <node id="5">
-        <label>DatabaseCommunicator.cxx</label>
-        <link refid="DatabaseCommunicator_8cxx"/>
-      </node>
-      <node id="16">
-        <label>Equations.cxx</label>
-        <link refid="Equations_8cxx"/>
-      </node>
-      <node id="10">
-        <label>Tuples.cxx</label>
-        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1IterationDescription" prot="public">atrip::IterationDescription</innerclass>
@@ -211,6 +133,16 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="21" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="define" id="Debug_8hpp_1a5cc2051ac37b4867f478c20baa37ebcf" prot="public" static="no">
+        <name>ATRIP_USE_DGEMM</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="24" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1acd562c2a281e45f3c9e777ee85940952" prot="public" static="no">
         <name>OCD_Barrier</name>
         <param><defname>com</defname></param>
@@ -220,7 +152,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="66" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="66" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="67" column="12" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="67" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" prot="public" static="no">
         <name>WITH_OCD</name>
@@ -231,7 +163,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="67" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="67" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="68" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="68" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1a51c4696a55d683ddde13f60d905bc053" prot="public" static="no">
         <name>WITH_ROOT</name>
@@ -242,7 +174,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="68" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="68" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="69" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="69" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1ad6b642c97ff359593a6b7dc92f457995" prot="public" static="no">
         <name>WITH_SPECIAL</name>
@@ -254,18 +186,18 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="69" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="69" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="70" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="70" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" prot="public" static="no">
         <name>WITH_RANK</name>
-        <initializer>if (false) std::cout &lt;&lt; <ref refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" kindref="member">atrip::Atrip::rank</ref> &lt;&lt; &quot;: &quot;</initializer>
+        <initializer>if (false) std::cout &lt;&lt; <ref refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" kindref="member">atrip::Atrip::rank</ref> &lt;&lt; &quot;: &quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="70" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="70" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="71" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="71" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1a318fefe76cbd9fb484ad4457e2285053" prot="public" static="no">
         <name>WITH_DBG</name>
@@ -276,7 +208,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="71" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="71" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="72" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" prot="public" static="no">
         <name>WITH_CRAZY_DEBUG</name>
@@ -287,7 +219,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="72" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="72" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="73" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="73" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1ae8924623ca601364965e3d88fb7f40fa" prot="public" static="no">
         <name>DBG</name>
@@ -298,20 +230,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="73" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="73" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="74" column="11" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="74" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" prot="public" static="no">
         <name>LOG</name>
         <param><defname>level</defname></param>
         <param><defname>name</defname></param>
-        <initializer>if (<ref refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" kindref="member">atrip::Atrip::rank</ref> == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</initializer>
+        <initializer>if (Atrip::rank == 0) std::cout &lt;&lt; name &lt;&lt; &quot;: &quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="79" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="79" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" line="80" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp" bodystart="80" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -333,7 +265,7 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Macros][Macros:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Macros][Macros:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;functional&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="18" refid="Debug_8hpp_1ad0141f91cd5e10e24d6a723624c437df" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATRIP_BENCHMARK</highlight><highlight class="normal"></highlight></codeline>
@@ -342,88 +274,89 @@
 <codeline lineno="21" refid="Debug_8hpp_1af1c9f39d9f533bf92bcf20f1e925691e" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>ATRIP_DEBUG<sp/>1</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//#define<sp/>ATRIP_WORKLOAD_DUMP</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//#define<sp/>ATRIP_PRINT_TUPLES</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>ATRIP_DEBUG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATRIP_DEBUG<sp/>1</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>==<sp/>4</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>OCD<sp/>debugging<sp/>ABC<sp/>triples<sp/>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;expect<sp/>GB<sp/>of<sp/>output<sp/>and<sp/>consult<sp/>your<sp/>therapist&quot;)</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>HAVE_OCD</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)<sp/>MPI_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>3</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>crazy<sp/>debugging<sp/>ABC<sp/>triples,&quot;</highlight><highlight class="normal"><sp/><sp/>\</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;<sp/>expect<sp/>GB<sp/>of<sp/>output&quot;)</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>some<sp/>debugging<sp/>info<sp/>for<sp/>ABC<sp/>triples&quot;</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="66" refid="Debug_8hpp_1acd562c2a281e45f3c9e777ee85940952" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="67" refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="68" refid="Debug_8hpp_1a51c4696a55d683ddde13f60d905bc053" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="69" refid="Debug_8hpp_1ad6b642c97ff359593a6b7dc92f457995" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="70" refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>if<sp/>(false)<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="71" refid="Debug_8hpp_1a318fefe76cbd9fb484ad4457e2285053" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="72" refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="73" refid="Debug_8hpp_1ae8924623ca601364965e3d88fb7f40fa" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="74"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="75"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="76"><highlight class="normal"></highlight></codeline>
-<codeline lineno="77"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Macros][Macros:2]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="78"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LOG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="79" refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="80"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="82"><highlight class="normal"></highlight></codeline>
-<codeline lineno="83"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Macros][Macros:3]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="84"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>ATRIP_NO_OUTPUT</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>undef<sp/>LOG</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(false)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="88"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:3<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="89"><highlight class="normal"></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::IterationDescriptor][IterationDescriptor]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"></highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">IterationDescription;</highlight></codeline>
-<codeline lineno="94" refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref><sp/>=<sp/>std::function&lt;void(<ref refid="structatrip_1_1IterationDescription" kindref="compound">IterationDescription</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;)&gt;;</highlight></codeline>
-<codeline lineno="95" refid="structatrip_1_1IterationDescription" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1IterationDescription" kindref="compound">IterationDescription</ref><sp/>{</highlight></codeline>
-<codeline lineno="96" refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref><sp/><ref refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" kindref="member">descriptor</ref>;</highlight></codeline>
-<codeline lineno="97" refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" kindref="member">currentIteration</ref>;</highlight></codeline>
-<codeline lineno="98" refid="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" kindref="member">totalIterations</ref>;</highlight></codeline>
-<codeline lineno="99" refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" kindref="member">currentElapsedTime</ref>;</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"></highlight></codeline>
-<codeline lineno="102"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a65234e51491c3fa418fcdfeb6e51ee1d" kindref="member">registerIterationDescriptor</ref>(<ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref>);</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"></highlight></codeline>
-<codeline lineno="104"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"></highlight><highlight class="comment">//<sp/>IterationDescriptor<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="Debug_8hpp_1a5cc2051ac37b4867f478c20baa37ebcf" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATRIP_USE_DGEMM</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//#define<sp/>ATRIP_PRINT_TUPLES</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>ATRIP_DEBUG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATRIP_DEBUG<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>==<sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>OCD<sp/>debugging<sp/>ABC<sp/>triples<sp/>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;expect<sp/>GB<sp/>of<sp/>output<sp/>and<sp/>consult<sp/>your<sp/>therapist&quot;)</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>HAVE_OCD</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)<sp/>MPI_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>crazy<sp/>debugging<sp/>ABC<sp/>triples,&quot;</highlight><highlight class="normal"><sp/><sp/>\</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;<sp/>expect<sp/>GB<sp/>of<sp/>output&quot;)</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;dbg.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>ATRIP_DEBUG<sp/>==<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>message(&quot;WARNING:<sp/>You<sp/>have<sp/>some<sp/>debugging<sp/>info<sp/>for<sp/>ABC<sp/>triples&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(atrip::Atrip::rank<sp/>==<sp/>r)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)<sp/>dbg(__VA_ARGS__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67" refid="Debug_8hpp_1acd562c2a281e45f3c9e777ee85940952" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>OCD_Barrier(com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68" refid="Debug_8hpp_1a321f8f2fd92f00a4da2fe732c4198132" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_OCD<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69" refid="Debug_8hpp_1a51c4696a55d683ddde13f60d905bc053" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_ROOT<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="Debug_8hpp_1ad6b642c97ff359593a6b7dc92f457995" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_SPECIAL(r)<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71" refid="Debug_8hpp_1a3f86e6b81edd7297ee6f9fd44cba3149" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_RANK<sp/>if<sp/>(false)<sp/>std::cout<sp/>&lt;&lt;<sp/>atrip::Atrip::rank<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72" refid="Debug_8hpp_1a318fefe76cbd9fb484ad4457e2285053" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_DBG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73" refid="Debug_8hpp_1ac0c1f2990209029f452a33e8ae2206cd" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>WITH_CRAZY_DEBUG<sp/>if<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74" refid="Debug_8hpp_1ae8924623ca601364965e3d88fb7f40fa" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>DBG(...)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Macros][Macros:2]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LOG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80" refid="Debug_8hpp_1aab91ba8612c2b67dad4376d30871eb95" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(Atrip::rank<sp/>==<sp/>0)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:2<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Macros][Macros:3]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>ATRIP_NO_OUTPUT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>undef<sp/>LOG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>LOG(level,<sp/>name)<sp/>if<sp/>(false)<sp/>std::cout<sp/>&lt;&lt;<sp/>name<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Macros:3<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::IterationDescriptor][IterationDescriptor]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">IterationDescription;</highlight></codeline>
+<codeline lineno="95" refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref><sp/>=<sp/>std::function&lt;void(<ref refid="structatrip_1_1IterationDescription" kindref="compound">IterationDescription</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;)&gt;;</highlight></codeline>
+<codeline lineno="96" refid="structatrip_1_1IterationDescription" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1IterationDescription" kindref="compound">IterationDescription</ref><sp/>{</highlight></codeline>
+<codeline lineno="97" refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref><sp/><ref refid="structatrip_1_1IterationDescription_1a729a7ecbd8ddd5c1819f8f71552f5b06" kindref="member">descriptor</ref>;</highlight></codeline>
+<codeline lineno="98" refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1a4c10b32db4be6c02541542b413228836" kindref="member">currentIteration</ref>;</highlight></codeline>
+<codeline lineno="99" refid="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1af419953a3963a0870a66ecbccd1a90bf" kindref="member">totalIterations</ref>;</highlight></codeline>
+<codeline lineno="100" refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1IterationDescription_1a50a044d231825bfece4d3d35fe133a61" kindref="member">currentElapsedTime</ref>;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a65234e51491c3fa418fcdfeb6e51ee1d" kindref="member">registerIterationDescriptor</ref>(<ref refid="namespaceatrip_1af4afd47789d6e8e39ce3886578386d6d" kindref="member">IterationDescriptor</ref>);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight><highlight class="comment">//<sp/>IterationDescriptor<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Debug.hpp"/>
   </compounddef>

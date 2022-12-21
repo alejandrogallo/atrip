@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['localdatabaseelement_0',['localDatabaseElement',['../structatrip_1_1Slice_1_1mpi.html#a683412cfa56e875df04fd82a3530f332',1,'atrip::Slice::mpi']]]
+  ['neededslices_0',['neededSlices',['../structatrip_1_1SliceUnion.html#a5c6aff911403f8a09491431863ff842c',1,'atrip::SliceUnion']]],
+  ['nsources_1',['nSources',['../structatrip_1_1RankMap.html#a7ea842103ccde38ba37663002e0089c6',1,'atrip::RankMap']]]
 ];

@@ -23,36 +23,14 @@
         </childnode>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="13" relation="include">
-        </childnode>
       </node>
-      <node id="14">
-        <label>atrip/Complex.hpp</label>
-        <link refid="Complex_8hpp"/>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-      </node>
-      <node id="11">
+      <node id="10">
         <label>atrip/Debug.hpp</label>
         <link refid="Debug_8hpp"/>
-        <childnode refid="12" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="13">
-        <label>atrip/Types.hpp</label>
-        <link refid="Types_8hpp"/>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="2" relation="include">
-        </childnode>
-      </node>
-      <node id="8">
+      <node id="7">
         <label>atrip/Utils.hpp</label>
         <link refid="Utils_8hpp"/>
         <childnode refid="3" relation="include">
@@ -61,26 +39,20 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
         <childnode refid="9" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
       </node>
-      <node id="9">
+      <node id="8">
         <label>chrono</label>
       </node>
-      <node id="15">
-        <label>complex</label>
-      </node>
-      <node id="7">
-        <label>config.h</label>
-      </node>
-      <node id="10">
+      <node id="9">
         <label>ctf.hpp</label>
       </node>
-      <node id="12">
+      <node id="11">
         <label>functional</label>
       </node>
       <node id="5">
@@ -115,7 +87,7 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Include%20header][Include<sp/>header:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../atrip.org::*Include<sp/>header][Include<sp/>header:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Atrip_8hpp" kindref="compound">atrip/Atrip.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>

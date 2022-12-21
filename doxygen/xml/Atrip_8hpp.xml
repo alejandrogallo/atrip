@@ -6,15 +6,9 @@
     <includes local="no">string</includes>
     <includes local="no">map</includes>
     <includes local="no">mpi.h</includes>
-    <includes local="yes">config.h</includes>
     <includes refid="Utils_8hpp" local="no">atrip/Utils.hpp</includes>
-    <includes refid="Types_8hpp" local="no">atrip/Types.hpp</includes>
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
-    <includedby refid="Blas_8cxx" local="no">Blas.cxx</includedby>
     <includedby refid="Checkpoint_8hpp" local="no">Checkpoint.hpp</includedby>
-    <includedby refid="Equations_8hpp" local="no">Equations.hpp</includedby>
-    <includedby refid="Tuples_8cxx" local="no">Tuples.cxx</includedby>
-    <includedby refid="Types_8hpp" local="no">Types.hpp</includedby>
     <includedby refid="atrip_8hpp" local="no">atrip.hpp</includedby>
     <incdepgraph>
       <node id="1">
@@ -30,36 +24,14 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
       </node>
-      <node id="13">
-        <label>atrip/Complex.hpp</label>
-        <link refid="Complex_8hpp"/>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-      </node>
-      <node id="10">
+      <node id="9">
         <label>atrip/Debug.hpp</label>
         <link refid="Debug_8hpp"/>
-        <childnode refid="11" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
       </node>
-      <node id="12">
-        <label>atrip/Types.hpp</label>
-        <link refid="Types_8hpp"/>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="1" relation="include">
-        </childnode>
-      </node>
-      <node id="7">
+      <node id="6">
         <label>atrip/Utils.hpp</label>
         <link refid="Utils_8hpp"/>
         <childnode refid="2" relation="include">
@@ -68,26 +40,20 @@
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
         <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
       </node>
-      <node id="8">
+      <node id="7">
         <label>chrono</label>
       </node>
-      <node id="14">
-        <label>complex</label>
-      </node>
-      <node id="6">
-        <label>config.h</label>
-      </node>
-      <node id="9">
+      <node id="8">
         <label>ctf.hpp</label>
       </node>
-      <node id="11">
+      <node id="10">
         <label>functional</label>
       </node>
       <node id="4">
@@ -104,7 +70,7 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="12">
+      <node id="4">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
@@ -117,74 +83,16 @@
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
       </node>
-      <node id="11">
-        <label>Blas.hpp</label>
-        <link refid="Blas_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
+      <node id="3">
         <label>Checkpoint.hpp</label>
         <link refid="Checkpoint_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="6">
-        <label>DatabaseCommunicator.hpp</label>
-        <link refid="DatabaseCommunicator_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-      </node>
-      <node id="5">
-        <label>Equations.hpp</label>
-        <link refid="Equations_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-      </node>
-      <node id="10">
-        <label>Types.hpp</label>
-        <link refid="Types_8hpp"/>
-        <childnode refid="1" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-      </node>
       <node id="2">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
-      </node>
-      <node id="3">
-        <label>Blas.cxx</label>
-        <link refid="Blas_8cxx"/>
-      </node>
-      <node id="7">
-        <label>DatabaseCommunicator.cxx</label>
-        <link refid="DatabaseCommunicator_8cxx"/>
-      </node>
-      <node id="8">
-        <label>Equations.cxx</label>
-        <link refid="Equations_8cxx"/>
-      </node>
-      <node id="9">
-        <label>Tuples.cxx</label>
-        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1Atrip" prot="public">atrip::Atrip</innerclass>
@@ -208,7 +116,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="33" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="33" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" line="25" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -230,107 +138,83 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Header][Header:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Header][Header:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;sstream&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;map&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;mpi.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;config.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
 <codeline lineno="22"><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(HAVE_CUDA)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cuda.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CUBLASAPI</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cublas_api.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cublas_v2.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Utils_8hpp" kindref="compound">atrip/Utils.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Types_8hpp" kindref="compound">atrip/Types.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight></codeline>
-<codeline lineno="33" refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ADD_ATTRIBUTE(_type,<sp/>_name,<sp/>_default)<sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="34"><highlight class="preprocessor"><sp/><sp/>_type<sp/>_name<sp/>=<sp/>_default;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="35"><highlight class="preprocessor"><sp/><sp/>Input&amp;<sp/>with_<sp/>##<sp/>_name(_type<sp/>i)<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="36"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>_name<sp/>=<sp/>i;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="37"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>return<sp/>*this;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="38"><highlight class="preprocessor"><sp/><sp/>}</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight></codeline>
-<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Utils_8hpp" kindref="compound">atrip/Utils.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ADD_ATTRIBUTE(_type,<sp/>_name,<sp/>_default)<sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="26"><highlight class="preprocessor"><sp/><sp/>_type<sp/>_name<sp/>=<sp/>_default;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="27"><highlight class="preprocessor"><sp/><sp/>Input&amp;<sp/>with_<sp/>##<sp/>_name(_type<sp/>i)<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="28"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>_name<sp/>=<sp/>i;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="29"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>return<sp/>*this;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="30"><highlight class="preprocessor"><sp/><sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32" refid="namespaceatrip" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34" refid="structatrip_1_1Atrip" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Atrip" kindref="compound">Atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a384ab5ffeacf4d84a5c614f6c0621a17" kindref="member">rank</ref>;</highlight></codeline>
+<codeline lineno="37" refid="structatrip_1_1Atrip_1a3ae9ddbec7d076ff8a99260febe93779" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a3ae9ddbec7d076ff8a99260febe93779" kindref="member">np</ref>;</highlight></codeline>
+<codeline lineno="38" refid="structatrip_1_1Atrip_1a2766cbbc253bb7c537843cee849e78f6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>MPI_Comm<sp/><ref refid="structatrip_1_1Atrip_1a2766cbbc253bb7c537843cee849e78f6" kindref="member">communicator</ref>;</highlight></codeline>
+<codeline lineno="39" refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kindref="member">Timings</ref><sp/><ref refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kindref="member">chrono</ref>;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a43f638f60cb68bf9ccd63c355acbec7f" kindref="member">init</ref>(MPI_Comm);</highlight></codeline>
 <codeline lineno="41"><highlight class="normal"></highlight></codeline>
-<codeline lineno="42" refid="structatrip_1_1Atrip" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Atrip" kindref="compound">Atrip</ref><sp/>{</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"></highlight></codeline>
-<codeline lineno="44" refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a551003e8a101a98960032754ed4fd6ad" kindref="member">rank</ref>;</highlight></codeline>
-<codeline lineno="45" refid="structatrip_1_1Atrip_1a991a8e5d4ad9b4e3fee02ec2b36b1661" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a991a8e5d4ad9b4e3fee02ec2b36b1661" kindref="member">np</ref>;</highlight></codeline>
-<codeline lineno="46" refid="structatrip_1_1Atrip_1a2766cbbc253bb7c537843cee849e78f6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>MPI_Comm<sp/><ref refid="structatrip_1_1Atrip_1a2766cbbc253bb7c537843cee849e78f6" kindref="member">communicator</ref>;</highlight></codeline>
-<codeline lineno="47" refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kindref="member">Timings</ref><sp/><ref refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kindref="member">chrono</ref>;</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(HAVE_CUDA)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">CudaContext<sp/>{</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>cublasStatus_t<sp/>status;</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>cublasHandle_t<sp/>handle;</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>CudaContext<sp/>cuda;</highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">KernelDimensions<sp/>{</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">{</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>blocks,<sp/>threads;}<sp/>ooo;</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>kernelDimensions;</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="58"><highlight class="normal"></highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1a43f638f60cb68bf9ccd63c355acbec7f" kindref="member">init</ref>(MPI_Comm);</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"></highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="63" refid="structatrip_1_1Atrip_1_1Input" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref><sp/>{</highlight></codeline>
-<codeline lineno="64" refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>CTF::Tensor&lt;F&gt;<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" kindref="member">ei</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="65" refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" kindref="member">ea</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="66" refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" kindref="member">Tph</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="67" refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" kindref="member">Tpphh</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="68" refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" kindref="member">Vpphh</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="69" refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" kindref="member">Vhhhp</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="70" refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" kindref="member">Vppph</ref><sp/>=<sp/>nullptr</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
-<codeline lineno="72" refid="structatrip_1_1Atrip_1_1Input_1abfb2267579a9c69704238ef6fb8a9770" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1abfb2267579a9c69704238ef6fb8a9770" kindref="member">with_epsilon_i</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" kindref="member">ei</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="73" refid="structatrip_1_1Atrip_1_1Input_1ac5bc0135d804b2cdbaa6cf355fb88f49" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1ac5bc0135d804b2cdbaa6cf355fb88f49" kindref="member">with_epsilon_a</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" kindref="member">ea</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="74" refid="structatrip_1_1Atrip_1_1Input_1a4a4d54013c30cd06879ba9b0b2e15f2d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4d54013c30cd06879ba9b0b2e15f2d" kindref="member">with_Tai</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" kindref="member">Tph</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="75" refid="structatrip_1_1Atrip_1_1Input_1a183527688d230fd550b830ac723e52f7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a183527688d230fd550b830ac723e52f7" kindref="member">with_Tabij</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" kindref="member">Tpphh</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="76" refid="structatrip_1_1Atrip_1_1Input_1a66d73f47fbc892766b63e486f8464382" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a66d73f47fbc892766b63e486f8464382" kindref="member">with_Vabij</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" kindref="member">Vpphh</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="77" refid="structatrip_1_1Atrip_1_1Input_1a86203dcf54dd26ca2e3c3c4cf29269c7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a86203dcf54dd26ca2e3c3c4cf29269c7" kindref="member">with_Vijka</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" kindref="member">Vhhhp</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="78" refid="structatrip_1_1Atrip_1_1Input_1a9a0fa2e1150be493b8a358d99a920386" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a9a0fa2e1150be493b8a358d99a920386" kindref="member">with_Vabci</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" kindref="member">Vppph</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"></highlight></codeline>
-<codeline lineno="80" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58" kindref="member">TuplesDistribution</ref><sp/>{</highlight></codeline>
-<codeline lineno="81" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kindref="member">NAIVE</ref>,</highlight></codeline>
-<codeline lineno="82" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58abf50306bc47e7c6eadfb5f69ee72ac83" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58abf50306bc47e7c6eadfb5f69ee72ac83" kindref="member">GROUP_AND_SORT</ref>,</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"></highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>deleteVppph,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>rankRoundRobin,<sp/>false)</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/><ref refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kindref="member">chrono</ref>,<sp/>false)</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>barrier,<sp/>false)</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>maxIterations,<sp/>0)</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>iterationMod,<sp/>-1)</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>percentageMod,<sp/>-1)</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(<ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref>,<sp/>tuplesDistribution,<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kindref="member">NAIVE</ref>)</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(std::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal">,<sp/>checkpointPath,<sp/>&quot;<ref refid="namespaceatrip" kindref="compound">atrip</ref>-checkpoint.yaml&quot;)</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>readCheckpointIfExists,<sp/>true)</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>writeCheckpoint,<sp/>true)</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">,<sp/>checkpointAtPercentage,<sp/>10)</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>checkpointAtEveryIteration,<sp/>0)</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(HAVE_CUDA)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>oooThreads,<sp/>0)</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>oooBlocks,<sp/>0)</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="102"><highlight class="normal"></highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="104"><highlight class="normal"></highlight></codeline>
-<codeline lineno="105" refid="structatrip_1_1Atrip_1_1Output" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Atrip_1_1Output" kindref="compound">Output</ref><sp/>{</highlight></codeline>
-<codeline lineno="106" refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" kindref="member">energy</ref>;</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Output" kindref="compound">Output</ref><sp/><ref refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" kindref="member">run</ref>(<ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>in);</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"></highlight></codeline>
-<codeline lineno="112"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"></highlight></codeline>
-<codeline lineno="114"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>ADD_ATTRIBUTE</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Header:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="43" refid="structatrip_1_1Atrip_1_1Input" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref><sp/>{</highlight></codeline>
+<codeline lineno="44" refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>CTF::Tensor&lt;F&gt;<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" kindref="member">ei</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="45" refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" kindref="member">ea</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="46" refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" kindref="member">Tph</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="47" refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" kindref="member">Tpphh</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="48" refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" kindref="member">Vpphh</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="49" refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" kindref="member">Vhhhp</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="50" refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>*<ref refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" kindref="member">Vppph</ref><sp/>=<sp/>nullptr</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
+<codeline lineno="52" refid="structatrip_1_1Atrip_1_1Input_1abfb2267579a9c69704238ef6fb8a9770" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1abfb2267579a9c69704238ef6fb8a9770" kindref="member">with_epsilon_i</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a1942a7f2c6056e3c7a744daa31d19bd7" kindref="member">ei</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="53" refid="structatrip_1_1Atrip_1_1Input_1ac5bc0135d804b2cdbaa6cf355fb88f49" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1ac5bc0135d804b2cdbaa6cf355fb88f49" kindref="member">with_epsilon_a</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a417e1d0b58b401e71d4a7f57821a6667" kindref="member">ea</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="54" refid="structatrip_1_1Atrip_1_1Input_1a4a4d54013c30cd06879ba9b0b2e15f2d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4d54013c30cd06879ba9b0b2e15f2d" kindref="member">with_Tai</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1ab3bb5e0081570e4fe344cc27e026c9ea" kindref="member">Tph</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="55" refid="structatrip_1_1Atrip_1_1Input_1a183527688d230fd550b830ac723e52f7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a183527688d230fd550b830ac723e52f7" kindref="member">with_Tabij</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a325375bd6757a376825fa06f446e8e60" kindref="member">Tpphh</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="56" refid="structatrip_1_1Atrip_1_1Input_1a66d73f47fbc892766b63e486f8464382" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a66d73f47fbc892766b63e486f8464382" kindref="member">with_Vabij</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a65f325923b75f3a12c369a84e312b498" kindref="member">Vpphh</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="57" refid="structatrip_1_1Atrip_1_1Input_1a86203dcf54dd26ca2e3c3c4cf29269c7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a86203dcf54dd26ca2e3c3c4cf29269c7" kindref="member">with_Vijka</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4c4f1bf55184b8dc1a99fac791323fbb" kindref="member">Vhhhp</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="58" refid="structatrip_1_1Atrip_1_1Input_1a9a0fa2e1150be493b8a358d99a920386" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input</ref>&amp;<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a9a0fa2e1150be493b8a358d99a920386" kindref="member">with_Vabci</ref>(CTF::Tensor&lt;F&gt;<sp/>*<sp/>t)<sp/>{<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1aa85110c04781751244f1e9cec7aacc27" kindref="member">Vppph</ref><sp/>=<sp/>t;<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58" kindref="member">TuplesDistribution</ref><sp/>{</highlight></codeline>
+<codeline lineno="61" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kindref="member">NAIVE</ref>,</highlight></codeline>
+<codeline lineno="62" refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58abf50306bc47e7c6eadfb5f69ee72ac83" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58abf50306bc47e7c6eadfb5f69ee72ac83" kindref="member">GROUP_AND_SORT</ref>,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>deleteVppph,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>rankRoundRobin,<sp/>false)</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/><ref refid="structatrip_1_1Atrip_1aee2a262d734e6ab160d51ec00df8a2f3" kindref="member">chrono</ref>,<sp/>false)</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>barrier,<sp/>false)</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>maxIterations,<sp/>0)</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>iterationMod,<sp/>-1)</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/>percentageMod,<sp/>-1)</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(<ref refid="structatrip_1_1TuplesDistribution" kindref="compound">TuplesDistribution</ref>,<sp/>tuplesDistribution,<sp/><ref refid="structatrip_1_1Atrip_1_1Input_1a4a4349822442475c3ef3eadc9f1d9e58af55d4863805c53693e55d5f3ee184ae7" kindref="member">NAIVE</ref>)</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(std::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal">,<sp/>checkpointPath,<sp/>&quot;<ref refid="namespaceatrip" kindref="compound">atrip</ref>-checkpoint.yaml&quot;)</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>readCheckpointIfExists,<sp/>true)</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">,<sp/>writeCheckpoint,<sp/>true)</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">,<sp/>checkpointAtPercentage,<sp/>10)</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="Atrip_8hpp_1a7c54062058578cbb65a776629621b5cb" kindref="member">ADD_ATTRIBUTE</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">,<sp/>checkpointAtEveryIteration,<sp/>0)</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81" refid="structatrip_1_1Atrip_1_1Output" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/>struct<sp/><ref refid="structatrip_1_1Atrip_1_1Output" kindref="compound">Output</ref><sp/>{</highlight></codeline>
+<codeline lineno="82" refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Output_1a4079f1fe4f534017ef2ec7fe661a1067" kindref="member">energy</ref>;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>F=</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Atrip_1_1Output" kindref="compound">Output</ref><sp/><ref refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" kindref="member">run</ref>(<ref refid="structatrip_1_1Atrip_1_1Input" kindref="compound">Input&lt;F&gt;</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>in);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>ADD_ATTRIBUTE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Header:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Atrip.hpp"/>
   </compounddef>

@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('RankMap_8hpp_source.html',''); initRes
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// See the License for the specific language governing permissions and</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// limitations under the License.</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// [[file:~/cuda/atrip/atrip.org::*The%20rank%20mapping][The rank mapping:1]]</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// [[file:../../atrip.org::*The rank mapping][The rank mapping:1]]</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
@@ -160,99 +160,98 @@ $(document).ready(function(){initNavTree('RankMap_8hpp_source.html',''); initRes
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>          ;</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="structatrip_1_1RankMap.html#a7950005cd56f7daaf4e25d813f5ca921">   68</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structatrip_1_1RankMap.html#a7950005cd56f7daaf4e25d813f5ca921">isSourcePadding</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> rank, <span class="keyword">const</span> <span class="keywordtype">size_t</span> source)</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>      <span class="keywordflow">return</span> source == <a class="code hl_function" href="structatrip_1_1RankMap.html#a7ea842103ccde38ba37663002e0089c6">nSources</a>() &amp;&amp; <a class="code hl_function" href="structatrip_1_1RankMap.html#aeeb8bd03cfc197bbdd7c73245bd956e4">isPaddingRank</a>(rank);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">typename</span> <a class="code hl_struct" href="structatrip_1_1Slice_1_1Location.html">Slice&lt;F&gt;::Location</a></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">   74</a></span>    <a class="code hl_function" href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">find</a>(<a class="code hl_typedef" href="namespaceatrip.html#af838c7ed7996be477f99aad86114f26b">ABCTuple</a> <span class="keyword">const</span>&amp; abc, <span class="keyword">typename</span> <a class="code hl_enumeration" href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">Slice&lt;F&gt;::Type</a> sliceType)<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>      <span class="comment">// tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <span class="comment">// tuple = {11, 0} when abc = {11, 8, 9} and sliceType = A</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>      <span class="keyword">const</span> <span class="keyword">auto</span> tuple = <a class="code hl_function" href="structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56">Slice&lt;F&gt;::subtupleBySlice</a>(abc, sliceType);</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>      <span class="keyword">const</span> <span class="keywordtype">size_t</span> index</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        = tuple[0]</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        + tuple[1] * (<a class="code hl_variable" href="structatrip_1_1RankMap.html#a265e337d553853bf4c2b15703d9316c8">lengths</a>.size() &gt; 1 ? <a class="code hl_variable" href="structatrip_1_1RankMap.html#a265e337d553853bf4c2b15703d9316c8">lengths</a>[0] : 0)</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        ;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>      <span class="keywordtype">size_t</span> rank, source;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="structatrip_1_1RankMap.html#ac0b8c9cc718d102197f4c373500c898a">RANK_ROUND_ROBIN</a>) {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        rank = index % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af64b2ce415e825b25000ab9e5f2a09e3">np</a>;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        source = index / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af64b2ce415e825b25000ab9e5f2a09e3">np</a>;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>      } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordtype">size_t</span> <span class="keyword">const</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>          <span class="comment">// the node that will be assigned to</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            nodeId = index % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">nNodes</a></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>          <span class="comment">// how many times it has been assigned to the node</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>          , s_n = index / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">nNodes</a></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>          <span class="comment">// which local rank in the node should be</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>          , localRank = s_n % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">ranksPerNode</a></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>          <span class="comment">// and the local source (how many times we chose this local rank)</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>          , localSource = s_n / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">ranksPerNode</a></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>          ;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="comment">// find the localRank-th entry in clusterInfo</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keyword">auto</span> <span class="keyword">const</span>&amp; it =</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>          std::find_if(<a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.begin(),</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                       <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.end(),</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>                       [nodeId, localRank](<a class="code hl_struct" href="structatrip_1_1RankInfo.html">RankInfo</a> <span class="keyword">const</span>&amp; ri) {</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>                         return ri.nodeId == nodeId</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                             &amp;&amp; ri.localRank == localRank</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                             ;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                       });</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        <span class="keywordflow">if</span> (it == <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.end()) {</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>          <span class="keywordflow">throw</span> <span class="stringliteral">&quot;FATAL! Error in node distribution of the slices&quot;</span>;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        }</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        rank = (*it).globalRank;</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        source = localSource;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>      }</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>      <span class="keywordflow">return</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        { rank</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        , source</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        };</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    }</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  };</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>}</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">// The rank mapping:1 ends here</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="structatrip_1_1RankMap.html#a489ad71146d35a5c2d22b94a04ae3770">   68</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structatrip_1_1RankMap.html#a489ad71146d35a5c2d22b94a04ae3770">isSourcePadding</a>(<span class="keywordtype">size_t</span> rank, <span class="keywordtype">size_t</span> source) <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      <span class="keywordflow">return</span> source == <a class="code hl_function" href="structatrip_1_1RankMap.html#a7ea842103ccde38ba37663002e0089c6">nSources</a>() &amp;&amp; <a class="code hl_function" href="structatrip_1_1RankMap.html#aeeb8bd03cfc197bbdd7c73245bd956e4">isPaddingRank</a>(rank);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">typename</span> <a class="code hl_struct" href="structatrip_1_1Slice_1_1Location.html">Slice&lt;F&gt;::Location</a></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">   73</a></span>    <a class="code hl_function" href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">find</a>(<a class="code hl_typedef" href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">ABCTuple</a> <span class="keyword">const</span>&amp; abc, <span class="keyword">typename</span> <a class="code hl_enumeration" href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">Slice&lt;F&gt;::Type</a> sliceType)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <span class="comment">// tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>      <span class="comment">// tuple = {11, 0} when abc = {11, 8, 9} and sliceType = A</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <span class="keyword">const</span> <span class="keyword">auto</span> tuple = <a class="code hl_function" href="structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56">Slice&lt;F&gt;::subtupleBySlice</a>(abc, sliceType);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      <span class="keyword">const</span> <span class="keywordtype">size_t</span> index</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        = tuple[0]</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        + tuple[1] * (<a class="code hl_variable" href="structatrip_1_1RankMap.html#a265e337d553853bf4c2b15703d9316c8">lengths</a>.size() &gt; 1 ? <a class="code hl_variable" href="structatrip_1_1RankMap.html#a265e337d553853bf4c2b15703d9316c8">lengths</a>[0] : 0)</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        ;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>      <span class="keywordtype">size_t</span> rank, source;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="structatrip_1_1RankMap.html#ac0b8c9cc718d102197f4c373500c898a">RANK_ROUND_ROBIN</a>) {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        rank = index % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af64b2ce415e825b25000ab9e5f2a09e3">np</a>;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        source = index / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af64b2ce415e825b25000ab9e5f2a09e3">np</a>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keywordtype">size_t</span> <span class="keyword">const</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>          <span class="comment">// the node that will be assigned to</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            nodeId = index % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">nNodes</a></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>          <span class="comment">// how many times it has been assigned to the node</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>          , s_n = index / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">nNodes</a></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>          <span class="comment">// which local rank in the node should be</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>          , localRank = s_n % <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">ranksPerNode</a></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>          <span class="comment">// and the local source (how many times we chose this local rank)</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>          , localSource = s_n / <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">ranksPerNode</a></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>          ;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="comment">// find the localRank-th entry in clusterInfo</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keyword">auto</span> <span class="keyword">const</span>&amp; it =</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>          std::find_if(<a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.begin(),</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                       <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.end(),</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                       [nodeId, localRank](<a class="code hl_struct" href="structatrip_1_1RankInfo.html">RankInfo</a> <span class="keyword">const</span>&amp; ri) {</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>                         return ri.nodeId == nodeId</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>                             &amp;&amp; ri.localRank == localRank</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                             ;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                       });</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordflow">if</span> (it == <a class="code hl_variable" href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">clusterInfo</a>.<a class="code hl_variable" href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">rankInfos</a>.end()) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>          <span class="keywordflow">throw</span> <span class="stringliteral">&quot;FATAL! Error in node distribution of the slices&quot;</span>;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        rank = (*it).globalRank;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        source = localSource;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      }</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>      <span class="keywordflow">return</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        { rank</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        , source</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        };</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  };</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>}</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">// The rank mapping:1 ends here</span></div>
 <div class="ttc" id="aSlice_8hpp_html"><div class="ttname"><a href="Slice_8hpp.html">Slice.hpp</a></div></div>
 <div class="ttc" id="aTuples_8hpp_html"><div class="ttname"><a href="Tuples_8hpp.html">Tuples.hpp</a></div></div>
-<div class="ttc" id="anamespaceatrip_html"><div class="ttname"><a href="namespaceatrip.html">atrip</a></div><div class="ttdef"><b>Definition:</b> Blas.cxx:37</div></div>
-<div class="ttc" id="anamespaceatrip_html_af838c7ed7996be477f99aad86114f26b"><div class="ttname"><a href="namespaceatrip.html#af838c7ed7996be477f99aad86114f26b">atrip::ABCTuple</a></div><div class="ttdeci">std::array&lt; size_t, 3 &gt; ABCTuple</div><div class="ttdef"><b>Definition:</b> Equations.hpp:28</div></div>
-<div class="ttc" id="anamespaceatrip_html_af9fd13d6ed4a11730462a362543d6e26"><div class="ttname"><a href="namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26">atrip::getClusterInfo</a></div><div class="ttdeci">ClusterInfo getClusterInfo(MPI_Comm comm)</div><div class="ttdef"><b>Definition:</b> Tuples.cxx:82</div></div>
-<div class="ttc" id="astructatrip_1_1ClusterInfo_html"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html">atrip::ClusterInfo</a></div><div class="ttdef"><b>Definition:</b> Tuples.hpp:70</div></div>
-<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a237c0bdaac8aff12e5e8c03fc0840177"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">atrip::ClusterInfo::nNodes</a></div><div class="ttdeci">const size_t nNodes</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:71</div></div>
-<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a636df31115df9361e5d787fca0b32817"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">atrip::ClusterInfo::ranksPerNode</a></div><div class="ttdeci">const size_t ranksPerNode</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:71</div></div>
-<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a6ad5fdc3b6e91f33582348725661722b"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">atrip::ClusterInfo::rankInfos</a></div><div class="ttdeci">const std::vector&lt; RankInfo &gt; rankInfos</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:72</div></div>
-<div class="ttc" id="astructatrip_1_1RankInfo_html"><div class="ttname"><a href="structatrip_1_1RankInfo.html">atrip::RankInfo</a></div><div class="ttdef"><b>Definition:</b> Tuples.hpp:59</div></div>
+<div class="ttc" id="anamespaceatrip_html"><div class="ttname"><a href="namespaceatrip.html">atrip</a></div><div class="ttdef"><b>Definition:</b> Atrip.hpp:32</div></div>
+<div class="ttc" id="anamespaceatrip_html_a28915c100861c4b2a8c868a4b8f1f233"><div class="ttname"><a href="namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233">atrip::ABCTuple</a></div><div class="ttdeci">std::array&lt; size_t, 3 &gt; ABCTuple</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:39</div></div>
+<div class="ttc" id="anamespaceatrip_html_af9fd13d6ed4a11730462a362543d6e26"><div class="ttname"><a href="namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26">atrip::getClusterInfo</a></div><div class="ttdeci">ClusterInfo getClusterInfo(MPI_Comm comm)</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:143</div></div>
+<div class="ttc" id="astructatrip_1_1ClusterInfo_html"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html">atrip::ClusterInfo</a></div><div class="ttdef"><b>Definition:</b> Tuples.hpp:137</div></div>
+<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a237c0bdaac8aff12e5e8c03fc0840177"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a237c0bdaac8aff12e5e8c03fc0840177">atrip::ClusterInfo::nNodes</a></div><div class="ttdeci">const size_t nNodes</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:138</div></div>
+<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a636df31115df9361e5d787fca0b32817"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a636df31115df9361e5d787fca0b32817">atrip::ClusterInfo::ranksPerNode</a></div><div class="ttdeci">const size_t ranksPerNode</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:138</div></div>
+<div class="ttc" id="astructatrip_1_1ClusterInfo_html_a6ad5fdc3b6e91f33582348725661722b"><div class="ttname"><a href="structatrip_1_1ClusterInfo.html#a6ad5fdc3b6e91f33582348725661722b">atrip::ClusterInfo::rankInfos</a></div><div class="ttdeci">const std::vector&lt; RankInfo &gt; rankInfos</div><div class="ttdef"><b>Definition:</b> Tuples.hpp:139</div></div>
+<div class="ttc" id="astructatrip_1_1RankInfo_html"><div class="ttname"><a href="structatrip_1_1RankInfo.html">atrip::RankInfo</a></div><div class="ttdef"><b>Definition:</b> Tuples.hpp:95</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html"><div class="ttname"><a href="structatrip_1_1RankMap.html">atrip::RankMap</a></div><div class="ttdef"><b>Definition:</b> RankMap.hpp:27</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_a265e337d553853bf4c2b15703d9316c8"><div class="ttname"><a href="structatrip_1_1RankMap.html#a265e337d553853bf4c2b15703d9316c8">atrip::RankMap::lengths</a></div><div class="ttdeci">std::vector&lt; size_t &gt; const lengths</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:30</div></div>
+<div class="ttc" id="astructatrip_1_1RankMap_html_a489ad71146d35a5c2d22b94a04ae3770"><div class="ttname"><a href="structatrip_1_1RankMap.html#a489ad71146d35a5c2d22b94a04ae3770">atrip::RankMap::isSourcePadding</a></div><div class="ttdeci">bool isSourcePadding(size_t rank, size_t source) const noexcept</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:68</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_a6d5becc3ba428aa4d7ac26c5c6b1114a"><div class="ttname"><a href="structatrip_1_1RankMap.html#a6d5becc3ba428aa4d7ac26c5c6b1114a">atrip::RankMap::find</a></div><div class="ttdeci">size_t find(typename Slice&lt; F &gt;::Location const &amp;p) const noexcept</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:42</div></div>
-<div class="ttc" id="astructatrip_1_1RankMap_html_a7950005cd56f7daaf4e25d813f5ca921"><div class="ttname"><a href="structatrip_1_1RankMap.html#a7950005cd56f7daaf4e25d813f5ca921">atrip::RankMap::isSourcePadding</a></div><div class="ttdeci">bool isSourcePadding(const size_t rank, const size_t source) const noexcept</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:68</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_a7b770e5c35a4edf4e8fc56bd9a9886e6"><div class="ttname"><a href="structatrip_1_1RankMap.html#a7b770e5c35a4edf4e8fc56bd9a9886e6">atrip::RankMap::RankMap</a></div><div class="ttdeci">RankMap(std::vector&lt; size_t &gt; lens, size_t np_, MPI_Comm comm)</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:34</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_a7ea842103ccde38ba37663002e0089c6"><div class="ttname"><a href="structatrip_1_1RankMap.html#a7ea842103ccde38ba37663002e0089c6">atrip::RankMap::nSources</a></div><div class="ttdeci">size_t nSources() const noexcept</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:56</div></div>
-<div class="ttc" id="astructatrip_1_1RankMap_html_a8f56a9194defc16337a8a773789028dd"><div class="ttname"><a href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">atrip::RankMap::find</a></div><div class="ttdeci">Slice&lt; F &gt;::Location find(ABCTuple const &amp;abc, typename Slice&lt; F &gt;::Type sliceType) const</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:74</div></div>
+<div class="ttc" id="astructatrip_1_1RankMap_html_a8f56a9194defc16337a8a773789028dd"><div class="ttname"><a href="structatrip_1_1RankMap.html#a8f56a9194defc16337a8a773789028dd">atrip::RankMap::find</a></div><div class="ttdeci">Slice&lt; F &gt;::Location find(ABCTuple const &amp;abc, typename Slice&lt; F &gt;::Type sliceType) const</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:73</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_a9446d8e669ada2186bab67c0ada510f3"><div class="ttname"><a href="structatrip_1_1RankMap.html#a9446d8e669ada2186bab67c0ada510f3">atrip::RankMap::size</a></div><div class="ttdeci">size_t const size</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:31</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_ac0b8c9cc718d102197f4c373500c898a"><div class="ttname"><a href="structatrip_1_1RankMap.html#ac0b8c9cc718d102197f4c373500c898a">atrip::RankMap::RANK_ROUND_ROBIN</a></div><div class="ttdeci">static bool RANK_ROUND_ROBIN</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:29</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_aeeb8bd03cfc197bbdd7c73245bd956e4"><div class="ttname"><a href="structatrip_1_1RankMap.html#aeeb8bd03cfc197bbdd7c73245bd956e4">atrip::RankMap::isPaddingRank</a></div><div class="ttdeci">bool isPaddingRank(size_t rank) const noexcept</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:61</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_af64b2ce415e825b25000ab9e5f2a09e3"><div class="ttname"><a href="structatrip_1_1RankMap.html#af64b2ce415e825b25000ab9e5f2a09e3">atrip::RankMap::np</a></div><div class="ttdeci">size_t const np</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:31</div></div>
 <div class="ttc" id="astructatrip_1_1RankMap_html_af73c05557a7b53fd7524e60ed462b35e"><div class="ttname"><a href="structatrip_1_1RankMap.html#af73c05557a7b53fd7524e60ed462b35e">atrip::RankMap::clusterInfo</a></div><div class="ttdeci">ClusterInfo const clusterInfo</div><div class="ttdef"><b>Definition:</b> RankMap.hpp:32</div></div>
-<div class="ttc" id="astructatrip_1_1Slice_1_1Location_html"><div class="ttname"><a href="structatrip_1_1Slice_1_1Location.html">atrip::Slice::Location</a></div><div class="ttdef"><b>Definition:</b> Slice.hpp:35</div></div>
-<div class="ttc" id="astructatrip_1_1Slice_html_a07166aae255c90bcbb117bf1e8e2fb56"><div class="ttname"><a href="structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56">atrip::Slice::subtupleBySlice</a></div><div class="ttdeci">static PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType)</div><div class="ttdef"><b>Definition:</b> Slice.hpp:221</div></div>
-<div class="ttc" id="astructatrip_1_1Slice_html_a4932aa32235b09b0a8220fc9ec3f3e46"><div class="ttname"><a href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">atrip::Slice::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> Slice.hpp:40</div></div>
+<div class="ttc" id="astructatrip_1_1Slice_1_1Location_html"><div class="ttname"><a href="structatrip_1_1Slice_1_1Location.html">atrip::Slice::Location</a></div><div class="ttdef"><b>Definition:</b> Slice.hpp:47</div></div>
+<div class="ttc" id="astructatrip_1_1Slice_html_a07166aae255c90bcbb117bf1e8e2fb56"><div class="ttname"><a href="structatrip_1_1Slice.html#a07166aae255c90bcbb117bf1e8e2fb56">atrip::Slice::subtupleBySlice</a></div><div class="ttdeci">static PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType)</div><div class="ttdef"><b>Definition:</b> Slice.hpp:233</div></div>
+<div class="ttc" id="astructatrip_1_1Slice_html_a4932aa32235b09b0a8220fc9ec3f3e46"><div class="ttname"><a href="structatrip_1_1Slice.html#a4932aa32235b09b0a8220fc9ec3f3e46">atrip::Slice::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> Slice.hpp:52</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

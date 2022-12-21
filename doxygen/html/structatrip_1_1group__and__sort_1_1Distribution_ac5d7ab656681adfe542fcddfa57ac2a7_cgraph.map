@@ -1,10 +1,11 @@
 <map id="atrip::group_and_sort::Distribution::getTuples" name="atrip::group_and_sort::Distribution::getTuples">
-<area shape="rect" id="node1" title=" " alt="" coords="5,73,181,113"/>
-<area shape="rect" id="node2" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " alt="" coords="229,73,389,113"/>
-<area shape="rect" id="node3" href="$namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b" title=" " alt="" coords="437,5,600,31"/>
-<area shape="rect" id="node4" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " alt="" coords="445,55,592,80"/>
-<area shape="rect" id="node5" href="$namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338" title=" " alt="" coords="438,104,599,129"/>
-<area shape="rect" id="node6" href="$namespaceatrip_1_1group__and__sort.html#a9285b4e63c38f7c586f8ba185e5fa2e9" title=" " alt="" coords="439,154,599,194"/>
-<area shape="rect" id="node7" href="$namespaceatrip_1_1group__and__sort.html#a64e55f94387e9330b4afdb3e6a6d5556" title=" " alt="" coords="648,125,808,165"/>
-<area shape="rect" id="node8" href="$namespaceatrip_1_1group__and__sort.html#a5835bdc1344efcd309e8d74a9a796299" title=" " alt="" coords="856,154,1016,194"/>
+<area shape="rect" id="node1" title=" " coords="5,99,181,139"/>
+<area shape="rect" id="node2" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " coords="229,99,389,139"/>
+<area shape="rect" id="node3" href="$namespaceatrip.html#ad3b6dffd6ea5627cfb04fbc5653d0e3b" title=" " coords="437,5,600,31"/>
+<area shape="rect" id="node4" href="$namespaceatrip.html#a3cdba26c5e1b49fd5a9359658484e1f0" title=" " coords="655,56,801,81"/>
+<area shape="rect" id="node5" href="$namespaceatrip.html#a97dd69bc4fe50212652f17f2e6bd04fb" title=" " coords="884,107,988,132"/>
+<area shape="rect" id="node6" href="$namespaceatrip.html#adf9f0314b16a7dc5e7c7d47c622a1338" title=" " coords="438,157,599,183"/>
+<area shape="rect" id="node7" href="$namespaceatrip_1_1group__and__sort.html#a9285b4e63c38f7c586f8ba185e5fa2e9" title=" " coords="439,207,599,247"/>
+<area shape="rect" id="node8" href="$namespaceatrip_1_1group__and__sort.html#a64e55f94387e9330b4afdb3e6a6d5556" title=" " coords="648,157,808,197"/>
+<area shape="rect" id="node9" href="$namespaceatrip_1_1group__and__sort.html#a5835bdc1344efcd309e8d74a9a796299" title=" " coords="856,185,1016,225"/>
 </map>

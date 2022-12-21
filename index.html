@@ -46,16 +46,6 @@
 <ul>
 <li><p><a class="reference internal" href="#about-this-document" id="id2">1 About this document</a></p></li>
 <li><p><a class="reference internal" href="#how-to-cite" id="id3">2 How to cite</a></p></li>
-<li><p><a class="reference internal" href="#building" id="id4">3 Building</a></p>
-<ul>
-<li><p><a class="reference internal" href="#benches" id="id5">3.1 Benches</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#running-benches" id="id6">4 Running benches</a></p>
-<ul>
-<li><p><a class="reference internal" href="#main-benchmark" id="id7">4.1 Main benchmark</a></p></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -75,8 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="atrip.html#atrip">10 Atrip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atrip.html#debug-and-logging">11 Debug and Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atrip.html#checkpoints-and-restarts">12 Checkpoints and restarts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="atrip.html#miscellaneous">13 Miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="atrip.html#include-header">14 Include header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atrip.html#include-header">13 Include header</a></li>
 </ul>
 </li>
 </ul>
@@ -100,78 +89,6 @@ before the proper paper is released please contact me.</p>
 <p>In the mean time the code has been used in
 <a class="reference external" href="https://aip.scitation.org/doi/10.1063/5.0074936">this publication</a> and can therefore been cited.</p>
 </section>
-<section id="building">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">3 Building</a><a class="headerlink" href="#building" title="Permalink to this heading">¶</a></h2>
-<p>Atrip uses autotools to build the system.
-Autotools works by first creating a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script from
-a <code class="docutils literal notranslate"><span class="pre">configure.ac</span></code> file.</p>
-<p>Atrip should be built out of source, this means that
-you have to create a build directory other that the root
-directory, for instance in the <code class="docutils literal notranslate"><span class="pre">build/tutorial</span></code> directory</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir -p build/tutorial/
-<span class="nb">cd</span> build/tutorial
-</pre></div>
-</div>
-<p>First you have to build the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script by doing</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>../../bootstrap.sh
-</pre></div>
-</div>
-<p>And then you can see the <code class="docutils literal notranslate"><span class="pre">configure</span></code> options</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>../../configure --help
-</pre></div>
-</div>
-<section id="benches">
-<h3><a class="toc-backref" href="#id5" role="doc-backlink">3.1 Benches</a><a class="headerlink" href="#benches" title="Permalink to this heading">¶</a></h3>
-<p>The script <code class="docutils literal notranslate"><span class="pre">tools/configure-benches.sh</span></code> can be used to create
-a couple of configurations for benches:</p>
-<dl class="simple">
-<dt>default</dt><dd><p>This configuration uses a CPU code with dgemm
-and without computing slices.</p>
-</dd>
-<dt>only-dgemm</dt><dd><p>This only runs the computation part that involves dgemms.</p>
-</dd>
-<dt>cuda-only-dgemm</dt><dd><p>This is the naive CUDA implementation compiling only the dgemm parts
-of the compute.</p>
-</dd>
-<dt>cuda-slices-on-gpu-only-dgemm</dt><dd><p>This configuration tests that slices reside completely on the gpu
-and it should use a CUDA aware MPI implementation.
-It also only uses the routines that involve dgemm.</p>
-</dd>
-</dl>
-<p>In order to generate the benches just create a suitable directory for it</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir -p build/benches
-<span class="nb">cd</span> buid/benches
-../../tools/configure-benches.sh <span class="nv">CXX</span><span class="o">=</span>g++ ...
-</pre></div>
-</div>
-<p>and you will get a Makefile together with several project folders.
-You can either configure all projects with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">all</span></code> or
-then go in each folder.</p>
-<p>Notice that you can give a path for ctf for all of them by doing</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>../../tools/configure-benches.sh --with-ctf<span class="o">=</span>/absolute/path/to/ctf
-</pre></div>
-</div>
-</section>
-</section>
-<section id="running-benches">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">4 Running benches</a><a class="headerlink" href="#running-benches" title="Permalink to this heading">¶</a></h2>
-<section id="main-benchmark">
-<h3><a class="toc-backref" href="#id7" role="doc-backlink">4.1 Main benchmark</a><a class="headerlink" href="#main-benchmark" title="Permalink to this heading">¶</a></h3>
-<p>The main benchmark gets built in <code class="docutils literal notranslate"><span class="pre">bench/atrip</span></code> and is used to run an
-atrip run with random tensors.</p>
-<p>A common run of this script will be the following</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bench/atrip <span class="se">\</span>
-  --no <span class="m">100</span> <span class="se">\</span>
-  --nv <span class="m">1000</span> <span class="se">\</span>
-  --mod <span class="m">1</span> <span class="se">\</span>
-  --% <span class="m">0</span> <span class="se">\</span>
-  --dist group <span class="se">\</span>
-  --nocheckpoint <span class="se">\</span>
-  --max-iterations <span class="m">1000</span>
-</pre></div>
-</div>
-</section>
-</section>
 </section>
 
 
@@ -187,14 +104,6 @@ atrip run with random tensors.</p>
 <li><a class="reference internal" href="#">ATRIP: An MPI-asynchronous implementation of CCSD(T)</a><ul>
 <li><a class="reference internal" href="#about-this-document">1 About this document</a></li>
 <li><a class="reference internal" href="#how-to-cite">2 How to cite</a></li>
-<li><a class="reference internal" href="#building">3 Building</a><ul>
-<li><a class="reference internal" href="#benches">3.1 Benches</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#running-benches">4 Running benches</a><ul>
-<li><a class="reference internal" href="#main-benchmark">4.1 Main benchmark</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

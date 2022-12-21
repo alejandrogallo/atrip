@@ -1,0 +1,5 @@
+<map id="atrip::SliceUnion::receive" name="atrip::SliceUnion::receive">
+<area shape="rect" id="node1" title="Receive asynchronously only if the state is Fetch." coords="5,5,143,45"/>
+<area shape="rect" id="node2" href="$structatrip_1_1Slice.html#aac3a4c4281d2ff9e3c2a0060d3a5aa4a" title=" " coords="191,13,356,38"/>
+<area shape="rect" id="node3" href="$namespaceatrip.html#a3178eea10b83bd01a95ca222be291c1f" title=" " coords="404,13,540,38"/>
+</map>

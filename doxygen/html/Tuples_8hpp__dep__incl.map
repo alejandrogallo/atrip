@@ -1,11 +1,9 @@
 <map id="Tuples.hpp" name="Tuples.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="94,5,185,31"/>
-<area shape="rect" id="node2" href="$RankMap_8hpp.html" title=" " alt="" coords="5,152,116,177"/>
-<area shape="rect" id="node8" href="$Slice_8hpp.html" title=" " alt="" coords="99,79,180,104"/>
-<area shape="rect" id="node9" href="$Tuples_8cxx.html" title=" " alt="" coords="205,79,295,104"/>
-<area shape="rect" id="node3" href="$SliceUnion_8hpp.html" title=" " alt="" coords="48,225,167,251"/>
-<area shape="rect" id="node4" href="$Atrip_8cxx.html" title=" " alt="" coords="9,445,89,471"/>
-<area shape="rect" id="node5" href="$DatabaseCommunicator_8hpp.html" title=" " alt="" coords="100,372,307,397"/>
-<area shape="rect" id="node7" href="$Unions_8hpp.html" title=" " alt="" coords="60,299,155,324"/>
-<area shape="rect" id="node6" href="$DatabaseCommunicator_8cxx.html" title=" " alt="" coords="113,445,320,471"/>
+<area shape="rect" id="node1" title=" " coords="63,5,154,31"/>
+<area shape="rect" id="node2" href="$RankMap_8hpp.html" title=" " coords="8,152,119,177"/>
+<area shape="rect" id="node6" href="$Slice_8hpp.html" title=" " coords="112,79,193,104"/>
+<area shape="rect" id="node3" href="$SliceUnion_8hpp.html" title=" " coords="5,225,124,251"/>
+<area shape="rect" id="node4" href="$Atrip_8cxx.html" title=" " coords="82,372,162,397"/>
+<area shape="rect" id="node5" href="$Unions_8hpp.html" title=" " coords="75,299,169,324"/>
+<area shape="rect" id="node7" href="$Equations_8hpp.html" title=" " coords="150,225,265,251"/>
 </map>

@@ -176,63 +176,7 @@ Again the implementation is a simple enum type.
       Acceptor = 405
     };
 
-2.5 Data pointer
-~~~~~~~~~~~~~~~~
-
-The data pointer type is an abstraction of where the data
-of the slice are.
-In a CPU architecture it will simply be ``F*``,
-otherwise it will be a pointer to a GPU address in the case
-of a GPU architecture.
-
-.. code:: c++
-
-    #pragma once
-    #include <atrip/Complex.hpp>
-    #include <atrip/Atrip.hpp>
-
-    namespace atrip {
-
-    template <typename F>
-    struct DataField;
-
-    template <>
-    struct DataField<double> {
-      using type = double;
-    };
-
-    #if defined(HAVE_CUDA)
-
-    template <typename F>
-    using DataPtr = CUdeviceptr;
-    #define DataNullPtr 0x00
-
-    template <>
-    struct DataField<Complex> {
-      using type = cuDoubleComplex;
-    };
-
-
-    #else
-
-    template <typename F>
-    using DataPtr = F*;
-    #define DataNullPtr nullptr
-
-    template <>
-    struct DataField<Complex> {
-      using type = Complex;
-    };
-
-    #endif
-
-
-    template <typename F>
-    using DataFieldType = typename DataField<F>::type;
-
-    }
-
-2.6 The Info structure
+2.5 The Info structure
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Every slice has an information structure associated with it
@@ -262,7 +206,7 @@ that keeps track of the ****variable**** type, state and so on.
 
     using Ty_x_Tu = std::pair< Type, PartialTuple >;
 
-2.7 Name
+2.6 Name
 ~~~~~~~~
 
 CCSD(T) needs in this algorithm 5 types of tensor slices,
@@ -286,7 +230,7 @@ and through two parameters for the hole contribution.
       , VABIJ = 202
       };
 
-2.8 Database
+2.7 Database
 ~~~~~~~~~~~~
 
 The database is a simple representation of the slices of a slice union.
@@ -308,7 +252,7 @@ a vector of these elements.
     using LocalDatabase = std::vector<LocalDatabaseElement>;
     using Database = LocalDatabase;
 
-2.9 MPI Types
+2.8 MPI Types
 ~~~~~~~~~~~~~
 
 .. code:: c++
@@ -417,8 +361,8 @@ a vector of these elements.
 
     };
 
-2.10 Static utilities
-~~~~~~~~~~~~~~~~~~~~~
+2.9 Static utilities
+~~~~~~~~~~~~~~~~~~~~
 
 This section presents some functions which are useful to work with
 slices and are inside the namespace created by the slice struct.
@@ -585,7 +529,7 @@ given slice could not be found.
       return *sliceIt;
     }
 
-2.11 Attributes
+2.10 Attributes
 ~~~~~~~~~~~~~~~
 
 A slice object does not own data, it is just a container
@@ -604,10 +548,7 @@ or deallocate itself the pointer.
 
 .. code:: c++
 
-        DataPtr<F> data;
-    #if defined(HAVE_CUDA)
-        F* mpi_data;
-    #endif
+    F  *data;
 
 An ``MPI_Request`` handle is also included so that the slices that are
 to receive data through MPI can know which request they belong to.
@@ -622,7 +563,7 @@ For practical purposes in MPI calls, the number of elements in ``data`` is also 
 
     const size_t size;
 
-2.12 Member functions
+2.11 Member functions
 ~~~~~~~~~~~~~~~~~~~~~
 
 It is important to note that a ready slice should not be recycled from
@@ -680,7 +621,7 @@ is done.
       info.state      = Acceptor;
       info.from       = {0, 0};
       info.recycling  = Blank;
-      data            = DataNullPtr;
+      data            = nullptr;
     }
 
     inline bool isFree() const noexcept {
@@ -690,7 +631,7 @@ is done.
           && info.from.rank   == 0
           && info.from.source == 0
           && info.recycling   == Blank
-          && data             == DataNullPtr
+          && data             == nullptr
            ;
     }
 
@@ -727,7 +668,7 @@ or ``Blank``, if this is the case then it is a bug.
 .. code:: c++
 
     inline bool hasValidDataPointer() const noexcept {
-      return data       != DataNullPtr
+      return data       != nullptr
           && info.state != Acceptor
           && info.type  != Blank
           ;
@@ -761,16 +702,8 @@ The main behaviour of the function should
             WITH_RANK << "__slice__:mpi: waiting " << "\n";
     #endif
           const int errorCode = MPI_Wait(&request, &status);
-          if (MPI_SUCCESS != MPI_Request_free(&request))
-            throw "Error freeing MPI request";
           if (errorCode != MPI_SUCCESS)
             throw "MPI ERROR HAPPENED....";
-
-    #if defined(HAVE_CUDA)
-          // copy the retrieved mpi data to the device
-          cuMemcpyHtoD(data, (void*)mpi_data, sizeof(F) * size);
-          std::free(mpi_data);
-    #endif
 
     #ifdef HAVE_OCD
           char errorString[MPI_MAX_ERROR_STRING];
@@ -800,8 +733,6 @@ The pretty printing uses the `dbg-macro <https://github.com/sharkdp/dbg-macro>`_
 
 .. code:: c++
 
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wunused-parameter"
       template <typename T>
       std::string pretty_print(T&& value) {
         std::stringstream stream;
@@ -810,7 +741,6 @@ The pretty printing uses the `dbg-macro <https://github.com/sharkdp/dbg-macro>`_
     #endif
         return stream.str();
       }
-    #pragma GCC diagnostic pop
 
 3.2 Chrono
 ~~~~~~~~~~
@@ -898,8 +828,7 @@ rank.
               ;
         }
 
-        bool isSourcePadding(const size_t rank, const size_t source)
-          const noexcept {
+        bool isSourcePadding(size_t rank, size_t source) const noexcept {
           return source == nSources() && isPaddingRank(rank);
         }
 
@@ -969,6 +898,566 @@ rank.
 5 The slice union
 -----------------
 
+.. code:: c++
+
+    #pragma once
+    #include <atrip/Debug.hpp>
+    #include <atrip/Slice.hpp>
+    #include <atrip/RankMap.hpp>
+
+    namespace atrip {
+
+      template <typename F=double>
+      struct SliceUnion {
+        using Tensor = CTF::Tensor<F>;
+
+        virtual void
+        sliceIntoBuffer(size_t iteration, Tensor &to, Tensor const& from) = 0;
+
+        /*
+         * This function should enforce an important property of a SliceUnion.
+         * Namely, there can be no two Slices of the same nature.
+         *
+         * This means that there can be at most one slice with a given Ty_x_Tu.
+         */
+        void checkForDuplicates() const {
+          std::vector<typename Slice<F>::Ty_x_Tu> tytus;
+          for (auto const& s: slices) {
+            if (s.isFree()) continue;
+            tytus.push_back({s.info.type, s.info.tuple});
+          }
+
+          for (auto const& tytu: tytus) {
+            if (std::count(tytus.begin(), tytus.end(), tytu) > 1)
+              throw "Invariance violated, more than one slice with same Ty_x_Tu";
+          }
+
+        }
+
+        std::vector<typename Slice<F>::Ty_x_Tu> neededSlices(ABCTuple const& abc) {
+          std::vector<typename Slice<F>::Ty_x_Tu> needed(sliceTypes.size());
+          // build the needed vector
+          std::transform(sliceTypes.begin(), sliceTypes.end(),
+                         needed.begin(),
+                         [&abc](typename Slice<F>::Type const type) {
+                           auto tuple = Slice<F>::subtupleBySlice(abc, type);
+                           return std::make_pair(type, tuple);
+                         });
+          return needed;
+        }
+
+        /* buildLocalDatabase
+         *
+         * It should build a database of slices so that we know what is needed
+         * to fetch in the next iteration represented by the tuple 'abc'.
+         *
+         * 1. The algorithm works as follows, we build a database of the all
+         * the slice types that we need together with their tuple.
+         *
+         * 2. Look in the SliceUnion if we already have this tuple,
+         * if we already have it mark it (TODO)
+         *
+         * 3. If we don't have the tuple, look for a (state=acceptor, type=blank)
+         * slice and mark this slice as type=Fetch with the corresponding type
+         * and tuple.
+         *
+         * NOTE: The algorithm should certify that we always have enough blank
+         * slices.
+         *
+         */
+        typename
+        Slice<F>::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
+          typename Slice<F>::LocalDatabase result;
+
+          auto const needed = neededSlices(abc);
+
+          WITH_RANK << "__db__:needed:" << pretty_print(needed) << "\n";
+          // BUILD THE DATABASE
+          // we need to loop over all sliceTypes that this TensorUnion
+          // is representing and find out how we will get the corresponding
+          // slice for the abc we are considering right now.
+          for (auto const& pair: needed) {
+            auto const type = pair.first;
+            auto const tuple = pair.second;
+            auto const from  = rankMap.find(abc, type);
+
+    #ifdef HAVE_OCD
+            WITH_RANK << "__db__:want:" << pretty_print(pair) << "\n";
+            for (auto const& s: slices)
+              WITH_RANK << "__db__:guts:ocd "
+                        << s.info << " pt " << s.data
+                        << "\n";
+    #endif
+
+    #ifdef HAVE_OCD
+            WITH_RANK << "__db__: checking if exact match" << "\n";
+    #endif
+            {
+              // FIRST: look up if there is already a *Ready* slice matching what we
+              // need
+              auto const& it
+                = std::find_if(slices.begin(), slices.end(),
+                               [&tuple, &type](Slice<F> const& other) {
+                                 return other.info.tuple == tuple
+                                     && other.info.type == type
+                                        // we only want another slice when it
+                                        // has already ready-to-use data
+                                     && other.isUnwrappable()
+                                     ;
+                               });
+              if (it != slices.end()) {
+                // if we find this slice, it means that we don't have to do anything
+                WITH_RANK << "__db__: EXACT: found EXACT in name=" << name
+                          << " for tuple " << tuple[0] << ", " << tuple[1]
+                          << " ptr " << it->data
+                          << "\n";
+                result.push_back({name, it->info});
+                continue;
+              }
+            }
+
+    #ifdef HAVE_OCD
+            WITH_RANK << "__db__: checking if recycle" << "\n";
+    #endif
+            // Try to find a recyling possibility ie. find a slice with the same
+            // tuple and that has a valid data pointer.
+            auto const& recycleIt
+              = std::find_if(slices.begin(), slices.end(),
+                             [&tuple, &type](Slice<F> const& other) {
+                               return other.info.tuple == tuple
+                                   && other.info.type != type
+                                   && other.isRecyclable()
+                                   ;
+                             });
+
+            // if we find this recylce, then we find a Blank slice
+            // (which should exist by construction :THINK)
+            //
+            if (recycleIt != slices.end()) {
+              auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
+              // TODO: formalize this through a method to copy information
+              //       from another slice
+              blank.data = recycleIt->data;
+              blank.info.type = type;
+              blank.info.tuple = tuple;
+              blank.info.state = Slice<F>::Recycled;
+              blank.info.from = from;
+              blank.info.recycling = recycleIt->info.type;
+              result.push_back({name, blank.info});
+              WITH_RANK << "__db__: RECYCLING: n" << name
+                        << " " << pretty_print(abc)
+                        << " get " << pretty_print(blank.info)
+                        << " from " << pretty_print(recycleIt->info)
+                        << " ptr " << recycleIt->data
+                        << "\n"
+                        ;
+              continue;
+            }
+
+            // in this case we have to create a new slice
+            // this means that we should have a blank slice at our disposal
+            // and also the freePointers should have some elements inside,
+            // so we pop a data pointer from the freePointers container
+    #ifdef HAVE_OCD
+            WITH_RANK << "__db__: none work, doing new" << "\n";
+    #endif
+            {
+              WITH_RANK << "__db__: NEW: finding blank in " << name
+                        << " for type " << type
+                        << " for tuple " << tuple[0] << ", " << tuple[1]
+                        << "\n"
+                        ;
+              auto& blank = Slice<F>::findOneByType(slices, Slice<F>::Blank);
+              blank.info.type = type;
+              blank.info.tuple = tuple;
+              blank.info.from = from;
+
+              // Handle self sufficiency
+              blank.info.state = Atrip::rank == from.rank
+                               ? Slice<F>::SelfSufficient
+                               : Slice<F>::Fetch
+                               ;
+              if (blank.info.state == Slice<F>::SelfSufficient) {
+                blank.data = sources[from.source].data();
+              } else {
+                if (freePointers.size() == 0) {
+                  std::stringstream stream;
+                  stream << "No more free pointers "
+                         << "for type " << type
+                         << " and name " << name
+                          ;
+                  throw std::domain_error(stream.str());
+                }
+                auto dataPointer = freePointers.begin();
+                freePointers.erase(dataPointer);
+                blank.data = *dataPointer;
+              }
+
+              result.push_back({name, blank.info});
+              continue;
+            }
+
+          }
+
+    #ifdef HAVE_OCD
+          for (auto const& s: slices)
+            WITH_RANK << "__db__:guts:ocd:__end__ " << s.info << "\n";
+    #endif
+
+
+          return result;
+
+        }
+
+        /*
+         * Garbage collect slices not needed for the next iteration.
+         *
+         * It will throw if it tries to gc a slice that has not been
+         * previously unwrapped, as a safety mechanism.
+         */
+        void clearUnusedSlicesForNext(ABCTuple const& abc) {
+          auto const needed = neededSlices(abc);
+
+          // CLEAN UP SLICES, FREE THE ONES THAT ARE NOT NEEDED ANYMORE
+          for (auto& slice: slices) {
+            // if the slice is free, then it was not used anyways
+            if (slice.isFree()) continue;
+
+
+            // try to find the slice in the needed slices list
+            auto const found
+              = std::find_if(needed.begin(), needed.end(),
+                             [&slice] (typename Slice<F>::Ty_x_Tu const& tytu) {
+                               return slice.info.tuple == tytu.second
+                                   && slice.info.type == tytu.first
+                                   ;
+                             });
+
+            // if we did not find slice in needed, then erase it
+            if (found == needed.end()) {
+
+              // We have to be careful about the data pointer,
+              // for SelfSufficient, the data pointer is a source pointer
+              // of the slice, so we should just wipe it.
+              //
+              // For Ready slices, we have to be careful if there are some
+              // recycled slices depending on it.
+              bool freeSlicePointer = true;
+
+              // allow to gc unwrapped and recycled, never Fetch,
+              // if we have a Fetch slice then something has gone very wrong.
+              if (!slice.isUnwrapped() && slice.info.state != Slice<F>::Recycled)
+                throw
+                  std::domain_error("Trying to garbage collect "
+                                    " a non-unwrapped slice! "
+                                    + pretty_print(&slice)
+                                    + pretty_print(slice.info));
+
+              // it can be that our slice is ready, but it has some hanging
+              // references lying around in the form of a recycled slice.
+              // Of course if we need the recycled slice the next iteration
+              // this would be fatal, because we would then free the pointer
+              // of the slice and at some point in the future we would
+              // overwrite it. Therefore, we must check if slice has some
+              // references in slices and if so then
+              //
+              //  - we should mark those references as the original (since the data
+              //    pointer should be the same)
+              //
+              //  - we should make sure that the data pointer of slice
+              //    does not get freed.
+              //
+              if (slice.info.state == Slice<F>::Ready) {
+                WITH_OCD WITH_RANK
+                  << "__gc__:" << "checking for data recycled dependencies\n";
+                auto recycled
+                  = Slice<F>::hasRecycledReferencingToIt(slices, slice.info);
+                if (recycled.size()) {
+                  Slice<F>* newReady = recycled[0];
+                  WITH_OCD WITH_RANK
+                    << "__gc__:" << "swaping recycled "
+                    << pretty_print(newReady->info)
+                    << " and "
+                    << pretty_print(slice.info)
+                    << "\n";
+                  newReady->markReady();
+                  assert(newReady->data == slice.data);
+                  freeSlicePointer = false;
+
+                  for (size_t i = 1; i < recycled.size(); i++) {
+                    auto newRecyled = recycled[i];
+                    newRecyled->info.recycling = newReady->info.type;
+                    WITH_OCD WITH_RANK
+                      << "__gc__:" << "updating recycled "
+                      << pretty_print(newRecyled->info)
+                      << "\n";
+                  }
+
+                }
+              }
+
+              // if the slice is self sufficient, do not dare touching the
+              // pointer, since it is a pointer to our sources in our rank.
+              if (  slice.info.state == Slice<F>::SelfSufficient
+                 || slice.info.state == Slice<F>::Recycled
+                 ) {
+                freeSlicePointer = false;
+              }
+
+              // make sure we get its data pointer to be used later
+              // only for non-recycled, since it can be that we need
+              // for next iteration the data of the slice that the recycled points
+              // to
+              if (freeSlicePointer) {
+                freePointers.insert(slice.data);
+                WITH_RANK << "~~~:cl(" << name << ")"
+                          << " added to freePointer "
+                          << pretty_print(freePointers)
+                          << "\n";
+              } else {
+                WITH_OCD WITH_RANK << "__gc__:not touching the free Pointer\n";
+              }
+
+              // at this point, let us blank the slice
+              WITH_RANK << "~~~:cl(" << name << ")"
+                        << " freeing up slice "
+                        // TODO: make this possible because of Templates
+                        // TODO: there is a deduction error here
+                        // << " info " << slice.info
+                        << "\n";
+              slice.free();
+            }
+
+          }
+        }
+
+        // CONSTRUCTOR
+        SliceUnion( Tensor const& sourceTensor
+                  , std::vector<typename Slice<F>::Type> sliceTypes_
+                  , std::vector<size_t> sliceLength_
+                  , std::vector<size_t> paramLength
+                  , size_t np
+                  , MPI_Comm child_world
+                  , MPI_Comm global_world
+                  , typename Slice<F>::Name name_
+                  , size_t nSliceBuffers = 4
+                  )
+                  : rankMap(paramLength, np, global_world)
+                  , world(child_world)
+                  , universe(global_world)
+                  , sliceLength(sliceLength_)
+                  , sources(rankMap.nSources(),
+                            std::vector<F>
+                              (std::accumulate(sliceLength.begin(),
+                                               sliceLength.end(),
+                                               1UL, std::multiplies<size_t>())))
+                  , name(name_)
+                  , sliceTypes(sliceTypes_)
+                  , sliceBuffers(nSliceBuffers, sources[0])
+                  //, slices(2 * sliceTypes.size(), Slice<F>{ sources[0].size() })
+        { // constructor begin
+
+          LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
+
+          slices
+            = std::vector<Slice<F>>(2 * sliceTypes.size(), { sources[0].size() });
+          // TODO: think exactly    ^------------------- about this number
+
+          // initialize the freePointers with the pointers to the buffers
+          std::transform(sliceBuffers.begin(), sliceBuffers.end(),
+                         std::inserter(freePointers, freePointers.begin()),
+                         [](std::vector<F> &vec) { return vec.data(); });
+
+
+
+          LOG(1,"Atrip") << "rankMap.nSources "
+                               << rankMap.nSources() << "\n";
+          LOG(1,"Atrip") << "#slices "
+                               << slices.size() << "\n";
+          LOG(1,"Atrip") << "#slices[0] "
+                               << slices[0].size << "\n";
+          LOG(1,"Atrip") << "#sources "
+                               << sources.size() << "\n";
+          LOG(1,"Atrip") << "#sources[0] "
+                               << sources[0].size() << "\n";
+          LOG(1,"Atrip") << "#freePointers "
+                               << freePointers.size() << "\n";
+          LOG(1,"Atrip") << "#sliceBuffers "
+                               << sliceBuffers.size() << "\n";
+          LOG(1,"Atrip") << "#sliceBuffers[0] "
+                               << sliceBuffers[0].size() << "\n";
+          LOG(1,"Atrip") << "#sliceLength "
+                               << sliceLength.size() << "\n";
+          LOG(1,"Atrip") << "#paramLength "
+                               << paramLength.size() << "\n";
+          LOG(1,"Atrip") << "GB*" << np << " "
+                               << double(sources.size() + sliceBuffers.size())
+                                * sources[0].size()
+                                * 8 * np
+                                / 1073741824.0
+                               << "\n";
+        } // constructor ends
+
+        void init(Tensor const& sourceTensor) {
+
+          CTF::World w(world);
+          const int rank = Atrip::rank
+                  , order = sliceLength.size()
+                  ;
+          std::vector<int> const syms(order, NS);
+          std::vector<int> __sliceLength(sliceLength.begin(), sliceLength.end());
+          Tensor toSliceInto(order,
+                             __sliceLength.data(),
+                             syms.data(),
+                             w);
+          LOG(1,"Atrip") << "slicing... \n";
+
+          // setUp sources
+          for (size_t it(0); it < rankMap.nSources(); ++it) {
+            const size_t
+              source = rankMap.isSourcePadding(rank, source) ? 0 : it;
+            WITH_OCD
+            WITH_RANK
+              << "Init:toSliceInto it-" << it
+              << " :: source " << source << "\n";
+            sliceIntoBuffer(source, toSliceInto, sourceTensor);
+          }
+
+        }
+
+        /**
+         * \brief Send asynchronously only if the state is Fetch
+         */
+        void send( size_t otherRank
+                 , typename Slice<F>::LocalDatabaseElement const& el
+                 , size_t tag) const noexcept {
+          MPI_Request request;
+          bool sendData_p = false;
+          auto const& info = el.info;
+
+          if (info.state == Slice<F>::Fetch) sendData_p = true;
+          // TODO: remove this because I have SelfSufficient
+          if (otherRank == info.from.rank)      sendData_p = false;
+          if (!sendData_p) return;
+
+          MPI_Isend( sources[info.from.source].data()
+                   , sources[info.from.source].size()
+                   , traits::mpi::datatypeOf<F>()
+                   , otherRank
+                   , tag
+                   , universe
+                   , &request
+                   );
+          WITH_CRAZY_DEBUG
+          WITH_RANK << "sent to " << otherRank << "\n";
+
+        }
+
+        /**
+         * \brief Receive asynchronously only if the state is Fetch
+         */
+        void receive(typename Slice<F>::Info const& info, size_t tag) noexcept {
+          auto& slice = Slice<F>::findByInfo(slices, info);
+
+          if (Atrip::rank == info.from.rank) return;
+
+          if (slice.info.state == Slice<F>::Fetch) {
+            // TODO: do it through the slice class
+            slice.info.state = Slice<F>::Dispatched;
+            MPI_Request request;
+            slice.request = request;
+            MPI_Irecv( slice.data
+                     , slice.size
+                     , traits::mpi::datatypeOf<F>()
+                     , info.from.rank
+                     , tag
+                     , universe
+                     , &slice.request
+                    //, MPI_STATUS_IGNORE
+                     );
+          }
+        }
+
+        void unwrapAll(ABCTuple const& abc) {
+          for (auto type: sliceTypes) unwrapSlice(type, abc);
+        }
+
+        F* unwrapSlice(typename Slice<F>::Type type, ABCTuple const& abc) {
+          WITH_CRAZY_DEBUG
+          WITH_RANK << "__unwrap__:slice " << type << " w n "
+                    << name
+                    << " abc" << pretty_print(abc)
+                    << "\n";
+          auto& slice = Slice<F>::findByTypeAbc(slices, type, abc);
+          //WITH_RANK << "__unwrap__:info " << slice.info << "\n";
+          switch  (slice.info.state) {
+            case Slice<F>::Dispatched:
+              WITH_RANK << "__unwrap__:Fetch: " << &slice
+                        << " info " << pretty_print(slice.info)
+                        << "\n";
+              slice.unwrapAndMarkReady();
+              return slice.data;
+              break;
+            case Slice<F>::SelfSufficient:
+              WITH_RANK << "__unwrap__:SelfSufficient: " << &slice
+                        << " info " << pretty_print(slice.info)
+                        << "\n";
+              return slice.data;
+              break;
+            case Slice<F>::Ready:
+              WITH_RANK << "__unwrap__:READY: UNWRAPPED ALREADY" << &slice
+                        << " info " << pretty_print(slice.info)
+                        << "\n";
+              return slice.data;
+              break;
+            case Slice<F>::Recycled:
+              WITH_RANK << "__unwrap__:RECYCLED " << &slice
+                        << " info " << pretty_print(slice.info)
+                        << "\n";
+              return unwrapSlice(slice.info.recycling, abc);
+              break;
+            case Slice<F>::Fetch:
+            case Slice<F>::Acceptor:
+              throw std::domain_error("Can't unwrap an acceptor or fetch slice!");
+              break;
+            default:
+              throw std::domain_error("Unknown error unwrapping slice!");
+          }
+          return slice.data;
+        }
+
+        const RankMap<F> rankMap;
+        const MPI_Comm world;
+        const MPI_Comm universe;
+        const std::vector<size_t> sliceLength;
+        std::vector< std::vector<F> > sources;
+        std::vector< Slice<F> > slices;
+        typename Slice<F>::Name name;
+        const std::vector<typename Slice<F>::Type> sliceTypes;
+        std::vector< std::vector<F> > sliceBuffers;
+        std::set<F*> freePointers;
+
+      };
+
+      template <typename F=double>
+      SliceUnion<F>&
+      unionByName(std::vector<SliceUnion<F>*> const& unions,
+                  typename Slice<F>::Name name) {
+          const auto sliceUnionIt
+            = std::find_if(unions.begin(), unions.end(),
+                          [&name](SliceUnion<F> const* s) {
+                            return name == s->name;
+                          });
+          if (sliceUnionIt == unions.end()) {
+            std::stringstream stream;
+            stream << "SliceUnion(" << name << ") not found!";
+            throw std::domain_error(stream.str());
+          }
+          return **sliceUnionIt;
+      }
+
+    }
+
 6 Tuples
 --------
 
@@ -1033,8 +1522,9 @@ number of nodes.
       MPI_Comm_size(comm, &np);
 
       std::vector<std::string> nodeList(np);
-      char nodeName[MPI_MAX_PROCESSOR_NAME];
-      char *nodeNames = (char*)malloc(np * MPI_MAX_PROCESSOR_NAME);
+      char nodeName[MPI_MAX_PROCESSOR_NAME]
+         , nodeNames[np*MPI_MAX_PROCESSOR_NAME]
+         ;
       std::vector<int> nameLengths(np)
                      , off(np)
                      ;
@@ -1061,11 +1551,8 @@ number of nodes.
         std::string const s(&nodeNames[off[i]], nameLengths[i]);
         nodeList[i] = s;
       }
-      std::free(nodeNames);
       return nodeList;
     }
-
-
 
 ``getNodeInfos``
 
@@ -1699,7 +2186,8 @@ is sliced differently.
              , size_t np
              , MPI_Comm child_world
              , MPI_Comm global_world
-             ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+             ) : SliceUnion<F>( sourceTensor
+                              , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                               , {Nv, No, No} // size of the slices
                               , {Nv}
                               , np
@@ -1736,7 +2224,8 @@ is sliced differently.
             , size_t np
             , MPI_Comm child_world
             , MPI_Comm global_world
-            ) : SliceUnion<F>( {Slice<F>::A, Slice<F>::B, Slice<F>::C}
+            ) : SliceUnion<F>( sourceTensor
+                             , {Slice<F>::A, Slice<F>::B, Slice<F>::C}
                              , {No, No, No} // size of the slices
                              , {Nv}         // size of the parametrization
                              , np
@@ -1770,7 +2259,8 @@ is sliced differently.
             , size_t np
             , MPI_Comm child_world
             , MPI_Comm global_world
-            ) : SliceUnion<F>( { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
+            ) : SliceUnion<F>( sourceTensor
+                             , { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
                                , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
                                }
                              , {Nv, No} // size of the slices
@@ -1810,7 +2300,8 @@ is sliced differently.
             , size_t np
             , MPI_Comm child_world
             , MPI_Comm global_world
-            ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+            ) : SliceUnion<F>( sourceTensor
+                             , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                              , {No, No} // size of the slices
                              , {Nv, Nv} // size of the parametrization
                              , np
@@ -1849,7 +2340,8 @@ is sliced differently.
              , size_t np
              , MPI_Comm child_world
              , MPI_Comm global_world
-             ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
+             ) : SliceUnion<F>( sourceTensor
+                              , {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                               , {No, No} // size of the slices
                               , {Nv, Nv} // size of the parametrization
                               , np
@@ -1885,493 +2377,246 @@ is sliced differently.
 8 Equations
 -----------
 
-This section presents on of the main physical contents of the program,
-the equations used.
-
-The equations are of two types, energy equations and intermediate
-tensor contractions.
-
-8.1 Energy
-~~~~~~~~~~
-
-For the energy we have two types of functions,
-a function for when the tuples :math:`(a,b,c)`
-are distinct and where they are the same,
-they are accordingly called:
-
-
 .. code:: c++
 
-    template <typename F=double>
-    double getEnergyDistinct
-      ( F const epsabc
-      , size_t const No
-      , F* const epsi
-      , F* const Tijk
-      , F* const Zijk
-      );
+    #pragma once
 
-    template <typename F=double>
-    double getEnergySame
-      ( F const epsabc
-      , size_t const No
-      , F* const epsi
-      , F* const Tijk
-      , F* const Zijk
-      );
+    #include<atrip/Slice.hpp>
+    #include<atrip/Blas.hpp>
 
-Their implementations follow, and they are
-written in a cache-friendly style for CPU architectures
-through the ``blockSize`` variable.
+    namespace atrip {
 
-.. code:: c++
+      template <typename F=double>
+      double getEnergyDistinct
+        ( const F epsabc
+        , std::vector<F> const& epsi
+        , std::vector<F> const& Tijk_
+        , std::vector<F> const& Zijk_
+        ) {
+        constexpr size_t blockSize=16;
+        F energy(0.);
+        const size_t No = epsi.size();
+        for (size_t kk=0; kk<No; kk+=blockSize){
+          const size_t kend( std::min(No, kk+blockSize) );
+          for (size_t jj(kk); jj<No; jj+=blockSize){
+            const size_t jend( std::min( No, jj+blockSize) );
+            for (size_t ii(jj); ii<No; ii+=blockSize){
+              const size_t iend( std::min( No, ii+blockSize) );
+              for (size_t k(kk); k < kend; k++){
+                const F ek(epsi[k]);
+                const size_t jstart = jj > k ? jj : k;
+                for (size_t j(jstart); j < jend; j++){
+                  F const ej(epsi[j]);
+                  F const facjk = j == k ? F(0.5) : F(1.0);
+                  size_t istart = ii > j ? ii : j;
+                  for (size_t i(istart); i < iend; i++){
+                    const F
+                        ei(epsi[i])
+                      , facij = i == j ? F(0.5) : F(1.0)
+                      , denominator(epsabc - ei - ej - ek)
+                      , U(Zijk_[i + No*j + No*No*k])
+                      , V(Zijk_[i + No*k + No*No*j])
+                      , W(Zijk_[j + No*i + No*No*k])
+                      , X(Zijk_[j + No*k + No*No*i])
+                      , Y(Zijk_[k + No*i + No*No*j])
+                      , Z(Zijk_[k + No*j + No*No*i])
+                      , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                      , B(maybeConjugate<F>(Tijk_[i + No*k + No*No*j]))
+                      , C(maybeConjugate<F>(Tijk_[j + No*i + No*No*k]))
+                      , D(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                      , E(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
+                      , _F(maybeConjugate<F>(Tijk_[k + No*j + No*No*i]))
+                      , value
+                        = 3.0 * ( A * U
+                                  + B * V
+                                  + C * W
+                                  + D * X
+                                  + E * Y
+                                  + _F * Z )
+                       + ( ( U + X + Y )
+                         - 2.0 * ( V + W + Z )
+                         ) * ( A + D + E )
+                       + ( ( V + W + Z )
+                         - 2.0 * ( U + X + Y )
+                         ) * ( B + C + _F )
+                      ;
+                    energy += 2.0 * value / denominator * facjk * facij;
+                  } // i
+                } // j
+              } // k
+            } // ii
+          } // jj
+        } // kk
+        return std::real(energy);
+      }
 
-    template <typename F=double>
-    double getEnergyDistinct
-      ( F const epsabc
-      , size_t const No
-      , F* const epsi
-      , F* const Tijk
-      , F* const Zijk
-      ) {
-      constexpr size_t blockSize=16;
-      F energy(0.);
-      for (size_t kk=0; kk<No; kk+=blockSize){
-        const size_t kend( std::min(No, kk+blockSize) );
-        for (size_t jj(kk); jj<No; jj+=blockSize){
-          const size_t jend( std::min( No, jj+blockSize) );
-          for (size_t ii(jj); ii<No; ii+=blockSize){
-            const size_t iend( std::min( No, ii+blockSize) );
-            for (size_t k(kk); k < kend; k++){
-              const F ek(epsi[k]);
-              const size_t jstart = jj > k ? jj : k;
-              for (size_t j(jstart); j < jend; j++){
-                F const ej(epsi[j]);
-                F const facjk = j == k ? F(0.5) : F(1.0);
-                size_t istart = ii > j ? ii : j;
-                for (size_t i(istart); i < iend; i++){
-                  const F
+
+      template <typename F=double>
+      double getEnergySame
+        ( const F epsabc
+        , std::vector<F> const& epsi
+        , std::vector<F> const& Tijk_
+        , std::vector<F> const& Zijk_
+        ) {
+        constexpr size_t blockSize = 16;
+        const size_t No = epsi.size();
+        F energy = F(0.);
+        for (size_t kk=0; kk<No; kk+=blockSize){
+          const size_t kend( std::min( kk+blockSize, No) );
+          for (size_t jj(kk); jj<No; jj+=blockSize){
+            const size_t jend( std::min( jj+blockSize, No) );
+            for (size_t ii(jj); ii<No; ii+=blockSize){
+              const size_t iend( std::min( ii+blockSize, No) );
+              for (size_t k(kk); k < kend; k++){
+                const F ek(epsi[k]);
+                const size_t jstart = jj > k ? jj : k;
+                for(size_t j(jstart); j < jend; j++){
+                  const F facjk( j == k ? F(0.5) : F(1.0));
+                  const F ej(epsi[j]);
+                  const size_t istart = ii > j ? ii : j;
+                  for(size_t i(istart); i < iend; i++){
+                    const F
                       ei(epsi[i])
-                    , facij = i == j ? F(0.5) : F(1.0)
+                    , facij ( i==j ? F(0.5) : F(1.0))
                     , denominator(epsabc - ei - ej - ek)
-                    , U(Zijk[i + No*j + No*No*k])
-                    , V(Zijk[i + No*k + No*No*j])
-                    , W(Zijk[j + No*i + No*No*k])
-                    , X(Zijk[j + No*k + No*No*i])
-                    , Y(Zijk[k + No*i + No*No*j])
-                    , Z(Zijk[k + No*j + No*No*i])
-                    , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
-                    , B(maybeConjugate<F>(Tijk[i + No*k + No*No*j]))
-                    , C(maybeConjugate<F>(Tijk[j + No*i + No*No*k]))
-                    , D(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
-                    , E(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
-                    , _F(maybeConjugate<F>(Tijk[k + No*j + No*No*i]))
+                    , U(Zijk_[i + No*j + No*No*k])
+                    , V(Zijk_[j + No*k + No*No*i])
+                    , W(Zijk_[k + No*i + No*No*j])
+                    , A(maybeConjugate<F>(Tijk_[i + No*j + No*No*k]))
+                    , B(maybeConjugate<F>(Tijk_[j + No*k + No*No*i]))
+                    , C(maybeConjugate<F>(Tijk_[k + No*i + No*No*j]))
                     , value
-                      = 3.0 * ( A * U
-                                + B * V
-                                + C * W
-                                + D * X
-                                + E * Y
-                                + _F * Z )
-                     + ( ( U + X + Y )
-                       - 2.0 * ( V + W + Z )
-                       ) * ( A + D + E )
-                     + ( ( V + W + Z )
-                       - 2.0 * ( U + X + Y )
-                       ) * ( B + C + _F )
+                      = F(3.0) * ( A * U
+                                 + B * V
+                                 + C * W
+                                 )
+                      - ( A + B + C ) * ( U + V + W )
                     ;
-                  energy += 2.0 * value / denominator * facjk * facij;
-                } // i
-              } // j
-            } // k
-          } // ii
-        } // jj
-      } // kk
-      return std::real(energy);
-    }
-
-
-    template <typename F=double>
-    double getEnergySame
-      ( F const epsabc
-      , size_t const No
-      , F* const epsi
-      , F* const Tijk
-      , F* const Zijk
-      ) {
-      constexpr size_t blockSize = 16;
-      F energy = F(0.);
-      for (size_t kk=0; kk<No; kk+=blockSize){
-        const size_t kend( std::min( kk+blockSize, No) );
-        for (size_t jj(kk); jj<No; jj+=blockSize){
-          const size_t jend( std::min( jj+blockSize, No) );
-          for (size_t ii(jj); ii<No; ii+=blockSize){
-            const size_t iend( std::min( ii+blockSize, No) );
-            for (size_t k(kk); k < kend; k++){
-              const F ek(epsi[k]);
-              const size_t jstart = jj > k ? jj : k;
-              for(size_t j(jstart); j < jend; j++){
-                const F facjk( j == k ? F(0.5) : F(1.0));
-                const F ej(epsi[j]);
-                const size_t istart = ii > j ? ii : j;
-                for(size_t i(istart); i < iend; i++){
-                  const F
-                    ei(epsi[i])
-                  , facij ( i==j ? F(0.5) : F(1.0))
-                  , denominator(epsabc - ei - ej - ek)
-                  , U(Zijk[i + No*j + No*No*k])
-                  , V(Zijk[j + No*k + No*No*i])
-                  , W(Zijk[k + No*i + No*No*j])
-                  , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
-                  , B(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
-                  , C(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
-                  , value
-                    = F(3.0) * ( A * U
-                               + B * V
-                               + C * W
-                               )
-                    - ( A + B + C ) * ( U + V + W )
-                  ;
-                  energy += F(2.0) * value / denominator * facjk * facij;
-                } // i
-              } // j
-            } // k
-          } // ii
-        } // jj
-      } // kk
-      return std::real(energy);
-    }
-
-And we explicitly instantiate these templated functions:
-
-.. code:: c++
-
-    // instantiate double
-    template
-    double getEnergyDistinct
-      ( double const epsabc
-      , size_t const No
-      , double* const epsi
-      , double* const Tijk
-      , double* const Zijk
-      );
-
-    template
-    double getEnergySame
-      ( double const epsabc
-      , size_t const No
-      , double* const epsi
-      , double* const Tijk
-      , double* const Zijk
-      );
-
-    // instantiate Complex
-    template
-    double getEnergyDistinct
-      ( Complex const epsabc
-      , size_t const No
-      , Complex* const epsi
-      , Complex* const Tijk
-      , Complex* const Zijk
-      );
-
-    template
-    double getEnergySame
-      ( Complex const epsabc
-      , size_t const No
-      , Complex* const epsi
-      , Complex* const Tijk
-      , Complex* const Zijk
-      );
-
-8.2 Contractions
-~~~~~~~~~~~~~~~~
-
-8.2.1 Singles contribution
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The first contraction we discuss is the one involving :math:`t_i^a`
-singles amplitudes.
-
-For every :math:`(a,b,c)` we construct the object
-
-\begin{align*}
-Z_{ijk} &= t^a_i V^{bc}_{jk} \\
-        & + t^b_j V^{ac}_{ik} \\
-        & + t^c_k V^{ab}_{ij}
-\end{align*}
-
-and for it we will need the corresponding slices
-of the :math:`V^{pp}_{ph}` integrals, i.e., ``AB``, ``AC`` and ``BC``.
-
-
-.. code:: c++
-
+                    energy += F(2.0) * value / denominator * facjk * facij;
+                  } // i
+                } // j
+              } // k
+            } // ii
+          } // jj
+        } // kk
+        return std::real(energy);
+      }
 
       template <typename F=double>
       void singlesContribution
         ( size_t No
         , size_t Nv
         , const ABCTuple &abc
-        , F* const Tph
-        , F* const VABij
-        , F* const VACij
-        , F* const VBCij
-        , F* Zijk
+        , F const* Tph
+        , F const* VABij
+        , F const* VACij
+        , F const* VBCij
+        , F *Zijk
         ) {
         const size_t a(abc[0]), b(abc[1]), c(abc[2]);
-        const size_t NoNo = No*No;
-        // TODO: change order of for loops
-        for (size_t k = 0; k < No; k++)
-        for (size_t i = 0; i < No; i++)
-        for (size_t j = 0; j < No; j++) {
-          const size_t ijk = i + j*No + k*NoNo;
+        for (size_t k=0; k < No; k++)
+        for (size_t i=0; i < No; i++)
+        for (size_t j=0; j < No; j++) {
+          const size_t ijk = i + j*No + k*No*No
+                    ,  jk = j + No * k
+                    ;
           Zijk[ijk] += Tph[ a + i * Nv ] * VBCij[ j + k * No ];
           Zijk[ijk] += Tph[ b + j * Nv ] * VACij[ i + k * No ];
           Zijk[ijk] += Tph[ c + k * Nv ] * VABij[ i + j * No ];
         }
       }
 
-    // instantiate
-      template void singlesContribution( size_t No
-                                       , size_t Nv
-                                       , const ABCTuple &abc
-                                       , double* const Tph
-                                       , double* const VABij
-                                       , double* const VACij
-                                       , double* const VBCij
-                                       , double* Zijk
-                                       );
-
-      template void singlesContribution( size_t No
-                                       , size_t Nv
-                                       , const ABCTuple &abc
-                                       , Complex* const Tph
-                                       , Complex* const VABij
-                                       , Complex* const VACij
-                                       , Complex* const VBCij
-                                       , Complex* Zijk
-                                       );
-
-8.2.2 Doubles contribution
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Next we build the tensor :math:`T_{ijk}` from the contraction
-of the coulomb integrals with the doubles amplitudes :math:`t^{ab}_{ij}`.
-There are two kinds of contractions, which are differently challenging
-in terms of computation.
-
-\begin{align*}
-T_{ijk}  &=  \\
-\sum_{{\color{red}L} = 0}^{N_\mathrm{o}}
-&- T^{{\color{blue} ab}}_{{\color{red}L}j} V_{ik}^{{\color{red}L}{\color{blue}c}} \\
-&- T^{{\color{blue} ab}}_{i{\color{red}L}} V_{jk}^{{\color{red}L}{\color{blue}c}} \\
-&- T^{{\color{blue} ac}}_{{\color{red}L}k} V_{ij}^{{\color{red}L}{\color{blue}b}} \\
-&- T^{{\color{blue} ac}}_{i{\color{red}L}} V_{kj}^{{\color{red}L}{\color{blue}b}} \\
-&- T^{{\color{blue} bc}}_{{\color{red}L}k} V_{ji}^{{\color{red}L}{\color{blue}a}} \\
-&- T^{{\color{blue} bc}}_{j{\color{red}L}} V_{ki}^{{\color{red}L}{\color{blue}a}}
-\end{align*}
-
-\begin{align*}
-T_{ijk}  &=  \\
-\sum_{{\color{red}e} = 0}^{N_\mathrm{v}}
- &\phantom{+}
-V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \\
-        &+ V^{{\color{blue}ba}}_{{\color{red}e}j}  T^{{\color{blue}c}{\color{red}e}}_{ji} \\
-        &+ V^{{\color{blue}cb}}_{{\color{red}e}k}  T^{{\color{blue}a}{\color{red}e}}_{kj} \\
-        &+ V^{{\color{blue}ac}}_{{\color{red}e}i}  T^{{\color{blue}b}{\color{red}e}}_{ik} \\
-        &+ V^{{\color{blue}bc}}_{{\color{red}e}j}  T^{{\color{blue}a}{\color{red}e}}_{jk} \\
-        &+ V^{{\color{blue}ca}}_{{\color{red}e}k}  T^{{\color{blue}b}{\color{red}e}}_{ki} \\
-\end{align*}
-
-
-.. code:: c++
-
-    #if defined(HAVE_CUDA)
-      __device__
-    #endif
       template <typename F=double>
       void doublesContribution
         ( const ABCTuple &abc
         , size_t const No
         , size_t const Nv
         // -- VABCI
-        , DataPtr<F> const VABph
-        , DataPtr<F> const VACph
-        , DataPtr<F> const VBCph
-        , DataPtr<F> const VBAph
-        , DataPtr<F> const VCAph
-        , DataPtr<F> const VCBph
+        , F const* VABph
+        , F const* VACph
+        , F const* VBCph
+        , F const* VBAph
+        , F const* VCAph
+        , F const* VCBph
         // -- VHHHA
-        , DataPtr<F> const VhhhA
-        , DataPtr<F> const VhhhB
-        , DataPtr<F> const VhhhC
+        , F const* VhhhA
+        , F const* VhhhB
+        , F const* VhhhC
         // -- TA
-        , DataPtr<F> const TAphh
-        , DataPtr<F> const TBphh
-        , DataPtr<F> const TCphh
+        , F const* TAphh
+        , F const* TBphh
+        , F const* TCphh
         // -- TABIJ
-        , DataPtr<F> const TABhh
-        , DataPtr<F> const TAChh
-        , DataPtr<F> const TBChh
+        , F const* TABhh
+        , F const* TAChh
+        , F const* TBChh
         // -- TIJK
-        // , DataPtr<F> Tijk
-        , DataFieldType<F>* Tijk_
-        );
-
-
-
-
-.. code:: c++
-
-    #if defined(HAVE_CUDA)
-      __device__
-    #endif
-      template <typename F=double>
-      void doublesContribution
-        ( const ABCTuple &abc
-        , size_t const No
-        , size_t const Nv
-        // -- VABCI
-        , DataPtr<F> const VABph
-        , DataPtr<F> const VACph
-        , DataPtr<F> const VBCph
-        , DataPtr<F> const VBAph
-        , DataPtr<F> const VCAph
-        , DataPtr<F> const VCBph
-        // -- VHHHA
-        , DataPtr<F> const VhhhA
-        , DataPtr<F> const VhhhB
-        , DataPtr<F> const VhhhC
-        // -- TA
-        , DataPtr<F> const TAphh
-        , DataPtr<F> const TBphh
-        , DataPtr<F> const TCphh
-        // -- TABIJ
-        , DataPtr<F> const TABhh
-        , DataPtr<F> const TAChh
-        , DataPtr<F> const TBChh
-        // -- TIJK
-        // , DataPtr<F> Tijk_
-        , DataFieldType<F>* Tijk_
+        , F *Tijk
         ) {
 
         const size_t a = abc[0], b = abc[1], c = abc[2]
                   , NoNo = No*No, NoNv = No*Nv
                   ;
 
-        typename DataField<F>::type* Tijk = (typename DataField<F>::type*) Tijk_;
-
-    #if defined(ATRIP_USE_DGEMM)
-    #define _IJK_(i, j, k) i + j*No + k*NoNo
-    #define REORDER(__II, __JJ, __KK)                                   \
+      #if defined(ATRIP_USE_DGEMM)
+      #define _IJK_(i, j, k) i + j*No + k*NoNo
+      #define REORDER(__II, __JJ, __KK)                                 \
         WITH_CHRONO("doubles:reorder",                                  \
         for (size_t k = 0; k < No; k++)                                 \
         for (size_t j = 0; j < No; j++)                                 \
         for (size_t i = 0; i < No; i++) {                               \
-          Tijk[_IJK_(i, j, k)] += _t_buffer_p[_IJK_(__II, __JJ, __KK)];   \
+          Tijk[_IJK_(i, j, k)] += _t_buffer[_IJK_(__II, __JJ, __KK)];   \
         }                                                               \
         )
-    #if defined(HAVE_CUDA)
-    #define __TO_DEVICEPTR(_v)                      \
-        ((DataFieldType<F>*)                        \
-         (CUdeviceptr)                              \
-         thrust::raw_pointer_cast((_v)))
-    #define DGEMM_PARTICLES(__A, __B)                   \
-      atrip::xgemm<F>("T",                              \
-                      "N",                              \
-                      (int const*)&NoNo,                \
-                      (int const*)&No,                  \
-                      (int const*)&Nv,                  \
-                      &one,                             \
-                      (DataFieldType<F>*)__A,           \
-                      (int const*)&Nv,                  \
-                      (DataFieldType<F>*)__B,           \
-                      (int const*)&Nv,                  \
-                      &zero,                            \
-                      _t_buffer_p,                      \
-                      (int const*)&NoNo);
-    #define DGEMM_HOLES(__A, __B, __TRANSB)             \
-      atrip::xgemm<F>("N",                              \
-                      __TRANSB,                         \
-                      (int const*)&NoNo,                \
-                      (int const*)&No,                  \
-                      (int const*)&No,                  \
-                      &m_one,                           \
-                      __TO_DEVICEPTR(__A),              \
-                      (int const*)&NoNo,                \
-                      (DataFieldType<F>*)__B,           \
-                      (int const*)&No,                  \
-                      &zero,                            \
-                      _t_buffer_p,                      \
-                      (int const*)&NoNo                 \
-                      );
-    #define MAYBE_CONJ(_conj, _buffer)                                      \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)                             \
-        __TO_DEVICEPTR(_conj.data())[__i] =                                 \
-          maybeConjugate<DataFieldType<F>>(((DataFieldType<F>*)(_buffer))[__i]);
-    #else
-    #define __TO_DEVICEPTR(_v) (_v)
-    #define DGEMM_PARTICLES(__A, __B)               \
-      atrip::xgemm<F>("T",                          \
-                      "N",                          \
-                      (int const*)&NoNo,            \
-                      (int const*)&No,              \
-                      (int const*)&Nv,              \
-                      &one,                         \
-                      __A,                          \
-                      (int const*)&Nv,              \
-                      __B,                          \
-                      (int const*)&Nv,              \
-                      &zero,                        \
-                      _t_buffer_p,                  \
-                      (int const*)&NoNo             \
-                      );
-    #define DGEMM_HOLES(__A, __B, __TRANSB)         \
-      atrip::xgemm<F>("N",                          \
-                      __TRANSB,                     \
-                      (int const*)&NoNo,            \
-                      (int const*)&No,              \
-                      (int const*)&No,              \
-                      &m_one,                       \
-                      __A,                          \
-                      (int const*)&NoNo,            \
-                      __B,                          \
-                      (int const*)&No,              \
-                      &zero,                        \
-                      _t_buffer_p,                  \
-                      (int const*)&NoNo             \
-                      );
-    #define MAYBE_CONJ(_conj, _buffer)                \
-      for (size_t __i = 0; __i < NoNoNo; ++__i)       \
-        _conj[__i] = maybeConjugate<F>(_buffer[__i]);
-    #endif
+      #define DGEMM_PARTICLES(__A, __B)      \
+        atrip::xgemm<F>( "T"                 \
+                       , "N"                 \
+                       , (int const*)&NoNo   \
+                       , (int const*)&No     \
+                       , (int const*)&Nv     \
+                       , &one                \
+                       , __A                 \
+                       , (int const*)&Nv     \
+                       , __B                 \
+                       , (int const*)&Nv     \
+                       , &zero               \
+                       , _t_buffer.data()    \
+                       , (int const*)&NoNo   \
+                       );
+      #define DGEMM_HOLES(__A, __B, __TRANSB)    \
+        atrip::xgemm<F>( "N"                     \
+                       , __TRANSB                \
+                       , (int const*)&NoNo       \
+                       , (int const*)&No         \
+                       , (int const*)&No         \
+                       , &m_one                  \
+                       , __A                     \
+                       , (int const*)&NoNo       \
+                       , __B                     \
+                       , (int const*)&No         \
+                       , &zero                   \
+                       , _t_buffer.data()        \
+                       , (int const*)&NoNo       \
+                       );
+      #define MAYBE_CONJ(_conj, _buffer)                 \
+        for (size_t __i = 0; __i < NoNoNo; ++__i)        \
+          _conj[__i] = maybeConjugate<F>(_buffer[__i]);  \
 
         const size_t NoNoNo = No*NoNo;
-    #ifdef HAVE_CUDA
-        thrust::device_vector< DataFieldType<F> > _t_buffer;
-    #else
         std::vector<F> _t_buffer;
-    #endif
         _t_buffer.reserve(NoNoNo);
-        DataFieldType<F>* _t_buffer_p = __TO_DEVICEPTR(_t_buffer.data());
         F one{1.0}, m_one{-1.0}, zero{0.0};
 
         WITH_CHRONO("double:reorder",
           for (size_t k = 0; k < NoNoNo; k++) {
-            Tijk[k] = DataFieldType<F>{0.0};
+             Tijk[k] = 0.0;
            })
 
         // TOMERGE: replace chronos
         WITH_CHRONO("doubles:holes",
           { // Holes part %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    #ifdef HAVE_CUDA
-            thrust::device_vector< DataFieldType<F> > _vhhh;
-            _vhhh.reserve(NoNoNo);
-    #else
             std::vector<F> _vhhh(NoNoNo);
-    #endif
 
             // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
             MAYBE_CONJ(_vhhh, VhhhC)
@@ -2499,70 +2744,7 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
     #endif
       }
 
-
-
-      // instantiate templates
-    #if defined(HAVE_CUDA)
-      __device__
-    #endif
-      template
-      void doublesContribution<double>
-        ( const ABCTuple &abc
-        , size_t const No
-        , size_t const Nv
-        // -- VABCI
-        , DataPtr<double> const VABph
-        , DataPtr<double> const VACph
-        , DataPtr<double> const VBCph
-        , DataPtr<double> const VBAph
-        , DataPtr<double> const VCAph
-        , DataPtr<double> const VCBph
-        // -- VHHHA
-        , DataPtr<double> const VhhhA
-        , DataPtr<double> const VhhhB
-        , DataPtr<double> const VhhhC
-        // -- TA
-        , DataPtr<double> const TAphh
-        , DataPtr<double> const TBphh
-        , DataPtr<double> const TCphh
-        // -- TABIJ
-        , DataPtr<double> const TABhh
-        , DataPtr<double> const TAChh
-        , DataPtr<double> const TBChh
-        // -- TIJK
-        , DataFieldType<double>* Tijk
-        );
-
-    #if defined(HAVE_CUDA)
-      __device__
-    #endif
-      template
-      void doublesContribution<Complex>
-        ( const ABCTuple &abc
-        , size_t const No
-        , size_t const Nv
-        // -- VABCI
-        , DataPtr<Complex> const VABph
-        , DataPtr<Complex> const VACph
-        , DataPtr<Complex> const VBCph
-        , DataPtr<Complex> const VBAph
-        , DataPtr<Complex> const VCAph
-        , DataPtr<Complex> const VCBph
-        // -- VHHHA
-        , DataPtr<Complex> const VhhhA
-        , DataPtr<Complex> const VhhhB
-        , DataPtr<Complex> const VhhhC
-        // -- TA
-        , DataPtr<Complex> const TAphh
-        , DataPtr<Complex> const TBphh
-        , DataPtr<Complex> const TCphh
-        // -- TABIJ
-        , DataPtr<Complex> const TABhh
-        , DataPtr<Complex> const TAChh
-        , DataPtr<Complex> const TBChh
-        // -- TIJK
-        , DataFieldType<Complex>* Tijk
-        );
+    }
 
 9 Blas
 ------
@@ -2573,96 +2755,87 @@ is mainly using the ``DGEMM`` function, which we declare as
 
 .. code:: c++
 
-    #include <atrip/Blas.hpp>
-    #include <atrip/Atrip.hpp>
-
-    #if defined(HAVE_CUDA)
-    #  include <cstring>
-
-      static inline
-      cublasOperation_t char_to_cublasOperation(const char* trans) {
-        if (strncmp("N", trans, 1) == 0)
-          return CUBLAS_OP_N;
-        else if (strncmp("T", trans, 1) == 0)
-          return CUBLAS_OP_T;
-        else
-          return CUBLAS_OP_C;
-      }
-
-    #endif
-
+    #pragma once
     namespace atrip {
 
+      using Complex = std::complex<double>;
 
-      template <>
-      void xgemm<double>(const char *transa,
+      extern "C" {
+        void dgemm_(
+          const char *transa,
+          const char *transb,
+          const int *m,
+          const int *n,
+          const int *k,
+          double *alpha,
+          const double *a,
+          const int *lda,
+          const double *b,
+          const int *ldb,
+          double *beta,
+          double *c,
+          const int *ldc
+        );
+
+        void zgemm_(
+          const char *transa,
+          const char *transb,
+          const int *m,
+          const int *n,
+          const int *k,
+          Complex *alpha,
+          const Complex *A,
+          const int *lda,
+          const Complex *B,
+          const int *ldb,
+          Complex *beta,
+          Complex *C,
+          const int *ldc
+        );
+      }
+
+
+      template <typename F=double>
+      void xgemm(const char *transa,
                  const char *transb,
                  const int *m,
                  const int *n,
                  const int *k,
-                 double *alpha,
-                 const typename DataField<double>::type *A,
+                 F *alpha,
+                 const F *A,
                  const int *lda,
-                 const typename DataField<double>::type *B,
+                 const F *B,
                  const int *ldb,
-                 double *beta,
-                 typename DataField<double>::type *C,
+                 F *beta,
+                 F *C,
                  const int *ldc) {
-    #if defined(HAVE_CUDA)
-        cublasDgemm(Atrip::cuda.handle,
-                    char_to_cublasOperation(transa),
-                    char_to_cublasOperation(transb),
-                    *m, *n, *k,
-                    alpha, A, *lda,
-                    B, *ldb, beta,
-                    C, *ldc);
-    #else
         dgemm_(transa, transb,
                m, n, k,
                alpha, A, lda,
                B, ldb, beta,
                C, ldc);
-    #endif
       }
 
       template <>
-      void xgemm<Complex>(const char *transa,
+      void xgemm(const char *transa,
                  const char *transb,
                  const int *m,
                  const int *n,
                  const int *k,
                  Complex *alpha,
-                 const typename DataField<Complex>::type *A,
+                 const Complex *A,
                  const int *lda,
-                 const typename DataField<Complex>::type *B,
+                 const Complex *B,
                  const int *ldb,
                  Complex *beta,
-                 typename DataField<Complex>::type *C,
+                 Complex *C,
                  const int *ldc) {
-    #if defined(HAVE_CUDA)
-    #pragma warning HAVE_CUDA
-        cuDoubleComplex
-          cu_alpha = {std::real(*alpha), std::imag(*alpha)},
-          cu_beta = {std::real(*beta), std::imag(*beta)};
-        cublasZgemm(Atrip::cuda.handle,
-                    char_to_cublasOperation(transa),
-                    char_to_cublasOperation(transb),
-                    *m, *n, *k,
-                    &cu_alpha,
-
-                    A, *lda,
-                    B, *ldb,
-                    &cu_beta,
-                    C, *ldc);
-    #else
         zgemm_(transa, transb,
                m, n, k,
                alpha, A, lda,
                B, ldb, beta,
                C, ldc);
-    #endif
       }
-
     }
 
 10 Atrip
@@ -2678,17 +2851,9 @@ is mainly using the ``DGEMM`` function, which we declare as
     #include <string>
     #include <map>
     #include <mpi.h>
-    #include "config.h"
 
-    #if defined(HAVE_CUDA)
-    #include <cuda.h>
-    #define CUBLASAPI
-    #include <cublas_api.h>
-    #include <cublas_v2.h>
-    #endif
 
     #include <atrip/Utils.hpp>
-    #include <atrip/Types.hpp>
 
     #define ADD_ATTRIBUTE(_type, _name, _default)   \
       _type _name = _default;                       \
@@ -2701,20 +2866,11 @@ is mainly using the ``DGEMM`` function, which we declare as
 
       struct Atrip {
 
-        static size_t rank;
-        static size_t np;
+        static int rank;
+        static int np;
         static MPI_Comm communicator;
         static Timings chrono;
-    #if defined(HAVE_CUDA)
-        struct CudaContext {
-          cublasStatus_t status;
-          cublasHandle_t handle;
-        };
-        static CudaContext cuda;
-    #endif
-
         static void init(MPI_Comm);
-
 
         template <typename F=double>
         struct Input {
@@ -2785,11 +2941,8 @@ is mainly using the ``DGEMM`` function, which we declare as
     template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
     template bool RankMap<double>::RANK_ROUND_ROBIN;
     template bool RankMap<Complex>::RANK_ROUND_ROBIN;
-    size_t Atrip::rank;
-    size_t Atrip::np;
-    #if defined(HAVE_CUDA)
-    typename Atrip::CudaContext Atrip::cuda;
-    #endif
+    int Atrip::rank;
+    int Atrip::np;
     MPI_Comm Atrip::communicator;
     Timings Atrip::chrono;
 
@@ -2801,20 +2954,15 @@ is mainly using the ``DGEMM`` function, which we declare as
 
     void Atrip::init(MPI_Comm world)  {
       Atrip::communicator = world;
-      MPI_Comm_rank(world, (int*)&Atrip::rank);
-      MPI_Comm_size(world, (int*)&Atrip::np);
-
-    #if defined(HAVE_CUDA)
-      Atrip::cuda.status = cublasCreate(&Atrip::cuda.handle);
-    #endif
-
+      MPI_Comm_rank(world, &Atrip::rank);
+      MPI_Comm_size(world, &Atrip::np);
     }
 
     template <typename F>
     Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
-      const size_t np = Atrip::np;
-      const size_t rank = Atrip::rank;
+      const int np = Atrip::np;
+      const int rank = Atrip::rank;
       MPI_Comm universe = Atrip::communicator;
 
       const size_t No = in.ei->lens[0];
@@ -2824,34 +2972,18 @@ is mainly using the ``DGEMM`` function, which we declare as
       LOG(0,"Atrip") << "np: " << np << "\n";
 
       // allocate the three scratches, see piecuch
-      // we need local copies of the following tensors on every
-      // rank
-      std::vector<F> _epsi(No)
-                   , _epsa(Nv)
-                   , _Tai(No * Nv)
+      std::vector<F> Tijk(No*No*No) // doubles only (see piecuch)
+                   , Zijk(No*No*No) // singles + doubles (see piecuch)
+                   // we need local copies of the following tensors on every
+                   // rank
+                   , epsi(No)
+                   , epsa(Nv)
+                   , Tai(No * Nv)
                    ;
 
-      in.ei->read_all(_epsi.data());
-      in.ea->read_all(_epsa.data());
-      in.Tph->read_all(_Tai.data());
-
-    #if defined(HAVE_CUDA)
-      DataPtr<F> Tai, epsi, epsa;
-      cuMemAlloc(&Tai, sizeof(F) * _Tai.size());
-      cuMemAlloc(&epsi, sizeof(F) * _epsi.size());
-      cuMemAlloc(&epsa, sizeof(F) * _epsa.size());
-
-      cuMemcpyHtoD(Tai, (void*)_Tai.data(), sizeof(F) * _Tai.size());
-      cuMemcpyHtoD(epsi,(void*)_epsi.data(), sizeof(F) * _epsi.size());
-      cuMemcpyHtoD(epsa, (void*)_epsa.data(), sizeof(F) * _epsa.size());
-
-      DataPtr<F> Tijk, Zijk;
-      cuMemAlloc(&Tijk, sizeof(F) * No * No * No);
-      cuMemAlloc(&Zijk, sizeof(F) * No * No * No);
-    #else
-      std::vector<F> &Tai = _Tai, &epsi = _epsi, &epsa = _epsa;
-      std::vector<F> Tijk(No*No*No), Zijk(No*No*No);
-    #endif
+      in.ei->read_all(epsi.data());
+      in.ea->read_all(epsa.data());
+      in.Tph->read_all(Tai.data());
 
       RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;
       if (RankMap<F>::RANK_ROUND_ROBIN) {
@@ -2921,6 +3053,7 @@ is mainly using the ``DGEMM`` function, which we declare as
         )
       const size_t nIterations = tuplesList.size();
       {
+        const size_t _all_tuples = Nv * (Nv + 1) * (Nv + 2) / 6 - Nv;
         LOG(0,"Atrip") << "#iterations: "
                       << nIterations
                       << "/"
@@ -3259,11 +3392,7 @@ is mainly using the ``DGEMM`` function, which we declare as
                                   , tabhh.unwrapSlice(Slice<F>::AC, abc)
                                   , tabhh.unwrapSlice(Slice<F>::BC, abc)
                                   // -- TIJK
-    #if defined(HAVE_CUDA)
-                                  , (DataFieldType<F>*)Tijk
-    #else
                                   , Tijk.data()
-    #endif
                                   );
             WITH_RANK << iteration << "-th doubles done\n";
           ))
@@ -3278,25 +3407,15 @@ is mainly using the ``DGEMM`` function, which we declare as
             abhh.unwrapAll(abc);
           )))
           WITH_CHRONO("reorder",
-            #pragma acc parallel
-            for (size_t I(0); I < No*No*No; I++)
-              ((DataFieldType<F>*)Zijk)[I] = ((DataFieldType<F>*)Tijk)[I];
+            for (size_t I(0); I < Zijk.size(); I++) Zijk[I] = Tijk[I];
           )
           WITH_CHRONO("singles",
           singlesContribution<F>( No, Nv, abc
-    #if defined(HAVE_CUDA)
-                                , (F*)Tai
-    #else
                                 , Tai.data()
-    #endif
-                                , (F*)abhh.unwrapSlice(Slice<F>::AB, abc)
-                                , (F*)abhh.unwrapSlice(Slice<F>::AC, abc)
-                                , (F*)abhh.unwrapSlice(Slice<F>::BC, abc)
-    #if defined(HAVE_CUDA)
-                                , (F*)Zijk);
-    #else
+                                , abhh.unwrapSlice(Slice<F>::AB, abc)
+                                , abhh.unwrapSlice(Slice<F>::AC, abc)
+                                , abhh.unwrapSlice(Slice<F>::BC, abc)
                                 , Zijk.data());
-    #endif
           )
         }
 
@@ -3308,13 +3427,13 @@ is mainly using the ``DGEMM`` function, which we declare as
           int distinct(0);
           if (abc[0] == abc[1]) distinct++;
           if (abc[1] == abc[2]) distinct--;
-          const F epsabc(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
+          const F epsabc(epsa[abc[0]] + epsa[abc[1]] + epsa[abc[2]]);
 
           WITH_CHRONO("energy",
             if ( distinct == 0)
-              tupleEnergy = getEnergyDistinct<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
+              tupleEnergy = getEnergyDistinct<F>(epsabc, epsi, Tijk, Zijk);
             else
-              tupleEnergy = getEnergySame<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
+              tupleEnergy = getEnergySame<F>(epsabc, epsi, Tijk, Zijk);
           )
 
     #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
@@ -3654,97 +3773,7 @@ of depth, so that we can write quite easily a parser.
       return read_checkpoint(in);
     }
 
-13 Miscellaneous
-----------------
-
-13.1 Complex numbers
-~~~~~~~~~~~~~~~~~~~~
-
-.. code:: c++
-
-    #pragma once
-
-    #include <complex>
-    #include <mpi.h>
-    #include "config.h"
-    #if defined(HAVE_CUDA)
-    #include <cuComplex.h>
-    #endif
-
-    namespace atrip {
-
-      using Complex = std::complex<double>;
-
-      template <typename F> F maybeConjugate(const F);
-
-    #if defined(HAVE_CUDA)
-      cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz);
-    #endif
-
-      namespace traits {
-
-        template <typename FF> bool isComplex();
-
-        namespace mpi {
-          template <typename F> MPI_Datatype datatypeOf(void);
-        }
-
-      }
-
-    }
-
-.. code:: c++
-
-    #include <atrip/Complex.hpp>
-
-    namespace atrip {
-
-      template <> double maybeConjugate(const double a) { return a; }
-      template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
-
-    #if defined(HAVE_CUDA)
-      /*
-      __device__
-      template <> double2
-      maybeConjugate(const double2 a) {
-        return {a.x, -a.y};
-      }
-      */
-      __device__
-      template <> cuDoubleComplex
-      maybeConjugate(const cuDoubleComplex a) {
-        return {a.x, -a.y};
-      }
-      /*
-      __device__
-      double2& operator+=(double2& lz, double2 const& rz) {
-        lz.x += rz.x;
-        lz.y += rz.y;
-        return lz;
-      }
-      */
-      __device__
-      cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz) {
-        lz.x += rz.x;
-        lz.y += rz.y;
-        return lz;
-      }
-    #endif
-
-
-      namespace traits {
-        template <typename F> bool isComplex() { return false; }
-        template <> bool isComplex<double>() { return false; }
-        template <> bool isComplex<Complex>() { return true; }
-      namespace mpi {
-        template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
-        template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
-      }
-      }
-
-    }
-
-14 Include header
+13 Include header
 -----------------
 
 .. code:: c++

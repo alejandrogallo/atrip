@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['abctuple_0',['ABCTuple',['../namespaceatrip.html#af838c7ed7996be477f99aad86114f26b',1,'atrip']]],
-  ['abctuples_1',['ABCTuples',['../namespaceatrip.html#a574f187428c0e46270abd5331fdd729a',1,'atrip']]]
+  ['abctuple_0',['ABCTuple',['../namespaceatrip.html#a28915c100861c4b2a8c868a4b8f1f233',1,'atrip']]],
+  ['abctuples_1',['ABCTuples',['../namespaceatrip.html#a42323fc6890662eefe0e071ada4748ea',1,'atrip']]]
 ];
