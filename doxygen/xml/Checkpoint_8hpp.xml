@@ -20,6 +20,10 @@
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>Checkpoint.hpp</label>
@@ -31,13 +35,31 @@
         <childnode refid="4" relation="include">
         </childnode>
       </node>
-      <node id="12">
-        <label>atrip/Debug.hpp</label>
-        <link refid="Debug_8hpp"/>
-        <childnode refid="13" relation="include">
+      <node id="16">
+        <label>atrip/Complex.hpp</label>
+        <link refid="Complex_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
         </childnode>
       </node>
-      <node id="9">
+      <node id="13">
+        <label>atrip/Debug.hpp</label>
+        <link refid="Debug_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>atrip/Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
         <label>atrip/Utils.hpp</label>
         <link refid="Utils_8hpp"/>
         <childnode refid="5" relation="include">
@@ -46,23 +68,29 @@
         </childnode>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
         <childnode refid="11" relation="include">
         </childnode>
         <childnode refid="12" relation="include">
         </childnode>
-      </node>
-      <node id="10">
-        <label>chrono</label>
+        <childnode refid="13" relation="include">
+        </childnode>
       </node>
       <node id="11">
+        <label>chrono</label>
+      </node>
+      <node id="17">
+        <label>complex</label>
+      </node>
+      <node id="9">
+        <label>config.h</label>
+      </node>
+      <node id="12">
         <label>ctf.hpp</label>
       </node>
       <node id="2">
         <label>fstream</label>
       </node>
-      <node id="13">
+      <node id="14">
         <label>functional</label>
       </node>
       <node id="3">
@@ -114,7 +142,7 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iomanip&gt;</highlight><highlight class="normal"></highlight></codeline>
@@ -124,7 +152,7 @@
 <codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
 <codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::checkpoint-definition][checkpoint-definition]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::checkpoint-definition][checkpoint-definition]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">//<sp/>template<sp/>&lt;typename<sp/>F&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="27" refid="structatrip_1_1Checkpoint" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/>{</highlight></codeline>
 <codeline lineno="28" refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" kindref="member">no</ref>,<sp/><ref refid="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" kindref="member">nv</ref>;</highlight></codeline>
@@ -138,7 +166,7 @@
 <codeline lineno="36"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="37"><highlight class="normal"></highlight><highlight class="comment">//<sp/>checkpoint-definition<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="38"><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Input<sp/>and<sp/>output][Input<sp/>and<sp/>output:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Input%20and%20output][Input<sp/>and<sp/>output:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="40" refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" kindref="member">write_checkpoint</ref>(<ref refid="structatrip_1_1Checkpoint" kindref="compound">Checkpoint</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>c,<sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>filepath)<sp/>{</highlight></codeline>
 <codeline lineno="41"><highlight class="normal"><sp/><sp/>std::ofstream<sp/>out(filepath);</highlight></codeline>
 <codeline lineno="42"><highlight class="normal"><sp/><sp/>out<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;No:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>c.<ref refid="structatrip_1_1Checkpoint_1aa65e33f6fbeb680cd164b3adf559566c" kindref="member">no</ref></highlight></codeline>
@@ -189,7 +217,7 @@
 <codeline lineno="87"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="88"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Input<sp/>and<sp/>output:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="89"><highlight class="normal"></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="91"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="92"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>

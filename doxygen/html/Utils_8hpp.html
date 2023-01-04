@@ -125,17 +125,26 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="Utils_8hpp__dep__incl.png" border="0" usemap="#aUtils_8hppdep" alt=""/></div>
 <map name="aUtils_8hppdep" id="aUtils_8hppdep">
-<area shape="rect" title=" " coords="152,5,232,31"/>
-<area shape="rect" href="Atrip_8cxx.html" title=" " coords="216,445,296,471"/>
-<area shape="rect" href="Atrip_8hpp.html" title=" " coords="122,299,203,324"/>
-<area shape="rect" href="Slice_8hpp.html" title=" " coords="314,152,395,177"/>
-<area shape="rect" href="Tuples_8hpp.html" title=" " coords="309,79,400,104"/>
-<area shape="rect" href="Checkpoint_8hpp.html" title=" " coords="93,372,216,397"/>
-<area shape="rect" href="atrip_8hpp.html" title=" " coords="240,372,320,397"/>
-<area shape="rect" href="Equations_8hpp.html" title=" " coords="209,225,324,251"/>
-<area shape="rect" href="RankMap_8hpp.html" title=" " coords="399,225,510,251"/>
-<area shape="rect" href="SliceUnion_8hpp.html" title=" " coords="395,299,514,324"/>
-<area shape="rect" href="Unions_8hpp.html" title=" " coords="446,372,541,397"/>
+<area shape="rect" title=" " coords="581,5,661,31"/>
+<area shape="rect" href="Atrip_8cxx.html" title=" " coords="281,519,361,544"/>
+<area shape="rect" href="Atrip_8hpp.html" title=" " coords="302,79,383,104"/>
+<area shape="rect" href="Equations_8hpp.html" title=" " coords="279,299,393,324"/>
+<area shape="rect" href="DatabaseCommunicator_8hpp.html" title=" " coords="650,445,857,471"/>
+<area shape="rect" href="CUDA_8hpp.html" title=" " coords="577,79,665,104"/>
+<area shape="rect" href="Slice_8hpp.html" title=" " coords="859,152,941,177"/>
+<area shape="rect" href="Tuples_8hpp.html" title=" " coords="752,79,843,104"/>
+<area shape="rect" href="Blas_8cxx.html" title=" " coords="432,299,509,324"/>
+<area shape="rect" href="Checkpoint_8hpp.html" title=" " coords="157,445,280,471"/>
+<area shape="rect" href="Tuples_8cxx.html" title=" " coords="744,152,835,177"/>
+<area shape="rect" href="Types_8hpp.html" title=" " coords="299,152,386,177"/>
+<area shape="rect" href="atrip_8hpp.html" title=" " coords="93,152,173,177"/>
+<area shape="rect" href="Equations_8cxx.html" title=" " coords="410,372,523,397"/>
+<area shape="rect" href="DatabaseCommunicator_8cxx.html" title=" " coords="650,519,857,544"/>
+<area shape="rect" href="Blas_8hpp.html" title=" " coords="354,225,433,251"/>
+<area shape="rect" href="Complex_8cxx.html" title=" " coords="613,152,720,177"/>
+<area shape="rect" href="RankMap_8hpp.html" title=" " coords="845,225,955,251"/>
+<area shape="rect" href="SliceUnion_8hpp.html" title=" " coords="699,299,818,324"/>
+<area shape="rect" href="Unions_8hpp.html" title=" " coords="626,372,721,397"/>
 </map>
 </div>
 </div>
@@ -155,6 +164,8 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:a684c98edc7c431d9fa25c1d75ae42f83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(__chrono_name, ...)</td></tr>
 <tr class="separator:a684c98edc7c431d9fa25c1d75ae42f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ba04a670d75dff46ec4be88bdd8ff3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utils_8hpp.html#aa8ba04a670d75dff46ec4be88bdd8ff3">_FORMAT</a>(_fmt, ...)</td></tr>
+<tr class="separator:aa8ba04a670d75dff46ec4be88bdd8ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -168,6 +179,40 @@ Functions</h2></td></tr>
 <tr class="separator:a3178eea10b83bd01a95ca222be291c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="aa8ba04a670d75dff46ec4be88bdd8ff3" name="aa8ba04a670d75dff46ec4be88bdd8ff3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8ba04a670d75dff46ec4be88bdd8ff3">&#9670;&#160;</a></span>_FORMAT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _FORMAT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_fmt, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  ([&amp;] (void) -&gt; std::string {                                \</div>
+<div class="line">     <span class="keywordtype">int</span> _sz = std::snprintf(<span class="keyword">nullptr</span>, 0, _fmt, __VA_ARGS__);  \</div>
+<div class="line">     std::vector&lt;char&gt;  _out(_sz  +  1);                      \</div>
+<div class="line">     std::snprintf(&amp;_out[0], _out.size(), _fmt, __VA_ARGS__); \</div>
+<div class="line">     <span class="keywordflow">return</span> std::string(_out.data());                         \</div>
+<div class="line">   })()</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a684c98edc7c431d9fa25c1d75ae42f83" name="a684c98edc7c431d9fa25c1d75ae42f83"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a684c98edc7c431d9fa25c1d75ae42f83">&#9670;&#160;</a></span>WITH_CHRONO</h2>
 

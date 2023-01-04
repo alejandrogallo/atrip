@@ -3,10 +3,42 @@
   <compounddef id="namespaceatrip_1_1traits_1_1mpi" kind="namespace" language="C++">
     <compoundname>atrip::traits::mpi</compoundname>
       <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceatrip_1_1traits_1_1mpi_1ab2b7059ea380f3639caeae806f3255b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>MPI_Datatype</type>
+        <definition>MPI_Datatype atrip::traits::mpi::datatypeOf&lt; double &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>datatypeOf&lt; double &gt;</name>
+        <qualifiedname>atrip::traits::mpi::datatypeOf&lt; double &gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" line="34" column="16" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceatrip_1_1traits_1_1mpi_1a95ed3fa24afbdb708d2e4525f6abe027" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>MPI_Datatype</type>
+        <definition>MPI_Datatype atrip::traits::mpi::datatypeOf&lt; Complex &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>datatypeOf&lt; Complex &gt;</name>
+        <qualifiedname>atrip::traits::mpi::datatypeOf&lt; Complex &gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" line="35" column="16" bodyfile="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" bodystart="35" bodyend="35"/>
+      </memberdef>
       <memberdef kind="function" id="namespaceatrip_1_1traits_1_1mpi_1ac5cddb4841206f9704c515491f9b7892" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
-            <type>typename FF</type>
+            <type>typename F</type>
           </param>
         </templateparamlist>
         <type>MPI_Datatype</type>
@@ -23,45 +55,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="35" column="28" declfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" declline="35" declcolumn="28"/>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1_1traits_1_1mpi_1ab2b7059ea380f3639caeae806f3255b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-        </templateparamlist>
-        <type>MPI_Datatype</type>
-        <definition>MPI_Datatype atrip::traits::mpi::datatypeOf&lt; double &gt;</definition>
-        <argsstring>()</argsstring>
-        <name>datatypeOf&lt; double &gt;</name>
-        <qualifiedname>atrip::traits::mpi::datatypeOf&lt; double &gt;</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="36" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="36" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="namespaceatrip_1_1traits_1_1mpi_1a95ed3fa24afbdb708d2e4525f6abe027" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-        </templateparamlist>
-        <type>MPI_Datatype</type>
-        <definition>MPI_Datatype atrip::traits::mpi::datatypeOf&lt; Complex &gt;</definition>
-        <argsstring>()</argsstring>
-        <name>datatypeOf&lt; Complex &gt;</name>
-        <qualifiedname>atrip::traits::mpi::datatypeOf&lt; Complex &gt;</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="37" column="14" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" bodystart="37" bodyend="37"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Complex.hpp" line="40" column="32" declfile="/home/runner/work/atrip/atrip/include/atrip/Complex.hpp" declline="40" declcolumn="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/runner/work/atrip/atrip/include/atrip/Slice.hpp" line="34" column="1"/>
+    <location file="/home/runner/work/atrip/atrip/src/atrip/Complex.cxx" line="33" column="3"/>
   </compounddef>
 </doxygen>

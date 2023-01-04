@@ -1,9 +1,9 @@
 <map id="Blas.hpp" name="Blas.hpp">
-<area shape="rect" id="node1" title=" " coords="91,5,170,31"/>
-<area shape="rect" id="node2" href="$Equations_8hpp.html" title=" " coords="5,152,120,177"/>
-<area shape="rect" id="node4" href="$Slice_8hpp.html" title=" " coords="145,79,226,104"/>
-<area shape="rect" id="node3" href="$Atrip_8cxx.html" title=" " coords="75,372,155,397"/>
-<area shape="rect" id="node5" href="$RankMap_8hpp.html" title=" " coords="145,152,255,177"/>
-<area shape="rect" id="node6" href="$SliceUnion_8hpp.html" title=" " coords="141,225,259,251"/>
-<area shape="rect" id="node7" href="$Unions_8hpp.html" title=" " coords="153,299,247,324"/>
+<area shape="rect" id="node1" title=" " coords="87,5,166,31"/>
+<area shape="rect" id="node2" href="$Blas_8cxx.html" title=" " coords="28,79,105,104"/>
+<area shape="rect" id="node3" href="$Equations_8hpp.html" title=" " coords="129,79,244,104"/>
+<area shape="rect" id="node4" href="$Atrip_8cxx.html" title=" " coords="5,225,85,251"/>
+<area shape="rect" id="node5" href="$DatabaseCommunicator_8hpp.html" title=" " coords="83,152,290,177"/>
+<area shape="rect" id="node7" href="$Equations_8cxx.html" title=" " coords="314,152,427,177"/>
+<area shape="rect" id="node6" href="$DatabaseCommunicator_8cxx.html" title=" " coords="110,225,317,251"/>
 </map>

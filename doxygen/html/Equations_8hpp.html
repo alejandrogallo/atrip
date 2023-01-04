@@ -92,40 +92,35 @@ $(document).ready(function(){initNavTree('Equations_8hpp.html',''); initResizabl
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Equations.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="Slice_8hpp_source.html">atrip/Slice.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="Atrip_8hpp_source.html">atrip/Atrip.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="Blas_8hpp_source.html">atrip/Blas.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="Utils_8hpp_source.html">atrip/Utils.hpp</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Equations.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="Equations_8hpp__incl.png" border="0" usemap="#aEquations_8hpp" alt=""/></div>
 <map name="aEquations_8hpp" id="aEquations_8hpp">
-<area shape="rect" title=" " coords="657,5,771,31"/>
-<area shape="rect" href="Slice_8hpp.html" title=" " coords="610,79,725,104"/>
-<area shape="rect" href="Blas_8hpp.html" title=" " coords="821,152,933,177"/>
-<area shape="rect" title=" " coords="666,152,746,177"/>
-<area shape="rect" title=" " coords="1013,225,1098,251"/>
-<area shape="rect" title=" " coords="5,225,68,251"/>
-<area shape="rect" title=" " coords="93,225,151,251"/>
-<area shape="rect" href="Tuples_8hpp.html" title=" " coords="466,152,591,177"/>
-<area shape="rect" href="Utils_8hpp.html" title=" " coords="874,225,989,251"/>
-<area shape="rect" title=" " coords="266,225,322,251"/>
-<area shape="rect" title=" " coords="397,225,471,251"/>
-<area shape="rect" title=" " coords="495,225,562,251"/>
-<area shape="rect" title=" " coords="587,225,655,251"/>
-<area shape="rect" title=" " coords="698,299,749,324"/>
-<area shape="rect" title=" " coords="730,225,799,251"/>
-<area shape="rect" title=" " coords="803,299,870,324"/>
-<area shape="rect" title=" " coords="175,225,242,251"/>
-<area shape="rect" href="Debug_8hpp.html" title=" " coords="437,299,564,324"/>
-<area shape="rect" title=" " coords="894,299,969,324"/>
-<area shape="rect" title=" " coords="993,299,1051,324"/>
-<area shape="rect" title=" " coords="1075,299,1142,324"/>
-<area shape="rect" title=" " coords="457,372,544,397"/>
+<area shape="rect" title=" " coords="505,5,620,31"/>
+<area shape="rect" href="Atrip_8hpp.html" title=" " coords="505,79,620,104"/>
+<area shape="rect" href="Utils_8hpp.html" title=" " coords="304,152,419,177"/>
+<area shape="rect" href="Blas_8hpp.html" title=" " coords="725,79,837,104"/>
+<area shape="rect" title=" " coords="339,225,413,251"/>
+<area shape="rect" title=" " coords="437,225,496,251"/>
+<area shape="rect" title=" " coords="520,225,571,251"/>
+<area shape="rect" title=" " coords="587,299,645,324"/>
+<area shape="rect" title=" " coords="790,299,863,324"/>
+<area shape="rect" href="Types_8hpp.html" title=" " coords="646,152,767,177"/>
+<area shape="rect" title=" " coords="248,225,315,251"/>
+<area shape="rect" title=" " coords="5,225,72,251"/>
+<area shape="rect" href="Debug_8hpp.html" title=" " coords="97,225,223,251"/>
+<area shape="rect" title=" " coords="117,299,203,324"/>
+<area shape="rect" href="Complex_8hpp.html" title=" " coords="646,225,789,251"/>
+<area shape="rect" title=" " coords="678,299,757,324"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -133,8 +128,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="Equations_8hpp__dep__incl.png" border="0" usemap="#aEquations_8hppdep" alt=""/></div>
 <map name="aEquations_8hppdep" id="aEquations_8hppdep">
-<area shape="rect" title=" " coords="5,5,120,31"/>
-<area shape="rect" href="Atrip_8cxx.html" title=" " coords="23,79,103,104"/>
+<area shape="rect" title=" " coords="129,5,244,31"/>
+<area shape="rect" href="Atrip_8cxx.html" title=" " coords="5,152,85,177"/>
+<area shape="rect" href="DatabaseCommunicator_8hpp.html" title=" " coords="83,79,290,104"/>
+<area shape="rect" href="Equations_8cxx.html" title=" " coords="314,79,427,104"/>
+<area shape="rect" href="DatabaseCommunicator_8cxx.html" title=" " coords="110,152,317,177"/>
 </map>
 </div>
 </div>
@@ -145,232 +143,30 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceatrip"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html">atrip</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a395c02ccca573561c1c6e5a2145c496b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a>(i,  j,  k)&#160;&#160;&#160;i + j*No + k*NoNo</td></tr>
-<tr class="separator:a395c02ccca573561c1c6e5a2145c496b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e804de074eaa56f17a152fb93eaae00"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Equations_8hpp.html#a8e804de074eaa56f17a152fb93eaae00">REORDER</a>(__II,  __JJ,  __KK)</td></tr>
-<tr class="separator:a8e804de074eaa56f17a152fb93eaae00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa57263b7876787581e36f91522c81e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Equations_8hpp.html#aaa57263b7876787581e36f91522c81e7">DGEMM_PARTICLES</a>(__A,  __B)</td></tr>
-<tr class="separator:aaa57263b7876787581e36f91522c81e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a178706b091c61817a72573aea44e95fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Equations_8hpp.html#a178706b091c61817a72573aea44e95fa">DGEMM_HOLES</a>(__A,  __B,  __TRANSB)</td></tr>
-<tr class="separator:a178706b091c61817a72573aea44e95fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae116a1c74783cc9363dbd6e2eb934ea8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Equations_8hpp.html#ae116a1c74783cc9363dbd6e2eb934ea8">MAYBE_CONJ</a>(_conj,  _buffer)</td></tr>
-<tr class="separator:ae116a1c74783cc9363dbd6e2eb934ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:af838c7ed7996be477f99aad86114f26b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#af838c7ed7996be477f99aad86114f26b">atrip::ABCTuple</a> = std::array&lt; size_t, 3 &gt;</td></tr>
+<tr class="separator:af838c7ed7996be477f99aad86114f26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b418cf6a27d7f12bcb3b8e42252ad35"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a3b418cf6a27d7f12bcb3b8e42252ad35">atrip::PartialTuple</a> = std::array&lt; size_t, 2 &gt;</td></tr>
+<tr class="separator:a3b418cf6a27d7f12bcb3b8e42252ad35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a574f187428c0e46270abd5331fdd729a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a574f187428c0e46270abd5331fdd729a">atrip::ABCTuples</a> = std::vector&lt; ABCTuple &gt;</td></tr>
+<tr class="separator:a574f187428c0e46270abd5331fdd729a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a840b02bd30fe9a856766d3d46549cada"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
-<tr class="memitem:a840b02bd30fe9a856766d3d46549cada"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a840b02bd30fe9a856766d3d46549cada">atrip::getEnergyDistinct</a> (const F epsabc, std::vector&lt; F &gt; const &amp;epsi, std::vector&lt; F &gt; const &amp;Tijk_, std::vector&lt; F &gt; const &amp;Zijk_)</td></tr>
-<tr class="separator:a840b02bd30fe9a856766d3d46549cada"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a793b8f00a013edaba6f2085ef13639b5"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
-<tr class="memitem:a793b8f00a013edaba6f2085ef13639b5"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a793b8f00a013edaba6f2085ef13639b5">atrip::getEnergySame</a> (const F epsabc, std::vector&lt; F &gt; const &amp;epsi, std::vector&lt; F &gt; const &amp;Tijk_, std::vector&lt; F &gt; const &amp;Zijk_)</td></tr>
-<tr class="separator:a793b8f00a013edaba6f2085ef13639b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
-<tr class="memitem:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a7787d4c4d5eaa1b23f1a38fd77452e91">atrip::singlesContribution</a> (size_t No, size_t Nv, const ABCTuple &amp;abc, F const *Tph, F const *VABij, F const *VACij, F const *VBCij, F *Zijk)</td></tr>
-<tr class="separator:a7787d4c4d5eaa1b23f1a38fd77452e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf38977bde26414f9921b16ea94e61a9"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
-<tr class="memitem:abf38977bde26414f9921b16ea94e61a9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#abf38977bde26414f9921b16ea94e61a9">atrip::doublesContribution</a> (const ABCTuple &amp;abc, size_t const No, size_t const Nv, F const *VABph, F const *VACph, F const *VBCph, F const *VBAph, F const *VCAph, F const *VCBph, F const *VhhhA, F const *VhhhB, F const *VhhhC, F const *TAphh, F const *TBphh, F const *TCphh, F const *TABhh, F const *TAChh, F const *TBChh, F *Tijk)</td></tr>
-<tr class="separator:abf38977bde26414f9921b16ea94e61a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaf0200c976351f46d2fe2b4a8ebe45b"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:adaf0200c976351f46d2fe2b4a8ebe45b"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#adaf0200c976351f46d2fe2b4a8ebe45b">atrip::getEnergyDistinct</a> (F const epsabc, size_t const No, F *const epsi, F *const Tijk, F *const Zijk)</td></tr>
+<tr class="separator:adaf0200c976351f46d2fe2b4a8ebe45b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec9dfa406423eb145e2399183b941ca5"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
+<tr class="memitem:aec9dfa406423eb145e2399183b941ca5"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#aec9dfa406423eb145e2399183b941ca5">atrip::getEnergySame</a> (F const epsabc, size_t const No, F *const epsi, F *const Tijk, F *const Zijk)</td></tr>
+<tr class="separator:aec9dfa406423eb145e2399183b941ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7231babbd637e91b841d63099549de8f"><td class="memTemplParams" colspan="2">template&lt;typename F  = double&gt; </td></tr>
+<tr class="memitem:a7231babbd637e91b841d63099549de8f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#a7231babbd637e91b841d63099549de8f">atrip::singlesContribution</a> (size_t No, size_t Nv, size_t a, size_t b, size_t c, DataFieldType&lt; F &gt; *const Tph, DataFieldType&lt; F &gt; *const VABij, DataFieldType&lt; F &gt; *const VACij, DataFieldType&lt; F &gt; *const VBCij, DataFieldType&lt; F &gt; *Zijk)</td></tr>
+<tr class="separator:a7231babbd637e91b841d63099549de8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1387203a9c668ad0980a5288a3fe97d"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
+<tr class="memitem:ab1387203a9c668ad0980a5288a3fe97d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceatrip.html#ab1387203a9c668ad0980a5288a3fe97d">atrip::doublesContribution</a> (const ABCTuple &amp;abc, size_t const No, size_t const Nv, DataPtr&lt; F &gt; const VABph, DataPtr&lt; F &gt; const VACph, DataPtr&lt; F &gt; const VBCph, DataPtr&lt; F &gt; const VBAph, DataPtr&lt; F &gt; const VCAph, DataPtr&lt; F &gt; const VCBph, DataPtr&lt; F &gt; const VhhhA, DataPtr&lt; F &gt; const VhhhB, DataPtr&lt; F &gt; const VhhhC, DataPtr&lt; F &gt; const TAphh, DataPtr&lt; F &gt; const TBphh, DataPtr&lt; F &gt; const TCphh, DataPtr&lt; F &gt; const TABhh, DataPtr&lt; F &gt; const TAChh, DataPtr&lt; F &gt; const TBChh, DataFieldType&lt; F &gt; *Tijk_)</td></tr>
+<tr class="separator:ab1387203a9c668ad0980a5288a3fe97d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a395c02ccca573561c1c6e5a2145c496b" name="a395c02ccca573561c1c6e5a2145c496b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a395c02ccca573561c1c6e5a2145c496b">&#9670;&#160;</a></span>_IJK_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define _IJK_</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">i, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">j, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">k&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;i + j*No + k*NoNo</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a178706b091c61817a72573aea44e95fa" name="a178706b091c61817a72573aea44e95fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a178706b091c61817a72573aea44e95fa">&#9670;&#160;</a></span>DGEMM_HOLES</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DGEMM_HOLES</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__A, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__B, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__TRANSB&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    atrip::xgemm&lt;F&gt;( <span class="stringliteral">&quot;N&quot;</span>                     \</div>
-<div class="line">                   , __TRANSB                \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;NoNo       \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;No         \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;No         \</div>
-<div class="line">                   , &amp;m_one                  \</div>
-<div class="line">                   , __A                     \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;NoNo       \</div>
-<div class="line">                   , __B                     \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;No         \</div>
-<div class="line">                   , &amp;zero                   \</div>
-<div class="line">                   , _t_buffer.data()        \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;NoNo       \</div>
-<div class="line">                   );</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="aaa57263b7876787581e36f91522c81e7" name="aaa57263b7876787581e36f91522c81e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa57263b7876787581e36f91522c81e7">&#9670;&#160;</a></span>DGEMM_PARTICLES</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DGEMM_PARTICLES</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__A, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__B&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    atrip::xgemm&lt;F&gt;( <span class="stringliteral">&quot;T&quot;</span>                 \</div>
-<div class="line">                   , <span class="stringliteral">&quot;N&quot;</span>                 \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;NoNo   \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;No     \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;Nv     \</div>
-<div class="line">                   , &amp;one                \</div>
-<div class="line">                   , __A                 \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;Nv     \</div>
-<div class="line">                   , __B                 \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;Nv     \</div>
-<div class="line">                   , &amp;zero               \</div>
-<div class="line">                   , _t_buffer.data()    \</div>
-<div class="line">                   , (<span class="keywordtype">int</span> <span class="keyword">const</span>*)&amp;NoNo   \</div>
-<div class="line">                   );</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="ae116a1c74783cc9363dbd6e2eb934ea8" name="ae116a1c74783cc9363dbd6e2eb934ea8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae116a1c74783cc9363dbd6e2eb934ea8">&#9670;&#160;</a></span>MAYBE_CONJ</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAYBE_CONJ</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_conj, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_buffer&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> __i = 0; __i &lt; NoNoNo; ++__i)        \</div>
-<div class="line">      _conj[__i] = maybeConjugate&lt;F&gt;(_buffer[__i]);  \</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a8e804de074eaa56f17a152fb93eaae00" name="a8e804de074eaa56f17a152fb93eaae00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e804de074eaa56f17a152fb93eaae00">&#9670;&#160;</a></span>REORDER</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define REORDER</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__II, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__JJ, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">__KK&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a>(<span class="stringliteral">&quot;doubles:reorder&quot;</span>,                                  \</div>
-<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; No; k++)                                 \</div>
-<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; No; j++)                                 \</div>
-<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; No; i++) {                               \</div>
-<div class="line">      Tijk[<a class="code hl_define" href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a>(i, j, k)] += _t_buffer[<a class="code hl_define" href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a>(__II, __JJ, __KK)];   \</div>
-<div class="line">    }                                                               \</div>
-<div class="line">    )</div>
-<div class="ttc" id="aEquations_8hpp_html_a395c02ccca573561c1c6e5a2145c496b"><div class="ttname"><a href="Equations_8hpp.html#a395c02ccca573561c1c6e5a2145c496b">_IJK_</a></div><div class="ttdeci">#define _IJK_(i, j, k)</div></div>
-<div class="ttc" id="aUtils_8hpp_html_a684c98edc7c431d9fa25c1d75ae42f83"><div class="ttname"><a href="Utils_8hpp.html#a684c98edc7c431d9fa25c1d75ae42f83">WITH_CHRONO</a></div><div class="ttdeci">#define WITH_CHRONO(__chrono_name,...)</div><div class="ttdef"><b>Definition:</b> Utils.hpp:47</div></div>
-</div><!-- fragment -->
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

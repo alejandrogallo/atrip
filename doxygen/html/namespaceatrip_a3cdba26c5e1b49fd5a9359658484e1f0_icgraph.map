@@ -1,6 +1,7 @@
 <map id="atrip::getNodeInfos" name="atrip::getNodeInfos">
 <area shape="rect" id="node1" title=" " coords="437,35,584,60"/>
 <area shape="rect" id="node2" href="$namespaceatrip.html#af9fd13d6ed4a11730462a362543d6e26" title=" " coords="233,5,385,31"/>
-<area shape="rect" id="node3" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " coords="229,55,389,95"/>
-<area shape="rect" id="node4" href="$structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7" title=" " coords="5,55,181,95"/>
+<area shape="rect" id="node4" href="$namespaceatrip_1_1group__and__sort.html#a4e0708f21a913d72d93cc5feb5bd9328" title=" " coords="229,55,389,95"/>
+<area shape="rect" id="node3" href="$structatrip_1_1Atrip.html#ac414d43de30968cc92a6f7a44e5cd9b6" title=" " coords="33,5,153,31"/>
+<area shape="rect" id="node5" href="$structatrip_1_1group__and__sort_1_1Distribution.html#ac5d7ab656681adfe542fcddfa57ac2a7" title=" " coords="5,55,181,95"/>
 </map>

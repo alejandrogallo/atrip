@@ -44,7 +44,7 @@ var structatrip_1_1Slice =
     [ "isUnwrapped", "structatrip_1_1Slice.html#ac87980ccdf02128fee5a3529e32ce346", null ],
     [ "markReady", "structatrip_1_1Slice.html#aea2369215b927bc117bbad21e4aa2b35", null ],
     [ "unwrapAndMarkReady", "structatrip_1_1Slice.html#ad9e60cbb9fe27fdd22edaf94dd46fa5e", null ],
-    [ "data", "structatrip_1_1Slice.html#ab0c99e8ec9e0c84611d7fdec14bdb6ee", null ],
+    [ "data", "structatrip_1_1Slice.html#a6a91e8f8b4520104947fcbce8733f7a6", null ],
     [ "info", "structatrip_1_1Slice.html#a5d20248fbeeed357af5abfa31c9f0d1b", null ],
     [ "request", "structatrip_1_1Slice.html#a0a10dbe08bdaca9682f640be8f8ae736", null ],
     [ "size", "structatrip_1_1Slice.html#a7e16150ff4f60689556a1b9ca139a22d", null ]

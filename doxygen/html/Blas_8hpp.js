@@ -1,8 +1,9 @@
 var Blas_8hpp =
 [
-    [ "Complex", "Blas_8hpp.html#aa4158a2e7e79c518dcb11d7ccfc1c82f", null ],
+    [ "dcopy_", "Blas_8hpp.html#a3c50f63737df805d0a20ee9aa9edf5ab", null ],
     [ "dgemm_", "Blas_8hpp.html#a302b648f916e8ad102dd42072cca699f", null ],
-    [ "xgemm", "Blas_8hpp.html#a598533b252b76257af9d6d6e7c285db2", null ],
-    [ "xgemm", "Blas_8hpp.html#ac816a227aaf7dcd0a1924bcbabedcd05", null ],
+    [ "xcopy", "Blas_8hpp.html#a0cd1521fc692bf2e9d22d2aedbf4af18", null ],
+    [ "xgemm", "Blas_8hpp.html#a0c35c51428658725f6e18e65bd03cb63", null ],
+    [ "zcopy_", "Blas_8hpp.html#a0ab6b5b2828912bb086db893519d4b42", null ],
     [ "zgemm_", "Blas_8hpp.html#a7dbace53db67d2fe7117fd8d401a714a", null ]
 ];

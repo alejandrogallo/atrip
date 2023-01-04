@@ -7,7 +7,7 @@
     <includes refid="Tuples_8hpp" local="no">Tuples.hpp</includes>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="structatrip_1_1TuplesDistribution_1abb339c6579cbd14147c075ebdabd5e7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="namespaceatrip_1a42323fc6890662eefe0e071ada4748ea" kindref="member">ABCTuples</ref></type>
+        <type><ref refid="namespaceatrip_1a574f187428c0e46270abd5331fdd729a" kindref="member">ABCTuples</ref></type>
         <definition>virtual ABCTuples atrip::TuplesDistribution::getTuples</definition>
         <argsstring>(size_t Nv, MPI_Comm universe)=0</argsstring>
         <name>getTuples</name>
@@ -29,7 +29,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="49" column="21"/>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       <memberdef kind="function" id="structatrip_1_1TuplesDistribution_1a0767a603e2865fef7d6a8cc9bf41c52a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -38,7 +38,7 @@
         <name>tupleIsFake</name>
         <qualifiedname>atrip::TuplesDistribution::tupleIsFake</qualifiedname>
         <param>
-          <type><ref refid="namespaceatrip_1a28915c100861c4b2a8c868a4b8f1f233" kindref="member">ABCTuple</ref> const &amp;</type>
+          <type><ref refid="namespaceatrip_1af838c7ed7996be477f99aad86114f26b" kindref="member">ABCTuple</ref> const &amp;</type>
           <declname>t</declname>
         </param>
         <briefdescription>
@@ -49,7 +49,7 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" line="50" column="16" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Tuples.hpp" bodystart="50" bodyend="50"/>
         <references refid="namespaceatrip_1a341e9614e55178a8e9537898f42ac636" compoundref="Tuples_8hpp" startline="43">atrip::FAKE_TUPLE</references>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
+        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="56" endline="837">atrip::Atrip::run</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>

@@ -1,5 +1,7 @@
 <map id="SliceUnion.hpp" name="SliceUnion.hpp">
-<area shape="rect" id="node1" title=" " coords="5,5,124,31"/>
-<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " coords="25,152,105,177"/>
-<area shape="rect" id="node3" href="$Unions_8hpp.html" title=" " coords="60,79,155,104"/>
+<area shape="rect" id="node1" title=" " coords="45,5,163,31"/>
+<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " coords="5,225,85,251"/>
+<area shape="rect" id="node3" href="$DatabaseCommunicator_8hpp.html" title=" " coords="97,152,303,177"/>
+<area shape="rect" id="node5" href="$Unions_8hpp.html" title=" " coords="57,79,151,104"/>
+<area shape="rect" id="node4" href="$DatabaseCommunicator_8cxx.html" title=" " coords="110,225,317,251"/>
 </map>

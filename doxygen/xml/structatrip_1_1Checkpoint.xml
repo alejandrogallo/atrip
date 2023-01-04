@@ -18,7 +18,6 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="28" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="28" bodyend="-1"/>
         <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
         <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a508d48ea8613cc353cc4e2df6619087b" prot="public" static="no" mutable="no">
@@ -35,7 +34,6 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="28" column="13" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="28" bodyend="-1"/>
         <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
         <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a58134223c7e2ff5a6608c3d55c1c8682" prot="public" static="no" mutable="no">
@@ -84,7 +82,6 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="31" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="31" bodyend="-1"/>
         <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
         <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Checkpoint_1abb5df4833497679ea0659f62fd534506" prot="public" static="no" mutable="no">
@@ -101,7 +98,6 @@
         </inbodydescription>
         <location file="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" line="32" column="10" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Checkpoint.hpp" bodystart="32" bodyend="-1"/>
         <referencedby refid="namespaceatrip_1a0e552094c9b3e3af0d38faf48a47a3db" compoundref="Checkpoint_8hpp" startline="59" endline="81">atrip::read_checkpoint</referencedby>
-        <referencedby refid="structatrip_1_1Atrip_1ac414d43de30968cc92a6f7a44e5cd9b6" compoundref="Atrip_8cxx" startline="48" endline="643">atrip::Atrip::run</referencedby>
         <referencedby refid="namespaceatrip_1a5b178d65b82630d40ed38d9ccd86e2a8" compoundref="Checkpoint_8hpp" startline="40" endline="56">atrip::write_checkpoint</referencedby>
       </memberdef>
       <memberdef kind="variable" id="structatrip_1_1Checkpoint_1a6007a0e5cc2cbbec3c4cba70b368777a" prot="public" static="no" mutable="no">

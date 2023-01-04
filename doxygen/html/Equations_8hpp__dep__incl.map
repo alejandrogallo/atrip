@@ -1,4 +1,7 @@
 <map id="Equations.hpp" name="Equations.hpp">
-<area shape="rect" id="node1" title=" " coords="5,5,120,31"/>
-<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " coords="23,79,103,104"/>
+<area shape="rect" id="node1" title=" " coords="129,5,244,31"/>
+<area shape="rect" id="node2" href="$Atrip_8cxx.html" title=" " coords="5,152,85,177"/>
+<area shape="rect" id="node3" href="$DatabaseCommunicator_8hpp.html" title=" " coords="83,79,290,104"/>
+<area shape="rect" id="node5" href="$Equations_8cxx.html" title=" " coords="314,79,427,104"/>
+<area shape="rect" id="node4" href="$DatabaseCommunicator_8cxx.html" title=" " coords="110,152,317,177"/>
 </map>

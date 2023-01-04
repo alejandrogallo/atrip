@@ -10,6 +10,9 @@
     <includes refid="Debug_8hpp" local="no">atrip/Debug.hpp</includes>
     <includedby refid="Atrip_8cxx" local="no">Atrip.cxx</includedby>
     <includedby refid="Atrip_8hpp" local="no">Atrip.hpp</includedby>
+    <includedby refid="CUDA_8hpp" local="no">CUDA.hpp</includedby>
+    <includedby refid="DatabaseCommunicator_8hpp" local="no">DatabaseCommunicator.hpp</includedby>
+    <includedby refid="Equations_8hpp" local="no">Equations.hpp</includedby>
     <includedby refid="Slice_8hpp" local="no">Slice.hpp</includedby>
     <includedby refid="Tuples_8hpp" local="no">Tuples.hpp</includedby>
     <incdepgraph>
@@ -55,7 +58,7 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="5">
+      <node id="13">
         <label>atrip.hpp</label>
         <link refid="atrip_8hpp"/>
       </node>
@@ -68,55 +71,107 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
       </node>
-      <node id="4">
+      <node id="12">
+        <label>Blas.hpp</label>
+        <link refid="Blas_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>CUDA.hpp</label>
+        <link refid="CUDA_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
         <label>Checkpoint.hpp</label>
         <link refid="Checkpoint_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
       <node id="7">
+        <label>DatabaseCommunicator.hpp</label>
+        <link refid="DatabaseCommunicator_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
         <label>Equations.hpp</label>
         <link refid="Equations_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-      </node>
-      <node id="8">
-        <label>RankMap.hpp</label>
-        <link refid="RankMap_8hpp"/>
-        <childnode refid="9" relation="include">
-        </childnode>
-      </node>
-      <node id="6">
-        <label>Slice.hpp</label>
-        <link refid="Slice_8hpp"/>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
         <childnode refid="9" relation="include">
         </childnode>
       </node>
-      <node id="9">
+      <node id="17">
+        <label>RankMap.hpp</label>
+        <link refid="RankMap_8hpp"/>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>Slice.hpp</label>
+        <link refid="Slice_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
         <label>SliceUnion.hpp</label>
         <link refid="SliceUnion_8hpp"/>
         <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>Tuples.hpp</label>
+        <link refid="Tuples_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
       </node>
       <node id="11">
-        <label>Tuples.hpp</label>
-        <link refid="Tuples_8hpp"/>
-        <childnode refid="8" relation="include">
+        <label>Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
       </node>
-      <node id="10">
+      <node id="19">
         <label>Unions.hpp</label>
         <link refid="Unions_8hpp"/>
         <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -126,14 +181,40 @@
         </childnode>
         <childnode refid="3" relation="include">
         </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
         </childnode>
       </node>
       <node id="2">
         <label>Atrip.cxx</label>
         <link refid="Atrip_8cxx"/>
+      </node>
+      <node id="4">
+        <label>Blas.cxx</label>
+        <link refid="Blas_8cxx"/>
+      </node>
+      <node id="15">
+        <label>Complex.cxx</label>
+        <link refid="Complex_8cxx"/>
+      </node>
+      <node id="8">
+        <label>DatabaseCommunicator.cxx</label>
+        <link refid="DatabaseCommunicator_8cxx"/>
+      </node>
+      <node id="9">
+        <label>Equations.cxx</label>
+        <link refid="Equations_8cxx"/>
+      </node>
+      <node id="10">
+        <label>Tuples.cxx</label>
+        <link refid="Tuples_8cxx"/>
       </node>
     </invincdepgraph>
     <innerclass refid="structatrip_1_1Timer" prot="public">atrip::Timer</innerclass>
@@ -152,7 +233,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="47" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="47" bodyend="-1"/>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="67" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Utils_8hpp_1aa8ba04a670d75dff46ec4be88bdd8ff3" prot="public" static="no">
+        <name>_FORMAT</name>
+        <param><defname>_fmt</defname></param>
+        <param><defname>...</defname></param>
+        <initializer>  ([&amp;] (void) -&gt; std::string {                                \
+     int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);  \
+     std::vector&lt;char&gt;  _out(_sz  +  1);                      \
+     std::snprintf(&amp;_out[0], _out.size(), _fmt, __VA_ARGS__); \
+     return std::string(_out.data());                         \
+   })()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" line="86" column="9" bodyfile="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp" bodystart="86" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -174,59 +273,89 @@
 <codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>See<sp/>the<sp/>License<sp/>for<sp/>the<sp/>specific<sp/>language<sp/>governing<sp/>permissions<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>limitations<sp/>under<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;sstream&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;map&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;chrono&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="21"><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>push</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wvla&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wint-in-bool-context&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wunused-parameter&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wdeprecated-copy&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ctf.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>pop</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Debug_8hpp" kindref="compound">atrip/Debug.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Pretty<sp/>printing][Pretty<sp/>printing:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
-<codeline lineno="37" refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" refkind="member"><highlight class="normal"><sp/><sp/>std::string<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(T&amp;&amp;<sp/>value)<sp/>{</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>std::stringstream<sp/>stream;</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>&gt;<sp/>2</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>dbg::pretty_print(stream,<sp/>std::forward&lt;T&gt;(value));</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>stream.str();</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Pretty<sp/>printing:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(__NVCC__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>nv_diagnostic_push</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>if<sp/>defined<sp/>__NVCC_DIAG_PRAGMA_SUPPORT__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//<sp/>http://www.ssl.berkeley.edu/~jimm/grizzly_docs/SSL/opt/intel/cc/9.0/lib/locale/en_US/mcpcom.msg</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>pragma<sp/>nv_diag_suppress<sp/>partial_override</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>pragma<sp/>diag_suppress<sp/>partial_override</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;ctf.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>nv_diagnostic_pop</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>push</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wvla&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wnonnull&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wall&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wint-in-bool-context&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wunused-parameter&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wdeprecated-copy&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>include<sp/>&lt;ctf.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>pragma<sp/>GCC<sp/>diagnostic<sp/>pop</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="Debug_8hpp" kindref="compound">atrip/Debug.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="45"><highlight class="normal"></highlight></codeline>
-<codeline lineno="46"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Chrono][Chrono:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="47" refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WITH_CHRONO(__chrono_name,<sp/>...)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="48"><highlight class="preprocessor"><sp/><sp/>Atrip::chrono[__chrono_name].start();<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="49"><highlight class="preprocessor"><sp/><sp/>__VA_ARGS__<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
-<codeline lineno="50"><highlight class="preprocessor"><sp/><sp/>Atrip::chrono[__chrono_name].stop();</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="51"><highlight class="normal"></highlight></codeline>
-<codeline lineno="52" refid="structatrip_1_1Timer" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer" kindref="compound">Timer</ref><sp/>{</highlight></codeline>
-<codeline lineno="53" refid="structatrip_1_1Timer_1ae15cc0675735926a17176c224976d098" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer_1ae15cc0675735926a17176c224976d098" kindref="member">Clock</ref><sp/>=<sp/>std::chrono::high_resolution_clock;</highlight></codeline>
-<codeline lineno="54" refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref><sp/>=<sp/>std::chrono::time_point&lt;Clock&gt;;</highlight></codeline>
-<codeline lineno="55" refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" refkind="member"><highlight class="normal"><sp/><sp/>std::chrono::duration&lt;double&gt;<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref>;</highlight></codeline>
-<codeline lineno="56" refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref><sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref>;</highlight></codeline>
-<codeline lineno="57" refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" kindref="member">start</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref><sp/>=<sp/>Clock::now();<sp/>}</highlight></codeline>
-<codeline lineno="58" refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" kindref="member">stop</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref><sp/>+=<sp/>Clock::now()<sp/>-<sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref>;<sp/>}</highlight></codeline>
-<codeline lineno="59" refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" kindref="member">clear</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref><sp/>*=<sp/>0;<sp/>}</highlight></codeline>
-<codeline lineno="60" refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" kindref="member">count</ref>()<sp/>const<sp/>noexcept<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref>.count();<sp/>}</highlight></codeline>
-<codeline lineno="61"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="62" refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kindref="member">Timings</ref><sp/>=<sp/>std::map&lt;std::string,<sp/>Timer&gt;;</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Chrono:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="64"><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:../../atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="66"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip" kindref="compound">atrip</ref><sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Prolog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Pretty%20printing][Pretty<sp/>printing:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>push</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>ignored<sp/>&quot;-Wunused-parameter&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="54" refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" refkind="member"><highlight class="normal"><sp/><sp/>std::string<sp/><ref refid="namespaceatrip_1a3178eea10b83bd01a95ca222be291c1f" kindref="member">pretty_print</ref>(T&amp;&amp;<sp/>value)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>ATRIP_DEBUG<sp/>&gt;<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>std::stringstream<sp/>stream;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>dbg::pretty_print(stream,<sp/>std::forward&lt;T&gt;(value));</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>stream.str();</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>GCC<sp/>diagnostic<sp/>pop</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Pretty<sp/>printing:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Chrono][Chrono:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67" refid="Utils_8hpp_1a684c98edc7c431d9fa25c1d75ae42f83" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WITH_CHRONO(__chrono_name,<sp/>...)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="68"><highlight class="preprocessor"><sp/><sp/>Atrip::chrono[__chrono_name].start();<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="69"><highlight class="preprocessor"><sp/><sp/>__VA_ARGS__<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="70"><highlight class="preprocessor"><sp/><sp/>Atrip::chrono[__chrono_name].stop();</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72" refid="structatrip_1_1Timer" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer" kindref="compound">Timer</ref><sp/>{</highlight></codeline>
+<codeline lineno="73" refid="structatrip_1_1Timer_1ae15cc0675735926a17176c224976d098" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer_1ae15cc0675735926a17176c224976d098" kindref="member">Clock</ref><sp/>=<sp/>std::chrono::high_resolution_clock;</highlight></codeline>
+<codeline lineno="74" refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref><sp/>=<sp/>std::chrono::time_point&lt;Clock&gt;;</highlight></codeline>
+<codeline lineno="75" refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" refkind="member"><highlight class="normal"><sp/><sp/>std::chrono::duration&lt;double&gt;<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref>;</highlight></codeline>
+<codeline lineno="76" refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structatrip_1_1Timer_1ad31848c0314568ca145a7ebccf9e9946" kindref="member">Event</ref><sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref>;</highlight></codeline>
+<codeline lineno="77" refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a09430eb4a9e28bb0bd81cd90a7cfd300" kindref="member">start</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref><sp/>=<sp/>Clock::now();<sp/>}</highlight></codeline>
+<codeline lineno="78" refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a3459f3c2a33eb751c07f117a1129dda9" kindref="member">stop</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref><sp/>+=<sp/>Clock::now()<sp/>-<sp/><ref refid="structatrip_1_1Timer_1aaefd99cf362148c5446ddaeca40ffa29" kindref="member">_start</ref>;<sp/>}</highlight></codeline>
+<codeline lineno="79" refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1a5a87a1d2a74e7b70a0f4f11fd211508c" kindref="member">clear</ref>()<sp/>noexcept<sp/>{<sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref><sp/>*=<sp/>0;<sp/>}</highlight></codeline>
+<codeline lineno="80" refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1acad7c5d85e5f77af899840933b6e4f9e" kindref="member">count</ref>()<sp/>const<sp/>noexcept<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structatrip_1_1Timer_1ab0c5de41ee1b8def08b719ce6ce94409" kindref="member">duration</ref>.count();<sp/>}</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="82" refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespaceatrip_1aec2fd4244568d19e92eb8d89425f1376" kindref="member">Timings</ref><sp/>=<sp/>std::map&lt;std::string,<sp/>Timer&gt;;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Chrono:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>A<sp/>nice<sp/>handy<sp/>macro<sp/>to<sp/>do<sp/>formatting</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86" refid="Utils_8hpp_1aa8ba04a670d75dff46ec4be88bdd8ff3" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>_FORMAT(_fmt,<sp/>...)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="87"><highlight class="preprocessor"><sp/><sp/>([&amp;]<sp/>(void)<sp/>-&gt;<sp/>std::string<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="88"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/>int<sp/>_sz<sp/>=<sp/>std::snprintf(nullptr,<sp/>0,<sp/>_fmt,<sp/>__VA_ARGS__);<sp/><sp/>\</highlight></codeline>
+<codeline lineno="89"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/>std::vector&lt;char&gt;<sp/><sp/>_out(_sz<sp/><sp/>+<sp/><sp/>1);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="90"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/>std::snprintf(&amp;_out[0],<sp/>_out.size(),<sp/>_fmt,<sp/>__VA_ARGS__);<sp/>\</highlight></codeline>
+<codeline lineno="91"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/>return<sp/>std::string(_out.data());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="92"><highlight class="preprocessor"><sp/><sp/><sp/>})()</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight><highlight class="comment">//<sp/>[[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Epilog:1<sp/>ends<sp/>here</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/runner/work/atrip/atrip/include/atrip/Utils.hpp"/>
   </compounddef>
