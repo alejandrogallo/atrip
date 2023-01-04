@@ -1,0 +1,53 @@
+mods=(
+  cuda/11.6
+  gcc/12
+  openmpi
+  mkl/2020.4
+  autoconf/2.69
+  automake/1.15
+  libtool/2.4.6
+)
+
+
+module purge
+module load ${mods[@]}
+LIB_PATH="${CUDA_HOME}/lib64"
+export CUDA_ROOT=${CUDA_HOME}
+export CUDA_LDFLAGS="-L${LIB_PATH} -lcuda -L${LIB_PATH} -lcudart -L${LIB_PATH} -lcublas"
+export CUDA_CXXFLAGS="-I${CUDA_HOME}/include"
+
+export LD_LIBRARY_PATH="${MKL_HOME}/lib/intel64:${LD_LIBRARY_PATH}"
+
+ls ${LIB_PATH}/libcublas.so
+ls ${LIB_PATH}/libcudart.so
+
+cat <<EOF
+
+////////////////////////////////////////////////////////////////////////////////
+                                    info
+////////////////////////////////////////////////////////////////////////////////
+
+
+MKL_HOME         = $MKL_HOME
+BLAS_STATIC_PATH = $BLAS_STATIC_PATH
+
+CUDA_ROOT      = ${CUDA_HOME}
+CUDA_LDFLAGS   = "-L${LIB_PATH} -lcuda -L${LIB_PATH} -lcudart -L${LIB_PATH} -lcublas"
+CUDA_CXXFLAGS  = "-I${CUDA_HOME}/include"
+
+
+
+Consider now runnng the following
+
+../configure \\
+  --enable-cuda \\
+  --disable-slice \\
+  --with-blas="-L\$MKL_HOME/lib/intel64/ -lmkl_blacs_openmpi_lp64 -lmkl_rt" \\
+  CXX=mpicxx \\
+  MPICXX=mpicxx
+
+
+EOF
+	
+
+return

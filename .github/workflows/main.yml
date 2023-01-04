@@ -18,6 +18,8 @@ jobs:
     strategy:
       matrix:
         compiler:
+          - gcc12
+          - gcc11
           - gcc11
           - gcc10
           - gcc9

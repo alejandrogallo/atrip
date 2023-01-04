@@ -48,8 +48,9 @@ AM_CONDITIONAL([WITH_CLANG_CHECK], [test x${clang_check} = xYES])
 AC_ARG_ENABLE([cuda],
               [AS_HELP_STRING([--enable-cuda],
                               [Build with cuda])],
-                              [WITH_CUDA=yes],
-                              [WITH_CUDA=no])
+              [WITH_CUDA=yes
+               WITH_OPENACC=yes],
+              [WITH_CUDA=no])
 AC_ARG_VAR([NVCC], [Path to the nvidia cuda compiler.])
 AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda, -lcudart, -lcublas.])
 AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
@@ -176,6 +177,11 @@ fi
 dnl CUDA NVIDIA -----------------------------------------------------------
 
 AM_CONDITIONAL([WITH_CUDA], [test x${WITH_CUDA} = xyes])
+AM_CONDITIONAL([WITH_OPENACC], [test x${WITH_OPENACC} = xyes])
+if test x${WITH_OPENACC} = xyes; then
+ATRIP_OPENACC([CXXFLAGS="${CXXFLAGS} -fopenacc"],
+              [AC_MSG_ERROR([I can't use -fopenacc, aborting])])
+fi
 if test x${WITH_CUDA} = xyes; then
   AC_MSG_RESULT([
                      CUDA SUPPORT IS ENABLED
