@@ -694,13 +694,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
       // LOG(0, "AtripCUDA") <<  "doing energy " << i << "distinct " << distinct << "\n";
       WITH_CHRONO("energy",
-/*
-    TODO: think about how to do this on the GPU in the best way possible
         if ( distinct == 0)
           tupleEnergy = getEnergyDistinct<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
         else
           tupleEnergy = getEnergySame<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
-*/
       )
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)

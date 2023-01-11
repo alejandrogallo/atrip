@@ -23,6 +23,18 @@ atrip_SOURCES = main.cxx
 atrip_CPPFLAGS = $(AM_CPPFLAGS)
 atrip_LDADD = $(BENCHES_LDADD)
 
+atrip: main.cxx
+	$(NVCXX) -cuda     \
+		-x cu -I../      \
+		$(MPILIBS)       \
+		-I$(srcdir)/     \
+		$(AM_CPPFLAGS)   \
+		$(DEFS)          \
+		$(BENCHES_LDADD) \
+		$(AM_LDFLAGS)    \
+		$< -o $@
+
+endif
 
 if !WITH_CUDA
 ##

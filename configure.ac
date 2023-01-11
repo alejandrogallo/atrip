@@ -177,17 +177,14 @@ fi
 dnl CUDA NVIDIA -----------------------------------------------------------
 
 AM_CONDITIONAL([WITH_CUDA], [test x${WITH_CUDA} = xyes])
-AM_CONDITIONAL([WITH_OPENACC], [test x${WITH_OPENACC} = xyes])
-if test x${WITH_OPENACC} = xyes; then
-ATRIP_OPENACC([CXXFLAGS="${CXXFLAGS} -fopenacc"],
-              [AC_MSG_ERROR([I can't use -fopenacc, aborting])])
-fi
 if test x${WITH_CUDA} = xyes; then
   AC_MSG_RESULT([
                      CUDA SUPPORT IS ENABLED
                      -----------------------
   ])
   AC_CHECK_PROGS([NVCC], [nvcc])
+  AC_CHECK_PROGS([NVCXX], [nvc++])
+  MPILIBS=$($MPICXX -show | awk '!($1="")')
   AC_SUBST([CUDA_LDFLAGS])
   AC_DEFINE([HAVE_CUDA],1,[Wether we are using CUDA])
   # TODO: make sure to find cuda and cudart
@@ -233,6 +230,7 @@ AC_MSG_RESULT([
                        ATRIP_LDFLAGS  = $ATRIP_LDFLAGS
                        BLAS = ${BLAS_LIBS}
                        LIBS = ${LIBS}
+                       MPILIBS = $MPILIBS
 ])
 
 AC_OUTPUT

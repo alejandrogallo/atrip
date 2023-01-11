@@ -1,5 +1,7 @@
+#!/usr/bin/env bash
 mods=(
-  cuda/11.6
+  #cuda/11.6
+  nvhpcsdk/22  # for openacc
   gcc/12
   openmpi
   mkl/2020.4
@@ -11,15 +13,41 @@ mods=(
 
 module purge
 module load ${mods[@]}
-LIB_PATH="${CUDA_HOME}/lib64"
+
+LIB_PATH="${NVHPC_CUDA_HOME}/lib64"
+export CUBLAS_LD_PATH="${NVHPC_ROOT}/math_libs/lib64/"
 export CUDA_ROOT=${CUDA_HOME}
-export CUDA_LDFLAGS="-L${LIB_PATH} -lcuda -L${LIB_PATH} -lcudart -L${LIB_PATH} -lcublas"
+export CUDA_LDFLAGS="-L${LIB_PATH} -lcuda -L${LIB_PATH} -lcudart -L${CUBLAS_LD_PATH} -lcublas"
 export CUDA_CXXFLAGS="-I${CUDA_HOME}/include"
 
 export LD_LIBRARY_PATH="${MKL_HOME}/lib/intel64:${LD_LIBRARY_PATH}"
 
-ls ${LIB_PATH}/libcublas.so
+MPILIBS=$(mpicxx -show | awk '!($1="")')
+export MPILIBS
+export MPINVCXX="nv++ ${MPILIBS}"
+
+ls ${CUBLAS_LD_PATH}/libcublas.so
 ls ${LIB_PATH}/libcudart.so
+
+#export OMPI_CC="nvc"
+#export OMPI_CXX="nvc++"
+
+BLAS_LDFLAGS="-L${PWD}/OpenBLAS-0.3.20/ -lopenblas"
+_openblas_make () {
+
+  [[ -d OpenBLAS-0.3.20/ ]] || {
+    wget https://github.com/xianyi/OpenBLAS/releases/download/v0.3.20/OpenBLAS-0.3.20.tar.gz
+    tar xvzf OpenBLAS-0.3.20.tar.gz
+    cd OpenBLAS-0.3.20/
+    make FC=gfortran CC=gcc USE_OPENMP=1 NUM_THREADS=72 TARGET=SKYLAKEX
+  } && {
+    echo "Openblas built"
+  }
+
+}
+( _openblas_make; )
+
+
 
 cat <<EOF
 
@@ -39,12 +67,13 @@ CUDA_CXXFLAGS  = "-I${CUDA_HOME}/include"
 
 Consider now runnng the following
 
-../configure \\
+../../configure \\
   --enable-cuda \\
   --disable-slice \\
-  --with-blas="-L\$MKL_HOME/lib/intel64/ -lmkl_blacs_openmpi_lp64 -lmkl_rt" \\
-  CXX=mpicxx \\
-  MPICXX=mpicxx
+  --with-blas="${BLAS_LDFLAGS}" \\
+  CXX="gcc" \\
+  NVCC="\$MPINVCXX" \\
+  MPICXX="mpicxx"
 
 
 EOF

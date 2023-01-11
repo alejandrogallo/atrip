@@ -182,15 +182,21 @@ namespace cuda {
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
+  __MAYBE_DEVICE__
 double getEnergyDistinct
-  ( F const epsabc
-  , size_t const No
-  , F* const epsi
-  , F* const Tijk
-  , F* const Zijk
-  ) {
+  (F const epsabc,
+   size_t const No,
+   F* const epsi,
+   F* const Tijk,
+   F* const Zijk) {
   constexpr size_t blockSize=16;
   F energy(0.);
+#if defined(HAVE_CUDA)
+  #pragma acc kernels
+  for (size_t k(0); k < No; k++) {
+    for (size_t j(k); j < No; j++) {
+      for (size_t i(j); i < No; i++) {
+#else
   for (size_t kk=0; kk<No; kk+=blockSize){
     const size_t kend( std::min(No, kk+blockSize) );
     for (size_t jj(kk); jj<No; jj+=blockSize){
@@ -198,13 +204,14 @@ double getEnergyDistinct
       for (size_t ii(jj); ii<No; ii+=blockSize){
         const size_t iend( std::min( No, ii+blockSize) );
         for (size_t k(kk); k < kend; k++){
-          const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
           for (size_t j(jstart); j < jend; j++){
-            F const ej(epsi[j]);
-            F const facjk = j == k ? F(0.5) : F(1.0);
             size_t istart = ii > j ? ii : j;
             for (size_t i(istart); i < iend; i++){
+#endif
+              const F ek(epsi[k]);
+              const F ej(epsi[j]);
+              const F facjk = j == k ? F(0.5) : F(1.0);
               const F
                   ei(epsi[i])
                 , facij = i == j ? F(0.5) : F(1.0)
@@ -239,14 +246,17 @@ double getEnergyDistinct
             } // i
           } // j
         } // k
+#if !defined(HAVE_CUDA)
       } // ii
     } // jj
   } // kk
+#endif
   return std::real(energy);
 }
 
 
 template <typename F>
+  __MAYBE_DEVICE__
 double getEnergySame
   ( F const epsabc
   , size_t const No
@@ -256,6 +266,12 @@ double getEnergySame
   ) {
   constexpr size_t blockSize = 16;
   F energy = F(0.);
+#if defined(HAVE_CUDA)
+  #pragma acc kernels
+  for (size_t k(0); k < No; k++) {
+    for (size_t j(k); j < No; j++) {
+      for (size_t i(j); i < No; i++) {
+#else
   for (size_t kk=0; kk<No; kk+=blockSize){
     const size_t kend( std::min( kk+blockSize, No) );
     for (size_t jj(kk); jj<No; jj+=blockSize){
@@ -263,13 +279,14 @@ double getEnergySame
       for (size_t ii(jj); ii<No; ii+=blockSize){
         const size_t iend( std::min( ii+blockSize, No) );
         for (size_t k(kk); k < kend; k++){
-          const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
           for(size_t j(jstart); j < jend; j++){
-            const F facjk( j == k ? F(0.5) : F(1.0));
-            const F ej(epsi[j]);
             const size_t istart = ii > j ? ii : j;
             for(size_t i(istart); i < iend; i++){
+#endif
+              const F facjk( j == k ? F(0.5) : F(1.0));
+              const F ek(epsi[k]);
+              const F ej(epsi[j]);
               const F
                 ei(epsi[i])
               , facij ( i==j ? F(0.5) : F(1.0))
@@ -291,9 +308,11 @@ double getEnergySame
             } // i
           } // j
         } // k
+#if !defined(HAVE_CUDA)
       } // ii
     } // jj
   } // kk
+#endif
   return std::real(energy);
 }
 // Energy:2 ends here
