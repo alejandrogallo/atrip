@@ -23,6 +23,8 @@
 #include<thrust/device_vector.h>
 #endif
 
+#include<atrip/CUDA.hpp>
+
 
 namespace atrip {
 using ABCTuple = std::array<size_t, 3>;
@@ -32,21 +34,25 @@ using ABCTuples = std::vector<ABCTuple>;
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:1]]
 template <typename F=double>
-double getEnergyDistinct
+__MAYBE_GLOBAL__
+void getEnergyDistinct
   ( F const epsabc
   , size_t const No
   , F* const epsi
   , F* const Tijk
   , F* const Zijk
+  , double* energy
   );
 
 template <typename F=double>
-double getEnergySame
+__MAYBE_GLOBAL__
+void getEnergySame
   ( F const epsabc
   , size_t const No
   , F* const epsi
   , F* const Tijk
   , F* const Zijk
+  , double* energy
   );
 // Energy:1 ends here
 

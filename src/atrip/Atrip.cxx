@@ -683,31 +683,59 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
 #if defined(ATRIP_ONLY_DGEMM)
     if (false)
-#endif
+#endif /* defined(ATRIP_ONLY_DGEMM) */
     if (!isFakeTuple(i)) {
-      double tupleEnergy(0.);
+#if defined(HAVE_CUDA)
+      double *tupleEnergy;
+      cuMemAlloc((DataPtr<double>*)&tupleEnergy, sizeof(double));
+#elif
+      double _tupleEnergy(0.);
+      double *tupleEnergy = &_tupleEnergy;
+#endif /* defined(HAVE_CUDA) */
 
       int distinct(0);
       if (abc[0] == abc[1]) distinct++;
       if (abc[1] == abc[2]) distinct--;
-      const F epsabc(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
+      const double
+        epsabc = std::real(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
 
-      // LOG(0, "AtripCUDA") <<  "doing energy " << i << "distinct " << distinct << "\n";
+      DataFieldType<F> _epsabc{epsabc};
+
       WITH_CHRONO("energy",
-/*
-    TODO: think about how to do this on the GPU in the best way possible
-        if ( distinct == 0)
-          tupleEnergy = getEnergyDistinct<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
-        else
-          tupleEnergy = getEnergySame<F>(epsabc, No, (F*)epsi, (F*)Tijk, (F*)Zijk);
-*/
-      )
+                  if ( distinct == 0) {
+                    ACC_FUNCALL(getEnergyDistinct<DataFieldType<F>>,
+                                1, 1, // for cuda
+                                _epsabc,
+                                No,
+                                (DataFieldType<F>*)epsi,
+                                (DataFieldType<F>*)Tijk,
+                                (DataFieldType<F>*)Zijk,
+                                tupleEnergy);
+                  } else {
+                    ACC_FUNCALL(getEnergySame<DataFieldType<F>>,
+                                1, 1, // for cuda
+                                _epsabc,
+                                No,
+                                (DataFieldType<F>*)epsi,
+                                (DataFieldType<F>*)Tijk,
+                                (DataFieldType<F>*)Zijk,
+                                tupleEnergy);
+                  })
+
+#if defined(HAVE_CUDA)
+        double host_tuple_energy;
+        cuMemcpyDtoH((void*)&host_tuple_energy,
+                     (DataPtr<double>)tupleEnergy,
+                     sizeof(double));
+#elif
+        double host_tuple_energy = *tupleEnergy;
+#endif /* defined(HAVE_CUDA) */
 
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
-      tupleEnergies[abc] = tupleEnergy;
+      tupleEnergies[abc] = host_tuple_energy;
 #endif
 
-      energy += tupleEnergy;
+      energy += host_tuple_energy;
 
     }
 

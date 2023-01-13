@@ -11,10 +11,21 @@
 #if defined(HAVE_CUDA) && defined(__CUDACC__)
 #  define __MAYBE_GLOBAL__ __global__
 #  define __MAYBE_DEVICE__ __device__
+#  define __MAYBE_HOST__ __host__
+#  define __INLINE__ __inline__
 #else
 #  define __MAYBE_GLOBAL__
 #  define __MAYBE_DEVICE__
+#  define __MAYBE_HOST__
+#  define __INLINE__ inline
 #endif
+
+#if defined(HAVE_CUDA)
+#define ACC_FUNCALL(fname, i, j, ...) fname<<<(i), (j)>>>(__VA_ARGS__)
+#else
+#define ACC_FUNCALL(fname, i, j, ...) fname(__VA_ARGS__)
+#endif /*  defined(HAVE_CUDA) */
+
 
 #define _CHECK_CUDA_SUCCESS(message, ...)                               \
   do {                                                                  \

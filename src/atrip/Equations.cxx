@@ -16,95 +16,12 @@
 #include<atrip/Equations.hpp>
 
 #include<atrip/CUDA.hpp>
+#include<atrip/Operations.hpp>
 
 namespace atrip {
 // Prolog:2 ends here
 
 
-
-#ifdef HAVE_CUDA
-namespace cuda {
-
-  // cuda kernels
-
-  template <typename F>
-  __global__
-  void zeroing(F* a, size_t n) {
-    F zero = {0};
-    for (size_t i = 0; i < n; i++) {
-      a[i] = zero;
-    }
-  }
-
-  ////
-  template <typename F>
-  __device__
-  F maybeConjugateScalar(const F a);
-
-  template <>
-  __device__
-  double maybeConjugateScalar(const double a) { return a; }
-
-  template <>
-  __device__
-  cuDoubleComplex
-  maybeConjugateScalar(const cuDoubleComplex a) {
-    return {a.x, -a.y};
-  }
-
-  template <typename F>
-  __global__
-  void maybeConjugate(F* to, F* from, size_t n) {
-    for (size_t i = 0; i < n; ++i) {
-      to[i] = maybeConjugateScalar<F>(from[i]);
-    }
-  }
-
-
-  template <typename F>
-  __global__
-  void reorder(F* to, F* from, size_t size, size_t I, size_t J, size_t K) {
-    size_t idx = 0;
-    const size_t IDX = I + J*size + K*size*size;
-    for (size_t k = 0; k < size; k++)
-    for (size_t j = 0; j < size; j++)
-    for (size_t i = 0; i < size; i++, idx++)
-      to[idx] += from[IDX];
-  }
-
-  // I mean, really CUDA... really!?
-  template <typename F>
-  __device__
-  F multiply(const F &a, const F &b);
-  template <>
-  __device__
-  double multiply(const double &a, const double &b) { return a * b; }
-
-  template <>
-  __device__
-  cuDoubleComplex multiply(const cuDoubleComplex &a, const cuDoubleComplex &b) {
-    return
-      {a.x * b.x - a.y * b.y,
-       a.x * b.y + a.y * b.x};
-  }
-
-  template <typename F>
-  __device__
-  void sum_in_place(F* to, const F* from);
-
-  template <>
-  __device__
-  void sum_in_place(double* to, const double *from) { *to += *from; }
-
-  template <>
-  __device__
-  void sum_in_place(cuDoubleComplex* to, const cuDoubleComplex* from) {
-    to->x += from->x;
-    to->y += from->y;
-  }
-
-};
-#endif
 
 #if defined(HAVE_CUDA)
 #define FOR_K()                                             \
@@ -133,7 +50,7 @@ namespace cuda {
     _REORDER_BODY_(__VA_ARGS__)                 \
       }
 #if defined(HAVE_CUDA)
-#define GO(__TO, __FROM) cuda::sum_in_place<F>(&__TO, &__FROM);
+#define GO(__TO, __FROM) acc::sum_in_place<F>(&__TO, &__FROM);
 #else
 #define GO(__TO, __FROM) __TO += __FROM;
 #endif
@@ -179,162 +96,199 @@ namespace cuda {
 #undef _IJK_
 #undef GO
 
+#if defined(HAVE_CUDA)
+#  define MIN(a, b) min((a), (b))
+#else
+#  define MIN(a, b) std::min((a), (b))
+#endif
+
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
-double getEnergyDistinct
+__MAYBE_GLOBAL__
+void getEnergyDistinct
   ( F const epsabc
   , size_t const No
   , F* const epsi
   , F* const Tijk
   , F* const Zijk
+  , double* energy
   ) {
   constexpr size_t blockSize=16;
-  F energy(0.);
+  F _energy = {0.};
   for (size_t kk=0; kk<No; kk+=blockSize){
-    const size_t kend( std::min(No, kk+blockSize) );
+    const size_t kend( MIN(No, kk+blockSize) );
     for (size_t jj(kk); jj<No; jj+=blockSize){
-      const size_t jend( std::min( No, jj+blockSize) );
+      const size_t jend( MIN( No, jj+blockSize) );
       for (size_t ii(jj); ii<No; ii+=blockSize){
-        const size_t iend( std::min( No, ii+blockSize) );
+        const size_t iend( MIN( No, ii+blockSize) );
         for (size_t k(kk); k < kend; k++){
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
           for (size_t j(jstart); j < jend; j++){
             F const ej(epsi[j]);
-            F const facjk = j == k ? F(0.5) : F(1.0);
+            F const facjk = j == k ? F{0.5} : F{1.0};
             size_t istart = ii > j ? ii : j;
             for (size_t i(istart); i < iend; i++){
               const F
                   ei(epsi[i])
-                , facij = i == j ? F(0.5) : F(1.0)
-                , denominator(epsabc - ei - ej - ek)
+                , facij = i == j ? F{0.5} : F{1.0}
+                , eijk(acc::add(acc::add(ei, ej), ek))
+                , denominator(acc::sub(epsabc, eijk))
                 , U(Zijk[i + No*j + No*No*k])
                 , V(Zijk[i + No*k + No*No*j])
                 , W(Zijk[j + No*i + No*No*k])
                 , X(Zijk[j + No*k + No*No*i])
                 , Y(Zijk[k + No*i + No*No*j])
                 , Z(Zijk[k + No*j + No*No*i])
-                , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
-                , B(maybeConjugate<F>(Tijk[i + No*k + No*No*j]))
-                , C(maybeConjugate<F>(Tijk[j + No*i + No*No*k]))
-                , D(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
-                , E(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
-                , _F(maybeConjugate<F>(Tijk[k + No*j + No*No*i]))
-                , value
-                  = 3.0 * ( A * U
-                            + B * V
-                            + C * W
-                            + D * X
-                            + E * Y
-                            + _F * Z )
-                 + ( ( U + X + Y )
-                   - 2.0 * ( V + W + Z )
-                   ) * ( A + D + E )
-                 + ( ( V + W + Z )
-                   - 2.0 * ( U + X + Y )
-                   ) * ( B + C + _F )
+                , A(acc::maybeConjugateScalar(Tijk[i + No*j + No*No*k]))
+                , B(acc::maybeConjugateScalar(Tijk[i + No*k + No*No*j]))
+                , C(acc::maybeConjugateScalar(Tijk[j + No*i + No*No*k]))
+                , D(acc::maybeConjugateScalar(Tijk[j + No*k + No*No*i]))
+                , E(acc::maybeConjugateScalar(Tijk[k + No*i + No*No*j]))
+                , _F(acc::maybeConjugateScalar(Tijk[k + No*j + No*No*i]))
+                // I just might as well write this in CL
+                , _first =  acc::add(acc::prod(A, U),
+                                     acc::add(acc::prod(B, V),
+                                              acc::add(acc::prod(C, W),
+                                                       acc::add(acc::prod(D, X),
+                                                                acc::add(acc::prod(E, Y),
+                                                                         acc::prod(_F, Z))))))
+                , _second = acc::prod(acc::sub(acc::add(U, acc::add(X, Y)),
+                                               acc::prod(F{-2.0},
+                                                         acc::add(V, acc::add(W, Z)))),
+                                      acc::add(A, acc::add(D, E)))
+                , _third = acc::prod(acc::sub(acc::add(V, acc::add(W, Z)),
+                                              acc::prod(F{-2.0},
+                                                        acc::add(U,
+                                                                 acc::add(X, Y)))),
+                                     acc::add(B, acc::add(C, _F)))
+                , value = acc::add(acc::prod(F{3.0}, _first),
+                                   acc::add(_second,
+                                            _third))
+                , _loop_energy = acc::prod(acc::prod(F{2.0}, value),
+                                           acc::div(acc::prod(facjk, facij),
+                                                    denominator))
                 ;
-              energy += 2.0 * value / denominator * facjk * facij;
+              acc::sum_in_place(&_energy, &_loop_energy);
             } // i
           } // j
         } // k
       } // ii
     } // jj
   } // kk
-  return std::real(energy);
+  const double real_part = acc::real(_energy);
+  acc::sum_in_place(energy, &real_part);
 }
 
 
 template <typename F>
-double getEnergySame
+__MAYBE_GLOBAL__
+void getEnergySame
   ( F const epsabc
   , size_t const No
   , F* const epsi
   , F* const Tijk
   , F* const Zijk
+  , double* energy
   ) {
   constexpr size_t blockSize = 16;
-  F energy = F(0.);
+  F _energy = F{0.};
   for (size_t kk=0; kk<No; kk+=blockSize){
-    const size_t kend( std::min( kk+blockSize, No) );
+    const size_t kend( MIN( kk+blockSize, No) );
     for (size_t jj(kk); jj<No; jj+=blockSize){
-      const size_t jend( std::min( jj+blockSize, No) );
+      const size_t jend( MIN( jj+blockSize, No) );
       for (size_t ii(jj); ii<No; ii+=blockSize){
-        const size_t iend( std::min( ii+blockSize, No) );
+        const size_t iend( MIN( ii+blockSize, No) );
         for (size_t k(kk); k < kend; k++){
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
           for(size_t j(jstart); j < jend; j++){
-            const F facjk( j == k ? F(0.5) : F(1.0));
+            const F facjk( j == k ? F{0.5} : F{1.0});
             const F ej(epsi[j]);
             const size_t istart = ii > j ? ii : j;
             for(size_t i(istart); i < iend; i++){
               const F
                 ei(epsi[i])
-              , facij ( i==j ? F(0.5) : F(1.0))
-              , denominator(epsabc - ei - ej - ek)
+              , facij ( i==j ? F{0.5} : F{1.0})
+              , eijk(acc::add(acc::add(ei, ej), ek))
+              , denominator(acc::sub(epsabc, eijk))
               , U(Zijk[i + No*j + No*No*k])
               , V(Zijk[j + No*k + No*No*i])
               , W(Zijk[k + No*i + No*No*j])
-              , A(maybeConjugate<F>(Tijk[i + No*j + No*No*k]))
-              , B(maybeConjugate<F>(Tijk[j + No*k + No*No*i]))
-              , C(maybeConjugate<F>(Tijk[k + No*i + No*No*j]))
-              , value
-                = F(3.0) * ( A * U
-                           + B * V
-                           + C * W
-                           )
-                - ( A + B + C ) * ( U + V + W )
+              , A(acc::maybeConjugateScalar(Tijk[i + No*j + No*No*k]))
+              , B(acc::maybeConjugateScalar(Tijk[j + No*k + No*No*i]))
+              , C(acc::maybeConjugateScalar(Tijk[k + No*i + No*No*j]))
+              , ABC = acc::add(A, acc::add(B, C))
+              , UVW = acc::add(U, acc::add(V, W))
+              , AU = acc::prod(A, U)
+              , BV = acc::prod(B, V)
+              , CW = acc::prod(C, W)
+              , AU_and_BV_and_CW = acc::add(acc::add(AU, BV), CW)
+              , value = acc::sub(acc::prod(F{3.0}, AU_and_BV_and_CW),
+                                 acc::prod(ABC, UVW))
+              , _loop_energy = acc::prod(acc::prod(F{2.0}, value),
+                                         acc::div(acc::prod(facjk, facij),
+                                                  denominator))
               ;
-              energy += F(2.0) * value / denominator * facjk * facij;
+
+              acc::sum_in_place(&_energy, &_loop_energy);
             } // i
           } // j
         } // k
       } // ii
     } // jj
   } // kk
-  return std::real(energy);
+  const double real_part = acc::real(_energy);
+  acc::sum_in_place(energy, &real_part);
 }
 // Energy:2 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:3]]
 // instantiate double
 template
-double getEnergyDistinct
-  ( double const epsabc
+__MAYBE_GLOBAL__
+void getEnergyDistinct
+  ( DataFieldType<double> const epsabc
   , size_t const No
-  , double* const epsi
-  , double* const Tijk
-  , double* const Zijk
+  , DataFieldType<double>* const epsi
+  , DataFieldType<double>* const Tijk
+  , DataFieldType<double>* const Zijk
+  , DataFieldType<double>* energy
   );
 
 template
-double getEnergySame
-  ( double const epsabc
+__MAYBE_GLOBAL__
+void getEnergySame
+  ( DataFieldType<double> const epsabc
   , size_t const No
-  , double* const epsi
-  , double* const Tijk
-  , double* const Zijk
+  , DataFieldType<double>* const epsi
+  , DataFieldType<double>* const Tijk
+  , DataFieldType<double>* const Zijk
+  , DataFieldType<double>* energy
   );
 
 // instantiate Complex
 template
-double getEnergyDistinct
-  ( Complex const epsabc
+__MAYBE_GLOBAL__
+void getEnergyDistinct
+  ( DataFieldType<Complex> const epsabc
   , size_t const No
-  , Complex* const epsi
-  , Complex* const Tijk
-  , Complex* const Zijk
+  , DataFieldType<Complex>* const epsi
+  , DataFieldType<Complex>* const Tijk
+  , DataFieldType<Complex>* const Zijk
+  , DataFieldType<double>* energy
   );
 
 template
-double getEnergySame
-  ( Complex const epsabc
+__MAYBE_GLOBAL__
+void getEnergySame
+  ( DataFieldType<Complex> const epsabc
   , size_t const No
-  , Complex* const epsi
-  , Complex* const Tijk
-  , Complex* const Zijk
+  , DataFieldType<Complex>* const epsi
+  , DataFieldType<Complex>* const Tijk
+  , DataFieldType<Complex>* const Zijk
+  , DataFieldType<double>* energy
   );
 // Energy:3 ends here
 
@@ -360,18 +314,26 @@ double getEnergySame
       const size_t ijk = i + j*No + k*NoNo;
 
 #ifdef HAVE_CUDA
-#  define GO(__TPH, __VABIJ)                                          \
-    {                                                                 \
-      const DataFieldType<F> product                                  \
-            = cuda::multiply<DataFieldType<F>>((__TPH), (__VABIJ));   \
-      cuda::sum_in_place<DataFieldType<F>>(&Zijk[ijk], &product);     \
-    }
+
+#define GO(__TPH, __VABIJ)                              \
+  do {                                                  \
+    const DataFieldType<F>                              \
+      product = acc::prod<DataFieldType<F>>((__TPH),    \
+                                            (__VABIJ)); \
+    acc::sum_in_place<DataFieldType<F>>(&Zijk[ijk],     \
+                                        &product);      \
+  } while (0)
+
 #else
-#  define GO(__TPH, __VABIJ) Zijk[ijk] += (__TPH) * (__VABIJ);
+
+#define GO(__TPH, __VABIJ) Zijk[ijk] += (__TPH) * (__VABIJ)
+
 #endif
-      GO(Tph[ a + i * Nv ], VBCij[ j + k * No ])
-      GO(Tph[ b + j * Nv ], VACij[ i + k * No ])
-      GO(Tph[ c + k * Nv ], VABij[ i + j * No ])
+
+      GO(Tph[ a + i * Nv ], VBCij[ j + k * No ]);
+      GO(Tph[ b + j * Nv ], VACij[ i + k * No ]);
+      GO(Tph[ c + k * Nv ], VABij[ i + j * No ]);
+
 #undef GO
     } // for loop j
   }
@@ -480,7 +442,7 @@ double getEnergySame
                   )
 #define MAYBE_CONJ(_conj, _buffer)                                \
   do {                                                            \
-    cuda::maybeConjugate<<<                                       \
+    acc::maybeConjugate<<<                                        \
                                                                   \
                             Atrip::kernelDimensions.ooo.blocks,   \
                                                                   \
@@ -564,8 +526,8 @@ double getEnergySame
       ths = Atrip::kernelDimensions.ooo.threads;
 
 #if !defined(ATRIP_ONLY_DGEMM)
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #endif
 
 #else
@@ -581,7 +543,7 @@ double getEnergySame
     // Set Tijk to zero
 #if defined(HAVE_CUDA) && !defined(ATRIP_ONLY_DGEMM)
     WITH_CHRONO("double:reorder",
-                cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
+                acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
                                            NoNoNo);
                 )
 #else
@@ -589,7 +551,7 @@ double getEnergySame
       for (size_t k = 0; k < NoNoNo; k++) {
         Tijk[k] = DataFieldType<F>{0.0};
        })
-#endif
+#endif /* defined(HAVE_CUDA) && !defined(ATRIP_ONLY_DGEMM) */
 
 
 #if defined(ATRIP_ONLY_DGEMM)
@@ -597,7 +559,7 @@ double getEnergySame
 #undef REORDER
 #define MAYBE_CONJ(a, b) do {} while(0)
 #define REORDER(i, j, k) do {} while(0)
-#endif
+#endif /* defined(ATRIP_ONLY_DGEMM) */
 
     // HOLES
     WITH_CHRONO("doubles:holes",
@@ -690,7 +652,7 @@ double getEnergySame
 #else
     free(_vhhh);
     free(_t_buffer);
-#endif
+#endif  /* defined(HAVE_CUDA) */
   }
 
   #undef REORDER
@@ -741,7 +703,7 @@ double getEnergySame
       }
 
     }
-#endif
+#endif /* defined(ATRIP_USE_DGEMM) */
   }
 
 
