@@ -147,22 +147,28 @@ void getEnergyDistinct
                 , D(acc::maybeConjugateScalar(Tijk[j + No*k + No*No*i]))
                 , E(acc::maybeConjugateScalar(Tijk[k + No*i + No*No*j]))
                 , _F(acc::maybeConjugateScalar(Tijk[k + No*j + No*No*i]))
+                , AU = acc::prod(A, U)
+                , BV = acc::prod(B, V)
+                , CW = acc::prod(C, W)
+                , DX = acc::prod(D, X)
+                , EY = acc::prod(E, Y)
+                , FZ = acc::prod(_F, Z)
+                , UXY = acc::add(U, acc::add(X, Y))
+                , VWZ = acc::add(V, acc::add(W, Z))
+                , ADE = acc::add(A, acc::add(D, E))
+                , BCF = acc::add(B, acc::add(C, _F))
                 // I just might as well write this in CL
-                , _first =  acc::add(acc::prod(A, U),
-                                     acc::add(acc::prod(B, V),
-                                              acc::add(acc::prod(C, W),
-                                                       acc::add(acc::prod(D, X),
-                                                                acc::add(acc::prod(E, Y),
-                                                                         acc::prod(_F, Z))))))
-                , _second = acc::prod(acc::sub(acc::add(U, acc::add(X, Y)),
-                                               acc::prod(F{-2.0},
-                                                         acc::add(V, acc::add(W, Z)))),
-                                      acc::add(A, acc::add(D, E)))
-                , _third = acc::prod(acc::sub(acc::add(V, acc::add(W, Z)),
-                                              acc::prod(F{-2.0},
-                                                        acc::add(U,
-                                                                 acc::add(X, Y)))),
-                                     acc::add(B, acc::add(C, _F)))
+                , _first =  acc::add(AU,
+                                     acc::add(BV,
+                                              acc::add(CW,
+                                                       acc::add(DX,
+                                                                acc::add(EY, FZ)))))
+                , _second = acc::prod(acc::sub(UXY,
+                                               acc::prod(F{-2.0}, VWZ)),
+                                      ADE)
+                , _third = acc::prod(acc::sub(VWZ,
+                                              acc::prod(F{-2.0}, UXY)),
+                                     BCF)
                 , value = acc::add(acc::prod(F{3.0}, _first),
                                    acc::add(_second,
                                             _third))
