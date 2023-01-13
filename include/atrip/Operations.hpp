@@ -47,7 +47,7 @@ namespace acc {
 #endif /*  defined(HAVE_CUDA) */
 
   template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__
+  __MAYBE_GLOBAL__
   void maybeConjugate(F* to, F* from, size_t n) {
     for (size_t i = 0; i < n; ++i) {
       to[i] = maybeConjugateScalar<F>(from[i]);
