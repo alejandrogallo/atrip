@@ -558,12 +558,14 @@ void getEnergySame
                 acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
                                            NoNoNo);
                 )
-#else
+#endif
+
+#if !defined(HAVE_CUDA)
     WITH_CHRONO("double:reorder",
       for (size_t k = 0; k < NoNoNo; k++) {
         Tijk[k] = DataFieldType<F>{0.0};
        })
-#endif /* defined(HAVE_CUDA) && !defined(ATRIP_ONLY_DGEMM) */
+#endif /* !defined(HAVE_CUDA) */
 
 
 #if defined(ATRIP_ONLY_DGEMM)
