@@ -533,11 +533,15 @@ void getEnergySame
 //                        cuMemAlloc((CUdeviceptr*)&_vhhh,
 //                                   NoNoNo * sizeof(DataFieldType<F>)));
 //                )
-//    const size_t
-//      bs = Atrip::kernelDimensions.ooo.blocks,
-//      ths = Atrip::kernelDimensions.ooo.threads;
-    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+#if !defined(ATRIP_ONLY_DGEMM)
+    // we still have to zero this
+    const size_t
+      bs = Atrip::kernelDimensions.ooo.blocks,
+      ths = Atrip::kernelDimensions.ooo.threads;
+    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+#endif
+
 #else
     DataFieldType<F>* _t_buffer = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
     DataFieldType<F>* _vhhh = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
