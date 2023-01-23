@@ -445,6 +445,34 @@ template <typename F=double>
                      std::inserter(freePointers, freePointers.begin()),
                      [](DataPtr<F> ptr) { return ptr; });
 
+#if defined(HAVE_CUDA)
+      LOG(1,"Atrip") << "warming communication up " << slices.size() << "\n";
+￼      WITH_CHRONO("cuda:warmup",
+                   int nRanks=Atrip::np, requestCount=0;
+                   int nSends=sliceBuffers.size()*nRanks;
+                   MPI_Request *requests = (MPI_Request*) malloc(nSends*2 * sizeof(MPI_Request));
+                   MPI_Status *statuses = (MPI_Status*) malloc(nSends*2 * sizeof(MPI_Status));
+                   for (int sliceId=0; sliceId<sliceBuffers.size(); sliceId++){
+                     for (int rankId=0; rankId<nRanks; rankId++){
+                       MPI_Isend((void*)SOURCES_DATA(sources[0]),
+                                 sliceSize,
+                                 traits::mpi::datatypeOf<F>(),
+                                 rankId,
+                                 100,
+                                 universe,
+                                 &requests[requestCount++]);
+                       MPI_Irecv((void*)sliceBuffers[sliceId],
+                                 sliceSize,
+                                 traits::mpi::datatypeOf<F>(),
+                                 rankId,
+                                 100,
+                                 universe,
+                                 &requests[requestCount++]);
+                     }
+                   }
+                   MPI_Waitall(nSends*2, requests, statuses);
+                  )
+#endif
 
 
       LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
