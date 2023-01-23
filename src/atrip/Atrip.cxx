@@ -688,7 +688,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 #if defined(HAVE_CUDA)
       double *tupleEnergy;
       cuMemAlloc((DataPtr<double>*)&tupleEnergy, sizeof(double));
-#elif
+#else
       double _tupleEnergy(0.);
       double *tupleEnergy = &_tupleEnergy;
 #endif /* defined(HAVE_CUDA) */
@@ -727,7 +727,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         cuMemcpyDtoH((void*)&host_tuple_energy,
                      (DataPtr<double>)tupleEnergy,
                      sizeof(double));
-#elif
+#else
         double host_tuple_energy = *tupleEnergy;
 #endif /* defined(HAVE_CUDA) */
 

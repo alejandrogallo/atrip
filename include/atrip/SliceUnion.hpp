@@ -418,6 +418,22 @@ template <typename F=double>
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
 
+#if defined(ATRIP_SOURCES_IN_GPU)
+      for (auto& ptr: sources) {
+        const CUresult sourceError =
+          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
+        if (ptr == 0UL) {
+          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR SOURCES";
+        }
+        if (sourceError != CUDA_SUCCESS) {
+          std::stringstream s;
+          s << "Error allocating memory for sources "
+            << "code " << sourceError << "\n";
+          throw s.str();
+        }
+      }
+#endif
+
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
         const CUresult error =
