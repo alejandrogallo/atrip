@@ -202,7 +202,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   _CHECK_CUDA_SUCCESS("Zijk",
                       cuMemAlloc(&Zijk, sizeof(F) * No * No * No));
 #else
-  std::vector<F> &Tai = _Tai, &epsi = _epsi, &epsa = _epsa;
+  DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data(), epsa = _epsa.data();
   Zijk = (DataFieldType<F>*)malloc(No*No*No * sizeof(DataFieldType<F>));
   Tijk = (DataFieldType<F>*)malloc(No*No*No * sizeof(DataFieldType<F>));
 #endif
@@ -693,7 +693,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                                       (DataFieldType<F>*)Tai,
 #else
       singlesContribution<F>(No, Nv, abc[0], abc[1], abc[2],
-                             Tai.data(),
+                             Tai,
 #endif
                              (DataFieldType<F>*)abhh.unwrapSlice(Slice<F>::AB,
                                                                  abc),
@@ -733,18 +733,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                                 1, 1, // for cuda
                                 _epsabc,
                                 No,
+#if defined(HAVE_CUDA)
                                 (DataFieldType<F>*)epsi,
                                 (DataFieldType<F>*)Tijk,
                                 (DataFieldType<F>*)Zijk,
+#else
+                                epsi,
+                                Tijk,
+                                Zijk,
+#endif
                                 tupleEnergy);
                   } else {
                     ACC_FUNCALL(getEnergySame<DataFieldType<F>>,
                                 1, 1, // for cuda
                                 _epsabc,
                                 No,
+#if defined(HAVE_CUDA)
                                 (DataFieldType<F>*)epsi,
                                 (DataFieldType<F>*)Tijk,
                                 (DataFieldType<F>*)Zijk,
+#else
+                                epsi,
+                                Tijk,
+                                Zijk,
+#endif
                                 tupleEnergy);
                   })
 
