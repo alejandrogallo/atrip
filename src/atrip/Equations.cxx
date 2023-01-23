@@ -538,8 +538,8 @@ void getEnergySame
     const size_t
       bs = Atrip::kernelDimensions.ooo.blocks,
       ths = Atrip::kernelDimensions.ooo.threads;
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #endif
 
 #else
