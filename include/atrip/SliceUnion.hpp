@@ -405,6 +405,7 @@ template <typename F=double>
               , sliceSize(std::accumulate(sliceLength.begin(),
                                           sliceLength.end(),
                                           1UL, std::multiplies<size_t>()))
+
 #if defined(ATRIP_SOURCES_IN_GPU)
               , sources(rankMap.nSources())
 #else
@@ -417,6 +418,23 @@ template <typename F=double>
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
+        printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
+
+#if defined(ATRIP_SOURCES_IN_GPU)
+      for (auto& ptr: sources) {
+        const CUresult sourceError =
+          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
+        if (ptr == 0UL) {
+          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR SOURCES";
+        }
+        if (sourceError != CUDA_SUCCESS) {
+          std::stringstream s;
+          s << "Error allocating memory for sources "
+            << "code " << sourceError << "\n";
+          throw s.str();
+        }
+      }
+#endif
 
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
@@ -446,6 +464,35 @@ template <typename F=double>
                      [](DataPtr<F> ptr) { return ptr; });
 
 
+#if defined(HAVE_CUDA)
+//
+//      WITH_CHRONO("cuda:warmup",
+//              int nRanks=4, requestCount=0;
+//              int nSends=sliceBuffers.size()*nRanks;
+//              MPI_Request *requests = (MPI_Request*) malloc(nSends*2 * sizeof(MPI_Request));
+//              MPI_Status *statuses = (MPI_Status*) malloc(nSends*2 * sizeof(MPI_Status));
+//              for (int sliceId=0; sliceId<sliceBuffers.size(); sliceId++){
+//                for (int rankId=0; rankId<nRanks; rankId++){
+//                      MPI_Isend((void*)SOURCES_DATA(sources[0]),
+//                                sliceSize,
+//                                traits::mpi::datatypeOf<F>(),
+//                                rankId,
+//                                100,
+//                                universe,
+//                                &requests[requestCount++]);
+//                        MPI_Irecv((void*)sliceBuffers[sliceId],
+//                                  sliceSize,
+//                                  traits::mpi::datatypeOf<F>(),
+//                                  rankId,
+//                                  100,
+//                                  universe,
+//                                  &requests[requestCount++]);
+//                  }
+//               }
+//              MPI_Waitall(nSends*2, requests, statuses);
+//      )
+//
+#endif 
 
       LOG(1,"Atrip") << "#slices " << slices.size() << "\n";
       WITH_RANK << "#slices[0] " << slices[0].size << "\n";
@@ -504,6 +551,15 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
+#if defined(HAVE_CUDA)
+      ncclResult_t ncclError;
+      ncclError = ncclSend((void*)SOURCES_DATA(sources[info.from.source]),
+                sliceSize,
+                Atrip::getNcclType(F {}),
+                otherRank,
+                Atrip::nccl_communicator,
+                0);
+#else
       MPI_Isend((void*)SOURCES_DATA(sources[info.from.source]),
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),
@@ -511,6 +567,8 @@ template <typename F=double>
                 tag,
                 universe,
                 &request);
+
+#endif
       WITH_CRAZY_DEBUG
       WITH_RANK << "sent to " << otherRank << "\n";
 
@@ -527,21 +585,26 @@ template <typename F=double>
       if (slice.info.state == Slice<F>::Fetch) { // if-1
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
-#if defined(HAVE_CUDA)
-#  if !defined(ATRIP_CUDA_AWARE_MPI) && defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
+#  if !defined(ATRIP_CUDA_AWARE_MPI) 
 #    error "You need CUDA aware MPI to have slices on the GPU"
 #  endif
-        slice.mpi_data = (F*)malloc(sizeof(F) * slice.size);
-        MPI_Irecv(slice.mpi_data,
+      ncclResult_t ncclError;
+      ncclError = ncclRecv((void*)slice.data,
+                slice.size,
+                Atrip::getNcclType(F {}),
+                info.from.rank,
+                Atrip::nccl_communicator,
+                0);
 #else
         MPI_Irecv(slice.data,
-#endif
                   slice.size,
                   traits::mpi::datatypeOf<F>(),
                   info.from.rank,
                   tag,
                   universe,
                   &slice.request);
+#endif
        } // if-1
     } // receive
 

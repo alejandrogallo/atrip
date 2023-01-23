@@ -23,6 +23,9 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 
+#include <nccl.h>
+#include <nvToolsExt.h>
+
 using namespace atrip;
 #if defined(HAVE_CUDA)
 #include <atrip/CUDA.hpp>
@@ -38,6 +41,7 @@ typename Atrip::CudaContext Atrip::cuda;
 typename Atrip::KernelDimensions Atrip::kernelDimensions;
 #endif
 MPI_Comm Atrip::communicator;
+ncclComm_t Atrip::nccl_communicator;
 Timings Atrip::chrono;
 
 // user printing block
@@ -52,9 +56,17 @@ void Atrip::init(MPI_Comm world)  {
   MPI_Comm_size(world, (int*)&Atrip::np);
 }
 
+// TODO -- is there a better place for these?
+ncclDataType_t Atrip::getNcclType(const double &t) {
+    return ncclFloat32;
+}
+ncclDataType_t Atrip::getNcclType(const float &t) {
+    return ncclFloat64;
+}
+
 template <typename F>
 Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
-
+  nvtxRangePushA("Atrip::run");
   const size_t np = Atrip::np;
   const size_t rank = Atrip::rank;
   MPI_Comm universe = Atrip::communicator;
@@ -144,6 +156,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     }
     MPI_Barrier(universe);
   }
+
+  // Initialise nccl. This needs to be after the gpu initialisation above
+  ncclUniqueId id;
+  if (Atrip::rank == 0) ncclGetUniqueId(&id);
+  MPI_Bcast(&id, sizeof(id), MPI_BYTE, 0, universe);
+  ncclCommInitRank(&Atrip::nccl_communicator, Atrip::np, id, Atrip::rank);
 
   if (in.oooThreads > 0) {
     Atrip::kernelDimensions.ooo.threads = in.oooThreads;
@@ -258,6 +276,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   // all tensors
   std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
+#ifdef HAVE_CUDA
+    // TODO: free buffers
+    DataFieldType<F>* _t_buffer;
+    DataFieldType<F>* _vhhh;
+    WITH_CHRONO("double:cuda:alloc",
+    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
+                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
+                                   No*No*No * sizeof(DataFieldType<F>)));
+    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
+                        cuMemAlloc((CUdeviceptr*)&_vhhh,
+                                   No*No*No * sizeof(DataFieldType<F>)));
+                )
+    //const size_t
+     // bs = Atrip::kernelDimensions.ooo.blocks,
+      //ths = Atrip::kernelDimensions.ooo.threads;
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+#endif
+
   // get tuples for the current rank
   TuplesDistribution *distribution;
 
@@ -295,7 +332,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     = [&tuplesList, distribution](size_t const i) {
         return distribution->tupleIsFake(tuplesList[i]);
       };
-
 
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
@@ -355,6 +391,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
   auto doIOPhase
     = [&unions, &rank, &np, &universe] (Database const& db) {
+    // matching ncclGroupEnd goes where MPI_Wait is used for non-nccl version
+    ncclGroupStart();
 
     const size_t localDBLength = db.size() / np;
 
@@ -434,6 +472,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     } // otherRank
 
+    ncclGroupEnd();
 
   };
 
@@ -498,6 +537,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ; i++, iteration++
       ) {
     Atrip::chrono["iterations"].start();
+    char nvtx_name[60];
+    sprintf(nvtx_name, "iteration: %d", i);
+    nvtxRangePushA(nvtx_name);
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
@@ -507,6 +549,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     WITH_CHRONO("mpi:barrier",
       if (in.barrier) MPI_Barrier(universe);
     ))
+
 
 
     // write checkpoints
@@ -639,7 +682,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                                          tabhh.unwrapSlice(Slice<F>::AC, abc),
                                          tabhh.unwrapSlice(Slice<F>::BC, abc),
                                          // -- TIJK
-                                         (DataFieldType<F>*)Tijk);
+                                         (DataFieldType<F>*)Tijk
+#if defined(HAVE_CUDA)
+                                         // -- tmp buffers
+                                         ,(DataFieldType<F>*)_t_buffer
+                                         ,(DataFieldType<F>*)_vhhh
+#endif
+                                         );
+                                        
                   WITH_RANK << iteration << "-th doubles done\n";
       ))
     }
@@ -775,8 +825,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     if (in.maxIterations != 0 && i >= in.maxIterations) break;
 
+    //AMB: debugging only
+    WITH_CHRONO("mpi:barrier",
+      MPI_Barrier(universe);
+    );
+
+    nvtxRangePop();
   }
     // END OF MAIN LOOP
+
 
 #if defined(HAVE_CUDA)
   cuMemFree(Tai);
@@ -831,11 +888,19 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   LOG(0, "atrip:flops(iterations)")
     << nIterations * doublesFlops / Atrip::chrono["iterations"].count() << "\n";
 
+  nvtxRangePop();
+
   // TODO: change the sign in  the getEnergy routines
+
+  // TODO: move to cleanup routine?
+  ncclCommDestroy(Atrip::nccl_communicator);
+
   return { - globalEnergy };
 
 }
 // instantiate
 template Atrip::Output Atrip::run(Atrip::Input<double> const& in);
-template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
+
+// TODO: nccl doesn't use Complex type, need to handle with cast 
+//template Atrip::Output Atrip::run(Atrip::Input<Complex> const& in);
 // Main:1 ends here

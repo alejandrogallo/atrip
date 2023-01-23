@@ -19,6 +19,9 @@
 #include <map>
 #include <chrono>
 
+#include <nvToolsExt.h>
+#include <nccl.h>
+
 #if defined(__NVCC__)
 #  pragma nv_diagnostic_push
 #  if defined __NVCC_DIAG_PRAGMA_SUPPORT__
@@ -65,9 +68,11 @@ namespace atrip {
 
 // [[file:~/cuda/atrip/atrip.org::*Chrono][Chrono:1]]
 #define WITH_CHRONO(__chrono_name, ...)         \
+  nvtxRangePushA(__chrono_name); \
   Atrip::chrono[__chrono_name].start();         \
   __VA_ARGS__                                   \
-  Atrip::chrono[__chrono_name].stop();
+  Atrip::chrono[__chrono_name].stop(); \
+  nvtxRangePop(); 
 
 struct Timer {
   using Clock = std::chrono::high_resolution_clock;

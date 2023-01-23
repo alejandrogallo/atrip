@@ -97,6 +97,11 @@ void singlesContribution
     // -- TIJK
     // , DataPtr<F> Tijk
     , DataFieldType<F>* Tijk_
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<F>* _t_buffer
+    , DataFieldType<F>* _vhhh 
+#endif
     );
 // Doubles contribution:1 ends here
 

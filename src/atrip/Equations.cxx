@@ -151,11 +151,12 @@ namespace cuda {
      KJI
     };
 
-  /*
+  /* 
    * Please the c++ type checker and template creator
    * in order to have an argument in the signature of
    * the function  that helps the compiler know which
    * instantiation it should take.
+   * 
    */
   template <typename F, reordering_t R>
   struct reorder_proxy {};
@@ -433,22 +434,28 @@ double getEnergySame
     // -- TIJK
     // , DataPtr<F> Tijk_
     , DataFieldType<F>* Tijk_
-    ) {
-
-    const size_t NoNo = No*No;
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<F>* _t_buffer
+    , DataFieldType<F>* _vhhh 
+#endif
+     ) {
+    const size_t a = abc[0], b = abc[1], c = abc[2]
+              , NoNo = No*No
+              ;
 
     DataFieldType<F>* Tijk = (DataFieldType<F>*)Tijk_;
 
 #if defined(ATRIP_USE_DGEMM)
 #if defined(HAVE_CUDA)
-#define REORDER(__II, __JJ, __KK)               \
-  reorder<<<bs, ths>>>(reorder_proxy<           \
-                       DataFieldType<F>,        \
-                       __II ## __JJ ## __KK     \
-                       >{},                     \
-                       No,                      \
-                       Tijk,                    \
-                       _t_buffer)
+#define REORDER(__II, __JJ, __KK)                           \
+  reorder<<<bs, ths>>>(reorder_proxy<                       \
+                       DataFieldType<F>,                    \
+                       __II ## __JJ ## __KK                 \
+                       >{},                                 \
+                       No,                                  \
+                       Tijk,                                \
+                       _t_buffer);
 #define DGEMM_PARTICLES(__A, __B)               \
   atrip::xgemm<F>("T",                          \
                   "N",                          \
@@ -478,18 +485,11 @@ double getEnergySame
                   _t_buffer,                    \
                   (int const*)&NoNo             \
                   )
-#define MAYBE_CONJ(_conj, _buffer)                                \
-  do {                                                            \
-    cuda::maybeConjugate<<<                                       \
-                                                                  \
-                            Atrip::kernelDimensions.ooo.blocks,   \
-                                                                  \
-                              Atrip::kernelDimensions.ooo.threads \
-                                                                  \
-                        >>>((DataFieldType<F>*)_conj,             \
-                            (DataFieldType<F>*)_buffer,           \
-                            NoNoNo);                              \
-  } while (0)
+#define MAYBE_CONJ(_conj, _buffer)                                      \
+  cuda::maybeConjugate<<<                                               \
+    Atrip::kernelDimensions.ooo.blocks,                                 \
+    Atrip::kernelDimensions.ooo.threads                                 \
+    >>>((DataFieldType<F>*)_conj, (DataFieldType<F>*)_buffer, NoNoNo);
 
 
 // END CUDA ////////////////////////////////////////////////////////////////////
@@ -504,9 +504,7 @@ double getEnergySame
 #define REORDER(__II, __JJ, __KK)               \
   reorder(reorder_proxy<DataFieldType<F>,       \
           __II ## __JJ ## __KK >{},             \
-          No,                                   \
-          Tijk,                                 \
-          _t_buffer)
+          No, Tijk, _t_buffer);
 #define DGEMM_PARTICLES(__A, __B)               \
   atrip::xgemm<F>("T",                          \
                   "N",                          \
@@ -537,37 +535,29 @@ double getEnergySame
                   _t_buffer,                    \
                   (int const*)&NoNo             \
                   )
-#define MAYBE_CONJ(_conj, _buffer)              \
-  do {                                          \
-    for (size_t __i = 0; __i < NoNoNo; ++__i) { \
-      _conj[__i]                                \
-        = maybeConjugate<F>(_buffer[__i]);      \
-    }                                           \
-  } while (0)
+#define MAYBE_CONJ(_conj, _buffer)                \
+  for (size_t __i = 0; __i < NoNoNo; ++__i)       \
+    _conj[__i] = maybeConjugate<F>(_buffer[__i]);
 #endif
 
     F one{1.0}, m_one{-1.0}, zero{0.0};
     const size_t NoNoNo = No*NoNo;
 #ifdef HAVE_CUDA
-    DataFieldType<F>* _t_buffer;
-    DataFieldType<F>* _vhhh;
-    WITH_CHRONO("double:cuda:alloc",
-    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
-                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
-                                   NoNoNo * sizeof(DataFieldType<F>)));
-    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
-                        cuMemAlloc((CUdeviceptr*)&_vhhh,
-                                   NoNoNo * sizeof(DataFieldType<F>)));
-                )
-    const size_t
-      bs = Atrip::kernelDimensions.ooo.blocks,
-      ths = Atrip::kernelDimensions.ooo.threads;
-
-#if !defined(ATRIP_ONLY_DGEMM)
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
-#endif
-
+//    DataFieldType<F>* _t_buffer;
+//    DataFieldType<F>* _vhhh;
+//    WITH_CHRONO("double:cuda:alloc",
+//    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
+//                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
+//                                   NoNoNo * sizeof(DataFieldType<F>)));
+//    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
+//                        cuMemAlloc((CUdeviceptr*)&_vhhh,
+//                                   NoNoNo * sizeof(DataFieldType<F>)));
+//                )
+//    const size_t
+//      bs = Atrip::kernelDimensions.ooo.blocks,
+//      ths = Atrip::kernelDimensions.ooo.threads;
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
+    //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #else
     DataFieldType<F>* _t_buffer = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
     DataFieldType<F>* _vhhh = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
@@ -579,10 +569,10 @@ double getEnergySame
 #endif
 
     // Set Tijk to zero
-#if defined(HAVE_CUDA) && !defined(ATRIP_ONLY_DGEMM)
+#ifdef HAVE_CUDA
     WITH_CHRONO("double:reorder",
-                cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
-                                           NoNoNo);
+                //cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
+                //NoNoNo);
                 )
 #else
     WITH_CHRONO("double:reorder",
@@ -591,51 +581,43 @@ double getEnergySame
        })
 #endif
 
-
-#if defined(ATRIP_ONLY_DGEMM)
-#undef MAYBE_CONJ
-#undef REORDER
-#define MAYBE_CONJ(a, b) do {} while(0)
-#define REORDER(i, j, k) do {} while(0)
-#endif
-
     // HOLES
     WITH_CHRONO("doubles:holes",
       {
         // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
-        MAYBE_CONJ(_vhhh, VhhhC);
+        //MAYBE_CONJ(_vhhh, VhhhC)
         WITH_CHRONO("doubles:holes:1",
                     DGEMM_HOLES(_vhhh, TABhh, "N");
-                    REORDER(I, K, J);
+                    //REORDER(I, K, J)
         )
         // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
         WITH_CHRONO("doubles:holes:2",
                     DGEMM_HOLES(_vhhh, TABhh, "T");
-                    REORDER(J, K, I);
+                    //REORDER(J, K, I)
         )
 
         // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
-          MAYBE_CONJ(_vhhh, VhhhB);
+        //MAYBE_CONJ(_vhhh, VhhhB)
         WITH_CHRONO("doubles:holes:3",
                     DGEMM_HOLES(_vhhh, TAChh, "N");
-                    REORDER(I, J, K);
+                    //REORDER(I, J, K)
         )
         // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
         WITH_CHRONO("doubles:holes:4",
                     DGEMM_HOLES(_vhhh, TAChh, "T");
-                    REORDER(K, J, I);
+                    //REORDER(K, J, I)
         )
 
         // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
-          MAYBE_CONJ(_vhhh, VhhhA);
+        //MAYBE_CONJ(_vhhh, VhhhA)
         WITH_CHRONO("doubles:holes:5",
                     DGEMM_HOLES(_vhhh, TBChh, "N");
-                    REORDER(J, I, K);
+                    //REORDER(J, I, K)
         )
         // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
         WITH_CHRONO("doubles:holes:6",
                     DGEMM_HOLES(_vhhh, TBChh, "T");
-                    REORDER(K, I, J);
+                    //REORDER(K, I, J)
         )
       }
     )
@@ -647,32 +629,32 @@ double getEnergySame
         // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
         WITH_CHRONO("doubles:particles:1",
                     DGEMM_PARTICLES(TAphh, VBCph);
-                    REORDER(I, J, K);
+                    //REORDER(I, J, K)
         )
         // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
         WITH_CHRONO("doubles:particles:2",
                     DGEMM_PARTICLES(TAphh, VCBph);
-                    REORDER(I, K, J);
+                    //REORDER(I, K, J)
         )
         // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
         WITH_CHRONO("doubles:particles:3",
                     DGEMM_PARTICLES(TCphh, VABph);
-                    REORDER(K, I, J);
+                    //REORDER(K, I, J)
         )
         // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
         WITH_CHRONO("doubles:particles:4",
                     DGEMM_PARTICLES(TCphh, VBAph);
-                    REORDER(K, J, I);
+                    //REORDER(K, J, I)
         )
         // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
         WITH_CHRONO("doubles:particles:5",
                     DGEMM_PARTICLES(TBphh, VACph);
-                    REORDER(J, I, K);
+                    //REORDER(J, I, K)
         )
         // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
         WITH_CHRONO("doubles:particles:6",
                     DGEMM_PARTICLES(TBphh, VCAph);
-                    REORDER(J, K, I);
+                    //REORDER(J, K, I)
         )
       }
     )
@@ -681,12 +663,12 @@ double getEnergySame
 #ifdef HAVE_CUDA
     // we need to synchronize here since we need
     // the Tijk for next process in the pipeline
-    _CHECK_CUDA_SUCCESS("Synchronizing",
-                        cuCtxSynchronize());
-    _CHECK_CUDA_SUCCESS("Freeing _vhhh",
-                        cuMemFree((CUdeviceptr)_vhhh));
-    _CHECK_CUDA_SUCCESS("Freeing _t_buffer",
-                        cuMemFree((CUdeviceptr)_t_buffer));
+    //_CHECK_CUDA_SUCCESS("Synchronizing",
+    //                    cuCtxSynchronize());
+    //_CHECK_CUDA_SUCCESS("Freeing _vhhh",
+    //                    cuMemFree((CUdeviceptr)_vhhh));
+    //_CHECK_CUDA_SUCCESS("Freeing _t_buffer",
+    //                    cuMemFree((CUdeviceptr)_t_buffer));
 #else
     free(_vhhh);
     free(_t_buffer);
@@ -773,6 +755,12 @@ double getEnergySame
     , DataPtr<double> const TBChh
     // -- TIJK
     , DataFieldType<double>* Tijk
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<double>* _t_buffer
+    , DataFieldType<double>* _vhhh 
+#endif
+
     );
 
   template
@@ -801,6 +789,12 @@ double getEnergySame
     , DataPtr<Complex> const TBChh
     // -- TIJK
     , DataFieldType<Complex>* Tijk
+#if defined(HAVE_CUDA)
+     // -- tmp buffers
+    , DataFieldType<Complex>* _t_buffer
+    , DataFieldType<Complex>* _vhhh 
+#endif
+
     );
 // Doubles contribution:2 ends here
 
