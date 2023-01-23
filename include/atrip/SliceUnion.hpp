@@ -200,7 +200,7 @@ template <typename F=double>
                            : Slice<F>::Fetch
                            ;
           if (blank.info.state == Slice<F>::SelfSufficient) {
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
             const size_t _size = sizeof(F) * sliceSize;
             // TODO: this is code duplication with downstairs
             if (freePointers.size() == 0) {
@@ -221,7 +221,6 @@ template <typename F=double>
                                                          (void*)SOURCES_DATA(sources[from.source]),
                                                          sizeof(F) * sliceSize));
                         ))
-
 #else
             blank.data = SOURCES_DATA(sources[from.source]);
 #endif
