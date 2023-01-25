@@ -38,6 +38,8 @@ namespace acc {
   __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
   F maybeConjugateScalar(const F &a) { return a; }
 
+  // TODO: instantiate for std::complex<double>
+
 #if defined(HAVE_CUDA)
   template <>
   __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__

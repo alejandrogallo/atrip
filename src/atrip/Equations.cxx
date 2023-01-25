@@ -102,6 +102,7 @@ namespace atrip {
 #  define MIN(a, b) std::min((a), (b))
 #endif
 
+#if defined(ATRIP_NEW_ENERGY)
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
@@ -250,6 +251,131 @@ void getEnergySame
 }
 // Energy:2 ends here
 
+#else
+
+// [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
+template <typename F>
+__MAYBE_GLOBAL__
+void getEnergyDistinct
+  ( F const epsabc
+  , size_t const No
+  , F* const epsi
+  , F* const Tijk
+  , F* const Zijk
+  , double* _energy
+  ) {
+  constexpr size_t blockSize=16;
+  F energy(0.);
+  for (size_t kk=0; kk<No; kk+=blockSize){
+    const size_t kend( MIN(No, kk+blockSize) );
+    for (size_t jj(kk); jj<No; jj+=blockSize){
+      const size_t jend( MIN( No, jj+blockSize) );
+      for (size_t ii(jj); ii<No; ii+=blockSize){
+        const size_t iend( MIN( No, ii+blockSize) );
+        for (size_t k(kk); k < kend; k++){
+          const F ek(epsi[k]);
+          const size_t jstart = jj > k ? jj : k;
+          for (size_t j(jstart); j < jend; j++){
+            F const ej(epsi[j]);
+            F const facjk = j == k ? F(0.5) : F(1.0);
+            size_t istart = ii > j ? ii : j;
+            for (size_t i(istart); i < iend; i++){
+              const F
+                  ei(epsi[i])
+                , facij = i == j ? F(0.5) : F(1.0)
+                , denominator(epsabc - ei - ej - ek)
+                , U(Zijk[i + No*j + No*No*k])
+                , V(Zijk[i + No*k + No*No*j])
+                , W(Zijk[j + No*i + No*No*k])
+                , X(Zijk[j + No*k + No*No*i])
+                , Y(Zijk[k + No*i + No*No*j])
+                , Z(Zijk[k + No*j + No*No*i])
+                , A(acc::maybeConjugateScalar<F>(Tijk[i + No*j + No*No*k]))
+                , B(acc::maybeConjugateScalar<F>(Tijk[i + No*k + No*No*j]))
+                , C(acc::maybeConjugateScalar<F>(Tijk[j + No*i + No*No*k]))
+                , D(acc::maybeConjugateScalar<F>(Tijk[j + No*k + No*No*i]))
+                , E(acc::maybeConjugateScalar<F>(Tijk[k + No*i + No*No*j]))
+                , _F(acc::maybeConjugateScalar<F>(Tijk[k + No*j + No*No*i]))
+                , value
+                  = 3.0 * ( A * U
+                            + B * V
+                            + C * W
+                            + D * X
+                            + E * Y
+                            + _F * Z )
+                 + ( ( U + X + Y )
+                   - 2.0 * ( V + W + Z )
+                   ) * ( A + D + E )
+                 + ( ( V + W + Z )
+                   - 2.0 * ( U + X + Y )
+                   ) * ( B + C + _F )
+                ;
+              energy += 2.0 * value / denominator * facjk * facij;
+            } // i
+          } // j
+        } // k
+      } // ii
+    } // jj
+  } // kk
+  *_energy = acc::real(energy);
+}
+
+
+template <typename F>
+__MAYBE_GLOBAL__
+void getEnergySame
+  ( F const epsabc
+  , size_t const No
+  , F* const epsi
+  , F* const Tijk
+  , F* const Zijk
+  , double* _energy
+  ) {
+  constexpr size_t blockSize = 16;
+  F energy = F(0.);
+  for (size_t kk=0; kk<No; kk+=blockSize){
+    const size_t kend( MIN( kk+blockSize, No) );
+    for (size_t jj(kk); jj<No; jj+=blockSize){
+      const size_t jend( MIN( jj+blockSize, No) );
+      for (size_t ii(jj); ii<No; ii+=blockSize){
+        const size_t iend( MIN( ii+blockSize, No) );
+        for (size_t k(kk); k < kend; k++){
+          const F ek(epsi[k]);
+          const size_t jstart = jj > k ? jj : k;
+          for(size_t j(jstart); j < jend; j++){
+            const F facjk( j == k ? F(0.5) : F(1.0));
+            const F ej(epsi[j]);
+            const size_t istart = ii > j ? ii : j;
+            for(size_t i(istart); i < iend; i++){
+              const F
+                ei(epsi[i])
+              , facij ( i==j ? F(0.5) : F(1.0))
+              , denominator(epsabc - ei - ej - ek)
+              , U(Zijk[i + No*j + No*No*k])
+              , V(Zijk[j + No*k + No*No*i])
+              , W(Zijk[k + No*i + No*No*j])
+              , A(acc::maybeConjugateScalar<F>(Tijk[i + No*j + No*No*k]))
+              , B(acc::maybeConjugateScalar<F>(Tijk[j + No*k + No*No*i]))
+              , C(acc::maybeConjugateScalar<F>(Tijk[k + No*i + No*No*j]))
+              , value
+                = F(3.0) * ( A * U
+                           + B * V
+                           + C * W
+                           )
+                - ( A + B + C ) * ( U + V + W )
+              ;
+              energy += F(2.0) * value / denominator * facjk * facij;
+            } // i
+          } // j
+        } // k
+      } // ii
+    } // jj
+  } // kk
+  *_energy = acc::real(energy);
+}
+// Energy:2 ends here
+#endif /* defined(ATRIP_NEW_ENERGY) */
+
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:3]]
 // instantiate double
 template
@@ -274,6 +400,8 @@ void getEnergySame
   , DataFieldType<double>* energy
   );
 
+// TODO: put this back in
+#if defined(ATRIP_WITH_COMPLEX)
 // instantiate Complex
 template
 __MAYBE_GLOBAL__
@@ -297,6 +425,7 @@ void getEnergySame
   , DataFieldType<double>* energy
   );
 // Energy:3 ends here
+#endif
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles contribution:2]]
   template <typename F> __MAYBE_GLOBAL__

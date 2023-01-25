@@ -573,12 +573,15 @@ template <typename F=double>
         // TODO: do it through the slice class
         slice.info.state = Slice<F>::Dispatched;
 #if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
-#  if !defined(ATRIP_CUDA_AWARE_MPI) 
+#  if !defined(ATRIP_CUDA_AWARE_MPI)
 #    error "You need CUDA aware MPI to have slices on the GPU"
 #  endif
         MPI_Irecv((void*)slice.data,
+#elif defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+        slice.mpi_data = (F*)malloc(sizeof(F) * slice.size);
+        MPI_Irecv(slice.mpi_data,
 #else
-        MPI_Irecv(slice.data,
+        MPI_Irecv((void*)slice.data,
 #endif
                   slice.size,
                   traits::mpi::datatypeOf<F>(),
