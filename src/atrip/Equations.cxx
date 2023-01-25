@@ -25,11 +25,8 @@ namespace atrip {
 
 #if defined(HAVE_CUDA)
 #define FOR_K()                                             \
-  for (size_t kmin = blockIdx.x * blockDim.x + threadIdx.x, \
-         k = kmin,                                          \
-         idx = kmin * size * size * size;                   \
-       k < (kmin < size) ? kmin + 1 : size;                 \
-       k++)
+  const size_t k = blockIdx.x * blockDim.x + threadIdx.x; \
+  size_t idx = 0;
 #else
 #define FOR_K() for (size_t k=0, idx=0; k < size; k++)
 #endif
@@ -545,7 +542,7 @@ void getEnergySame
 #if defined(ATRIP_USE_DGEMM)
 #if defined(HAVE_CUDA)
 #define REORDER(__II, __JJ, __KK)               \
-  reorder<<<bs, ths>>>(reorder_proxy<           \
+  reorder<<<1, No>>>(reorder_proxy<           \
                        DataFieldType<F>,        \
                        __II ## __JJ ## __KK     \
                        >{},                     \
