@@ -387,6 +387,22 @@ template <typename F=double>
       }
     }
 
+    static size_t
+    getSize(const std::vector<size_t> sliceLength,
+            const std::vector<size_t> paramLength,
+            const size_t np,
+            const MPI_Comm global_world) {
+        const RankMap<F> rankMap(paramLength, np, global_world);
+        const size_t
+          nSources = rankMap.nSources(),
+          sliceSize = std::accumulate(sliceLength.begin(),
+                                      sliceLength.end(),
+                                      1UL,
+                                      std::multiplies<size_t>());
+        return nSources * sliceSize;
+      }
+
+
     // CONSTRUCTOR
     SliceUnion( std::vector<typename Slice<F>::Type> sliceTypes_
               , std::vector<size_t> sliceLength_
