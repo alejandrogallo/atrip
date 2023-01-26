@@ -21,11 +21,6 @@ namespace atrip {
   template <> double maybeConjugate(const double a) { return a; }
   template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
 
-#if defined(HAVE_CUDA)
-
-#endif
-
-
   namespace traits {
     template <typename F> bool isComplex() { return false; }
     template <> bool isComplex<double>() { return false; }

@@ -13,6 +13,8 @@
 // limitations under the License.
 
 // [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:2]]
+#include <cstring>
+
 #include<atrip/Equations.hpp>
 
 #include<atrip/CUDA.hpp>
@@ -580,13 +582,8 @@ void getEnergySame
                   )
 #define MAYBE_CONJ(_conj, _buffer)                                \
   do {                                                            \
-    acc::maybeConjugate<<<                                        \
-                                                                  \
-                            Atrip::kernelDimensions.ooo.blocks,   \
-                                                                  \
-                              Atrip::kernelDimensions.ooo.threads \
-                                                                  \
-                        >>>((DataFieldType<F>*)_conj,             \
+    acc::maybeConjugate<<<1, 1                                    \
+                       >>>((DataFieldType<F>*)_conj,              \
                             (DataFieldType<F>*)_buffer,           \
                             NoNoNo);                              \
   } while (0)
@@ -648,50 +645,31 @@ void getEnergySame
 
     F one{1.0}, m_one{-1.0}, zero{0.0};
     const size_t NoNoNo = No*NoNo;
+
+// Zeroing vectors
 #ifdef HAVE_CUDA
-//    DataFieldType<F>* _t_buffer;
-//    DataFieldType<F>* _vhhh;
-//    WITH_CHRONO("double:cuda:alloc",
-//    _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
-//                        cuMemAlloc((CUdeviceptr*)&_t_buffer,
-//                                   NoNoNo * sizeof(DataFieldType<F>)));
-//    _CHECK_CUDA_SUCCESS("Allocating _vhhh",
-//                        cuMemAlloc((CUdeviceptr*)&_vhhh,
-//                                   NoNoNo * sizeof(DataFieldType<F>)));
-//                )
+
 #if !defined(ATRIP_ONLY_DGEMM)
-    // we still have to zero this
-    const size_t
-      bs = Atrip::kernelDimensions.ooo.blocks,
-      ths = Atrip::kernelDimensions.ooo.threads;
-    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-    acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
+    {
+    const size_t elements = NoNoNo * sizeof(DataFieldType<F>)/4;
+    WITH_CHRONO("double:zeroing",
+                _CHECK_CUDA_SUCCESS("Zeroing Tijk",
+                  cuMemsetD32_v2((CUdeviceptr)Tijk, 0x00, elements));
+                _CHECK_CUDA_SUCCESS("Zeroing t buffer",
+                  cuMemsetD32_v2((CUdeviceptr)_t_buffer, 0x00, elements));
+                _CHECK_CUDA_SUCCESS("Zeroing vhhh buffer",
+                  cuMemsetD32_v2((CUdeviceptr)_vhhh, 0x00, elements));
+                )
+    }
 #endif
 
 #else
     DataFieldType<F>* _t_buffer = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
     DataFieldType<F>* _vhhh = (DataFieldType<F>*)malloc(NoNoNo * sizeof(F));
-    DataFieldType<F> zero_h{0.0};
-    for (size_t i=0; i < NoNoNo; i++) {
-      _t_buffer[i] = zero_h;
-      _vhhh[i] = zero_h;
-    }
-#endif
-
-    // Set Tijk to zero
-#if defined(HAVE_CUDA) && !defined(ATRIP_ONLY_DGEMM)
-    WITH_CHRONO("double:reorder",
-                acc::zeroing<<<bs, ths>>>((DataFieldType<F>*)Tijk,
-                                           NoNoNo);
-                )
-#endif
-
-#if !defined(HAVE_CUDA)
-    WITH_CHRONO("double:reorder",
-      for (size_t k = 0; k < NoNoNo; k++) {
-        Tijk[k] = DataFieldType<F>{0.0};
-       })
-#endif /* !defined(HAVE_CUDA) */
+    std::memset((void*)_t_buffer, 0x00, NoNoNo * sizeof(DataFieldType<F>));
+    std::memset((void*)_vhhh,     0x00, NoNoNo * sizeof(DataFieldType<F>));
+    std::memset((void*)Tijk,      0x00, NoNoNo * sizeof(DataFieldType<F>));
+#endif /* HAVE_CUDA */
 
 
 #if defined(ATRIP_ONLY_DGEMM)

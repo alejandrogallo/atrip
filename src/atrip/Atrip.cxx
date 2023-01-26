@@ -160,9 +160,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
   LOG(0,"Atrip") << "ooo blocks: "
-		 << Atrip::kernelDimensions.ooo.blocks << "\n";
+    << Atrip::kernelDimensions.ooo.blocks << "\n";
   LOG(0,"Atrip") << "ooo threads per block: "
-		 << Atrip::kernelDimensions.ooo.threads << "\n";
+    << Atrip::kernelDimensions.ooo.threads << "\n";
 #endif
 
   // allocate the three scratches, see piecuch

@@ -24,15 +24,6 @@ namespace acc {
 
   // cuda kernels
 
-  template <typename F>
-  __MAYBE_GLOBAL__
-  void zeroing(F* a, size_t n) {
-    F zero = {0};
-    for (size_t i = 0; i < n; i++) {
-      a[i] = zero;
-    }
-  }
-
   ////
   template <typename F>
   __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
