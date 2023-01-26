@@ -260,7 +260,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 #if defined(HAVE_CUDA)
     DataPtr<F> all_sources_pointer;
-    cuMemAlloc(&all_sources_pointer, total_source_size);
+    _CHECK_CUDA_SUCCESS("Allocating all_sources",
+	    cuMemAlloc(&all_sources_pointer, total_source_size));
 #else
     DataPtr<F>
       all_sources_pointer = (DataPtr<F>)malloc(total_source_size);
@@ -268,22 +269,18 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   size_t _source_pointer_idx = 0;
 
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
+
   WITH_CHRONO("nv-nv-slices",
+  DataPtr<F> offseted_pointer = all_sources_pointer;
     LOG(0,"Atrip") << "building NV x NV slices\n";
-    // TODO
-    // DataPtr<F> offseted_pointer = all_sources_pointer
-    //                             * total_source_sizes[_source_pointer_idx++];
-    ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABPH<F> abph(*in.Vppph, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe, offseted_pointer);
+    offseted_pointer += total_source_sizes[_source_pointer_idx++];
 
-    // TODO
-    // DataPtr<F> offseted_pointer = all_sources_pointer
-    //                             * total_source_sizes[_source_pointer_idx++];
-    ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    ABHH<F> abhh(*in.Vpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe, offseted_pointer);
+    offseted_pointer += total_source_sizes[_source_pointer_idx++];
 
-    // TODO
-    // DataPtr<F> offseted_pointer = all_sources_pointer
-    //                             * total_source_sizes[_source_pointer_idx++];
-    TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TABHH<F> tabhh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe, offseted_pointer);
+    offseted_pointer += total_source_sizes[_source_pointer_idx++];
   )
 
   // delete the Vppph so that we don't have a HWM situation for the NV slices
@@ -294,14 +291,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   WITH_CHRONO("nv-slices",
     LOG(0,"Atrip") << "building NV slices\n";
-    // TODO
-    // DataPtr<F> offseted_pointer = all_sources_pointer
-    //                             * total_source_sizes[_source_pointer_idx++];
-    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
-    // TODO
-    // DataPtr<F> offseted_pointer = all_sources_pointer
-    //                             * total_source_sizes[_source_pointer_idx++];
-    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe);
+    TAPHH<F> taphh(*in.Tpphh, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe, offseted_pointer);
+    offseted_pointer += total_source_sizes[_source_pointer_idx++];
+
+    HHHA<F>  hhha(*in.Vhhhp, (size_t)No, (size_t)Nv, (size_t)np, child_comm, universe, offseted_pointer);
   )
 
   // all tensors
