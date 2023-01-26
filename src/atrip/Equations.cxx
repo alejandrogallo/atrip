@@ -28,7 +28,7 @@ namespace atrip {
 #if defined(HAVE_CUDA)
 #define FOR_K()                                             \
   const size_t k = blockIdx.x * blockDim.x + threadIdx.x; \
-  size_t idx = 0;
+  size_t idx = k*size*size;
 #else
 #define FOR_K() for (size_t k=0, idx=0; k < size; k++)
 #endif
