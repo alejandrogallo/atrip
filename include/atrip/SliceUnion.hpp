@@ -411,6 +411,7 @@ template <typename F=double>
               , MPI_Comm child_world
               , MPI_Comm global_world
               , typename Slice<F>::Name name_
+              , DataPtr<F> working_memory
               , size_t nSliceBuffers = 4
               )
               : rankMap(paramLength, np, global_world)
@@ -433,37 +434,32 @@ template <typename F=double>
     { // constructor begin
 
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
-        printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
 
+        size_t sourceOffset(0);
 #if defined(ATRIP_SOURCES_IN_GPU)
       for (auto& ptr: sources) {
-        const CUresult sourceError =
-          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
-        if (ptr == 0UL) {
-          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR SOURCES";
-        }
-        if (sourceError != CUDA_SUCCESS) {
-          std::stringstream s;
-          s << "Error allocating memory for sources "
-            << "code " << sourceError << "\n";
-          throw s.str();
-        }
+	ptr = working_memory + sourceOffset*sliceSize;
+	sourceOffset += 1;
       }
 #endif
 
+     DataPtr<F> all_slices;
+     const CUresult error = cuMemAlloc(&all_slices, sizeof(F) * sliceSize * sliceBuffers.size());
+     if (all_slices == 0UL) {
+       throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
+     }
+     if (error != CUDA_SUCCESS) {
+       std::stringstream s;
+       s << "Error allocating memory for slice buffers "
+         << "code " << error << "\n";
+       throw s.str();
+     }
+
+     size_t offset(0);
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
-        const CUresult error =
-          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
-        if (ptr == 0UL) {
-          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
-        }
-        if (error != CUDA_SUCCESS) {
-          std::stringstream s;
-          s << "Error allocating memory for slice buffers "
-            << "code " << error << "\n";
-          throw s.str();
-        }
+	ptr = all_slices + offset*sliceSize;
+	offset += 1;
 #else
         ptr = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
 #endif
@@ -680,6 +676,7 @@ template <typename F=double>
     const std::vector<typename Slice<F>::Type> sliceTypes;
     std::vector< DataPtr<F> > sliceBuffers;
     std::set< DataPtr<F> > freePointers;
+    DataPtr<F> working_memory;
 
   };
 
