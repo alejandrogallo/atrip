@@ -634,13 +634,10 @@ void getEnergySame
                   _t_buffer,                    \
                   (int const*)&NoNo             \
                   )
-#define MAYBE_CONJ(_conj, _buffer)              \
-  do {                                          \
-    for (size_t __i = 0; __i < NoNoNo; ++__i) { \
-      _conj[__i]                                \
-        = maybeConjugate<F>(_buffer[__i]);      \
-    }                                           \
-  } while (0)
+#define MAYBE_CONJ(_conj, _buffer)               \
+  acc::maybeConjugate((DataFieldType<F>*)_conj,  \
+                      (DataFieldType<F>*)_buffer,\
+                      NoNoNo);
 #endif
 
     F one{1.0}, m_one{-1.0}, zero{0.0};
