@@ -158,7 +158,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-         , DataPtr<F> working_memory
+        , DataPtr<F> working_memory
         ) : SliceUnion<F>( { Slice<F>::AB, Slice<F>::BC, Slice<F>::AC
                            , Slice<F>::BA, Slice<F>::CB, Slice<F>::CA
                            }
@@ -199,7 +199,7 @@ namespace atrip {
         , size_t np
         , MPI_Comm child_world
         , MPI_Comm global_world
-         , DataPtr<F> working_memory
+        , DataPtr<F> working_memory
         ) : SliceUnion<F>( {Slice<F>::AB, Slice<F>::BC, Slice<F>::AC}
                          , {No, No} // size of the slices
                          , {Nv, Nv} // size of the parametrization
@@ -248,7 +248,7 @@ namespace atrip {
                           , child_world
                           , global_world
                           , Slice<F>::TABIJ
-		         , working_memory
+		          , working_memory
                           , 6) {
            this->init(sourceTensor);
          }
