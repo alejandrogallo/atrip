@@ -66,7 +66,7 @@ namespace atrip {
                 _CHECK_CUDA_SUCCESS("copying sources data to device",
                                     cuMemcpyHtoD(source,
                                                  toSlice.data,
-                                                 sliceSize));
+                                                 sizeof(F) * sliceSize));
                 )
 #else
     memcpy(source.data(),
