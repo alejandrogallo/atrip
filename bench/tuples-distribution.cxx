@@ -65,6 +65,18 @@ std::string name_to_string(typename Slice<F>::Name t) {
 }
 
 template <typename F>
+size_t name_to_size(typename Slice<F>::Name t, size_t No, size_t Nv) {
+  switch (t) {
+  case Slice<F>::TA: return Nv * No * No;
+  case Slice<F>::VIJKA: return No * No * No;
+  case Slice<F>::VABCI: return Nv * No;
+  case Slice<F>::TABIJ: return No * No;
+  case Slice<F>::VABIJ: return No * No;
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
 std::string state_to_string(typename Slice<F>::State t) {
   switch (t) {
   case Slice<F>::Fetch: return "Fetch";
@@ -386,7 +398,7 @@ int main(int argc, char** argv) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, mod, out_rank] (Database const& db,
+    = [&unions, &rank, &np, mod, out_rank, no, nv] (Database const& db,
                                             std::vector<LocalDatabaseElement> &to_send,
                                             size_t iteration) {
 
@@ -410,7 +422,7 @@ int main(int argc, char** argv) {
         slice.markReady();
         // u.receive(el.info, recvTag);
         if (rank == out_rank) {
-          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld)",
+          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld",
                                "RECV",
                                iteration,
                                el.info.from.rank,
@@ -420,7 +432,8 @@ int main(int argc, char** argv) {
                                type_to_string<double>(el.info.type).c_str(),
                                state_to_string<double>(el.info.state).c_str(),
                                el.info.tuple[0],
-                               el.info.tuple[1])
+                               el.info.tuple[1],
+                               name_to_size<double>(el.name, no, nv))
                     << "\n";
         }
 
@@ -441,7 +454,7 @@ int main(int argc, char** argv) {
           to_send.push_back(el);
         }
         if (rank == out_rank) {
-          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld)",
+          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld",
                                "SEND",
                                iteration,
                                rank,
@@ -451,7 +464,8 @@ int main(int argc, char** argv) {
                                type_to_string<double>(el.info.type).c_str(),
                                state_to_string<double>(el.info.state).c_str(),
                                el.info.tuple[0],
-                               el.info.tuple[1])
+                               el.info.tuple[1],
+                               name_to_size<double>(el.name, no, nv))
                     << "\n";
         }
         // u.send(otherRank, el, sendTag);
