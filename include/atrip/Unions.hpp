@@ -57,9 +57,6 @@ namespace atrip {
                   origin_.low.data(),
                   origin_.up.data(),
                   1.0);
-#else
-#  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
-#endif
 
 #if defined(ATRIP_SOURCES_IN_GPU)
     WITH_CHRONO("cuda:sources",
@@ -72,7 +69,12 @@ namespace atrip {
     memcpy(source.data(),
            toSlice.data,
            sizeof(F) * sliceSize);
-#endif
+#endif /* defined(ATRIP_SOURCES_IN_GPU) */
+
+#else
+#  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
+#endif /* ATRIP_DONT_SLICE */
+
 
   }
 

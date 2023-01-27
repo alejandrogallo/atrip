@@ -1,5 +1,6 @@
 #include <iostream>
 #define ATRIP_DEBUG 2
+#define ATRIP_DONT_SLICE
 #include <atrip/Atrip.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Unions.hpp>
@@ -15,6 +16,7 @@ using Tr = CTF::Tensor<F>;
   do {                                                            \
     std::vector<int64_t> lens = __VA_ARGS__;                      \
     int i = -1;                                                   \
+    name.wrld = &world;                                           \
     name.order = lens.size();                                     \
     name.lens = (int64_t*)malloc(sizeof(int64_t) * lens.size());  \
     name.sym = (int*)malloc(sizeof(int) * lens.size());           \
@@ -353,9 +355,8 @@ int main(int argc, char** argv) {
   TABHH<F> tabhh(t_tabhh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
   TAPHH<F> taphh(t_taphh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
   HHHA<F>  hhha(t_hhha, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
+
   std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
-
-
 
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
@@ -457,8 +458,8 @@ int main(int argc, char** argv) {
           std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld",
                                "SEND",
                                iteration,
-                               rank,
                                el.info.from.rank,
+                               otherRank,
                                recvTag,
                                name_to_string<double>(el.name).c_str(),
                                type_to_string<double>(el.info.type).c_str(),
