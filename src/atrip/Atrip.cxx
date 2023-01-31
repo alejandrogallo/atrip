@@ -906,7 +906,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     Atrip::chrono["iterations"].stop();
     // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
-    if (in.maxIterations != 0 && i >= in.maxIterations) break;
+    if (in.maxIterations != 0 && i >= in.maxIterations) {
+      for (auto& u: unions) u->unwrapAll(abc);
+      break;
+    }
 
   }
     // END OF MAIN LOOP
