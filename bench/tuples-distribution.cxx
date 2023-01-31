@@ -481,6 +481,7 @@ int main(int argc, char** argv) {
   std::vector<LocalDatabaseElement>
     to_send;
 
+  MPI_Barrier(kaun);
   for (size_t it = 0; it < tuplesList.size(); it++) {
 
 
