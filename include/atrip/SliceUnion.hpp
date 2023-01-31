@@ -437,33 +437,13 @@ template <typename F=double>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
       for (auto& ptr: sources) {
-        const CUresult sourceError =
-          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
-        if (ptr == 0UL) {
-          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR SOURCES";
-        }
-        if (sourceError != CUDA_SUCCESS) {
-          std::stringstream s;
-          s << "Error allocating memory for sources "
-            << "code " << sourceError << "\n";
-          throw s.str();
-        }
+        _CUDA_MALLOC("SOURCES", &ptr, sizeof(F) * sliceSize);
       }
 #endif
 
       for (auto& ptr: sliceBuffers) {
 #if defined(HAVE_CUDA)
-        const CUresult error =
-          cuMemAlloc(&ptr, sizeof(F) * sliceSize);
-        if (ptr == 0UL) {
-          throw "UNSUFICCIENT MEMORY ON THE GRAPHIC CARD FOR FREE POINTERS";
-        }
-        if (error != CUDA_SUCCESS) {
-          std::stringstream s;
-          s << "Error allocating memory for slice buffers "
-            << "code " << error << "\n";
-          throw s.str();
-        }
+        _CUDA_MALLOC("Slice Buffer", &ptr, sizeof(F) * sliceSize);
 #else
         ptr = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
 #endif
