@@ -23,12 +23,12 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 
-#include <nvToolsExt.h>
-
-using namespace atrip;
 #if defined(HAVE_CUDA)
+#include <nvToolsExt.h>
 #include <atrip/CUDA.hpp>
 #endif
+
+using namespace atrip;
 
 template <typename F> bool RankMap<F>::RANK_ROUND_ROBIN;
 template bool RankMap<double>::RANK_ROUND_ROBIN;
@@ -571,9 +571,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ) {
     Atrip::chrono["iterations"].start();
 
+#if defined(HAVE_CUDA)
     char nvtx_name[60];
     sprintf(nvtx_name, "iteration: %d", i);
     nvtxRangePushA(nvtx_name);
+#endif /* defined(HAVE_CUDA) */
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
