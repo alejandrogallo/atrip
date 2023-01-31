@@ -424,7 +424,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe] (Database const& db) {
+    = [&unions, &rank, &np, &universe] (Database const& db,
+                                        ABCTuple const abc) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -499,7 +500,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           ;
 
         WITH_CHRONO("db:io:send",
-          u.send(otherRank, el, sendTag);
+                    u.send(otherRank,
+                           el,
+                           sendTag,
+                           abc);
         )
 
       } // send phase
@@ -663,7 +667,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       const auto db = communicateDatabase(abc, universe, i);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
-      doIOPhase(db);
+      doIOPhase(db, abc);
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto& u: unions) u->unwrapAll(abc);
@@ -678,9 +682,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         const auto db = communicateDatabase(*abcNext, universe, i);
       )
       WITH_CHRONO("db:io",
-
-      doIOPhase(db);
-      
+                  doIOPhase(db, abc);
       )
       WITH_RANK << "__comm__:" <<  iteration << "th database io phase DONE\n";
     }
@@ -899,12 +901,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     // Cleanup mpi staging buffers
     for (auto& u: unions) {
       for (auto& i: u->mpi_staging_buffers) {
-        MPI_Status status;
-        int completed;
-        MPI_Test(i.request, &completed, &status);
-        if (status.MPI_ERROR != MPI_SUCCESS) {
-          throw "Atrip: MPI_Test error asking for status of asynchronous send.";
-        }
+        int completed = i.abc == abc;
         if (completed) {
           u->freePointers.insert(i.data);
           u->mpi_staging_buffers.erase(i);

@@ -18,7 +18,10 @@
 #include <string>
 #include <map>
 #include <chrono>
+
+#if defined(HAVE_CUDA)
 #include <nvToolsExt.h>
+#endif /* defined(HAVE_CUDA) */
 
 #if defined(__NVCC__)
 #  pragma nv_diagnostic_push

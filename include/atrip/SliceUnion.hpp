@@ -42,6 +42,7 @@ template <typename F=double>
     DataPtr<F> data;
     size_t tag;
     MPI_Request *request;
+    ABCTuple const abc;
 
     bool operator==(StagingBufferInfo const& o) const {
     // TODO: think about this more carefully,
@@ -574,7 +575,8 @@ template <typename F=double>
      */
     void send( size_t otherRank
              , typename Slice<F>::LocalDatabaseElement const& el
-             , size_t tag) {
+             , size_t tag
+             , ABCTuple abc) {
       MPI_Request *request = (MPI_Request*)malloc(sizeof(MPI_Request));
       bool sendData_p = false;
       auto const& info = el.info;
@@ -614,7 +616,10 @@ template <typename F=double>
       WITH_RANK << "sent to " << otherRank << "\n";
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-      mpi_staging_buffers.insert(StagingBufferInfo{isend_buffer, tag, request});
+      mpi_staging_buffers.insert(StagingBufferInfo{isend_buffer,
+                                                   tag,
+                                                   request,
+                                                   abc});
 #else
       free(request);
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
