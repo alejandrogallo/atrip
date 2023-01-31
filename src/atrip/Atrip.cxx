@@ -928,7 +928,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 #endif
 
     if (in.maxIterations != 0 && i >= in.maxIterations) {
-      for (auto& u: unions) u->unwrapAll(abc);
+      if (abcNext) for (auto& u: unions) u->unwrapAll(*abcNext);
       break;
     }
 
