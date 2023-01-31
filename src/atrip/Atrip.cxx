@@ -900,12 +900,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
     // Cleanup mpi staging buffers
     for (auto& u: unions) {
+      std::vector<typename SliceUnion<F>::StagingBufferInfo> to_erase;
       for (auto& i: u->mpi_staging_buffers) {
         int completed = i.abc == abc;
         if (completed) {
-          u->freePointers.insert(i.data);
-          u->mpi_staging_buffers.erase(i);
+          to_erase.push_back(i);
         }
+      }
+      for (auto& i: to_erase) {
+        u->freePointers.insert(i.data);
+        u->mpi_staging_buffers.erase(i);
       }
     }
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
