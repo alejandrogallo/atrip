@@ -586,7 +586,7 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-#if defined(ATRIP_SOURCES_IN_GPU)
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
 #else
       DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
