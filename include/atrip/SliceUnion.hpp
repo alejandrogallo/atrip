@@ -589,7 +589,7 @@ template <typename F=double>
 #if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
 #else
-      DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
+      double* source_buffer = SOURCES_DATA(sources[info.from.source]);
 #endif
 #if defined(ATRIP_MPI_STAGING_BUFFERS) && defined(ATRIP_SOURCES_IN_GPU)
       DataPtr<F> isend_buffer = popFreePointer();
