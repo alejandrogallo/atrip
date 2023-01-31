@@ -883,7 +883,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       }
     }
 
-      WITH_RANK << iteration << "-th cleaning up....... DONE\n";
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+    // Cleanup mpi staging buffers
+    for (auto& u: unions) {
+      for (auto& i: u->mpi_staging_buffers) {
+        MPI_Status status;
+        int completed;
+        MPI_Test(i.request, &completed, &status);
+        if (status.MPI_ERROR != MPI_SUCCESS) {
+          throw "Atrip: MPI_Test error asking for status of asynchronous send.";
+        }
+        if (completed) {
+          u->freePointers.insert(i.data);
+          u->mpi_staging_buffers.erase(i);
+        }
+      }
+    }
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
+
+    WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
     Atrip::chrono["iterations"].stop();
     // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1

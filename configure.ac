@@ -101,6 +101,24 @@ ATRIP_DEF([cuda-aware-mpi], [enable],
           [When using MPI, assume support for CUDA aware mpi by the
           given MPI implementation.])
 
+ATRIP_DEF([mpi-staging-buffers], [enable],
+          [ATRIP_MPI_STAGING_BUFFERS],
+          [Enable mpi staging buffers int the GPU code. Every source
+           will first be copied to this buffer and then subsequently
+           sent.
+           You should probably enable ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS
+           since the additional buffers are free pointers and they might
+           run out, so dynamic allocation of free buffers is necessary.])
+
+ATRIP_DEF([allocate-additional-free-pointers], [enable],
+          [ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS],
+          [Enable the allocation of additional free buffers at runtime
+           if the free buffer pool runs empty.])
+
+ATRIP_DEF([print-tuples], [enable],
+          [ATRIP_PRINT_TUPLES],
+          [Print the tuple energies for each (abc) tuple at then end of the run.])
+
 
 dnl -----------------------------------------------------------------------
 

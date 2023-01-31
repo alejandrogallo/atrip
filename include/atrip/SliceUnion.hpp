@@ -14,9 +14,13 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
+#include <set>
+#include <unordered_set>
+
 #include <atrip/Debug.hpp>
 #include <atrip/Slice.hpp>
 #include <atrip/RankMap.hpp>
+#include <atrip/Utils.hpp>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
 #  define SOURCES_DATA(s) (s)
@@ -32,6 +36,28 @@ template <typename F=double>
   class SliceUnion {
   public:
     using Tensor = CTF::Tensor<F>;
+
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+  struct StagingBufferInfo {
+    DataPtr<F> data;
+    size_t tag;
+    MPI_Request *request;
+
+    bool operator==(StagingBufferInfo const& o) const {
+    // TODO: think about this more carefully,
+    //     can two staging buffers have the same data, it should not be
+    //     the case
+    return o.data == data;
+    }
+  };
+
+  class StagingBufferInfoHash {
+  public:
+    size_t operator()(StagingBufferInfo const& i) const {
+      return i.data;
+    }
+  };
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
     virtual void
     sliceIntoBuffer(size_t iteration, Tensor &to, Tensor const& from) = 0;
@@ -484,6 +510,8 @@ template <typename F=double>
                     }
                   }
                   MPI_Waitall(nSends*2, requests, statuses);
+                  free(requests);
+                  free(statuses);
                   )
 #endif
 
@@ -530,13 +558,45 @@ template <typename F=double>
 
     }
 
+
+    /*
+     */
+    DataPtr<F>
+    allocateFreeBuffer() {
+      DataPtr<F> new_pointer;
+#if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
+      _CUDA_MALLOC("Additional free buffer",
+                   &new_pointer,
+                   sizeof(DataFieldType<F>) * sliceSize);
+#else
+      new_pointer = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
+#endif
+      freePointers.insert(new_pointer);
+    }
+
+    DataPtr<F>
+    popFreePointer() {
+      if (freePointers.size() == 0) {
+#if defined(ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS)
+        allocateFreeBuffer();
+#else
+        throw _FORMAT("No more free pointers for name %s",
+                      name);
+#endif /* defined(ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS) */
+      }
+      auto dataPointer_it = freePointers.begin();
+      auto dataPointer = *dataPointer_it;
+      freePointers.erase(dataPointer_it);
+      return dataPointer;
+    }
+
     /**
      * \brief Send asynchronously only if the state is Fetch
      */
     void send( size_t otherRank
              , typename Slice<F>::LocalDatabaseElement const& el
-             , size_t tag) const noexcept {
-      MPI_Request request;
+             , size_t tag) {
+      MPI_Request *request = (MPI_Request*)malloc(sizeof(MPI_Request));
       bool sendData_p = false;
       auto const& info = el.info;
 
@@ -545,15 +605,40 @@ template <typename F=double>
       if (otherRank == info.from.rank)      sendData_p = false;
       if (!sendData_p) return;
 
-      MPI_Isend((void*)SOURCES_DATA(sources[info.from.source]),
+#if defined(ATRIP_SOURCES_IN_GPU)
+      DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
+#else
+      DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
+#endif
+#if defined(ATRIP_MPI_STAGING_BUFFERS) && defined(ATRIP_SOURCES_IN_GPU)
+      DataPtr<F> isend_buffer = popFreePointer();
+      WITH_CHRONO("cuda:memcpy",
+      WITH_CHRONO("cuda:memcpy:staging",
+      _CHECK_CUDA_SUCCESS("copying to staging buffer",
+                          cuMemcpy(isend_buffer,
+                                   source_buffer,
+                                   sizeof(F) * sliceSize));
+                        ))
+#else
+      DataPtr<const F>& isend_buffer = source_buffer;
+#endif
+
+
+      MPI_Isend((void*)isend_buffer,
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),
                 otherRank,
                 tag,
                 universe,
-                &request);
+                request);
       WITH_CRAZY_DEBUG
       WITH_RANK << "sent to " << otherRank << "\n";
+
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+      mpi_staging_buffers.insert(StagingBufferInfo{isend_buffer, tag, request});
+#else
+      free(request);
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
     }
 
@@ -660,6 +745,10 @@ template <typename F=double>
     const std::vector<typename Slice<F>::Type> sliceTypes;
     std::vector< DataPtr<F> > sliceBuffers;
     std::set< DataPtr<F> > freePointers;
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+    std::unordered_set< StagingBufferInfo, StagingBufferInfoHash >
+      mpi_staging_buffers;
+#endif
 
   };
 
