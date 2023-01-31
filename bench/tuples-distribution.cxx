@@ -1,5 +1,6 @@
 #include <iostream>
 #define ATRIP_DEBUG 2
+#define ATRIP_DONT_SLICE
 #include <atrip/Atrip.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Unions.hpp>
@@ -15,6 +16,7 @@ using Tr = CTF::Tensor<F>;
   do {                                                            \
     std::vector<int64_t> lens = __VA_ARGS__;                      \
     int i = -1;                                                   \
+    name.wrld = &world;                                           \
     name.order = lens.size();                                     \
     name.lens = (int64_t*)malloc(sizeof(int64_t) * lens.size());  \
     name.sym = (int*)malloc(sizeof(int) * lens.size());           \
@@ -34,6 +36,60 @@ using Tr = CTF::Tensor<F>;
 
 using LocalDatabase = typename Slice<F>::LocalDatabase;
 using LocalDatabaseElement = typename Slice<F>::LocalDatabaseElement;
+
+
+template <typename F>
+std::string type_to_string(typename Slice<F>::Type t) {
+  switch (t) {
+  case Slice<F>::AB: return "AB";
+  case Slice<F>::BC: return "BC";
+  case Slice<F>::AC: return "AC";
+  case Slice<F>::CB: return "CB";
+  case Slice<F>::BA: return "BA";
+  case Slice<F>::CA: return "CA";
+  case  Slice<F>::A: return "A";
+  case  Slice<F>::B: return "B";
+  case  Slice<F>::C: return "C";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+std::string name_to_string(typename Slice<F>::Name t) {
+  switch (t) {
+  case Slice<F>::TA: return "TA";
+  case Slice<F>::VIJKA: return "VIJKA";
+  case Slice<F>::VABCI: return "VABCI";
+  case Slice<F>::TABIJ: return "TABIJ";
+  case Slice<F>::VABIJ: return "VABIJ";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+size_t name_to_size(typename Slice<F>::Name t, size_t No, size_t Nv) {
+  switch (t) {
+  case Slice<F>::TA: return Nv * No * No;
+  case Slice<F>::VIJKA: return No * No * No;
+  case Slice<F>::VABCI: return Nv * No;
+  case Slice<F>::TABIJ: return No * No;
+  case Slice<F>::VABIJ: return No * No;
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+std::string state_to_string(typename Slice<F>::State t) {
+  switch (t) {
+  case Slice<F>::Fetch: return "Fetch";
+  case Slice<F>::Dispatched: return "Dispatched";
+  case Slice<F>::Ready: return "Ready";
+  case Slice<F>::SelfSufficient: return "SelfSufficient";
+  case Slice<F>::Recycled: return "Recycled";
+  case Slice<F>::Acceptor: return "Acceptor";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
 
 LocalDatabase buildLocalDatabase(SliceUnion<F> &u,
                                  ABCTuple const& abc) {
@@ -238,13 +294,15 @@ void unwrapSlice(Slice<F>::Type t, ABCTuple abc, SliceUnion<F> *u) {
 int main(int argc, char** argv) {
   MPI_Init(&argc, &argv);
 
-  int no(10), nv(100);
+  int no(10), nv(100), mod(1000), out_rank(0);
   std::string tuplesDistributionString = "naive";
 
   CLI::App app{"Main bench for atrip"};
   app.add_option("--no", no, "Occupied orbitals");
   app.add_option("--nv", nv, "Virtual orbitals");
   app.add_option("--dist", tuplesDistributionString, "Which distribution");
+  app.add_option("--mod", mod, "Every each iteration there is output");
+  app.add_option("--out-rank", out_rank, "Stdout for given rank");
   CLI11_PARSE(app, argc, argv);
 
   CTF::World world(argc, argv);
@@ -297,9 +355,8 @@ int main(int argc, char** argv) {
   TABHH<F> tabhh(t_tabhh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
   TAPHH<F> taphh(t_taphh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
   HHHA<F>  hhha(t_hhha, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
+
   std::vector< SliceUnion<F>* > unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
-
-
 
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
@@ -342,8 +399,9 @@ int main(int argc, char** argv) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np] (Database const& db,
-                             std::vector<LocalDatabaseElement> &to_send) {
+    = [&unions, &rank, &np, mod, out_rank, no, nv] (Database const& db,
+                                            std::vector<LocalDatabaseElement> &to_send,
+                                            size_t iteration) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -351,6 +409,7 @@ int main(int argc, char** argv) {
          , recvTag = rank * localDBLength
          ;
 
+    // RECIEVE PHASE ======================================================
     {
       // At this point, we have already send to everyone that fits
       auto const& begin = &db[rank * localDBLength]
@@ -363,6 +422,21 @@ int main(int argc, char** argv) {
         auto& slice = Slice<F>::findByInfo(u.slices, el.info);
         slice.markReady();
         // u.receive(el.info, recvTag);
+        if (rank == out_rank) {
+          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld",
+                               "RECV",
+                               iteration,
+                               el.info.from.rank,
+                               rank,
+                               recvTag,
+                               name_to_string<double>(el.name).c_str(),
+                               type_to_string<double>(el.info.type).c_str(),
+                               state_to_string<double>(el.info.state).c_str(),
+                               el.info.tuple[0],
+                               el.info.tuple[1],
+                               name_to_size<double>(el.name, no, nv))
+                    << "\n";
+        }
 
       } // recv
     }
@@ -380,6 +454,21 @@ int main(int argc, char** argv) {
         if (el.info.state == Slice<F>::Fetch) {
           to_send.push_back(el);
         }
+        if (rank == out_rank) {
+          std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld",
+                               "SEND",
+                               iteration,
+                               el.info.from.rank,
+                               otherRank,
+                               recvTag,
+                               name_to_string<double>(el.name).c_str(),
+                               type_to_string<double>(el.info.type).c_str(),
+                               state_to_string<double>(el.info.state).c_str(),
+                               el.info.tuple[0],
+                               el.info.tuple[1],
+                               name_to_size<double>(el.name, no, nv))
+                    << "\n";
+        }
         // u.send(otherRank, el, sendTag);
 
       } // send phase
@@ -392,6 +481,7 @@ int main(int argc, char** argv) {
   std::vector<LocalDatabaseElement>
     to_send;
 
+  MPI_Barrier(kaun);
   for (size_t it = 0; it < tuplesList.size(); it++) {
 
 
@@ -407,9 +497,9 @@ int main(int argc, char** argv) {
     }
 
     const auto db = communicateDatabase(abc, kaun);
-    doIOPhase(db, to_send);
+    doIOPhase(db, to_send, it);
 
-    if (it % 1000 == 0)
+    if (it % mod == 0)
       std::cout << _FORMAT("%ld :it %ld  %f %% ∷ %ld ∷ %f GB\n",
                            rank,
                            it,

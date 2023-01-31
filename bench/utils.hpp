@@ -1,5 +1,7 @@
 #ifndef UTILS_HPP_
 #define UTILS_HPP_
+#include <vector>
+#include <string>
 
 #define _FORMAT(_fmt, ...)                                    \
   ([&] (void) -> std::string {                                \
@@ -8,5 +10,6 @@
      std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__); \
      return std::string(_out.data());                         \
    })()
+
 
 #endif
