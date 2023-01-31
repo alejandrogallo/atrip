@@ -589,9 +589,9 @@ template <typename F=double>
 #if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
 #else
-      double* source_buffer = SOURCES_DATA(sources[info.from.source]);
+      F* source_buffer = SOURCES_DATA(sources[info.from.source]);
 #endif
-#if defined(ATRIP_MPI_STAGING_BUFFERS) && defined(ATRIP_SOURCES_IN_GPU)
+#if defined(ATRIP_MPI_STAGING_BUFFERS) && defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       DataPtr<F> isend_buffer = popFreePointer();
       WITH_CHRONO("cuda:memcpy",
       WITH_CHRONO("cuda:memcpy:staging",
@@ -600,8 +600,10 @@ template <typename F=double>
                                    source_buffer,
                                    sizeof(F) * sliceSize));
                         ))
+#elif defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+      DataPtr<F> isend_buffer = source_buffer;
 #else
-      DataPtr<const F>& isend_buffer = source_buffer;
+      F* isend_buffer = source_buffer;
 #endif
 
 
