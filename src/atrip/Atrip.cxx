@@ -23,6 +23,8 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 
+#include <nvToolsExt.h>
+
 using namespace atrip;
 #if defined(HAVE_CUDA)
 #include <atrip/CUDA.hpp>
@@ -465,6 +467,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       } // recv
     }
 
+    MPI_Barrier(universe);
+
     // SEND PHASE =========================================================
     for (size_t otherRank = 0; otherRank<np; otherRank++) {
       auto const& begin = &db[otherRank * localDBLength]
@@ -567,6 +571,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ) {
     Atrip::chrono["iterations"].start();
 
+    char nvtx_name[60];
+    sprintf(nvtx_name, "iteration: %d", i);
+    nvtxRangePushA(nvtx_name);
+
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
 
@@ -668,7 +676,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         const auto db = communicateDatabase(*abcNext, universe, i);
       )
       WITH_CHRONO("db:io",
-        doIOPhase(db);
+
+      doIOPhase(db);
+      
       )
       WITH_RANK << "__comm__:" <<  iteration << "th database io phase DONE\n";
     }
@@ -887,6 +897,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
     Atrip::chrono["iterations"].stop();
     // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+
+    //AMB: debugging only
+    WITH_CHRONO("mpi:barrier",
+      MPI_Barrier(universe);
+    );
+    cudaDeviceSynchronize();
+
+    nvtxRangePop();
 
     if (in.maxIterations != 0 && i >= in.maxIterations) break;
 
