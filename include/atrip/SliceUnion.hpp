@@ -228,18 +228,7 @@ template <typename F=double>
           if (blank.info.state == Slice<F>::SelfSufficient) {
 #if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
             const size_t _size = sizeof(F) * sliceSize;
-            // TODO: this is code duplication with downstairs
-            if (freePointers.size() == 0) {
-              std::stringstream stream;
-              stream << "No more free pointers "
-                     << "for type " << type
-                     << " and name " << name
-                      ;
-              throw std::domain_error(stream.str());
-            }
-            auto dataPointer = freePointers.begin();
-            freePointers.erase(dataPointer);
-            blank.data = *dataPointer;
+            blank.data = popFreePointer();
             WITH_CHRONO("cuda:memcpy",
             WITH_CHRONO("cuda:memcpy:self-sufficient",
                         _CHECK_CUDA_SUCCESS("copying mpi data to device",
@@ -251,17 +240,7 @@ template <typename F=double>
             blank.data = SOURCES_DATA(sources[from.source]);
 #endif
           } else {
-            if (freePointers.size() == 0) {
-              std::stringstream stream;
-              stream << "No more free pointers "
-                     << "for type " << type
-                     << " and name " << name
-                      ;
-              throw std::domain_error(stream.str());
-            }
-            auto dataPointer = freePointers.begin();
-            freePointers.erase(dataPointer);
-            blank.data = *dataPointer;
+            blank.data = popFreePointer();
           }
 
           result.push_back({name, blank.info});
