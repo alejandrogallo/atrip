@@ -347,7 +347,7 @@ template <typename F=double>
             }
           }
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
           // In cuda, SelfSufficient slices have an ad-hoc pointer
           // since it is a pointer on the device and has to be
           // brought back to the free pointer bucket of the SliceUnion.
