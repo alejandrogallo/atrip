@@ -56,7 +56,16 @@ std::vector<std::string> getNodeNames(MPI_Comm comm){
 std::vector<RankInfo>
 getNodeInfos(std::vector<string> const& nodeNames) {
   std::vector<RankInfo> result;
-  auto const uniqueNames = unique(nodeNames);
+  std::vector<std::string> uniqueNames;
+  for (auto const& name : nodeNames) {
+    if (uniqueNames.size() == 0
+        || uniqueNames.end() == std::find(uniqueNames.begin(),
+                                          uniqueNames.end(),
+                                          name)) {
+      uniqueNames.push_back(name);
+    }
+  }
+  // auto const uniqueNames = unique(nodeNames);
   auto const index = [&uniqueNames](std::string const& s) {
     auto const& it = std::find(uniqueNames.begin(), uniqueNames.end(), s);
     return std::distance(uniqueNames.begin(), it);
