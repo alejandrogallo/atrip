@@ -262,7 +262,7 @@ static Slice<F>& findOneByType(std::vector<Slice<F>> &slices, Slice<F>::Type typ
     WITH_RANK
       << "\t__ looking for " << type << "\n";
     if (sliceIt == slices.end())
-      throw std::domain_error("Slice by type not found!");
+      throw std::domain_error("Slice one by type not found!");
     return *sliceIt;
 }
 // Static utilities:3 ends here
@@ -283,7 +283,7 @@ findRecycledSource (std::vector<Slice<F>> &slices, Slice<F>::Info info) {
   WITH_RANK << "__slice__:find: recycling source of "
             << pretty_print(info) << "\n";
   if (sliceIt == slices.end())
-    throw std::domain_error( "Slice not found: "
+    throw std::domain_error( "Recycled source not found: "
                            + pretty_print(info)
                            + " rank: "
                            + pretty_print(Atrip::rank)
@@ -312,12 +312,12 @@ static Slice<F>& findByTypeAbc
               << pretty_print(tuple)
               << "\n";
     if (sliceIt == slices.end())
-      throw std::domain_error( "Slice not found: "
+      throw std::domain_error( "Slice by type not found: "
                              + pretty_print(tuple)
                              + ", "
-                             + pretty_print(type)
+                             + std::to_string(type)
                              + " rank: "
-                             + pretty_print(Atrip::rank)
+                             + std::to_string(Atrip::rank)
                              );
     return *sliceIt;
 }
@@ -508,13 +508,87 @@ std::ostream& operator<<(std::ostream& out, typename Slice<F>::Location const& v
 
 template <typename F=double>
 std::ostream& operator<<(std::ostream& out, typename Slice<F>::Info const& i) {
-  out << "«t" << i.type << ", s" << i.state << "»"
+  out << "«" << i.type << ", " << i.state << "»"
       << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
       << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"
-      << " ♲t" << i.recycling
+      << " ♲" << i.recycling
       ;
   return out;
 }
+
+template <typename F>
+std::string type_to_string(typename Slice<F>::Type t) {
+  switch (t) {
+  case Slice<F>::AB: return "AB";
+  case Slice<F>::BC: return "BC";
+  case Slice<F>::AC: return "AC";
+  case Slice<F>::CB: return "CB";
+  case Slice<F>::BA: return "BA";
+  case Slice<F>::CA: return "CA";
+  case  Slice<F>::A: return "A";
+  case  Slice<F>::B: return "B";
+  case  Slice<F>::C: return "C";
+  case  Slice<F>::Blank: return "Blank";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+std::string name_to_string(typename Slice<F>::Name t) {
+  switch (t) {
+  case Slice<F>::TA: return "TA";
+  case Slice<F>::VIJKA: return "VIJKA";
+  case Slice<F>::VABCI: return "VABCI";
+  case Slice<F>::TABIJ: return "TABIJ";
+  case Slice<F>::VABIJ: return "VABIJ";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+size_t name_to_size(typename Slice<F>::Name t, size_t No, size_t Nv) {
+  switch (t) {
+  case Slice<F>::TA: return Nv * No * No;
+  case Slice<F>::VIJKA: return No * No * No;
+  case Slice<F>::VABCI: return Nv * No;
+  case Slice<F>::TABIJ: return No * No;
+  case Slice<F>::VABIJ: return No * No;
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+template <typename F>
+std::string state_to_string(typename Slice<F>::State t) {
+  switch (t) {
+  case Slice<F>::Fetch: return "Fetch";
+  case Slice<F>::Dispatched: return "Dispatched";
+  case Slice<F>::Ready: return "Ready";
+  case Slice<F>::SelfSufficient: return "SelfSufficient";
+  case Slice<F>::Recycled: return "Recycled";
+  case Slice<F>::Acceptor: return "Acceptor";
+  default: throw "Switch statement not exhaustive!";
+  }
+}
+
+
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::State const& i) {
+  out << state_to_string<F>(i);
+  return out;
+}
+
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Name const& i) {
+  out << name_to_string<F>(i);
+  return out;
+}
+
+template <typename F=double>
+std::ostream& operator<<(std::ostream& out, typename Slice<F>::Type const& i) {
+  out << type_to_string<F>(i);
+  return out;
+}
+
 
 } // namespace atrip
 // Debug:1 ends here

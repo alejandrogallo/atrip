@@ -366,6 +366,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         return distribution->tupleIsFake(tuplesList[i]);
       };
 
+  double db_last_iteration_time = 0.0;
 
   using Database = typename Slice<F>::Database;
   auto communicateDatabase
@@ -424,8 +425,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       };
 
   auto doIOPhase
-    = [&unions, &rank, &np, &universe] (Database const& db,
-                                        ABCTuple const abc) {
+    = [&unions, &rank, &np, No, Nv, &universe, &db_last_iteration_time]
+    (Database const& db,
+     ABCTuple const abc,
+     size_t iteration) {
 
     const size_t localDBLength = db.size() / np;
 
@@ -465,6 +468,29 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           u.receive(el.info, recvTag);
         )
 
+#if defined(ATRIP_PRINT_DB)
+      if (!Atrip::rank)
+      std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld %ld %f\n",
+                            "RECV",
+                            iteration,
+                            el.info.from.rank,
+                            rank,
+                            recvTag,
+                            name_to_string<double>(el.name).c_str(),
+                            type_to_string<double>(el.info.type).c_str(),
+                            state_to_string<double>(el.info.state).c_str(),
+                            el.info.tuple[0],
+                            el.info.tuple[1],
+                            name_to_size<double>(el.name, No, Nv),
+                            u.freePointers.size(),
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+                            u.mpi_staging_buffers.size(),
+#else
+                            0,
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
+                            db_last_iteration_time);
+#endif /* defined(ATRIP_PRINT_DB) */
+
       } // recv
     }
 
@@ -498,6 +524,29 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                     << "}"
           << "\n"
           ;
+
+#if defined(ATRIP_PRINT_DB)
+      if (!Atrip::rank)
+        std::cout << _FORMAT("%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld %ld %f\n",
+                             "SEND",
+                             iteration,
+                             el.info.from.rank,
+                             otherRank,
+                             sendTag,
+                             name_to_string<double>(el.name).c_str(),
+                             type_to_string<double>(el.info.type).c_str(),
+                             state_to_string<double>(el.info.state).c_str(),
+                             el.info.tuple[0],
+                             el.info.tuple[1],
+                             name_to_size<double>(el.name, No, Nv),
+                             u.freePointers.size(),
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+                             u.mpi_staging_buffers.size(),
+#else
+                             0,
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
+                             db_last_iteration_time);
+#endif /* defined(ATRIP_PRINT_DB) */
 
         WITH_CHRONO("db:io:send",
                     u.send(otherRank,
@@ -574,6 +623,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       ; i++, iteration++
       ) {
     Atrip::chrono["iterations"].start();
+    Atrip::chrono["db-last-iteration"].start();
 
 #if defined(HAVE_CUDA)
     char nvtx_name[60];
@@ -667,7 +717,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       const auto db = communicateDatabase(abc, universe, i);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
-      doIOPhase(db, abc);
+      doIOPhase(db, abc, i);
       WITH_RANK << "__first__:first database io phase DONE\n";
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto& u: unions) u->unwrapAll(abc);
@@ -682,7 +732,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         const auto db = communicateDatabase(*abcNext, universe, i);
       )
       WITH_CHRONO("db:io",
-                  doIOPhase(db, abc);
+                  doIOPhase(db, abc, i+1);
       )
       WITH_RANK << "__comm__:" <<  iteration << "th database io phase DONE\n";
     }
@@ -928,6 +978,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     nvtxRangePop();
 #endif
 
+    Atrip::chrono["db-last-iteration"].stop();
+    db_last_iteration_time = Atrip::chrono["db-last-iteration"].count();
+    Atrip::chrono["db-last-iteration"].clear();
     if (in.maxIterations != 0 && i >= in.maxIterations) {
       if (abcNext) for (auto& u: unions) u->unwrapAll(*abcNext);
       break;

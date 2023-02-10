@@ -29,8 +29,8 @@ int main(int argc, char** argv) {
               checkpoint_path = "checkpoint.yaml";
 
   CLI::App app{"Main bench for atrip"};
-  app.add_option("--no", no, "Occupied orbitals");
-  app.add_option("--nv", nv, "Virtual orbitals");
+  app.add_option("--no", no, "Occupied orbitals")->required();
+  app.add_option("--nv", nv, "Virtual orbitals")->required();
   app.add_option("--mod", itMod, "Iteration modifier");
   app.add_option("--max-iterations",
                  max_iterations,
@@ -39,7 +39,9 @@ int main(int argc, char** argv) {
   app.add_flag("--nochrono", nochrono, "Do not print chrono");
   app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
   app.add_flag("--barrier", barrier, "Use the first barrier");
-  app.add_option("--dist", tuplesDistributionString, "Which distribution");
+  app.add_option("--dist",
+                 tuplesDistributionString,
+                 "Which distribution")->required();
   app.add_option("-%", percentageMod, "Percentage to be printed");
   // checkpointing
   app.add_flag("--nocheckpoint", noCheckpoint, "Do not use checkpoint");
