@@ -464,7 +464,7 @@ template <typename F=double>
                      std::inserter(freePointers, freePointers.begin()),
                      [](DataPtr<F> ptr) { return ptr; });
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_CUDA) && defined(DONT_DO_THAT)
       LOG(1,"Atrip") << "warming communication up " << slices.size() << "\n";
       WITH_CHRONO("cuda:warmup",
                   int nRanks=Atrip::np, requestCount=0;

@@ -91,6 +91,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 
 
   for (size_t _rank = 0; _rank < np; _rank++) {
+    printf(":rank %ld :_rank %ld\n", rank, _rank);
     if (rank == _rank) {
       CUcontext ctx;
       CUdevice dev;
@@ -628,7 +629,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
 #if defined(HAVE_CUDA)
     char nvtx_name[60];
     sprintf(nvtx_name, "iteration: %d", i);
-    nvtxRangePushA(nvtx_name);
 #endif /* defined(HAVE_CUDA) */
 
     // check overhead from chrono over all iterations
@@ -975,7 +975,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     );
 #if defined(HAVE_CUDA)
     cudaDeviceSynchronize();
-    nvtxRangePop();
 #endif
 
     Atrip::chrono["db-last-iteration"].stop();
