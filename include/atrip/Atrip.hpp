@@ -45,6 +45,10 @@ namespace atrip {
     static size_t np;
     static MPI_Comm communicator;
     static Timings chrono;
+    static size_t networkSend;
+    static size_t localSend;
+    static double bytesSent;
+    static size_t ppn;
 #if defined(HAVE_CUDA)
     struct CudaContext {
       cublasStatus_t status;
@@ -86,6 +90,7 @@ namespace atrip {
       ADD_ATTRIBUTE(bool, rankRoundRobin, false)
       ADD_ATTRIBUTE(bool, chrono, false)
       ADD_ATTRIBUTE(bool, barrier, false)
+      ADD_ATTRIBUTE(bool, blocking, false)
       ADD_ATTRIBUTE(size_t, maxIterations, 0)
       ADD_ATTRIBUTE(int, iterationMod, -1)
       ADD_ATTRIBUTE(int, percentageMod, -1)

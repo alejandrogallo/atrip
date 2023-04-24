@@ -24,7 +24,8 @@ int main(int argc, char** argv) {
   bool
     nochrono(false), barrier(false), rankRoundRobin(false),
     keepVppph(false),
-    noCheckpoint = false;
+    noCheckpoint = false,
+    blocking = false;
   std::string tuplesDistributionString = "naive",
               checkpoint_path = "checkpoint.yaml";
 
@@ -42,6 +43,7 @@ int main(int argc, char** argv) {
   app.add_option("--dist",
                  tuplesDistributionString,
                  "Which distribution")->required();
+  app.add_flag("--blocking", blocking, "Perform blocking communication");
   app.add_option("-%", percentageMod, "Percentage to be printed");
   // checkpointing
   app.add_flag("--nocheckpoint", noCheckpoint, "Do not use checkpoint");
@@ -241,6 +243,7 @@ int main(int argc, char** argv) {
        // some options
        .with_deleteVppph(!keepVppph)
        .with_barrier(barrier)
+       .with_blocking(blocking)
        .with_chrono(!nochrono)
        .with_rankRoundRobin(rankRoundRobin)
        .with_iterationMod(itMod)

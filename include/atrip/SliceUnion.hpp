@@ -607,6 +607,16 @@ template <typename F=double>
 #endif
 
 
+      // We count network sends only for the largest buffers
+      switch (el.name) {
+        case Slice<F>::Name::TA:
+          if (otherRank / Atrip::ppn == Atrip::rank / Atrip::ppn) {
+            Atrip::localSend++;
+          } else {
+            Atrip::networkSend++;
+          }
+      }
+      Atrip::bytesSent += sliceSize * sizeof(F);
       MPI_Isend((void*)isend_buffer,
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),
