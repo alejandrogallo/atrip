@@ -438,9 +438,6 @@ template <typename F=double>
               , sliceBuffers(nSliceBuffers)
     { // constructor begin
 
-      LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
-        printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
-
 #if defined(ATRIP_SOURCES_IN_GPU)
       for (auto& ptr: sources) {
         _CUDA_MALLOC("SOURCES", &ptr, sizeof(F) * sliceSize);
