@@ -513,9 +513,9 @@ template <typename F=double>
       CTF::World w(world);
       const int rank = Atrip::rank;
 #if defined(ATRIP_DRY)
-      const int order = sliceLength.size();
-#else
       const int order = 0;
+#else
+      const int order = sliceLength.size();
 #endif /* defined(ATRIP_DRY) */
       std::vector<int> const syms(order, NS);
       std::vector<int> __sliceLength(sliceLength.begin(), sliceLength.end());
