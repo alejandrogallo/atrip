@@ -28,3 +28,5 @@ config.mk
 /result
 /result-dev
 /vendor/
+/.cache/
+/compile_commands.json
