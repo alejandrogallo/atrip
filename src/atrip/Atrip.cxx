@@ -22,6 +22,7 @@
 #include <atrip/Unions.hpp>
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
+#include <atrip/Malloc.hpp>
 
 #if defined(HAVE_CUDA)
 #include <nvToolsExt.h>
@@ -207,8 +208,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                       cuMemAlloc(&Zijk, sizeof(F) * No * No * No));
 #else
   DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data(), epsa = _epsa.data();
-  Zijk = (DataFieldType<F>*)malloc(No*No*No * sizeof(DataFieldType<F>));
-  Tijk = (DataFieldType<F>*)malloc(No*No*No * sizeof(DataFieldType<F>));
+  MALLOC_DATA_PTR("Zijk", &Zijk, sizeof(DataFieldType<F>) * No*No*No);
+  MALLOC_DATA_PTR("Tijk", &Tijk, sizeof(DataFieldType<F>) * No*No*No);
 #endif
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rankRoundRobin;

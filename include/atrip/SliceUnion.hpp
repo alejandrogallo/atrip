@@ -21,6 +21,7 @@
 #include <atrip/Slice.hpp>
 #include <atrip/RankMap.hpp>
 #include <atrip/Utils.hpp>
+#include <atrip/Malloc.hpp>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
 #  define SOURCES_DATA(s) (s)
@@ -55,7 +56,7 @@ template <typename F=double>
   class StagingBufferInfoHash {
   public:
     size_t operator()(StagingBufferInfo const& i) const {
-      return i.data;
+      return (size_t)i.data;
     }
   };
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
@@ -431,8 +432,12 @@ template <typename F=double>
               , sources(rankMap.nSources())
 #else
               , sources(rankMap.nSources(),
+#if defined(ATRIP_DRY)
+                        std::vector<F>(1))
+#else
                         std::vector<F>(sliceSize))
-#endif
+#endif /* defined(ATRIP_DRY) */
+#endif /* defined(ATRIP_SOURCES_IN_GPU) */
               , name(name_)
               , sliceTypes(sliceTypes_)
               , sliceBuffers(nSliceBuffers)
@@ -441,18 +446,14 @@ template <typename F=double>
       LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
         printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
 
-#if defined(ATRIP_SOURCES_IN_GPU)
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       for (auto& ptr: sources) {
-        _CUDA_MALLOC("SOURCES", &ptr, sizeof(F) * sliceSize);
+        MALLOC_DATA_POINTER("SOURCES", &ptr, sizeof(F) * sliceSize);
       }
 #endif
 
       for (auto& ptr: sliceBuffers) {
-#if defined(HAVE_CUDA)
-        _CUDA_MALLOC("Slice Buffer", &ptr, sizeof(F) * sliceSize);
-#else
-        ptr = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
-#endif
+        MALLOC_DATA_PTR("Slice Buffer", &ptr, sizeof(F) * sliceSize);
       }
 
       slices
@@ -462,7 +463,7 @@ template <typename F=double>
       // initialize the freePointers with the pointers to the buffers
       std::transform(sliceBuffers.begin(), sliceBuffers.end(),
                      std::inserter(freePointers, freePointers.begin()),
-                     [](DataPtr<F> ptr) { return ptr; });
+                     [](DataPtr<F> ptr) {  return ptr; });
 
 #if defined(HAVE_CUDA)
       LOG(1,"Atrip") << "warming communication up " << slices.size() << "\n";
@@ -513,9 +514,12 @@ template <typename F=double>
     void init(Tensor const& sourceTensor) {
 
       CTF::World w(world);
-      const int rank = Atrip::rank
-              , order = sliceLength.size()
-              ;
+      const int rank = Atrip::rank;
+#if defined(ATRIP_DRY)
+      const int order = sliceLength.size();
+#else
+      const int order = 0;
+#endif /* defined(ATRIP_DRY) */
       std::vector<int> const syms(order, NS);
       std::vector<int> __sliceLength(sliceLength.begin(), sliceLength.end());
       Tensor toSliceInto(order,
@@ -541,15 +545,17 @@ template <typename F=double>
 
     /*
      */
-    DataPtr<F>
+    void
     allocateFreeBuffer() {
       DataPtr<F> new_pointer;
 #if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
-      _CUDA_MALLOC("Additional free buffer",
-                   &new_pointer,
-                   sizeof(DataFieldType<F>) * sliceSize);
+      MALLOC_DATA_PTR("Additional free buffer",
+                      &new_pointer,
+                      sizeof(DataFieldType<F>) * sliceSize);
 #else
-      new_pointer = (DataPtr<F>)malloc(sizeof(F) * sliceSize);
+      MALLOC_HOST_DATA("Additional free buffer",
+                       &new_pointer,
+                       sizeof(DataFieldType<F>) * sliceSize);
 #endif
       freePointers.insert(new_pointer);
     }
@@ -591,8 +597,12 @@ template <typename F=double>
 #else
       F* source_buffer = SOURCES_DATA(sources[info.from.source]);
 #endif
-#if defined(ATRIP_MPI_STAGING_BUFFERS) && defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+
+      // do staging buffers
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
       DataPtr<F> isend_buffer = popFreePointer();
+
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       WITH_CHRONO("cuda:memcpy",
       WITH_CHRONO("cuda:memcpy:staging",
       _CHECK_CUDA_SUCCESS("copying to staging buffer",
@@ -600,12 +610,30 @@ template <typename F=double>
                                    source_buffer,
                                    sizeof(F) * sliceSize));
                         ))
-#elif defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+
+#elif !defined(HAVE_CUDA)
+        // do cpu mpi memory staging
+        WITH_CHRONO("memcpy",
+                    WITH_CHRONO("memcpy:staging",
+                                memcpy(isend_buffer,
+                                       source_buffer,
+                                       sizeof(F) * sliceSize);))
+
+#else
+#pragma error("Not possible to do MPI_STAGING_BUFFERS with your config.h")
+#endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
+
+#else
+
+      // otherwise the isend_buffer will be the source buffer itself
+
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       DataPtr<F> isend_buffer = source_buffer;
 #else
       F* isend_buffer = source_buffer;
 #endif
 
+#endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
       MPI_Isend((void*)isend_buffer,
                 sliceSize,
