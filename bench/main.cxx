@@ -1,8 +1,12 @@
 #include <iostream>
+#include <vector>
+#include <functional>
+
+#include <CLI11.hpp>
+
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
 #include <atrip/Utils.hpp>
-#include <CLI11.hpp>
 
 #define _print_size(what, size)                                                \
   do {                                                                         \
@@ -12,8 +16,27 @@
     }                                                                          \
   } while (0)
 
+// Printer for options
+std::vector<std::function<void(void)>> input_printer;
+#define _register_printer(flag, variable)                                      \
+  input_printer.push_back([&variable]() {                                      \
+    std::cout << "Input " << flag << " " << variable << std::endl;             \
+  })
+
+#define defoption(app, flag, variable, description)                            \
+  _register_printer(flag, variable);                                           \
+  app.add_option(flag, variable, description)
+
+#define defflag(app, flag, variable, description)                              \
+  _register_printer(flag, variable);                                           \
+  app.add_flag(flag, variable, description)
+
 int main(int argc, char **argv) {
   MPI_Init(&argc, &argv);
+  CTF::World world(argc, argv);
+  int rank, nranks;
+  MPI_Comm_rank(world.comm, &rank);
+  MPI_Comm_size(world.comm, &nranks);
 
   size_t checkpoint_it, max_iterations;
   int no(10), nv(100), itMod(-1), percentageMod(10);
@@ -24,40 +47,46 @@ int main(int argc, char **argv) {
               checkpoint_path = "checkpoint.yaml";
 
   CLI::App app{"Main bench for atrip"};
-  app.add_option("--no", no, "Occupied orbitals")->required();
-  app.add_option("--nv", nv, "Virtual orbitals")->required();
-  app.add_option("--mod", itMod, "Iteration modifier");
-  app.add_option("--max-iterations",
-                 max_iterations,
-                 "Maximum number of iterations to run");
-  app.add_flag("--keep-vppph", keepVppph, "Do not delete the tensor Vppph");
-  app.add_flag("--nochrono", nochrono, "Do not print chrono");
-  app.add_flag("--rank-round-robin", rankRoundRobin, "Do rank round robin");
-  app.add_flag("--barrier", barrier, "Use the first barrier");
-  app.add_option("--dist", tuplesDistributionString, "Which distribution")
+
+  defoption(app, "--no", no, "Occupied orbitals")->required();
+  defoption(app, "--nv", nv, "Virtual orbitals")->required();
+  defoption(app, "--mod", itMod, "Iteration modifier");
+  defoption(app,
+            "--max-iterations",
+            max_iterations,
+            "Maximum number of iterations to run");
+  defoption(app, "--dist", tuplesDistributionString, "Which distribution")
       ->required();
+  defflag(app, "--keep-vppph", keepVppph, "Do not delete the tensor Vppph");
+  defflag(app, "--nochrono", nochrono, "Do not print chrono");
+  defflag(app, "--rank-round-robin", rankRoundRobin, "Do rank round robin");
+  defflag(app, "--barrier", barrier, "Use the first barrier");
+
   app.add_flag("--blocking", blocking, "Perform blocking communication");
   app.add_option("-%", percentageMod, "Percentage to be printed");
+
   // checkpointing
-  app.add_flag("--nocheckpoint", noCheckpoint, "Do not use checkpoint");
-  app.add_option("--checkpoint-path", checkpoint_path, "Path for checkpoint");
-  app.add_option("--checkpoint-it",
-                 checkpoint_it,
-                 "Checkpoint at every iteration");
-  app.add_option("--checkpoint-%",
-                 checkpoint_percentage,
-                 "Percentage for checkpoints");
+  defflag(app, "--nocheckpoint", noCheckpoint, "Do not use checkpoint");
+  defoption(app, "--checkpoint-path", checkpoint_path, "Path for checkpoint");
+  defoption(app,
+            "--checkpoint-it",
+            checkpoint_it,
+            "Checkpoint at every iteration");
+  defoption(app,
+            "--checkpoint-%",
+            checkpoint_percentage,
+            "Percentage for checkpoints");
 
   // Optional tensor files
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
       Vppph_path;
-  app.add_option("--ei", ei_path, "Path for ei");
-  app.add_option("--ea", ea_path, "Path for ea");
-  app.add_option("--Tpphh", Tpphh_path, "Path for Tpphh");
-  app.add_option("--Tph", Tph_path, "Path for Tph");
-  app.add_option("--Vpphh", Vpphh_path, "Path for Vpphh");
-  app.add_option("--Vhhhp", Vhhhp_path, "Path for Vhhhp");
-  app.add_option("--Vppph", Vppph_path, "Path for Vppph");
+  defoption(app, "--ei", ei_path, "Path for ei");
+  defoption(app, "--ea", ea_path, "Path for ea");
+  defoption(app, "--Tpphh", Tpphh_path, "Path for Tpphh");
+  defoption(app, "--Tph", Tph_path, "Path for Tph");
+  defoption(app, "--Vpphh", Vpphh_path, "Path for Vpphh");
+  defoption(app, "--Vhhhp", Vhhhp_path, "Path for Vhhhp");
+  defoption(app, "--Vppph", Vppph_path, "Path for Vppph");
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
@@ -73,10 +102,6 @@ int main(int argc, char **argv) {
 
   CLI11_PARSE(app, argc, argv);
 
-  CTF::World world(argc, argv);
-  int rank, nranks;
-  MPI_Comm_rank(world.comm, &rank);
-  MPI_Comm_size(world.comm, &nranks);
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
 
   // USER PRINTING TEST BEGIN
@@ -106,6 +131,7 @@ int main(int argc, char **argv) {
         lastElapsedTime = d.currentElapsedTime;
         if (rank == 0) std::cout << out << "\n";
       });
+
   // USER PRINTING TEST END
 
   atrip::Atrip::Input<double>::TuplesDistribution tuplesDistribution;
@@ -193,36 +219,21 @@ int main(int argc, char **argv) {
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
 
-  if (ei_path.size()) {
-    ei.read_dense_from_file(ei_path.c_str());
-  } else {
-    ei.fill_random(-40.0, -2);
-  }
-  if (ea_path.size()) {
-    ea.read_dense_from_file(ea_path.c_str());
-  } else {
-    ea.fill_random(2, 50);
-  }
-  if (Tpphh_path.size()) {
-    Tpphh.read_dense_from_file(Tpphh_path.c_str());
-  } else {
-    Tpphh.fill_random(0, 1);
-  }
-  if (Tph_path.size()) {
-    Tph.read_dense_from_file(Tph_path.c_str());
-  } else {
-    Tph.fill_random(0, 1);
-  }
-  if (Vpphh_path.size()) {
-    Vpphh.read_dense_from_file(Vpphh_path.c_str());
-  } else {
-    Vpphh.fill_random(0, 1);
-  }
-  if (Vhhhp_path.size()) {
-    Vhhhp.read_dense_from_file(Vhhhp_path.c_str());
-  } else {
-    Vhhhp.fill_random(0, 1);
-  }
+#define _read_or_fill(tsr, a, b)                                               \
+  do {                                                                         \
+    if (tsr##_path.size()) {                                                   \
+      tsr.read_dense_from_file(tsr##_path.c_str());                            \
+    } else {                                                                   \
+      tsr.fill_random(a, b);                                                   \
+    }                                                                          \
+  } while (0)
+
+  _read_or_fill(ei, -40.0, -2);
+  _read_or_fill(ea, 2, 50);
+  _read_or_fill(Tpphh, 0, 1);
+  _read_or_fill(Tph, 0, 1);
+  _read_or_fill(Vpphh, 0, 1);
+  _read_or_fill(Vhhhp, 0, 1);
   if (Vppph_path.size()) {
     Vppph->read_dense_from_file(Vppph_path.c_str());
   } else {
@@ -261,6 +272,11 @@ int main(int argc, char **argv) {
                .with_oooBlocks(ooo_blocks)
 #endif
       ;
+
+  if (!rank)
+    for (auto const &fn : input_printer)
+      // print input parameters
+      fn();
 
   try {
     auto out = atrip::Atrip::run(in);
