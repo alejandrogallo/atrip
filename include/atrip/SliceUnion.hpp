@@ -443,9 +443,6 @@ template <typename F=double>
               , sliceBuffers(nSliceBuffers)
     { // constructor begin
 
-      LOG(0,"Atrip") << "INIT SliceUnion: " << name << "\n";
-        printf("sliceSize %d, number of slices %d\n\n\n", sliceSize, sources.size());
-
 #if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
       for (auto& ptr: sources) {
         MALLOC_DATA_POINTER("SOURCES", &ptr, sizeof(F) * sliceSize);
@@ -635,6 +632,16 @@ template <typename F=double>
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
+      // We count network sends only for the largest buffers
+      switch (el.name) {
+        case Slice<F>::Name::TA:
+          if (otherRank / Atrip::ppn == Atrip::rank / Atrip::ppn) {
+            Atrip::localSend++;
+          } else {
+            Atrip::networkSend++;
+          }
+      }
+      Atrip::bytesSent += sliceSize * sizeof(F);
       MPI_Isend((void*)isend_buffer,
                 sliceSize,
                 traits::mpi::datatypeOf<F>(),

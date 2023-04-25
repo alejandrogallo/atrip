@@ -43,6 +43,11 @@ typename Atrip::KernelDimensions Atrip::kernelDimensions;
 #endif
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
+size_t Atrip::ppn;
+size_t Atrip::networkSend;
+size_t Atrip::localSend;
+double Atrip::bytesSent;
+
 
 // user printing block
 IterationDescriptor IterationDescription::descriptor;
@@ -55,6 +60,10 @@ void Atrip::init(MPI_Comm world)  {
   MPI_Comm_rank(world, (int*)&Atrip::rank);
   MPI_Comm_size(world, (int*)&Atrip::np);
   Atrip::cluster_info = new ClusterInfo(getClusterInfo(world));
+  Atrip::networkSend = 0UL;
+  Atrip::localSend = 0UL;
+  Atrip::bytesSent = 0.0;
+  Atrip::ppn = Atrip::cluster_info->ranksPerNode;
 }
 
 template <typename F>
@@ -675,6 +684,33 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       const double _doubles_time = Atrip::chrono["doubles"].count(),
                    _its_time = Atrip::chrono["iterations"].count();
 
+      size_t networkSend(0);
+      MPI_Reduce(&Atrip::networkSend,
+                 &networkSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
+      size_t localSend(0);
+      MPI_Reduce(&Atrip::localSend,
+                 &localSend,
+                 1,
+                 MPI_UINT64_T,
+                 MPI_SUM,
+                 0,
+                 universe);
+
+      double bytesSent(0.0);
+      MPI_Reduce(&Atrip::bytesSent,
+                 &bytesSent,
+                 1,
+                 MPI_DOUBLE,
+                 MPI_SUM,
+                 0,
+                 universe);
+
       LOG(0,"Atrip")
         << "iteration " << iteration
         << " [" << 100 * iteration / nIterations << "%]"
@@ -685,8 +721,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         << " (" << (_its_time > 0.0
                  ? doublesFlops * iteration / _its_time
                  : -1)
-        << "GF)"
-        << "\n";
+        << "GF) :: GB sent per rank: "
+        << bytesSent / 1073741824.0 
+        << " :: " << networkSend / (networkSend + localSend) 
+        << " % network communication" << std::endl;
 
 
       // PRINT TIMINGS
@@ -751,6 +789,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           u->unwrapAll(abc);
         }
       )))
+      if (in.blocking && abcNext) {
+        WITH_CHRONO("blockingCommunication",
+          for (auto& u: decltype(unions){&abph, &hhha, &taphh, &tabhh}) {
+            u->unwrapAll(*abcNext);
+          }
+        )
+        WITH_CHRONO("blocking-barrier",
+          MPI_Barrier(universe);
+        )
+      }
+
       WITH_CHRONO("oneshot-doubles",
       WITH_CHRONO("doubles",
                   doublesContribution<F>(abc, (size_t)No, (size_t)Nv,
