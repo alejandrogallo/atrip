@@ -575,7 +575,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
     * double(No)
     * (double(No) + double(Nv))
     * 2.0
-    * (traits::isComplex<F>() ? 2.0 : 1.0)
+    * (traits::isComplex<F>() ? 4.0 : 1.0)
     * 6.0
     / 1e9
     ;
