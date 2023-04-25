@@ -62,8 +62,8 @@ int main(int argc, char **argv) {
   defflag(app, "--rank-round-robin", rankRoundRobin, "Do rank round robin");
   defflag(app, "--barrier", barrier, "Use the first barrier");
 
-  app.add_flag("--blocking", blocking, "Perform blocking communication");
-  app.add_option("-%", percentageMod, "Percentage to be printed");
+  defflag(app, "--blocking", blocking, "Perform blocking communication");
+  defoption(app, "-%", percentageMod, "Percentage to be printed");
 
   // checkpointing
   defflag(app, "--nocheckpoint", noCheckpoint, "Do not use checkpoint");
@@ -90,14 +90,16 @@ int main(int argc, char **argv) {
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
-  app.add_option(
+  defoption(
+      app,
       "--ooo-blocks",
       ooo_blocks,
       "CUDA: Number of blocks per block for kernels going through ooo tensors");
-  app.add_option("--ooo-threads",
-                 ooo_threads,
-                 "CUDA: Number of threads per block for kernels going through "
-                 "ooo tensors");
+  defoption(app,
+            "--ooo-threads",
+            ooo_threads,
+            "CUDA: Number of threads per block for kernels going through "
+            "ooo tensors");
 #endif
 
   CLI11_PARSE(app, argc, argv);
