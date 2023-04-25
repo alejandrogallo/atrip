@@ -62,6 +62,8 @@ pkgs.mkShell rec {
         coreutils
         git
         vim
+        clang-tools
+        bear
 
         openmpi
         llvmPackages.openmp

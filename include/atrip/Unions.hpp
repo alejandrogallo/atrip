@@ -49,7 +49,7 @@ namespace atrip {
                    << "," << pretty_print(origin_.low)
               << "\n";
 
-#ifndef ATRIP_DONT_SLICE
+#if !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY)
     toSlice.slice(toSlice_.low.data(),
                   toSlice_.up.data(),
                   0.0,
@@ -73,7 +73,7 @@ namespace atrip {
 
 #else
 #  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
-#endif /* ATRIP_DONT_SLICE */
+#endif /* !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY) */
 
 
   }

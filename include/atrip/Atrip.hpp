@@ -29,6 +29,7 @@
 
 #include <atrip/Utils.hpp>
 #include <atrip/Types.hpp>
+#include <atrip/Tuples.hpp>
 
 #define ADD_ATTRIBUTE(_type, _name, _default)   \
   _type _name = _default;                       \
@@ -43,6 +44,7 @@ namespace atrip {
 
     static size_t rank;
     static size_t np;
+    static ClusterInfo *cluster_info;
     static MPI_Comm communicator;
     static Timings chrono;
 #if defined(HAVE_CUDA)

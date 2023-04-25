@@ -365,9 +365,12 @@ ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples) {
 
     std::vector<ABCTuple> result;
 
-    auto const nodeNames(getNodeNames(universe));
-    size_t const nNodes = unique(nodeNames).size();
-    auto const nodeInfos = getNodeInfos(nodeNames);
+    // auto const nodeNames(getNodeNames(universe));
+    // size_t const nNodes = unique(nodeNames).size();
+    // auto const nodeInfos = getNodeInfos(nodeNames);
+    auto cluster_info = Atrip::cluster_info;
+    auto const nodeInfos = cluster_info->rankInfos;
+    size_t const nNodes = cluster_info->nNodes;
 
     // We want to construct a communicator which only contains of one
     // element per node

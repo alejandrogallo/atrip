@@ -20,6 +20,7 @@
 
 #include <atrip/Slice.hpp>
 #include <atrip/Tuples.hpp>
+#include <atrip/Atrip.hpp>
 
 namespace atrip {
 
@@ -35,8 +36,8 @@ namespace atrip {
       : lengths(lens)
       , np(np_)
       , size(std::accumulate(lengths.begin(), lengths.end(),
-                            1UL, std::multiplies<size_t>()))
-      , clusterInfo(getClusterInfo(comm))
+                             1UL, std::multiplies<size_t>()))
+      , clusterInfo(*Atrip::cluster_info)
     { assert(lengths.size() <= 2); }
 
     size_t find(typename Slice<F>::Location const& p) const noexcept {

@@ -35,6 +35,7 @@ template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 size_t Atrip::rank;
 size_t Atrip::np;
+ClusterInfo *Atrip::cluster_info;
 #if defined(HAVE_CUDA)
 typename Atrip::CudaContext Atrip::cuda;
 typename Atrip::KernelDimensions Atrip::kernelDimensions;
@@ -52,6 +53,7 @@ void Atrip::init(MPI_Comm world)  {
   Atrip::communicator = world;
   MPI_Comm_rank(world, (int*)&Atrip::rank);
   MPI_Comm_size(world, (int*)&Atrip::np);
+  Atrip::cluster_info = new ClusterInfo(getClusterInfo(world));
 }
 
 template <typename F>
@@ -73,7 +75,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
                       cuInit(0));
   _CHECK_CUDA_SUCCESS("getting device count",
                       cuDeviceGetCount(&ngcards));
-  const auto clusterInfo = getClusterInfo(Atrip::communicator);
+  const auto clusterInfo = *Atrip::cluster_info;
   LOG(0,"Atrip") << "ngcards: " << ngcards << "\n";
   if (clusterInfo.ranksPerNode > ngcards) {
     const auto msg
