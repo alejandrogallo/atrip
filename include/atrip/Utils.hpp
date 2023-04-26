@@ -20,7 +20,7 @@
 #include <chrono>
 
 #if defined(HAVE_CUDA)
-#include <nvToolsExt.h>
+#  include <nvToolsExt.h>
 #endif /* defined(HAVE_CUDA) */
 
 #if defined(__NVCC__)
@@ -47,39 +47,38 @@
 
 #include <atrip/Debug.hpp>
 
-
 namespace atrip {
 // Prolog:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Pretty%20printing][Pretty printing:1]]
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-  template <typename T>
-  std::string pretty_print(T&& value) {
+template <typename T>
+std::string pretty_print(T &&value) {
 #if ATRIP_DEBUG > 2
-    std::stringstream stream;
-    dbg::pretty_print(stream, std::forward<T>(value));
-    return stream.str();
+  std::stringstream stream;
+  dbg::pretty_print(stream, std::forward<T>(value));
+  return stream.str();
 #else
-    return "";
+  return "";
 #endif
-  }
+}
 #pragma GCC diagnostic pop
 // Pretty printing:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Chrono][Chrono:1]]
 #if defined(HAVE_CUDA)
-#define WITH_CHRONO(__chrono_name, ...)         \
-  nvtxRangePushA(__chrono_name);                \
-  Atrip::chrono[__chrono_name].start();         \
-  __VA_ARGS__                                   \
-  Atrip::chrono[__chrono_name].stop();          \
-  nvtxRangePop();
+#  define WITH_CHRONO(__chrono_name, ...)                                      \
+    nvtxRangePushA(__chrono_name);                                             \
+    Atrip::chrono[__chrono_name].start();                                      \
+    __VA_ARGS__                                                                \
+    Atrip::chrono[__chrono_name].stop();                                       \
+    nvtxRangePop();
 #else
-#define WITH_CHRONO(__chrono_name, ...)         \
-  Atrip::chrono[__chrono_name].start();         \
-  __VA_ARGS__                                   \
-  Atrip::chrono[__chrono_name].stop();
+#  define WITH_CHRONO(__chrono_name, ...)                                      \
+    Atrip::chrono[__chrono_name].start();                                      \
+    __VA_ARGS__                                                                \
+    Atrip::chrono[__chrono_name].stop();
 #endif
 
 struct Timer {
@@ -96,15 +95,14 @@ using Timings = std::map<std::string, Timer>;
 // Chrono:1 ends here
 
 //  A nice handy macro to do formatting
-#define _FORMAT(_fmt, ...)                                    \
-  ([&] (void) -> std::string {                                \
-     int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);  \
-     std::vector<char>  _out(_sz  +  1);                      \
-     std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__); \
-     return std::string(_out.data());                         \
-   })()
-
+#define _FORMAT(_fmt, ...)                                                     \
+  ([&](void) -> std::string {                                                  \
+    int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);                    \
+    std::vector<char> _out(_sz + 1);                                           \
+    std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__);                   \
+    return std::string(_out.data());                                           \
+  })()
 
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
-}
+} // namespace atrip
 // Epilog:1 ends here

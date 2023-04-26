@@ -19,28 +19,31 @@
 #include <mpi.h>
 #include "config.h"
 #if defined(HAVE_CUDA)
-#include <cuComplex.h>
+#  include <cuComplex.h>
 #endif
 
 namespace atrip {
 
-  using Complex = std::complex<double>;
+using Complex = std::complex<double>;
 
-  template <typename F> F maybeConjugate(const F);
+template <typename F>
+F maybeConjugate(const F);
 
 #if defined(HAVE_CUDA)
-  cuDoubleComplex& operator+=(cuDoubleComplex& lz, cuDoubleComplex const& rz);
+cuDoubleComplex &operator+=(cuDoubleComplex &lz, cuDoubleComplex const &rz);
 #endif
 
-  namespace traits {
+namespace traits {
 
-    template <typename FF> bool isComplex();
+template <typename FF>
+bool isComplex();
 
-    namespace mpi {
-      template <typename F> MPI_Datatype datatypeOf(void);
-    }
-
-  }
-
+namespace mpi {
+template <typename F>
+MPI_Datatype datatypeOf(void);
 }
+
+} // namespace traits
+
+} // namespace atrip
 // Complex numbers:1 ends here

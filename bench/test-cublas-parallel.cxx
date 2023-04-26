@@ -27,43 +27,43 @@ struct Timer {
 };
 using Timings = std::map<std::string, Timer>;
 
-#define _FORMAT(_fmt, ...)                                    \
-  ([&] (void) -> std::string {                                \
-     int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);  \
-     std::vector<char>  _out(_sz  +  1);                      \
-     std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__); \
-     return std::string(_out.data());                         \
-   })()
+#define _FORMAT(_fmt, ...)                                                     \
+  ([&](void) -> std::string {                                                  \
+    int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);                    \
+    std::vector<char> _out(_sz + 1);                                           \
+    std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__);                   \
+    return std::string(_out.data());                                           \
+  })()
 
-#define _CHECK_CUDA_SUCCESS(message, ...)                               \
-  do {                                                                  \
-    CUresult result = __VA_ARGS__;                                      \
-    printf("doing %s\n", message);                                      \
-    if (result != CUDA_SUCCESS) {                                       \
-      printf("\t!!CUDA_ERROR(%d): %s:%d %s\n",                          \
-             result,                                                    \
-             __FILE__,                                                  \
-             __LINE__,                                                  \
-             message);                                                  \
-      return 1;                                                         \
-    }                                                                   \
+#define _CHECK_CUDA_SUCCESS(message, ...)                                      \
+  do {                                                                         \
+    CUresult result = __VA_ARGS__;                                             \
+    printf("doing %s\n", message);                                             \
+    if (result != CUDA_SUCCESS) {                                              \
+      printf("\t!!CUDA_ERROR(%d): %s:%d %s\n",                                 \
+             result,                                                           \
+             __FILE__,                                                         \
+             __LINE__,                                                         \
+             message);                                                         \
+      return 1;                                                                \
+    }                                                                          \
   } while (0)
 
-#define _CHECK_CUBLAS_SUCCESS(message, ...)                             \
-  do {                                                                  \
-    cublasStatus_t result = __VA_ARGS__;                                \
-    printf("CUBLAS: doing %s\n", message);                              \
-    if (result != 0) {                                                  \
-      printf("\t!!CUBLAS_ERROR(%d): %s:%d  %s\n",                       \
-             result,                                                    \
-             __FILE__,                                                  \
-             __LINE__,                                                  \
-             message);                                                  \
-      return 1;                                                         \
-    }                                                                   \
+#define _CHECK_CUBLAS_SUCCESS(message, ...)                                    \
+  do {                                                                         \
+    cublasStatus_t result = __VA_ARGS__;                                       \
+    printf("CUBLAS: doing %s\n", message);                                     \
+    if (result != 0) {                                                         \
+      printf("\t!!CUBLAS_ERROR(%d): %s:%d  %s\n",                              \
+             result,                                                           \
+             __FILE__,                                                         \
+             __LINE__,                                                         \
+             message);                                                         \
+      return 1;                                                                \
+    }                                                                          \
   } while (0)
 
-int main(int  argc, char** argv) {
+int main(int argc, char **argv) {
   MPI_Init(NULL, NULL);
   int rank, np, ngcards;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -73,43 +73,26 @@ int main(int  argc, char** argv) {
 
   MPI_Barrier(MPI_COMM_WORLD);
 
-  _CHECK_CUDA_SUCCESS("init for cuda",
-                      cuInit(0));
+  _CHECK_CUDA_SUCCESS("init for cuda", cuInit(0));
 
-  _CHECK_CUDA_SUCCESS("get ncards",
-                      cuDeviceGetCount(&ngcards));
+  _CHECK_CUDA_SUCCESS("get ncards", cuDeviceGetCount(&ngcards));
 
-
-  const size_t N
-    = argc > 1
-    ? atoi(argv[1])
-    : 30000
-    , dgemms
-    = argc > 2
-    ? atoi(argv[2])
-    : 2
-    , flops = 2 * N * N * N * dgemms
-    ;
+  const size_t N = argc > 1 ? atoi(argv[1]) : 30000,
+               dgemms = argc > 2 ? atoi(argv[2]) : 2,
+               flops = 2 * N * N * N * dgemms;
 
   CUcontext ctx;
   CUdevice dev;
 
   char hostname[256];
   gethostname(hostname, 256);
-  printf("%s with rank %d gets card %d\n",
-         hostname,
-         rank,
-         rank % ngcards);
+  printf("%s with rank %d gets card %d\n", hostname, rank, rank % ngcards);
 
   // set contexts
-  _CHECK_CUDA_SUCCESS("device get",
-                      cuDeviceGet(&dev, rank % ngcards));
-  _CHECK_CUDA_SUCCESS("creating context",
-                      cuCtxCreate(&ctx, 0, dev));
-  _CHECK_CUDA_SUCCESS("setting context",
-                      cuCtxSetCurrent(ctx));
-  _CHECK_CUDA_SUCCESS("synchronizing",
-                      cuCtxSynchronize());
+  _CHECK_CUDA_SUCCESS("device get", cuDeviceGet(&dev, rank % ngcards));
+  _CHECK_CUDA_SUCCESS("creating context", cuCtxCreate(&ctx, 0, dev));
+  _CHECK_CUDA_SUCCESS("setting context", cuCtxSetCurrent(ctx));
+  _CHECK_CUDA_SUCCESS("synchronizing", cuCtxSynchronize());
   MPI_Barrier(MPI_COMM_WORLD);
 
   CUdeviceptr A, B, C;
@@ -130,24 +113,24 @@ int main(int  argc, char** argv) {
                           cublasDgemm(handle,
                                       CUBLAS_OP_N,
                                       CUBLAS_OP_N,
-                                      N, N, N,
+                                      N,
+                                      N,
+                                      N,
                                       &one,
-                                      (double*)A, N,
-                                      (double*)B, N,
+                                      (double *)A,
+                                      N,
+                                      (double *)B,
+                                      N,
                                       &one,
-                                      (double*)C, N));
+                                      (double *)C,
+                                      N));
   }
 
   cuCtxSynchronize();
   timings["dgemm"].stop();
 
-
   printf("dgemm Gflops: %f\n",
-         flops
-         / timings["dgemm"].count()
-         / 1024.0
-         / 1024.0
-         / 1024.0);
+         flops / timings["dgemm"].count() / 1024.0 / 1024.0 / 1024.0);
 
   MPI_Finalize();
   return 0;

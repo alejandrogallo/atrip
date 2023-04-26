@@ -31,19 +31,18 @@ struct DataField<double> {
 
 template <typename F>
 using DataPtr = CUdeviceptr;
-#define DataNullPtr 0x00
+#  define DataNullPtr 0x00
 
 template <>
 struct DataField<Complex> {
   using type = cuDoubleComplex;
 };
 
-
 #else
 
 template <typename F>
-using DataPtr = F*;
-#define DataNullPtr nullptr
+using DataPtr = F *;
+#  define DataNullPtr nullptr
 
 template <>
 struct DataField<Complex> {
@@ -52,9 +51,8 @@ struct DataField<Complex> {
 
 #endif
 
-
 template <typename F>
 using DataFieldType = typename DataField<F>::type;
 
-}
+} // namespace atrip
 // Data pointer:1 ends here

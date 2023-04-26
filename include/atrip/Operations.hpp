@@ -22,143 +22,141 @@
 namespace atrip {
 namespace acc {
 
-  // cuda kernels
+// cuda kernels
 
-  ////
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  F maybeConjugateScalar(const F &a) { return a; }
+////
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F maybeConjugateScalar(const F &a) {
+  return a;
+}
 
-  // TODO: instantiate for std::complex<double>
+// TODO: instantiate for std::complex<double>
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  cuDoubleComplex maybeConjugateScalar(const cuDoubleComplex &a) {
-    return {a.x, -a.y};
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
+maybeConjugateScalar(const cuDoubleComplex &a) {
+  return {a.x, -a.y};
+}
 #endif /*  defined(HAVE_CUDA) */
 
-  template <typename F>
-  __MAYBE_GLOBAL__
-  void maybeConjugate(F* to, F* from, size_t n) {
-    for (size_t i = 0; i < n; ++i) {
-      to[i] = maybeConjugateScalar<F>(from[i]);
-    }
-  }
+template <typename F>
+__MAYBE_GLOBAL__ void maybeConjugate(F *to, F *from, size_t n) {
+  for (size_t i = 0; i < n; ++i) { to[i] = maybeConjugateScalar<F>(from[i]); }
+}
 
-
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__
-  void reorder(F* to, F* from, size_t size, size_t I, size_t J, size_t K) {
-    size_t idx = 0;
-    const size_t IDX = I + J*size + K*size*size;
-    for (size_t k = 0; k < size; k++)
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ void
+reorder(F *to, F *from, size_t size, size_t I, size_t J, size_t K) {
+  size_t idx = 0;
+  const size_t IDX = I + J * size + K * size * size;
+  for (size_t k = 0; k < size; k++)
     for (size_t j = 0; j < size; j++)
-    for (size_t i = 0; i < size; i++, idx++)
-      to[idx] += from[IDX];
-  }
+      for (size_t i = 0; i < size; i++, idx++) to[idx] += from[IDX];
+}
 
-  // Multiplication operation
-  //////////////////////////////////////////////////////////////////////////////
+// Multiplication operation
+//////////////////////////////////////////////////////////////////////////////
 
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  F prod(const F &a, const F &b) { return a * b; }
-
-#if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  cuDoubleComplex prod(const cuDoubleComplex &a, const cuDoubleComplex &b) {
-    return cuCmul(a, b);
-  }
-#endif /*  defined(HAVE_CUDA) */
-
-  // Division operation
-  //////////////////////////////////////////////////////////////////////////////
-
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  F div(const F &a, const F &b) { return a / b; }
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F prod(const F &a, const F &b) {
+  return a * b;
+}
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  cuDoubleComplex div(const cuDoubleComplex &a, const cuDoubleComplex &b) {
-    return cuCdiv(a, b);
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
+prod(const cuDoubleComplex &a, const cuDoubleComplex &b) {
+  return cuCmul(a, b);
+}
 #endif /*  defined(HAVE_CUDA) */
 
-  // Real part
-  //////////////////////////////////////////////////////////////////////////////
+// Division operation
+//////////////////////////////////////////////////////////////////////////////
 
-  template <typename F>
-  __MAYBE_HOST__ __INLINE__
-  double real(F &a) { return std::real(a); }
-
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  double real(double &a) {
-    return a;
-  }
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F div(const F &a, const F &b) {
+  return a / b;
+}
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  double real(cuDoubleComplex &a) {
-    return cuCreal(a);
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
+div(const cuDoubleComplex &a, const cuDoubleComplex &b) {
+  return cuCdiv(a, b);
+}
 #endif /*  defined(HAVE_CUDA) */
 
-  // Substraction operator
-  //////////////////////////////////////////////////////////////////////////////
+// Real part
+//////////////////////////////////////////////////////////////////////////////
 
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  F sub(const F &a, const F &b) { return a - b; }
+template <typename F>
+__MAYBE_HOST__ __INLINE__ double real(F &a) {
+  return std::real(a);
+}
+
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ double real(double &a) {
+  return a;
+}
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  cuDoubleComplex sub(const cuDoubleComplex &a,
-                               const cuDoubleComplex &b) {
-    return cuCsub(a, b);
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ double real(cuDoubleComplex &a) {
+  return cuCreal(a);
+}
 #endif /*  defined(HAVE_CUDA) */
 
-  // Addition operator
-  //////////////////////////////////////////////////////////////////////////////
+// Substraction operator
+//////////////////////////////////////////////////////////////////////////////
 
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  F add(const F &a, const F &b) { return a + b; }
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F sub(const F &a, const F &b) {
+  return a - b;
+}
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__
-  cuDoubleComplex add(const cuDoubleComplex &a, const cuDoubleComplex &b) {
-    return cuCadd(a, b);
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
+sub(const cuDoubleComplex &a, const cuDoubleComplex &b) {
+  return cuCsub(a, b);
+}
 #endif /*  defined(HAVE_CUDA) */
 
-  // Sum in place operator
-  //////////////////////////////////////////////////////////////////////////////
+// Addition operator
+//////////////////////////////////////////////////////////////////////////////
 
-  template <typename F>
-  __MAYBE_DEVICE__ __MAYBE_HOST__
-  void sum_in_place(F* to, const F* from) { *to += *from; }
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F add(const F &a, const F &b) {
+  return a + b;
+}
 
 #if defined(HAVE_CUDA)
-  template <>
-  __MAYBE_DEVICE__ __MAYBE_HOST__
-  void sum_in_place(cuDoubleComplex* to, const cuDoubleComplex* from) {
-    to->x += from->x;
-    to->y += from->y;
-  }
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
+add(const cuDoubleComplex &a, const cuDoubleComplex &b) {
+  return cuCadd(a, b);
+}
 #endif /*  defined(HAVE_CUDA) */
 
+// Sum in place operator
+//////////////////////////////////////////////////////////////////////////////
 
-}  // namespace acc
-}  // namespace atrip
+template <typename F>
+__MAYBE_DEVICE__ __MAYBE_HOST__ void sum_in_place(F *to, const F *from) {
+  *to += *from;
+}
+
+#if defined(HAVE_CUDA)
+template <>
+__MAYBE_DEVICE__ __MAYBE_HOST__ void sum_in_place(cuDoubleComplex *to,
+                                                  const cuDoubleComplex *from) {
+  to->x += from->x;
+  to->y += from->y;
+}
+#endif /*  defined(HAVE_CUDA) */
+
+} // namespace acc
+} // namespace atrip
 
 #endif

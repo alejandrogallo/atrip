@@ -15,16 +15,15 @@
 // [[file:~/cuda/atrip/atrip.org::*Prolog][Prolog:1]]
 #pragma once
 
-#include<atrip/Atrip.hpp>
-#include<atrip/Blas.hpp>
-#include<atrip/Utils.hpp>
+#include <atrip/Atrip.hpp>
+#include <atrip/Blas.hpp>
+#include <atrip/Utils.hpp>
 
 #if defined(HAVE_CUDA)
-#include<thrust/device_vector.h>
+#  include <thrust/device_vector.h>
 #endif
 
-#include<atrip/CUDA.hpp>
-
+#include <atrip/CUDA.hpp>
 
 namespace atrip {
 using ABCTuple = std::array<size_t, 3>;
@@ -33,84 +32,84 @@ using ABCTuples = std::vector<ABCTuple>;
 // Prolog:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:1]]
-template <typename F=double>
-__MAYBE_GLOBAL__
-void getEnergyDistinct
-  ( F const epsabc
-  , size_t const No
-  , F* const epsi
-  , F* const Tijk
-  , F* const Zijk
-  , double* energy
-  );
+template <typename F = double>
+__MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
+                                        size_t const No,
+                                        F *const epsi,
+                                        F *const Tijk,
+                                        F *const Zijk,
+                                        double *energy);
 
-template <typename F=double>
-__MAYBE_GLOBAL__
-void getEnergySame
-  ( F const epsabc
-  , size_t const No
-  , F* const epsi
-  , F* const Tijk
-  , F* const Zijk
-  , double* energy
-  );
+template <typename F = double>
+__MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
+                                    size_t const No,
+                                    F *const epsi,
+                                    F *const Tijk,
+                                    F *const Zijk,
+                                    double *energy);
 // Energy:1 ends here
 
-// [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles contribution:1]]
-template <typename F=double>
+// [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles
+// contribution:1]]
+template <typename F = double>
 #ifdef HAVE_CUDA
 __global__
 #endif
-void singlesContribution
-  ( size_t No
-  , size_t Nv
-  , size_t a
-  , size_t b
-  , size_t c
-  , DataFieldType<F>* const Tph
-  , DataFieldType<F>* const VABij
-  , DataFieldType<F>* const VACij
-  , DataFieldType<F>* const VBCij
-  , DataFieldType<F>* Zijk
-  );
+    void
+    singlesContribution(size_t No,
+                        size_t Nv,
+                        size_t a,
+                        size_t b,
+                        size_t c,
+                        DataFieldType<F> *const Tph,
+                        DataFieldType<F> *const VABij,
+                        DataFieldType<F> *const VACij,
+                        DataFieldType<F> *const VBCij,
+                        DataFieldType<F> *Zijk);
 // Singles contribution:1 ends here
 
-// [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles contribution:1]]
-  template <typename F=double>
-  void doublesContribution
-    ( const ABCTuple &abc
-    , size_t const No
-    , size_t const Nv
-    // -- VABCI
-    , DataPtr<F> const VABph
-    , DataPtr<F> const VACph
-    , DataPtr<F> const VBCph
-    , DataPtr<F> const VBAph
-    , DataPtr<F> const VCAph
-    , DataPtr<F> const VCBph
-    // -- VHHHA
-    , DataPtr<F> const VhhhA
-    , DataPtr<F> const VhhhB
-    , DataPtr<F> const VhhhC
-    // -- TA
-    , DataPtr<F> const TAphh
-    , DataPtr<F> const TBphh
-    , DataPtr<F> const TCphh
-    // -- TABIJ
-    , DataPtr<F> const TABhh
-    , DataPtr<F> const TAChh
-    , DataPtr<F> const TBChh
-    // -- TIJK
-    // , DataPtr<F> Tijk
-    , DataFieldType<F>* Tijk_
+// [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles
+// contribution:1]]
+template <typename F = double>
+void doublesContribution(const ABCTuple &abc,
+                         size_t const No,
+                         size_t const Nv
+                         // -- VABCI
+                         ,
+                         DataPtr<F> const VABph,
+                         DataPtr<F> const VACph,
+                         DataPtr<F> const VBCph,
+                         DataPtr<F> const VBAph,
+                         DataPtr<F> const VCAph,
+                         DataPtr<F> const VCBph
+                         // -- VHHHA
+                         ,
+                         DataPtr<F> const VhhhA,
+                         DataPtr<F> const VhhhB,
+                         DataPtr<F> const VhhhC
+                         // -- TA
+                         ,
+                         DataPtr<F> const TAphh,
+                         DataPtr<F> const TBphh,
+                         DataPtr<F> const TCphh
+                         // -- TABIJ
+                         ,
+                         DataPtr<F> const TABhh,
+                         DataPtr<F> const TAChh,
+                         DataPtr<F> const TBChh
+                         // -- TIJK
+                         // , DataPtr<F> Tijk
+                         ,
+                         DataFieldType<F> *Tijk_
 #if defined(HAVE_CUDA)
-     // -- tmp buffers
-    , DataFieldType<F>* _t_buffer
-    , DataFieldType<F>* _vhhh 
+                         // -- tmp buffers
+                         ,
+                         DataFieldType<F> *_t_buffer,
+                         DataFieldType<F> *_vhhh
 #endif
-    );
+);
 // Doubles contribution:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
-}
+} // namespace atrip
 // Epilog:1 ends here

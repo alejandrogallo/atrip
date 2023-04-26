@@ -18,18 +18,39 @@
 
 namespace atrip {
 
-  template <> double maybeConjugate(const double a) { return a; }
-  template <> Complex maybeConjugate(const Complex a) { return std::conj(a); }
-
-  namespace traits {
-    template <typename F> bool isComplex() { return false; }
-    template <> bool isComplex<double>() { return false; }
-    template <> bool isComplex<Complex>() { return true; }
-  namespace mpi {
-    template <> MPI_Datatype datatypeOf<double>() { return MPI_DOUBLE; }
-    template <> MPI_Datatype datatypeOf<Complex>() { return MPI_DOUBLE_COMPLEX; }
-  }
-  }
-
+template <>
+double maybeConjugate(const double a) {
+  return a;
 }
+template <>
+Complex maybeConjugate(const Complex a) {
+  return std::conj(a);
+}
+
+namespace traits {
+template <typename F>
+bool isComplex() {
+  return false;
+}
+template <>
+bool isComplex<double>() {
+  return false;
+}
+template <>
+bool isComplex<Complex>() {
+  return true;
+}
+namespace mpi {
+template <>
+MPI_Datatype datatypeOf<double>() {
+  return MPI_DOUBLE;
+}
+template <>
+MPI_Datatype datatypeOf<Complex>() {
+  return MPI_DOUBLE_COMPLEX;
+}
+} // namespace mpi
+} // namespace traits
+
+} // namespace atrip
 // Complex numbers:2 ends here

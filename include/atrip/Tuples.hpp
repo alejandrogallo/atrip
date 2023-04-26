@@ -44,15 +44,16 @@ constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 constexpr ABCTuple INVALID_TUPLE = {1, 1, 1};
 // Tuples types:1 ends here
 
-// [[file:~/cuda/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the tuples:1]]
+// [[file:~/cuda/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the
+// tuples:1]]
 struct TuplesDistribution {
   virtual ABCTuples getTuples(size_t Nv, MPI_Comm universe) = 0;
-  virtual bool tupleIsFake(ABCTuple const& t) { return t == FAKE_TUPLE; }
+  virtual bool tupleIsFake(ABCTuple const &t) { return t == FAKE_TUPLE; }
 };
 // Distributing the tuples:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Node%20information][Node information:1]]
-  std::vector<std::string> getNodeNames(MPI_Comm comm);
+std::vector<std::string> getNodeNames(MPI_Comm comm);
 // Node information:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Node%20information][Node information:2]]
@@ -64,8 +65,7 @@ struct RankInfo {
   const size_t ranksPerNode;
 };
 
-std::vector<RankInfo>
-getNodeInfos(std::vector<string> const& nodeNames);
+std::vector<RankInfo> getNodeInfos(std::vector<string> const &nodeNames);
 
 struct ClusterInfo {
   const size_t nNodes, np, ranksPerNode;
@@ -97,13 +97,11 @@ namespace group_and_sort {
 // Provides the node on which the slice-element is found
 // Right now we distribute the slices in a round robin fashion
 // over the different nodes (NOTE: not mpi ranks but nodes)
-inline
-size_t isOnNode(size_t tuple, size_t nNodes);
-
+inline size_t isOnNode(size_t tuple, size_t nNodes);
 
 // return the node (or all nodes) where the elements of this
 // tuple are located
-std::vector<size_t> getTupleNodes(ABCTuple const& t, size_t nNodes);
+std::vector<size_t> getTupleNodes(ABCTuple const &t, size_t nNodes);
 
 struct Info {
   size_t nNodes;
@@ -112,7 +110,7 @@ struct Info {
 // Utils:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Distribution][Distribution:1]]
-ABCTuples specialDistribution(Info const& info, ABCTuples const& allTuples);
+ABCTuples specialDistribution(Info const &info, ABCTuples const &allTuples);
 // Distribution:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Main][Main:1]]
@@ -130,5 +128,5 @@ struct Distribution : public TuplesDistribution {
 // Epilog:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
-}
+} // namespace atrip
 // Epilog:1 ends here
