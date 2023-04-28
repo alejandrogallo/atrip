@@ -332,7 +332,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
 #ifdef HAVE_CUDA
-  // TODO: free buffers
   DataFieldType<F> *_t_buffer;
   DataFieldType<F> *_vhhh;
   WITH_CHRONO(
@@ -343,11 +342,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       _CHECK_CUDA_SUCCESS("Allocating _vhhh",
                           cuMemAlloc((CUdeviceptr *)&_vhhh,
                                      No * No * No * sizeof(DataFieldType<F>)));)
-  // const size_t
-  //  bs = Atrip::kernelDimensions.ooo.blocks,
-  // ths = Atrip::kernelDimensions.ooo.threads;
-  // cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_t_buffer, NoNoNo);
-  // cuda::zeroing<<<bs, ths>>>((DataFieldType<F>*)_vhhh, NoNoNo);
 #endif
 
   // get tuples for the current rank
@@ -769,6 +763,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                                   tabhh.unwrapSlice(Slice<F>::BC, abc),
                                   // -- TIJK
                                   (DataFieldType<F> *)Tijk
+      // TODO: have the buffers also in the CPU case
 #if defined(HAVE_CUDA)
                                   // -- tmp buffers
                                   ,
@@ -988,6 +983,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   cuMemFree(epsa);
   cuMemFree(Tijk);
   cuMemFree(Zijk);
+  cuMemFree(_t_buffer);
+  cuMemFree(_vhhh);
 #else
   std::free(Zijk);
   std::free(Tijk);

@@ -476,7 +476,7 @@ void doublesContribution(const ABCTuple &abc,
                          DataFieldType<F> *_vhhh
 #endif
 ) {
-  const size_t a = abc[0], b = abc[1], c = abc[2], NoNo = No * No;
+  const size_t NoNo = No * No;
 
   DataFieldType<F> *Tijk = (DataFieldType<F> *)Tijk_;
 
