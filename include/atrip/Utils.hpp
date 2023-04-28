@@ -19,6 +19,9 @@
 #include <map>
 #include <chrono>
 
+#define IGNORABLE(param)                                                       \
+  do { (void)(param); } while (0)
+
 #if defined(HAVE_CUDA)
 #  include <nvToolsExt.h>
 #endif /* defined(HAVE_CUDA) */

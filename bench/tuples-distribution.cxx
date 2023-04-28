@@ -155,6 +155,9 @@ void send(SliceUnion<F> &u,
           typename Slice<F>::LocalDatabaseElement const &el,
           size_t tag,
           ABCTuple abc) {
+  IGNORABLE(u);
+  IGNORABLE(tag);
+  IGNORABLE(abc);
   bool sendData_p = false;
   auto const &info = el.info;
 
@@ -391,8 +394,7 @@ int main(int argc, char **argv) {
   using Database = typename Slice<F>::Database;
   auto communicateDatabase = [&unions, np](ABCTuple const &abc,
                                            MPI_Comm const &c) -> Database {
-    WITH_CHRONO("db:comm:type:do",
-                auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();)
+    auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
 
     WITH_CHRONO(
         "db:comm:ldb", // Build local database
@@ -477,7 +479,7 @@ int main(int argc, char **argv) {
     }
 
     // SEND PHASE =========================================================
-    for (size_t otherRank = 0; otherRank < np; otherRank++) {
+    for (size_t otherRank = 0UL; otherRank < np; otherRank++) {
       auto const &begin = &db[otherRank * localDBLength],
                  end = begin + localDBLength;
       for (auto it = begin; it != end; ++it) {
