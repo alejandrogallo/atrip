@@ -244,31 +244,35 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // H                      => No
   // total_source_sizes contains a list of the number of elements
   // in all sources of every tensor union, therefore nSlices * sliceSize
-  const std::vector<size_t> total_source_sizes = {
-      // ABPH
-      SliceUnion<F>::getSize({Nv, No}, {Nv, Nv}, (size_t)np, universe),
-      // ABHH
-      SliceUnion<F>::getSize({No, No}, {Nv, Nv}, (size_t)np, universe),
-      // TABHH
-      SliceUnion<F>::getSize({No, No}, {Nv, Nv}, (size_t)np, universe),
-      // TAPHH
-      SliceUnion<F>::getSize({Nv, No, No}, {Nv}, (size_t)np, universe),
-      // HHHA
-      SliceUnion<F>::getSize({No, No, No}, {Nv}, (size_t)np, universe),
-  };
 
-  const size_t total_source_size = sizeof(DataFieldType<F>)
-                                 * std::accumulate(total_source_sizes.begin(),
-                                                   total_source_sizes.end(),
-                                                   0UL);
+  // TODO: remove the alignment of sources in one big block or
+  //        add it as an option
 
-#if defined(HAVE_CUDA)
-  DataPtr<F> all_sources_pointer;
-  cuMemAlloc(&all_sources_pointer, total_source_size);
-#else
-  DataPtr<F> all_sources_pointer = (DataPtr<F>)malloc(total_source_size);
-#endif
-  size_t _source_pointer_idx = 0;
+  // const std::vector<size_t> total_source_sizes = {
+  //     // ABPH
+  //     SliceUnion<F>::getSize({Nv, No}, {Nv, Nv}, (size_t)np, universe),
+  //     // ABHH
+  //     SliceUnion<F>::getSize({No, No}, {Nv, Nv}, (size_t)np, universe),
+  //     // TABHH
+  //     SliceUnion<F>::getSize({No, No}, {Nv, Nv}, (size_t)np, universe),
+  //     // TAPHH
+  //     SliceUnion<F>::getSize({Nv, No, No}, {Nv}, (size_t)np, universe),
+  //     // HHHA
+  //     SliceUnion<F>::getSize({No, No, No}, {Nv}, (size_t)np, universe),
+  // };
+
+  // const size_t total_source_size = sizeof(DataFieldType<F>)
+  //                                * std::accumulate(total_source_sizes.begin(),
+  //                                                  total_source_sizes.end(),
+  //                                                  0UL);
+
+  // #if defined(HAVE_CUDA)
+  //   DataPtr<F> all_sources_pointer;
+  //   cuMemAlloc(&all_sources_pointer, total_source_size);
+  // #else
+  //   DataPtr<F> all_sources_pointer = (DataPtr<F>)malloc(total_source_size);
+  // #endif
+  //   size_t _source_pointer_idx = 0;
 
   // BUILD SLICES PARAMETRIZED BY NV x NV =============================={{{1
   WITH_CHRONO(
