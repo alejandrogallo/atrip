@@ -299,22 +299,24 @@ int main(int argc, char **argv) {
   bool print_database, print_tuples;
 
   CLI::App app{"Main bench for atrip"};
-  app.add_option("-N", ranks_per_node, "Ranks per node")->required();
-  app.add_option("--nodes", n_nodes, "Number of nodes")->required();
-  app.add_option("--no", no, "Occupied orbitals")->required();
-  app.add_option("--nv", nv, "Virtual orbitals")->required();
-  app.add_option("--dist", tuplesDistributionString, "Which distribution")
+  defoption(app, "-N", ranks_per_node, "Ranks per node")->required();
+  defoption(app, "--nodes", n_nodes, "Number of nodes")->required();
+  defoption(app, "--no", no, "Occupied orbitals")->required();
+  defoption(app, "--nv", nv, "Virtual orbitals")->required();
+  defoption(app, "--dist", tuplesDistributionString, "Which distribution")
       ->required();
-  app.add_option("--mod", mod, "Every each iteration there is output");
-  app.add_option("--out-rank", out_rank, "Stdout for given rank");
-  app.add_option("--max-iterations", max_iterations, "Iterations to run");
-  app.add_flag(
-      "--db",
-      print_database,
-      "Wether to print the database for every iteration for rank --out-rank");
-  app.add_flag("--print-tuples",
-               print_tuples,
-               "Print the tuples list for --out-rank");
+  defoption(app, "--mod", mod, "Every each iteration there is output");
+  defoption(app, "--out-rank", out_rank, "Stdout for given rank");
+  defoption(app, "--max-iterations", max_iterations, "Iterations to run");
+  defflag(app,
+          "--db",
+          print_database,
+          "Wether to print the database for every "
+          "iteration for rank --out-rank");
+  defflag(app,
+          "--print-tuples",
+          print_tuples,
+          "Print the tuples list for --out-rank");
   CLI11_PARSE(app, argc, argv);
 
   CTF::World world(argc, argv);
@@ -335,6 +337,12 @@ int main(int argc, char **argv) {
                 << std::endl;
       std::exit(1);
     }
+
+  std::cout << "\n";
+  if (!rank)
+    for (auto const &fn : input_printer)
+      // print input parameters
+      fn();
 
   atrip::ABCTuples tuplesList;
   atrip::TuplesDistribution *dist;
@@ -363,19 +371,6 @@ int main(int argc, char **argv) {
     MPI_Barrier(kaun);
     exit(0);
   }
-
-  double tuplesListGb =
-      tuplesList.size() * sizeof(tuplesList[0]) / 1024.0 / 1024.0 / 1024.0;
-
-  std::cout << "\n";
-  PRINT_VARIABLE(tuplesDistributionString);
-  PRINT_VARIABLE(n_nodes);
-  PRINT_VARIABLE(ranks_per_node);
-  PRINT_VARIABLE(np);
-  PRINT_VARIABLE(no);
-  PRINT_VARIABLE(nv);
-  PRINT_VARIABLE(tuplesList.size());
-  PRINT_VARIABLE(tuplesListGb);
 
   // create a fake dry tensor
   Tr t_abph, t_abhh, t_tabhh, t_taphh, t_hhha;

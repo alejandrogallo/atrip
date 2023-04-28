@@ -4,6 +4,8 @@
 
 #include <CLI11.hpp>
 
+#include <bench/utils.hpp>
+
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
 #include <atrip/Utils.hpp>
@@ -15,21 +17,6 @@
                 << std::endl;                                                  \
     }                                                                          \
   } while (0)
-
-// Printer for options
-std::vector<std::function<void(void)>> input_printer;
-#define _register_printer(flag, variable)                                      \
-  input_printer.push_back([&variable]() {                                      \
-    std::cout << "Input " << flag << " " << variable << std::endl;             \
-  })
-
-#define defoption(app, flag, variable, description)                            \
-  _register_printer(flag, variable);                                           \
-  app.add_option(flag, variable, description)
-
-#define defflag(app, flag, variable, description)                              \
-  _register_printer(flag, variable);                                           \
-  app.add_flag(flag, variable, description)
 
 int main(int argc, char **argv) {
   MPI_Init(&argc, &argv);
