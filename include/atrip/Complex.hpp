@@ -16,7 +16,9 @@
 #pragma once
 
 #include <complex>
-#include <mpi.h>
+
+#include <atrip/mpi.hpp>
+
 #include "config.h"
 #if defined(HAVE_CUDA)
 #  include <cuComplex.h>

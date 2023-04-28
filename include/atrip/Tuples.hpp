@@ -27,8 +27,8 @@
 #include <cassert>
 #include <chrono>
 #include <climits>
-#include <mpi.h>
 
+#include <atrip/mpi.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Debug.hpp>
 

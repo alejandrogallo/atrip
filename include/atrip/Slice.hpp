@@ -17,8 +17,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <mpi.h>
 
+#include <atrip/mpi.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/CUDA.hpp>

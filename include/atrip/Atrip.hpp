@@ -17,8 +17,9 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include <mpi.h>
 #include "config.h"
+
+#include <atrip/mpi.hpp>
 
 #if defined(HAVE_CUDA)
 #  include <cuda.h>
