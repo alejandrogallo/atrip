@@ -21,11 +21,10 @@ namespace atrip {
 template <typename F = double>
 static void sliceIntoVector
 #if defined(ATRIP_SOURCES_IN_GPU)
-    (DataPtr<F> &source
+    (DataPtr<F> &source,
 #else
-    (std::vector<F> &source
+    (std::vector<F> &source,
 #endif
-     ,
      size_t sliceSize,
      CTF::Tensor<F> &toSlice,
      std::vector<int64_t> const low,
@@ -65,6 +64,10 @@ static void sliceIntoVector
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) */
 
 #else
+  IGNORABLE(source);
+  IGNORABLE(sliceSize);
+  IGNORABLE(toSlice);
+  IGNORABLE(origin);
 #  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
 #endif /* !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY) */
 }
