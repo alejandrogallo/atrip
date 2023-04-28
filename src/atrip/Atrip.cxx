@@ -383,8 +383,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     if (in.tuplesDistribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
 
       WITH_CHRONO("db:comm:naive",
-                  auto const &db =
-                      naiveDatabase<F>(unions, Nv, np, iteration, c);)
+                  auto const &db = naiveDatabase<F>(unions, Nv, np, iteration);)
       return db;
 
     } else {

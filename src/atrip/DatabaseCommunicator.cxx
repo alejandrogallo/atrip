@@ -197,11 +197,8 @@ build_local_database_fake(ABCTuple const &abc_prev,
 }
 
 template <typename F>
-typename Slice<F>::Database naiveDatabase(Unions<F> &unions,
-                                          size_t nv,
-                                          size_t np,
-                                          size_t iteration,
-                                          MPI_Comm const &c) {
+typename Slice<F>::Database
+naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
 
   using Database = typename Slice<F>::Database;
   Database db;
@@ -244,14 +241,12 @@ template typename Slice<double>::Database
 naiveDatabase<double>(Unions<double> &unions,
                       size_t nv,
                       size_t np,
-                      size_t iteration,
-                      MPI_Comm const &c);
+                      size_t iteration);
 
 template typename Slice<Complex>::Database
 naiveDatabase<Complex>(Unions<Complex> &unions,
                        size_t nv,
                        size_t np,
-                       size_t iteration,
-                       MPI_Comm const &c);
+                       size_t iteration);
 
 } // namespace atrip
