@@ -32,7 +32,7 @@ struct RankMap {
   size_t const np, size;
   ClusterInfo const clusterInfo;
 
-  RankMap(std::vector<size_t> lens, size_t np_, MPI_Comm comm)
+  RankMap(std::vector<size_t> lens, size_t np_)
       : lengths(lens)
       , np(np_)
       , size(std::accumulate(lengths.begin(),

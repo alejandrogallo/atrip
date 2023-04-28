@@ -377,7 +377,7 @@ public:
                         const std::vector<size_t> paramLength,
                         const size_t np,
                         const MPI_Comm global_world) {
-    const RankMap<F> rankMap(paramLength, np, global_world);
+    const RankMap<F> rankMap(paramLength, np);
     const size_t nSources = rankMap.nSources(),
                  sliceSize = std::accumulate(sliceLength.begin(),
                                              sliceLength.end(),
@@ -395,7 +395,7 @@ public:
              MPI_Comm global_world,
              typename Slice<F>::Name name_,
              size_t nSliceBuffers = 4)
-      : rankMap(paramLength, np, global_world)
+      : rankMap(paramLength, np)
       , world(child_world)
       , universe(global_world)
       , sliceLength(sliceLength_)
@@ -526,7 +526,8 @@ public:
 #if defined(ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS)
       allocateFreeBuffer();
 #else
-      throw _FORMAT("No more free pointers for name %s", name);
+      throw _FORMAT("No more free pointers for name %s",
+                    name_to_string<F>(name).c_str());
 #endif /* defined(ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS) */
     }
     auto dataPointer_it = freePointers.begin();
@@ -602,6 +603,7 @@ public:
       } else {
         Atrip::networkSend++;
       }
+    default:;
     }
     Atrip::bytesSent += sliceSize * sizeof(F);
     MPI_Isend((void *)isend_buffer,
