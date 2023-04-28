@@ -1,4 +1,7 @@
-#define ATRIP_DEBUG 2
+#ifdef ATRIP_DEBUG
+#  undef ATRIP_DEBUG
+#  define ATRIP_DEBUG 2
+#endif
 #define ATRIP_DONT_SLICE
 #define ATRIP_DRY
 #define ATRIP_ALLOCATE_ADDITIONAL_FREE_POINTERS
@@ -9,10 +12,13 @@
 #include <algorithm>
 
 #include "config.h"
+
 #include <atrip/Atrip.hpp>
+#include <atrip/Utils.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Unions.hpp>
 #include <atrip/SliceUnion.hpp>
+
 #include <bench/CLI11.hpp>
 #include <bench/utils.hpp>
 
@@ -24,15 +30,18 @@ using Tr = CTF::Tensor<F>;
 #define INIT_DRY(name, ...)                                                    \
   do {                                                                         \
     std::vector<int64_t> lens = __VA_ARGS__;                                   \
-    int i = -1;                                                                \
+    size_t i = 0UL;                                                            \
     name.wrld = &world;                                                        \
     name.order = lens.size();                                                  \
     name.lens = (int64_t *)malloc(sizeof(int64_t) * lens.size());              \
     name.sym = (int *)malloc(sizeof(int) * lens.size());                       \
-    name.lens[++i] = lens[i];                                                  \
-    name.lens[++i] = lens[i];                                                  \
-    name.lens[++i] = lens[i];                                                  \
-    name.lens[++i] = lens[i];                                                  \
+    name.lens[i] = lens[i];                                                    \
+    name.lens[i] = lens[i];                                                    \
+    i++;                                                                       \
+    name.lens[i] = lens[i];                                                    \
+    i++;                                                                       \
+    name.lens[i] = lens[i];                                                    \
+    i++;                                                                       \
     i = 0;                                                                     \
     name.sym[i++] = NS;                                                        \
     name.sym[i++] = NS;                                                        \
@@ -391,7 +400,8 @@ int main(int argc, char **argv) {
                 auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();)
 
     WITH_CHRONO(
-        "db:comm:ldb", typename Slice<F>::LocalDatabase ldb;
+        "db:comm:ldb", // Build local database
+        typename Slice<F>::LocalDatabase ldb;
         for (auto const &tensor
              : unions) {
           auto const &tensorDb = buildLocalDatabase(*tensor, abc);
@@ -447,7 +457,7 @@ int main(int argc, char **argv) {
         if (print_database)
           if (rank == out_rank) {
             std::cout << _FORMAT(
-                "%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
                 "RECV",
                 iteration,
                 el.info.from.rank,
@@ -463,7 +473,7 @@ int main(int argc, char **argv) {
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
                 u.mpi_staging_buffers.size())
 #else
-                0)
+                0UL)
 #endif
                       << "\n";
           }
@@ -484,7 +494,7 @@ int main(int argc, char **argv) {
         if (rank == out_rank) {
           if (print_database)
             std::cout << _FORMAT(
-                "%4s %d %d %d %5d %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                "%4s %ld %ld %ld %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
                 "SEND",
                 iteration,
                 el.info.from.rank,
@@ -500,7 +510,7 @@ int main(int argc, char **argv) {
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
                 u.mpi_staging_buffers.size())
 #else
-                0)
+                0UL)
 #endif
                       << "\n";
         }
@@ -547,7 +557,7 @@ int main(int argc, char **argv) {
 
     if (!print_database)
       if (it % mod == 0)
-        std::cout << _FORMAT("%ld :it %ld  %f %% ∷ %ld ∷ %f GB\n",
+        std::cout << _FORMAT("%d :it %ld  %f %% ∷ %ld ∷ %f GB\n",
                              rank,
                              it,
                              100.0 * double(to_send.size())
