@@ -41,6 +41,7 @@ namespace atrip {
                                 size_t size,                                   \
                                 F *to,                                         \
                                 F *from) {                                     \
+    IGNORABLE(p);                                                              \
     _REORDER_BODY_(__VA_ARGS__)                                                \
   }
 #if defined(HAVE_CUDA)
@@ -439,8 +440,7 @@ singlesContribution<Complex>(size_t No,
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles
 // contribution:2]]
 template <typename F>
-void doublesContribution(const ABCTuple &abc,
-                         size_t const No,
+void doublesContribution(size_t const No,
                          size_t const Nv
                          // -- VABCI
                          ,
@@ -727,8 +727,7 @@ void doublesContribution(const ABCTuple &abc,
 }
 
 // instantiate templates
-template void doublesContribution<double>(const ABCTuple &abc,
-                                          size_t const No,
+template void doublesContribution<double>(size_t const No,
                                           size_t const Nv
                                           // -- VABCI
                                           ,
@@ -765,8 +764,7 @@ template void doublesContribution<double>(const ABCTuple &abc,
 
 );
 
-template void doublesContribution<Complex>(const ABCTuple &abc,
-                                           size_t const No,
+template void doublesContribution<Complex>(size_t const No,
                                            size_t const Nv
                                            // -- VABCI
                                            ,

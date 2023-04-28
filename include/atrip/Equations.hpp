@@ -71,8 +71,7 @@ __global__
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles
 // contribution:1]]
 template <typename F = double>
-void doublesContribution(const ABCTuple &abc,
-                         size_t const No,
+void doublesContribution(size_t const No,
                          size_t const Nv
                          // -- VABCI
                          ,

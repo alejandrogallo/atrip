@@ -738,7 +738,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       WITH_CHRONO("oneshot-doubles",
                   WITH_CHRONO("doubles",
                               doublesContribution<F>(
-                                  abc,
                                   (size_t)No,
                                   (size_t)Nv,
                                   // -- VABCI
