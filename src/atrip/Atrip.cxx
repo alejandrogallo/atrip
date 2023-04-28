@@ -662,19 +662,20 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  0,
                  universe);
 
-      LOG(0, "Atrip") << "iteration " << iteration << " ["
-                      << 100 * iteration / nIterations << "%]"
-                      << " ("
-                      << (_doubles_time > 0.0
-                              ? doublesFlops * iteration / _doubles_time
-                              : -1)
-                      << "GF)"
-                      << " ("
-                      << (_its_time > 0.0 ? doublesFlops * iteration / _its_time
-                                          : -1)
-                      << "GF) :: GB sent per rank: " << bytesSent / 1073741824.0
-                      << " :: " << networkSend / (networkSend + localSend)
-                      << " % network communication" << std::endl;
+      const size_t total_send = networkSend + localSend;
+
+      LOG(0, "Atrip")
+          << "iteration " << iteration << " [" << 100 * iteration / nIterations
+          << "%]"
+          << " ("
+          << (_doubles_time > 0.0 ? doublesFlops * iteration / _doubles_time
+                                  : -1)
+          << "GF)"
+          << " ("
+          << (_its_time > 0.0 ? doublesFlops * iteration / _its_time : -1)
+          << "GF) :: GB sent per rank: " << bytesSent / 1073741824.0
+          << " :: " << (total_send > 0UL ? networkSend / total_send : 0UL)
+          << " % network communication" << std::endl;
 
       // PRINT TIMINGS
       if (in.chrono)
