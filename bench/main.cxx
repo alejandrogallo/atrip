@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
   int no(10), nv(100), itMod(-1), percentageMod(10);
   float checkpoint_percentage;
   bool nochrono(false), barrier(false), rankRoundRobin(false), keepVppph(false),
-      noCheckpoint = false, blocking = false;
+      noCheckpoint = false, blocking = false, cT(false);
   std::string tuplesDistributionString = "naive",
               checkpoint_path = "checkpoint.yaml";
 
@@ -63,10 +63,12 @@ int main(int argc, char **argv) {
             "--checkpoint-%",
             checkpoint_percentage,
             "Percentage for checkpoints");
+  // completeTriples
+  defflag(app, "--cT", cT, "Perform (cT) calculation");
 
   // Optional tensor files
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
-      Vppph_path;
+      Vppph_path, Jppph_path, Jhphh_path;
   defoption(app, "--ei", ei_path, "Path for ei");
   defoption(app, "--ea", ea_path, "Path for ea");
   defoption(app, "--Tpphh", Tpphh_path, "Path for Tpphh");
@@ -74,6 +76,10 @@ int main(int argc, char **argv) {
   defoption(app, "--Vpphh", Vpphh_path, "Path for Vpphh");
   defoption(app, "--Vhhhp", Vhhhp_path, "Path for Vhhhp");
   defoption(app, "--Vppph", Vppph_path, "Path for Vppph");
+
+
+  defoption(app, "--Jppph", Jppph_path, "Path for Jppph");
+  defoption(app, "--Jhphh", Jhphh_path, "Path for Jhphh");
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
@@ -190,7 +196,7 @@ int main(int argc, char **argv) {
   }
 
   std::vector<int> symmetries(4, NS), vo({nv, no}), vvoo({nv, nv, no, no}),
-      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no});
+      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no}), ovoo({no, nv, no, no});
 
   CTF::Tensor<double>                                  // All input tensors
       ei(1, ooov.data(), symmetries.data(), world),    // Holes
@@ -228,6 +234,26 @@ int main(int argc, char **argv) {
   } else {
     Vppph->fill_random(0, 1);
   }
+  // provide tensor for ct
+  CTF::Tensor<double> *Jppph = NULL, *Jhhhp = NULL;
+  if (cT) {
+    // allocate the tensors Jppph and Jhhhp
+    Jppph = new CTF::Tensor<double>(4, vvvo.data(), symmetries.data(), world);
+    Jhhhp = new CTF::Tensor<double>(4, ooov.data(), symmetries.data(), world);
+    if (Jppph_path.size()) {
+      Jppph->read_dense_from_file(Jppph_path.c_str());
+    } else {
+      Jppph->fill_random(0,1);
+    }
+    if (Jhphh_path.size()) {
+      CTF::Tensor<double> Jhphh(4, ovoo.data(), symmetries.data(), world);
+      Jhphh.read_dense_from_file(Jhphh_path.c_str());
+      (*Jhhhp)["ijka"] = Jhphh["kaij"];
+    } else {
+      Jhhhp->fill_random(0,1);
+    }
+
+  }
 
   atrip::Atrip::init(MPI_COMM_WORLD);
   const auto
@@ -241,6 +267,8 @@ int main(int argc, char **argv) {
                .with_Vabij(&Vpphh)
                .with_Vijka(&Vhhhp)
                .with_Vabci(Vppph)
+               .with_Jabci(Jppph)
+               .with_Jijka(Jhhhp)
                // some options
                .with_deleteVppph(!keepVppph)
                .with_barrier(barrier)

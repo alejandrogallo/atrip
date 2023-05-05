@@ -335,6 +335,37 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // all tensors
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
+  // IF (cT) IS USED: HANDLE TWO FURTHER SLICES==========================={{{1
+  HHHA<F>* jhhha = nullptr;
+  ABPH<F>* jabph = nullptr;
+  if (in.Jhhhp) {
+    WITH_CHRONO(
+        "Jhhha-slice",
+        LOG(0, "Atrip") << "slicing Jijka" << std::endl;
+        jhhha = new HHHA<F>(*in.Jhhhp,
+                      (size_t)No,
+                      (size_t)Nv,
+                      (size_t)np,
+                      child_comm,
+                      universe);)
+    jhhha->name = Slice<F>::Name::JIJKA;
+    unions.push_back(jhhha);
+  }
+
+  if (in.Jppph) {
+    WITH_CHRONO(
+        "Jabph-slice", LOG(0, "Atrip") << "slicing Jabci" << std::endl;
+        jabph = new ABPH<F>(*in.Jppph,
+          (size_t)No,
+          (size_t)Nv,
+          (size_t)np,
+          child_comm,
+          universe);)
+    jabph->name = Slice<F>::Name::JABCI;
+    unions.push_back(jabph);
+  }
+
+
 #ifdef HAVE_CUDA
   DataFieldType<F> *_t_buffer;
   DataFieldType<F> *_vhhh;
@@ -817,6 +848,52 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                         (DataFieldType<F> *)Zijk);)
       }
 
+      // COMPUTE (cT) DOUBLES WITH THE J-INTERMEDIATE%%%%%%%%%%%%%%%%%%%%% {{{1
+#if defined(ATRIP_ONLY_DGEMM)
+    if (false)
+#endif
+      if (!isFakeTuple(i) && jhhha && jabph) {
+
+        WITH_CHRONO("oneshot-doubles-J",
+                    WITH_CHRONO("doubles-J",
+                                doublesContribution<F>(
+                                    (size_t)No,
+                                    (size_t)Nv,
+                                    // -- VABCI
+                                    jabph->unwrapSlice(Slice<F>::AB, abc),
+                                    jabph->unwrapSlice(Slice<F>::AC, abc),
+                                    jabph->unwrapSlice(Slice<F>::BC, abc),
+                                    jabph->unwrapSlice(Slice<F>::BA, abc),
+                                    jabph->unwrapSlice(Slice<F>::CA, abc),
+                                    jabph->unwrapSlice(Slice<F>::CB, abc),
+                                    // -- VHHHA,
+                                    jhhha->unwrapSlice(Slice<F>::A, abc),
+                                    jhhha->unwrapSlice(Slice<F>::B, abc),
+                                    jhhha->unwrapSlice(Slice<F>::C, abc),
+                                    // -- TA,
+                                    taphh.unwrapSlice(Slice<F>::A, abc),
+                                    taphh.unwrapSlice(Slice<F>::B, abc),
+                                    taphh.unwrapSlice(Slice<F>::C, abc),
+                                    // -- TABIJ
+                                    tabhh.unwrapSlice(Slice<F>::AB, abc),
+                                    tabhh.unwrapSlice(Slice<F>::AC, abc),
+                                    tabhh.unwrapSlice(Slice<F>::BC, abc),
+                                    // -- TIJK
+                                    (DataFieldType<F> *)Tijk
+      // TODO: have the buffers also in the CPU case
+#if defined(HAVE_CUDA)
+                                    // -- tmp buffers
+                                    ,
+                                    (DataFieldType<F> *)_t_buffer,
+                                    (DataFieldType<F> *)_vhhh
+#endif
+                                );
+
+                                WITH_RANK << iteration << "-th doubles done\n";))
+
+      }
+
+
       // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       // {{{1
 #if defined(ATRIP_ONLY_DGEMM)
@@ -991,7 +1068,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   std::free(Zijk);
   std::free(Tijk);
 #endif
-
+  if (jhhha) delete jhhha;
+  if (jabph) delete jabph;
   MPI_Barrier(universe);
 
   // PRINT TUPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
