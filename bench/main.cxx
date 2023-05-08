@@ -1,3 +1,4 @@
+#include "atrip/Atrip.hpp"
 #include <iostream>
 #include <vector>
 #include <functional>
@@ -18,6 +19,37 @@
     }                                                                          \
   } while (0)
 
+template <typename F>
+class InputTensors {
+public:
+  using T = CTF::Tensor<F>;
+  using Map = std::map<std::string, T *>;
+
+  Map map;
+
+  T *read_or_fill(std::string const &name,
+                  int order,
+                  int *lens,
+                  int *syms,
+                  CTF::World world,
+                  std::string const &path,
+                  F const a,
+                  F const b) {
+    int rank;
+    MPI_Comm_rank(world.comm, &rank);
+    map[name] = new T(order, lens, syms, world);
+    auto tsr = map[name];
+    if (path.size()) {
+      tsr->read_dense_from_file(path.c_str());
+    } else {
+      if (!rank)
+        std::cout << "WARNING: file not found! Random initialization\n";
+      tsr->fill_random(a, b);
+    }
+    return tsr;
+  }
+};
+
 int main(int argc, char **argv) {
   MPI_Init(&argc, &argv);
   CTF::World world(argc, argv);
@@ -29,7 +61,7 @@ int main(int argc, char **argv) {
   int no(10), nv(100), itMod(-1), percentageMod(10);
   float checkpoint_percentage;
   bool nochrono(false), barrier(false), rankRoundRobin(false), keepVppph(false),
-      noCheckpoint = false, blocking = false;
+      noCheckpoint = false, blocking = false, complex = false;
   std::string tuplesDistributionString = "naive",
               checkpoint_path = "checkpoint.yaml";
 
@@ -44,6 +76,7 @@ int main(int argc, char **argv) {
             "Maximum number of iterations to run");
   defoption(app, "--dist", tuplesDistributionString, "Which distribution")
       ->required();
+  defflag(app, "--complex", complex, "Use the complex version of atrip bench");
   defflag(app, "--keep-vppph", keepVppph, "Do not delete the tensor Vppph");
   defflag(app, "--nochrono", nochrono, "Do not print chrono");
   defflag(app, "--rank-round-robin", rankRoundRobin, "Do rank round robin");
@@ -123,20 +156,6 @@ int main(int argc, char **argv) {
 
   // USER PRINTING TEST END
 
-  atrip::Atrip::Input<double>::TuplesDistribution tuplesDistribution;
-  {
-    using atrip::Atrip;
-    if (tuplesDistributionString == "naive") {
-      tuplesDistribution = Atrip::Input<double>::TuplesDistribution::NAIVE;
-    } else if (tuplesDistributionString == "group") {
-      tuplesDistribution =
-          Atrip::Input<double>::TuplesDistribution::GROUP_AND_SORT;
-    } else {
-      std::cout << "--dist should be either naive or group\n";
-      std::exit(1);
-    }
-  }
-
   size_t const
 
       f = sizeof(double),
@@ -192,91 +211,125 @@ int main(int argc, char **argv) {
   std::vector<int> symmetries(4, NS), vo({nv, no}), vvoo({nv, nv, no, no}),
       ooov({no, no, no, nv}), vvvo({nv, nv, nv, no});
 
-  CTF::Tensor<double>                                  // All input tensors
-      ei(1, ooov.data(), symmetries.data(), world),    // Holes
-      ea(1, vo.data(), symmetries.data(), world),      // Particles
-      Tph(2, vo.data(), symmetries.data(), world),     // Singles
-      Tpphh(4, vvoo.data(), symmetries.data(), world), // Doubles
-      Vpphh(4, vvoo.data(), symmetries.data(), world), // Vabij
-      Vhhhp(4, ooov.data(), symmetries.data(), world); // Vijka
-
-  // initialize deletable tensors in heap
-  auto Vppph =
-      new CTF::Tensor<double>(4, vvvo.data(), symmetries.data(), world);
-
   _print_size(Vabci, no * nv * nv * nv);
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
-
-#define _read_or_fill(tsr, a, b)                                               \
-  do {                                                                         \
-    if (tsr##_path.size()) {                                                   \
-      tsr.read_dense_from_file(tsr##_path.c_str());                            \
-    } else {                                                                   \
-      tsr.fill_random(a, b);                                                   \
-    }                                                                          \
-  } while (0)
-
-  _read_or_fill(ei, -40.0, -2);
-  _read_or_fill(ea, 2, 50);
-  _read_or_fill(Tpphh, 0, 1);
-  _read_or_fill(Tph, 0, 1);
-  _read_or_fill(Vpphh, 0, 1);
-  _read_or_fill(Vhhhp, 0, 1);
-  if (Vppph_path.size()) {
-    Vppph->read_dense_from_file(Vppph_path.c_str());
-  } else {
-    Vppph->fill_random(0, 1);
-  }
-
-  atrip::Atrip::init(MPI_COMM_WORLD);
-  const auto
-
-      in = atrip::Atrip::Input<double>()
-               // Tensors
-               .with_epsilon_i(&ei)
-               .with_epsilon_a(&ea)
-               .with_Tai(&Tph)
-               .with_Tabij(&Tpphh)
-               .with_Vabij(&Vpphh)
-               .with_Vijka(&Vhhhp)
-               .with_Vabci(Vppph)
-               // some options
-               .with_deleteVppph(!keepVppph)
-               .with_barrier(barrier)
-               .with_blocking(blocking)
-               .with_chrono(!nochrono)
-               .with_rankRoundRobin(rankRoundRobin)
-               .with_iterationMod(itMod)
-               .with_percentageMod(percentageMod)
-               .with_tuplesDistribution(tuplesDistribution)
-               .with_maxIterations(max_iterations)
-               // checkpoint options
-               .with_checkpointAtEveryIteration(checkpoint_it)
-               .with_checkpointAtPercentage(checkpoint_percentage)
-               .with_checkpointPath(checkpoint_path)
-               .with_readCheckpointIfExists(!noCheckpoint)
-#if defined(HAVE_CUDA)
-               .with_oooThreads(ooo_threads)
-               .with_oooBlocks(ooo_blocks)
-#endif
-      ;
 
   if (!rank)
     for (auto const &fn : input_printer)
       // print input parameters
       fn();
 
-  try {
-    auto out = atrip::Atrip::run(in);
-    if (atrip::Atrip::rank == 0)
-      std::cout << "Energy: " << out.energy << std::endl;
-  } catch (const char *msg) {
-    if (atrip::Atrip::rank == 0)
-      std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";
-  }
+  atrip::Atrip::init(MPI_COMM_WORLD);
 
-  if (!in.deleteVppph) delete Vppph;
+#define RUN_ATRIP(FIELD)                                                       \
+  do {                                                                         \
+                                                                               \
+    atrip::Atrip::Input<FIELD>::TuplesDistribution tuplesDistribution;         \
+    {                                                                          \
+      using atrip::Atrip;                                                      \
+      if (tuplesDistributionString == "naive") {                               \
+        tuplesDistribution = Atrip::Input<FIELD>::TuplesDistribution::NAIVE;   \
+      } else if (tuplesDistributionString == "group") {                        \
+        tuplesDistribution =                                                   \
+            Atrip::Input<FIELD>::TuplesDistribution::GROUP_AND_SORT;           \
+      } else {                                                                 \
+        std::cout << "--dist should be either naive or group\n";               \
+        std::exit(1);                                                          \
+      }                                                                        \
+    }                                                                          \
+                                                                               \
+    InputTensors<FIELD> tensors;                                               \
+    const auto in =                                                            \
+        atrip::Atrip::Input<FIELD>()                                           \
+            .with_epsilon_i(tensors.read_or_fill("ei",                         \
+                                                 1,                            \
+                                                 ooov.data(),                  \
+                                                 symmetries.data(),            \
+                                                 world,                        \
+                                                 ei_path,                      \
+                                                 -40.0,                        \
+                                                 -2))                          \
+            .with_epsilon_a(tensors.read_or_fill("ea",                         \
+                                                 1,                            \
+                                                 vo.data(),                    \
+                                                 symmetries.data(),            \
+                                                 world,                        \
+                                                 ea_path,                      \
+                                                 2,                            \
+                                                 50))                          \
+            .with_Tai(tensors.read_or_fill("Tph",                              \
+                                           2,                                  \
+                                           vo.data(),                          \
+                                           symmetries.data(),                  \
+                                           world,                              \
+                                           Tph_path,                           \
+                                           0,                                  \
+                                           1))                                 \
+            .with_Tabij(tensors.read_or_fill("Tpphh",                          \
+                                             4,                                \
+                                             vvoo.data(),                      \
+                                             symmetries.data(),                \
+                                             world,                            \
+                                             Tpphh_path,                       \
+                                             0,                                \
+                                             1))                               \
+            .with_Vabij(tensors.read_or_fill("Vpphh",                          \
+                                             4,                                \
+                                             vvoo.data(),                      \
+                                             symmetries.data(),                \
+                                             world,                            \
+                                             Vpphh_path,                       \
+                                             0,                                \
+                                             1))                               \
+            .with_Vijka(tensors.read_or_fill("Vhhhp",                          \
+                                             4,                                \
+                                             ooov.data(),                      \
+                                             symmetries.data(),                \
+                                             world,                            \
+                                             Vhhhp_path,                       \
+                                             0,                                \
+                                             1))                               \
+            .with_Vabci(tensors.read_or_fill("Vppph",                          \
+                                             4,                                \
+                                             vvvo.data(),                      \
+                                             symmetries.data(),                \
+                                             world,                            \
+                                             Vppph_path,                       \
+                                             0,                                \
+                                             1))                               \
+                                                                               \
+            .with_deleteVppph(!keepVppph)                                      \
+            .with_barrier(barrier)                                             \
+            .with_blocking(blocking)                                           \
+            .with_chrono(!nochrono)                                            \
+            .with_rankRoundRobin(rankRoundRobin)                               \
+            .with_iterationMod(itMod)                                          \
+            .with_percentageMod(percentageMod)                                 \
+            .with_tuplesDistribution(tuplesDistribution)                       \
+            .with_maxIterations(max_iterations)                                \
+                                                                               \
+            .with_checkpointAtEveryIteration(checkpoint_it)                    \
+            .with_checkpointAtPercentage(checkpoint_percentage)                \
+            .with_checkpointPath(checkpoint_path)                              \
+            .with_readCheckpointIfExists(!noCheckpoint);                       \
+                                                                               \
+    try {                                                                      \
+      auto out = atrip::Atrip::run<FIELD>(in);                                 \
+      if (!atrip::Atrip::rank) {                                               \
+        std::cout << "Used " << #FIELD << " version of atrip" << std::endl;    \
+        std::cout << "Energy: " << out.energy << std::endl;                    \
+      }                                                                        \
+    } catch (const char *msg) {                                                \
+      if (!atrip::Atrip::rank)                                                 \
+        std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";          \
+    }                                                                          \
+  } while (0)
+
+  if (complex) RUN_ATRIP(atrip::Complex);
+  else RUN_ATRIP(double);
+
+  // if (!in.deleteVppph) delete tensors->[]Vppph;
 
   MPI_Finalize();
   return 0;
