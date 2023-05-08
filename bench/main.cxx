@@ -35,15 +35,23 @@ public:
                   std::string const &path,
                   F const a,
                   F const b) {
+
+    const auto file_exists = [](std::string const &filename) {
+      ifstream file(filename.c_str());
+      return file.good();
+    };
     int rank;
     MPI_Comm_rank(world.comm, &rank);
     map[name] = new T(order, lens, syms, world);
     auto tsr = map[name];
-    if (path.size()) {
+    if (path.size() && file_exists(path)) {
       tsr->read_dense_from_file(path.c_str());
     } else {
+      if (path.size() && !rank) {
+        std::cout << "WARNING: file " << path << " provided but not found!\n";
+      }
       if (!rank)
-        std::cout << "WARNING: file not found! Random initialization\n";
+        std::cout << "Random initialization for tensor " << name << std::endl;
       tsr->fill_random(a, b);
     }
     return tsr;
