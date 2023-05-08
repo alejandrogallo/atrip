@@ -348,8 +348,6 @@ template __MAYBE_GLOBAL__ void getEnergySame(DataFieldType<double> const epsabc,
                                              DataFieldType<double> *const Zijk,
                                              DataFieldType<double> *energy);
 
-// TODO: put this back in
-#if defined(ATRIP_WITH_COMPLEX)
 // instantiate Complex
 template __MAYBE_GLOBAL__ void
 getEnergyDistinct(DataFieldType<Complex> const epsabc,
@@ -367,7 +365,6 @@ getEnergySame(DataFieldType<Complex> const epsabc,
               DataFieldType<Complex> *const Zijk,
               DataFieldType<double> *energy);
 // Energy:3 ends here
-#endif
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles
 // contribution:2]]
