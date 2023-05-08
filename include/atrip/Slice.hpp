@@ -99,7 +99,10 @@ struct Slice {
     VIJKA = 101,
     VABCI = 200,
     TABIJ = 201,
-    VABIJ = 202
+    VABIJ = 202,
+    // ct tensor names
+    JIJKA = 300,
+    JABCI = 301
   };
   // Name:1 ends here
 

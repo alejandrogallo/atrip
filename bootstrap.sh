@@ -40,7 +40,7 @@ cat <<EOF
   mkdir build
   cd build
   ../configure
-  make extern
+  make ctf
   make all
 
 EOF

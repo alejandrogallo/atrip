@@ -71,7 +71,7 @@ struct Atrip {
   struct Input {
     CTF::Tensor<F> *ei = nullptr, *ea = nullptr, *Tph = nullptr,
                    *Tpphh = nullptr, *Vpphh = nullptr, *Vhhhp = nullptr,
-                   *Vppph = nullptr;
+                   *Vppph = nullptr, *Jppph = nullptr, *Jhhhp = nullptr;
     Input &with_epsilon_i(CTF::Tensor<F> *t) {
       ei = t;
       return *this;
@@ -100,7 +100,14 @@ struct Atrip {
       Vppph = t;
       return *this;
     }
-
+    Input &with_Jijka(CTF::Tensor<F> *t) {
+      Jhhhp = t;
+      return *this;
+    }
+    Input &with_Jabci(CTF::Tensor<F> *t) {
+      Jppph = t;
+      return *this;
+    }
     enum TuplesDistribution {
       NAIVE,
       GROUP_AND_SORT,

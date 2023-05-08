@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   int no(10), nv(100), itMod(-1), percentageMod(10);
   float checkpoint_percentage;
   bool nochrono(false), barrier(false), rankRoundRobin(false), keepVppph(false),
-      noCheckpoint = false, blocking = false, complex = false;
+      noCheckpoint = false, blocking = false, complex = false, cT = false;
   std::string tuplesDistributionString = "naive",
               checkpoint_path = "checkpoint.yaml";
 
@@ -96,10 +96,12 @@ int main(int argc, char **argv) {
             "--checkpoint-%",
             checkpoint_percentage,
             "Percentage for checkpoints");
+  // completeTriples
+  defflag(app, "--cT", cT, "Perform (cT) calculation");
 
   // Optional tensor files
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
-      Vppph_path;
+      Vppph_path, Jppph_path, Jhphh_path;
   defoption(app, "--ei", ei_path, "Path for ei");
   defoption(app, "--ea", ea_path, "Path for ea");
   defoption(app, "--Tpphh", Tpphh_path, "Path for Tpphh");
@@ -107,6 +109,9 @@ int main(int argc, char **argv) {
   defoption(app, "--Vpphh", Vpphh_path, "Path for Vpphh");
   defoption(app, "--Vhhhp", Vhhhp_path, "Path for Vhhhp");
   defoption(app, "--Vppph", Vppph_path, "Path for Vppph");
+
+  defoption(app, "--Jppph", Jppph_path, "Path for Jppph");
+  defoption(app, "--Jhphh", Jhphh_path, "Path for Jhphh");
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
@@ -158,7 +163,7 @@ int main(int argc, char **argv) {
 
   size_t const
 
-      f = sizeof(double),
+      f = complex ? sizeof(double) : sizeof(atrip::Complex),
 
       n_tuples =
 
@@ -209,7 +214,7 @@ int main(int argc, char **argv) {
   }
 
   std::vector<int> symmetries(4, NS), vo({nv, no}), vvoo({nv, nv, no, no}),
-      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no});
+      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no}), ovoo({no, nv, no, no});
 
   _print_size(Vabci, no * nv * nv * nv);
   _print_size(Vabij, no * no * nv * nv);
@@ -240,6 +245,23 @@ int main(int argc, char **argv) {
     }                                                                          \
                                                                                \
     InputTensors<FIELD> tensors;                                               \
+    auto Jhphh = tensors.read_or_fill("Jhphh",                                 \
+                                      4,                                       \
+                                      ovoo.data(),                             \
+                                      symmetries.data(),                       \
+                                      world,                                   \
+                                      Jhphh_path,                              \
+                                      0,                                       \
+                                      1);                                      \
+    auto Jhhhp = tensors.read_or_fill("Jhhhp",                                 \
+                                      4,                                       \
+                                      ooov.data(),                             \
+                                      symmetries.data(),                       \
+                                      world,                                   \
+                                      "",                                      \
+                                      0,                                       \
+                                      1);                                      \
+    (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];                                       \
     const auto in =                                                            \
         atrip::Atrip::Input<FIELD>()                                           \
             .with_epsilon_i(tensors.read_or_fill("ei",                         \
@@ -299,6 +321,15 @@ int main(int argc, char **argv) {
                                              0,                                \
                                              1))                               \
                                                                                \
+            .with_Jabci(tensors.read_or_fill("Jppph",                          \
+                                             4,                                \
+                                             vvvo.data(),                      \
+                                             symmetries.data(),                \
+                                             world,                            \
+                                             Jppph_path,                       \
+                                             0,                                \
+                                             1))                               \
+            .with_Jijka(Jhhhp)                                                 \
             .with_deleteVppph(!keepVppph)                                      \
             .with_barrier(barrier)                                             \
             .with_blocking(blocking)                                           \
