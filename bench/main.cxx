@@ -253,23 +253,37 @@ int main(int argc, char **argv) {
     }                                                                          \
                                                                                \
     InputTensors<FIELD> tensors;                                               \
-    auto Jhphh = tensors.read_or_fill("Jhphh",                                 \
-                                      4,                                       \
-                                      ovoo.data(),                             \
-                                      symmetries.data(),                       \
-                                      world,                                   \
-                                      Jhphh_path,                              \
-                                      0,                                       \
-                                      1);                                      \
-    auto Jhhhp = tensors.read_or_fill("Jhhhp",                                 \
-                                      4,                                       \
-                                      ooov.data(),                             \
-                                      symmetries.data(),                       \
-                                      world,                                   \
-                                      "",                                      \
-                                      0,                                       \
-                                      1);                                      \
-    (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];                                       \
+    CTF::Tensor<FIELD> *Jppph, *Jhphh, *Jhhhp;                                 \
+    if (cT || (Jppph_path.size() && Jhphh_path.size())) {                      \
+      if (!rank) std::cout << "doing cT" << std::endl;                         \
+      Jppph = tensors.read_or_fill("Jppph",                                    \
+                                   4,                                          \
+                                   vvvo.data(),                                \
+                                   symmetries.data(),                          \
+                                   world,                                      \
+                                   Jppph_path,                                 \
+                                   0,                                          \
+                                   1);                                         \
+      Jhphh = tensors.read_or_fill("Jhphh",                                    \
+                                   4,                                          \
+                                   ovoo.data(),                                \
+                                   symmetries.data(),                          \
+                                   world,                                      \
+                                   Jhphh_path,                                 \
+                                   0,                                          \
+                                   1);                                         \
+      Jhhhp = tensors.read_or_fill("Jhhhp",                                    \
+                                   4,                                          \
+                                   ooov.data(),                                \
+                                   symmetries.data(),                          \
+                                   world,                                      \
+                                   "",                                         \
+                                   0,                                          \
+                                   1);                                         \
+      if (!rank) std::cout << "Setting Jhhhp from Jhphh" << std::endl;         \
+      (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];                                     \
+      if (!rank) std::cout << "done" << std::endl;                             \
+    }                                                                          \
     const auto in =                                                            \
         atrip::Atrip::Input<FIELD>()                                           \
             .with_epsilon_i(tensors.read_or_fill("ei",                         \
@@ -329,14 +343,7 @@ int main(int argc, char **argv) {
                                              0,                                \
                                              1))                               \
                                                                                \
-            .with_Jabci(tensors.read_or_fill("Jppph",                          \
-                                             4,                                \
-                                             vvvo.data(),                      \
-                                             symmetries.data(),                \
-                                             world,                            \
-                                             Jppph_path,                       \
-                                             0,                                \
-                                             1))                               \
+            .with_Jabci(Jppph)                                                 \
             .with_Jijka(Jhhhp)                                                 \
             .with_deleteVppph(!keepVppph)                                      \
             .with_barrier(barrier)                                             \
