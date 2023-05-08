@@ -214,11 +214,19 @@ int main(int argc, char **argv) {
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
 
+  auto file_exists = [] (std::string filename) {
+    ifstream file(filename.c_str());
+    return file.good();
+  };
+
+
 #define _read_or_fill(tsr, a, b)                                               \
   do {                                                                         \
-    if (tsr##_path.size()) {                                                   \
+    if (tsr##_path.size() && file_exists(tsr##_path)) {                        \
       tsr.read_dense_from_file(tsr##_path.c_str());                            \
     } else {                                                                   \
+      if (tsr##_path.size() && !rank)                                          \
+        std::cout << "WARNING: file not found! Random initialization\n";       \
       tsr.fill_random(a, b);                                                   \
     }                                                                          \
   } while (0)
@@ -229,9 +237,11 @@ int main(int argc, char **argv) {
   _read_or_fill(Tph, 0, 1);
   _read_or_fill(Vpphh, 0, 1);
   _read_or_fill(Vhhhp, 0, 1);
-  if (Vppph_path.size()) {
+  if (Vppph_path.size() && file_exists(Vppph_path)) {
     Vppph->read_dense_from_file(Vppph_path.c_str());
   } else {
+    if (Jhphh_path.size() && !rank)
+        std::cout << "WARNING: file not found! Random initialization\n";
     Vppph->fill_random(0, 1);
   }
   // provide tensor for ct
@@ -240,16 +250,20 @@ int main(int argc, char **argv) {
     // allocate the tensors Jppph and Jhhhp
     Jppph = new CTF::Tensor<double>(4, vvvo.data(), symmetries.data(), world);
     Jhhhp = new CTF::Tensor<double>(4, ooov.data(), symmetries.data(), world);
-    if (Jppph_path.size()) {
+    if (Jppph_path.size() && file_exists(Jppph_path)) {
       Jppph->read_dense_from_file(Jppph_path.c_str());
     } else {
+      if (Jppph_path.size() && !rank)
+        std::cout << "WARNING: file not found! Random initialization\n";
       Jppph->fill_random(0,1);
     }
-    if (Jhphh_path.size()) {
+    if (Jhphh_path.size() && file_exists(Jhphh_path)) {
       CTF::Tensor<double> Jhphh(4, ovoo.data(), symmetries.data(), world);
       Jhphh.read_dense_from_file(Jhphh_path.c_str());
       (*Jhhhp)["ijka"] = Jhphh["kaij"];
     } else {
+      if (Jhphh_path.size() && !rank)
+        std::cout << "WARNING: file not found! Random initialization\n";
       Jhhhp->fill_random(0,1);
     }
 
