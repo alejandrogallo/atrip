@@ -167,8 +167,12 @@ CXXFLAGS="${CXXFLAGS} ${OPENMP_CXXFLAGS}"
 LDFLAGS="${LDFLAGS} ${OPENMP_CXXFLAGS}"
 
 dnl -----------------------------------------------------------------------
-AX_BLAS([], [AC_MSG_FAILURE([Could not find BLAS library.])])
-AX_LAPACK([], [AC_MSG_FAILURE([Could not find LAPACK library.])])
+AX_BLAS([LIBS="${LIBS} ${BLAS_LIBS}"],
+        [AC_MSG_FAILURE([Could not find BLAS library.])])
+AX_LAPACK([LIBS="${LIBS} ${LAPACK_LIBS}"],
+          [AC_MSG_FAILURE([Could not find LAPACK library.])])
+SISI_SCALAPACK([LIBS="${LIBS} ${SCALAPACK_LIBS}"],
+               [AC_MSG_FAILURE([could not find a working scalapack installation.])])
 
 dnl -----------------------------------------------------------------------
 dnl CXX checks

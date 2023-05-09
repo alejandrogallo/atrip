@@ -9,7 +9,7 @@ ATRIP_CTF = $(CTF_BUILD_PATH)/lib/libctf.a
 else
 ATRIP_CTF = @LIBCTF_LD_LIBRARY_PATH@/libctf.a
 endif
-ATRIP_LIB = $(top_builddir)/src/libatrip.a $(ATRIP_CTF)
+ATRIP_LIB = $(top_builddir)/src/libatrip.a
 
 bin_PROGRAMS =
 BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF)
