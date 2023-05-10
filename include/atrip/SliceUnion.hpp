@@ -558,7 +558,20 @@ public:
     F *source_buffer = SOURCES_DATA(sources[info.from.source]);
 #endif
 
-    // do staging buffers
+    // SECTION TO START DOING THE STAGING BUFFERS
+    //
+    // in general it has to check whether or not the receiving buffer
+    // is on a different node or on the same node.
+    //
+    // Only a staging buffer will be allocated if the communication
+    // is to happen in an INTER-node manner.
+
+    size_t target_node = Atrip::cluster_info->rankInfos[otherRank].nodeId,
+           from_node = Atrip::cluster_info->rankInfos[info.from.rank].nodeId;
+    const bool inter_node_communication = target_node == from_node;
+
+    if (inter_node_communication) { goto no_mpi_staging; }
+
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
     DataPtr<F> isend_buffer = popFreePointer();
 
@@ -583,29 +596,36 @@ public:
 #    pragma error("Not possible to do MPI_STAGING_BUFFERS with your config.h")
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
 
+    goto mpi_staging_done;
+
 #else
 
     // otherwise the isend_buffer will be the source buffer itself
-
-#  if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
-    DataPtr<F> isend_buffer = source_buffer;
-#  else
-    F *isend_buffer = source_buffer;
-#  endif
+    goto no_mpi_staging;
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
+
+  no_mpi_staging:
+
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+    DataPtr<F> isend_buffer = source_buffer;
+#else
+    F *isend_buffer = source_buffer;
+#endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
+
+  mpi_staging_done:
 
     // We count network sends only for the largest buffers
     switch (el.name) {
     case Slice<F>::Name::TA:
       if (otherRank / Atrip::ppn == Atrip::rank / Atrip::ppn) {
-        Atrip::localSend++;
+        Atrip::local_send++;
       } else {
         Atrip::networkSend++;
       }
     default:;
     }
-    Atrip::bytesSent += sliceSize * sizeof(F);
+    Atrip::bytes_sent += sliceSize * sizeof(F);
     MPI_Isend((void *)isend_buffer,
               sliceSize,
               traits::mpi::datatypeOf<F>(),
@@ -617,8 +637,10 @@ public:
     WITH_RANK << "sent to " << otherRank << "\n";
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-    mpi_staging_buffers.insert(
-        StagingBufferInfo{isend_buffer, tag, request, abc});
+    if (!inter_node_communication)
+      mpi_staging_buffers.insert(
+          StagingBufferInfo{isend_buffer, tag, request, abc});
+    else free(request);
 #else
     free(request);
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
