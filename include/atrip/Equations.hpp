@@ -56,16 +56,16 @@ template <typename F = double>
 __global__
 #endif
     void
-    singlesContribution(size_t No,
-                        size_t Nv,
-                        size_t a,
-                        size_t b,
-                        size_t c,
-                        DataFieldType<F> *const Tph,
-                        DataFieldType<F> *const VABij,
-                        DataFieldType<F> *const VACij,
-                        DataFieldType<F> *const VBCij,
-                        DataFieldType<F> *Zijk);
+    singles_contribution(size_t No,
+                         size_t Nv,
+                         size_t a,
+                         size_t b,
+                         size_t c,
+                         DataFieldType<F> *const Tph,
+                         DataFieldType<F> *const VABij,
+                         DataFieldType<F> *const VACij,
+                         DataFieldType<F> *const VBCij,
+                         DataFieldType<F> *Zijk);
 // Singles contribution:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles

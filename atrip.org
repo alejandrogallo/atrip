@@ -2824,7 +2824,7 @@ of the \( V^{pp}_{ph} \) integrals, i.e., =AB=, =AC= and =BC=.
 
 #+begin_src c++ :tangle (atrip-equations-h) :exports none
   template <typename F=double>
-  void singlesContribution
+  void singles_contribution
     ( size_t No
     , size_t Nv
     , const ABCTuple &abc
@@ -2839,7 +2839,7 @@ of the \( V^{pp}_{ph} \) integrals, i.e., =AB=, =AC= and =BC=.
 #+begin_src c++ :tangle (atrip-equations-cxx)
 
   template <typename F=double>
-  void singlesContribution
+  void singles_contribution
     ( size_t No
     , size_t Nv
     , const ABCTuple &abc
@@ -2863,7 +2863,7 @@ of the \( V^{pp}_{ph} \) integrals, i.e., =AB=, =AC= and =BC=.
   }
 
 // instantiate
-  template void singlesContribution( size_t No
+  template void singles_contribution( size_t No
                                    , size_t Nv
                                    , const ABCTuple &abc
                                    , double* const Tph
@@ -2873,7 +2873,7 @@ of the \( V^{pp}_{ph} \) integrals, i.e., =AB=, =AC= and =BC=.
                                    , double* Zijk
                                    );
 
-  template void singlesContribution( size_t No
+  template void singles_contribution( size_t No
                                    , size_t Nv
                                    , const ABCTuple &abc
                                    , Complex* const Tph
@@ -4079,7 +4079,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
           ((DataFieldType<F>*)Zijk)[I] = ((DataFieldType<F>*)Tijk)[I];
       )
       WITH_CHRONO("singles",
-      singlesContribution<F>( No, Nv, abc
+      singles_contribution<F>( No, Nv, abc
 #if defined(HAVE_CUDA)
                             , (F*)Tai
 #else

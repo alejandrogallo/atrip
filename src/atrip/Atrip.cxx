@@ -13,6 +13,7 @@
 // limitations under the License.
 
 // [[file:~/cuda/atrip/atrip.org::*Main][Main:1]]
+#include "atrip/CUDA.hpp"
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
@@ -816,30 +817,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
             "oneshot-unwrap",
             WITH_CHRONO("unwrap",
                         WITH_CHRONO("unwrap:singles", abhh.unwrapAll(abc);)))
-        WITH_CHRONO("reorder", int ooo = No * No * No, stride = 1;
+        WITH_CHRONO("reorder", /**/
+                    int ooo = No * No * No,
+                    stride = 1;
                     atrip::xcopy<F>(&ooo,
                                     (DataFieldType<F> *)Tijk,
                                     &stride,
                                     (DataFieldType<F> *)Zijk,
                                     &stride);)
-        WITH_CHRONO("singles",
-#if defined(HAVE_CUDA)
-                    singlesContribution<F><<<1, 1>>>(
+        WITH_CHRONO(
+            "singles",
+            ACC_FUNCALL(singles_contribution<F>,
+                        1, // gpu
+                        1, // gpu
                         No,
                         Nv,
                         abc[0],
                         abc[1],
                         abc[2],
                         (DataFieldType<F> *)Tai,
-#else
-                  singlesContribution<F>(
-                      No,
-                      Nv,
-                      abc[0],
-                      abc[1],
-                      abc[2],
-                      Tai,
-#endif
                         (DataFieldType<F> *)abhh.unwrapSlice(Slice<F>::AB, abc),
                         (DataFieldType<F> *)abhh.unwrapSlice(Slice<F>::AC, abc),
                         (DataFieldType<F> *)abhh.unwrapSlice(Slice<F>::BC, abc),
@@ -916,15 +912,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                           1, // for cuda
                           _epsabc,
                           No,
-#if defined(HAVE_CUDA)
                           (DataFieldType<F> *)epsi,
                           (DataFieldType<F> *)Tijk,
                           (DataFieldType<F> *)Zijk,
-#else
-                        epsi,
-                        Tijk,
-                        Zijk,
-#endif
                           tupleEnergy);
             } else {
               ACC_FUNCALL(getEnergySame<DataFieldType<F>>,
@@ -932,15 +922,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                           1, // for cuda
                           _epsabc,
                           No,
-#if defined(HAVE_CUDA)
                           (DataFieldType<F> *)epsi,
                           (DataFieldType<F> *)Tijk,
                           (DataFieldType<F> *)Zijk,
-#else
-                        epsi,
-                        Tijk,
-                        Zijk,
-#endif
                           tupleEnergy);
             })
 

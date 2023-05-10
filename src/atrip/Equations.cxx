@@ -369,16 +369,16 @@ getEnergySame(DataFieldType<Complex> const epsabc,
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles
 // contribution:2]]
 template <typename F>
-__MAYBE_GLOBAL__ void singlesContribution(size_t No,
-                                          size_t Nv,
-                                          size_t a,
-                                          size_t b,
-                                          size_t c,
-                                          DataFieldType<F> *const Tph,
-                                          DataFieldType<F> *const VABij,
-                                          DataFieldType<F> *const VACij,
-                                          DataFieldType<F> *const VBCij,
-                                          DataFieldType<F> *Zijk) {
+__MAYBE_GLOBAL__ void singles_contribution(size_t No,
+                                           size_t Nv,
+                                           size_t a,
+                                           size_t b,
+                                           size_t c,
+                                           DataFieldType<F> *const Tph,
+                                           DataFieldType<F> *const VABij,
+                                           DataFieldType<F> *const VACij,
+                                           DataFieldType<F> *const VBCij,
+                                           DataFieldType<F> *Zijk) {
   const size_t NoNo = No * No;
   // TODO: change order of for loops
   for (size_t k = 0; k < No; k++)
@@ -410,28 +410,28 @@ __MAYBE_GLOBAL__ void singlesContribution(size_t No,
 }
 
 // instantiate
-template __MAYBE_GLOBAL__ void singlesContribution<double>(size_t No,
-                                                           size_t Nv,
-                                                           size_t a,
-                                                           size_t b,
-                                                           size_t c,
-                                                           double *const Tph,
-                                                           double *const VABij,
-                                                           double *const VACij,
-                                                           double *const VBCij,
-                                                           double *Zijk);
+template __MAYBE_GLOBAL__ void singles_contribution<double>(size_t No,
+                                                            size_t Nv,
+                                                            size_t a,
+                                                            size_t b,
+                                                            size_t c,
+                                                            double *const Tph,
+                                                            double *const VABij,
+                                                            double *const VACij,
+                                                            double *const VBCij,
+                                                            double *Zijk);
 
 template __MAYBE_GLOBAL__ void
-singlesContribution<Complex>(size_t No,
-                             size_t Nv,
-                             size_t a,
-                             size_t b,
-                             size_t c,
-                             DataFieldType<Complex> *const Tph,
-                             DataFieldType<Complex> *const VABij,
-                             DataFieldType<Complex> *const VACij,
-                             DataFieldType<Complex> *const VBCij,
-                             DataFieldType<Complex> *Zijk);
+singles_contribution<Complex>(size_t No,
+                              size_t Nv,
+                              size_t a,
+                              size_t b,
+                              size_t c,
+                              DataFieldType<Complex> *const Tph,
+                              DataFieldType<Complex> *const VABij,
+                              DataFieldType<Complex> *const VACij,
+                              DataFieldType<Complex> *const VBCij,
+                              DataFieldType<Complex> *Zijk);
 // Singles contribution:2 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles

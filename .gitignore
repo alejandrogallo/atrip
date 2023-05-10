@@ -31,3 +31,4 @@ config.mk
 /.cache/
 /compile_commands.json
 \#*
+libatrip.a
