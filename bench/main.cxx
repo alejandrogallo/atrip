@@ -22,42 +22,37 @@
   } while (0)
 
 template <typename F>
-class InputTensors {
-public:
-  using T = CTF::Tensor<F>;
+CTF::Tensor<F> *read_or_fill(std::string const &name,
+                             int order,
+                             int *lens,
+                             int *syms,
+                             CTF::World world,
+                             std::string const &path,
+                             F const a,
+                             F const b) {
 
-  T *read_or_fill(std::string const &name,
-                  int order,
-                  int *lens,
-                  int *syms,
-                  CTF::World world,
-                  std::string const &path,
-                  F const a,
-                  F const b) {
-
-    const auto file_exists = [](std::string const &filename) {
-      ifstream file(filename.c_str());
-      return file.good();
-    };
-    int rank;
-    MPI_Comm_rank(world.comm, &rank);
-    auto tsr = new T(order, lens, syms, world);
-    if (!rank)
-      std::cout << _FORMAT("made tsr %s<%p>", name.c_str(), (void *)tsr)
-                << std::endl;
-    if (path.size() && file_exists(path)) {
-      tsr->read_dense_from_file(path.c_str());
-    } else {
-      if (path.size() && !rank) {
-        std::cout << "WARNING: file " << path << " provided but not found!\n";
-      }
-      if (!rank)
-        std::cout << "Random initialization for tensor " << name << std::endl;
-      tsr->fill_random(a, b);
+  const auto file_exists = [](std::string const &filename) {
+    ifstream file(filename.c_str());
+    return file.good();
+  };
+  int rank;
+  MPI_Comm_rank(world.comm, &rank);
+  auto tsr = new CTF::Tensor<F>(order, lens, syms, world);
+  if (!rank)
+    std::cout << _FORMAT("made tsr %s<%p>", name.c_str(), (void *)tsr)
+              << std::endl;
+  if (path.size() && file_exists(path)) {
+    tsr->read_dense_from_file(path.c_str());
+  } else {
+    if (path.size() && !rank) {
+      std::cout << "WARNING: file " << path << " provided but not found!\n";
     }
-    return tsr;
+    if (!rank)
+      std::cout << "Random initialization for tensor " << name << std::endl;
+    tsr->fill_random(a, b);
   }
-};
+  return tsr;
+}
 
 int main(int argc, char **argv) {
   MPI_Init(&argc, &argv);
@@ -284,7 +279,6 @@ int main(int argc, char **argv) {
       }                                                                        \
     }                                                                          \
                                                                                \
-    InputTensors<FIELD> tensors;                                               \
     CTF::Tensor<FIELD> *Jppph = nullptr, *Jhphh = nullptr, *Jhhhp = nullptr;   \
     if (cT || (Jppph_path.size() && Jhphh_path.size())) {                      \
       if (!rank) std::cout << "doing cT" << std::endl;                         \
@@ -294,7 +288,7 @@ int main(int argc, char **argv) {
       Jhphh =                                                                  \
           new CTF::Tensor<FIELD>(4, ovoo.data(), symmetries.data(), world);    \
       Jhphh->read_dense_from_file(Jhphh_path.c_str());                         \
-      /*Jhphh = tensors.read_or_fill("Jhphh",                                  \
+      /*Jhphh = read_or_fill<FIELD>("Jhphh",                                   \
                                    4,                                          \
                                    ovoo.data(),                                \
                                    symmetries.data(),                          \
@@ -342,46 +336,46 @@ int main(int argc, char **argv) {
     const auto in = atrip::Atrip::Input<FIELD>()                               \
                         .with_epsilon_i((CTF::Tensor<FIELD> *)epsi)            \
                         .with_epsilon_a((CTF::Tensor<FIELD> *)epsa)            \
-                        .with_Tai(tensors.read_or_fill("Tph",                  \
-                                                       2,                      \
-                                                       vo.data(),              \
-                                                       symmetries.data(),      \
-                                                       world,                  \
-                                                       Tph_path,               \
-                                                       0,                      \
-                                                       1))                     \
-                        .with_Tabij(tensors.read_or_fill("Tpphh",              \
-                                                         4,                    \
-                                                         vvoo.data(),          \
-                                                         symmetries.data(),    \
-                                                         world,                \
-                                                         Tpphh_path,           \
-                                                         0,                    \
-                                                         1))                   \
-                        .with_Vabij(tensors.read_or_fill("Vpphh",              \
-                                                         4,                    \
-                                                         vvoo.data(),          \
-                                                         symmetries.data(),    \
-                                                         world,                \
-                                                         Vpphh_path,           \
-                                                         0,                    \
-                                                         1))                   \
-                        .with_Vijka(tensors.read_or_fill("Vhhhp",              \
-                                                         4,                    \
-                                                         ooov.data(),          \
-                                                         symmetries.data(),    \
-                                                         world,                \
-                                                         Vhhhp_path,           \
-                                                         0,                    \
-                                                         1))                   \
-                        .with_Vabci(tensors.read_or_fill("Vppph",              \
-                                                         4,                    \
-                                                         vvvo.data(),          \
-                                                         symmetries.data(),    \
-                                                         world,                \
-                                                         Vppph_path,           \
-                                                         0,                    \
-                                                         1))                   \
+                        .with_Tai(read_or_fill<FIELD>("Tph",                   \
+                                                      2,                       \
+                                                      vo.data(),               \
+                                                      symmetries.data(),       \
+                                                      world,                   \
+                                                      Tph_path,                \
+                                                      0,                       \
+                                                      1))                      \
+                        .with_Tabij(read_or_fill<FIELD>("Tpphh",               \
+                                                        4,                     \
+                                                        vvoo.data(),           \
+                                                        symmetries.data(),     \
+                                                        world,                 \
+                                                        Tpphh_path,            \
+                                                        0,                     \
+                                                        1))                    \
+                        .with_Vabij(read_or_fill<FIELD>("Vpphh",               \
+                                                        4,                     \
+                                                        vvoo.data(),           \
+                                                        symmetries.data(),     \
+                                                        world,                 \
+                                                        Vpphh_path,            \
+                                                        0,                     \
+                                                        1))                    \
+                        .with_Vijka(read_or_fill<FIELD>("Vhhhp",               \
+                                                        4,                     \
+                                                        ooov.data(),           \
+                                                        symmetries.data(),     \
+                                                        world,                 \
+                                                        Vhhhp_path,            \
+                                                        0,                     \
+                                                        1))                    \
+                        .with_Vabci(read_or_fill<FIELD>("Vppph",               \
+                                                        4,                     \
+                                                        vvvo.data(),           \
+                                                        symmetries.data(),     \
+                                                        world,                 \
+                                                        Vppph_path,            \
+                                                        0,                     \
+                                                        1))                    \
                                                                                \
                         .with_Jabci(Jppph)                                     \
                         .with_Jijka(Jhhhp)                                     \
