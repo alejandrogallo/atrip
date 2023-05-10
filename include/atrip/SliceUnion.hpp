@@ -498,12 +498,15 @@ public:
     WITH_OCD WITH_RANK << "slicing... \n";
 
     // setUp sources
+    size_t last_source = 0;
     for (size_t it(0); it < rank_map.n_sources(); ++it) {
-      const size_t source = rank_map.is_source_padding(rank, source) ? 0 : it;
+      const size_t source =
+          rank_map.is_source_padding(rank, last_source) ? 0 : it;
       WITH_OCD
       WITH_RANK << "Init:to_slice_into it-" << it << " :: source " << source
                 << "\n";
       slice_into_buffer(source, to_slice_into, source_tensor);
+      last_source = source;
     }
   }
 
