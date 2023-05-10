@@ -386,7 +386,7 @@ __MAYBE_GLOBAL__ void singlesContribution(size_t No,
       for (size_t j = 0; j < No; j++) {
         const size_t ijk = i + j * No + k * NoNo;
 
-#ifdef HAVE_CUDA
+#if defined(HAVE_CUDA)
 
 #  define GO(__TPH, __VABIJ)                                                   \
     do {                                                                       \
@@ -399,7 +399,7 @@ __MAYBE_GLOBAL__ void singlesContribution(size_t No,
 
 #  define GO(__TPH, __VABIJ) Zijk[ijk] += (__TPH) * (__VABIJ)
 
-#endif
+#endif // HAVE_CUDA
 
         GO(Tph[a + i * Nv], VBCij[j + k * No]);
         GO(Tph[b + j * Nv], VACij[i + k * No]);
@@ -565,8 +565,8 @@ void doubles_contribution(size_t const No,
   F one{1.0}, m_one{-1.0}, zero{0.0};
   const size_t NoNoNo = No * NoNo;
 
-// Zeroing vectors
-#  ifdef HAVE_CUDA
+// !!!! Zeroing vectors Tijk, _t_buffer and _vhhh
+#  if defined(HAVE_CUDA)
 
 #    if !defined(ATRIP_ONLY_DGEMM)
   {
@@ -605,26 +605,32 @@ void doubles_contribution(size_t const No,
   WITH_CHRONO("doubles:holes", {
     // VhhhC[i + k*No + L*NoNo] * TABhh[L + j*No]; H1
     MAYBE_CONJ(_vhhh, VhhhC);
-    WITH_CHRONO("doubles:holes:1", DGEMM_HOLES(_vhhh, TABhh, "N");
+    WITH_CHRONO("doubles:holes:1", /**/
+                DGEMM_HOLES(_vhhh, TABhh, "N");
                 REORDER(I, K, J);)
     // VhhhC[j + k*No + L*NoNo] * TABhh[i + L*No]; H0
-    WITH_CHRONO("doubles:holes:2", DGEMM_HOLES(_vhhh, TABhh, "T");
+    WITH_CHRONO("doubles:holes:2", /**/
+                DGEMM_HOLES(_vhhh, TABhh, "T");
                 REORDER(J, K, I);)
 
     // VhhhB[i + j*No + L*NoNo] * TAChh[L + k*No]; H5
     MAYBE_CONJ(_vhhh, VhhhB);
-    WITH_CHRONO("doubles:holes:3", DGEMM_HOLES(_vhhh, TAChh, "N");
+    WITH_CHRONO("doubles:holes:3", /**/
+                DGEMM_HOLES(_vhhh, TAChh, "N");
                 REORDER(I, J, K);)
     // VhhhB[k + j*No + L*NoNo] * TAChh[i + L*No]; H3
-    WITH_CHRONO("doubles:holes:4", DGEMM_HOLES(_vhhh, TAChh, "T");
+    WITH_CHRONO("doubles:holes:4", /**/
+                DGEMM_HOLES(_vhhh, TAChh, "T");
                 REORDER(K, J, I);)
 
     // VhhhA[j + i*No + L*NoNo] * TBChh[L + k*No]; H1
     MAYBE_CONJ(_vhhh, VhhhA);
-    WITH_CHRONO("doubles:holes:5", DGEMM_HOLES(_vhhh, TBChh, "N");
+    WITH_CHRONO("doubles:holes:5", /**/
+                DGEMM_HOLES(_vhhh, TBChh, "N");
                 REORDER(J, I, K);)
     // VhhhA[k + i*No + L*NoNo] * TBChh[j + L*No]; H4
-    WITH_CHRONO("doubles:holes:6", DGEMM_HOLES(_vhhh, TBChh, "T");
+    WITH_CHRONO("doubles:holes:6", /**/
+                DGEMM_HOLES(_vhhh, TBChh, "T");
                 REORDER(K, I, J);)
   })
 #  undef MAYBE_CONJ
@@ -632,22 +638,28 @@ void doubles_contribution(size_t const No,
   // PARTICLES
   WITH_CHRONO("doubles:particles", {
     // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-    WITH_CHRONO("doubles:particles:1", DGEMM_PARTICLES(TAphh, VBCph);
+    WITH_CHRONO("doubles:particles:1", /**/
+                DGEMM_PARTICLES(TAphh, VBCph);
                 REORDER(I, J, K);)
     // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-    WITH_CHRONO("doubles:particles:2", DGEMM_PARTICLES(TAphh, VCBph);
+    WITH_CHRONO("doubles:particles:2", /**/
+                DGEMM_PARTICLES(TAphh, VCBph);
                 REORDER(I, K, J);)
     // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-    WITH_CHRONO("doubles:particles:3", DGEMM_PARTICLES(TCphh, VABph);
+    WITH_CHRONO("doubles:particles:3", /**/
+                DGEMM_PARTICLES(TCphh, VABph);
                 REORDER(K, I, J);)
     // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-    WITH_CHRONO("doubles:particles:4", DGEMM_PARTICLES(TCphh, VBAph);
+    WITH_CHRONO("doubles:particles:4", /**/
+                DGEMM_PARTICLES(TCphh, VBAph);
                 REORDER(K, J, I);)
     // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-    WITH_CHRONO("doubles:particles:5", DGEMM_PARTICLES(TBphh, VACph);
+    WITH_CHRONO("doubles:particles:5", /**/
+                DGEMM_PARTICLES(TBphh, VACph);
                 REORDER(J, I, K);)
     // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-    WITH_CHRONO("doubles:particles:6", DGEMM_PARTICLES(TBphh, VCAph);
+    WITH_CHRONO("doubles:particles:6", /**/
+                DGEMM_PARTICLES(TBphh, VCAph);
                 REORDER(J, K, I);)
   })
 

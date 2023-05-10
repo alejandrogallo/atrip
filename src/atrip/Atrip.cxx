@@ -362,9 +362,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     unions.push_back(jabph);
   }
 
+  DataFieldType<F> *_t_buffer, *_vhhh;
+  MALLOC_DATA_PTR("Tijk buffer for doubles equations",
+                  &_t_buffer,
+                  sizeof(DataFieldType<F>) * No * No * No);
+  MALLOC_DATA_PTR("Vijk buffer for doubles equations",
+                  &_vhhh,
+                  sizeof(DataFieldType<F>) * No * No * No);
+
 #ifdef HAVE_CUDA
-  DataFieldType<F> *_t_buffer;
-  DataFieldType<F> *_vhhh;
   WITH_CHRONO(
       "double:cuda:alloc",
       _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
@@ -769,7 +775,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
       WITH_CHRONO("oneshot-doubles",
                   WITH_CHRONO("doubles",
-                              doublesContribution<F>(
+                              doubles_contribution<F>(
                                   (size_t)No,
                                   (size_t)Nv,
                                   // -- VABCI
@@ -792,15 +798,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                                   tabhh.unwrapSlice(Slice<F>::AC, abc),
                                   tabhh.unwrapSlice(Slice<F>::BC, abc),
                                   // -- TIJK
-                                  (DataFieldType<F> *)Tijk
-      // TODO: have the buffers also in the CPU case
-#if defined(HAVE_CUDA)
+                                  (DataFieldType<F> *)Tijk,
                                   // -- tmp buffers
-                                  ,
                                   (DataFieldType<F> *)_t_buffer,
-                                  (DataFieldType<F> *)_vhhh
-#endif
-                              );
+                                  (DataFieldType<F> *)_vhhh);
 
                               WITH_RANK << iteration << "-th doubles done\n";))
     }
@@ -855,37 +856,32 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
             "oneshot-doubles-J",
             WITH_CHRONO(
                 "doubles-J",
-                doublesContribution<F>((size_t)No,
-                                       (size_t)Nv,
-                                       // -- VABCI
-                                       jabph->unwrapSlice(Slice<F>::AB, abc),
-                                       jabph->unwrapSlice(Slice<F>::AC, abc),
-                                       jabph->unwrapSlice(Slice<F>::BC, abc),
-                                       jabph->unwrapSlice(Slice<F>::BA, abc),
-                                       jabph->unwrapSlice(Slice<F>::CA, abc),
-                                       jabph->unwrapSlice(Slice<F>::CB, abc),
-                                       // -- VHHHA,
-                                       jhhha->unwrapSlice(Slice<F>::A, abc),
-                                       jhhha->unwrapSlice(Slice<F>::B, abc),
-                                       jhhha->unwrapSlice(Slice<F>::C, abc),
-                                       // -- TA,
-                                       taphh.unwrapSlice(Slice<F>::A, abc),
-                                       taphh.unwrapSlice(Slice<F>::B, abc),
-                                       taphh.unwrapSlice(Slice<F>::C, abc),
-                                       // -- TABIJ
-                                       tabhh.unwrapSlice(Slice<F>::AB, abc),
-                                       tabhh.unwrapSlice(Slice<F>::AC, abc),
-                                       tabhh.unwrapSlice(Slice<F>::BC, abc),
-                                       // -- TIJK
-                                       (DataFieldType<F> *)Tijk
-        // TODO: have the buffers also in the CPU case
-#if defined(HAVE_CUDA)
-                                       // -- tmp buffers
-                                       ,
-                                       (DataFieldType<F> *)_t_buffer,
-                                       (DataFieldType<F> *)_vhhh
-#endif
-                );
+                doubles_contribution<F>((size_t)No,
+                                        (size_t)Nv,
+                                        // -- VABCI
+                                        jabph->unwrapSlice(Slice<F>::AB, abc),
+                                        jabph->unwrapSlice(Slice<F>::AC, abc),
+                                        jabph->unwrapSlice(Slice<F>::BC, abc),
+                                        jabph->unwrapSlice(Slice<F>::BA, abc),
+                                        jabph->unwrapSlice(Slice<F>::CA, abc),
+                                        jabph->unwrapSlice(Slice<F>::CB, abc),
+                                        // -- VHHHA,
+                                        jhhha->unwrapSlice(Slice<F>::A, abc),
+                                        jhhha->unwrapSlice(Slice<F>::B, abc),
+                                        jhhha->unwrapSlice(Slice<F>::C, abc),
+                                        // -- TA,
+                                        taphh.unwrapSlice(Slice<F>::A, abc),
+                                        taphh.unwrapSlice(Slice<F>::B, abc),
+                                        taphh.unwrapSlice(Slice<F>::C, abc),
+                                        // -- TABIJ
+                                        tabhh.unwrapSlice(Slice<F>::AB, abc),
+                                        tabhh.unwrapSlice(Slice<F>::AC, abc),
+                                        tabhh.unwrapSlice(Slice<F>::BC, abc),
+                                        // -- TIJK
+                                        (DataFieldType<F> *)Tijk,
+                                        // -- tmp buffers
+                                        (DataFieldType<F> *)_t_buffer,
+                                        (DataFieldType<F> *)_vhhh);
 
                 WITH_RANK << iteration << "-th doubles done\n";))
       }
@@ -1053,17 +1049,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // END OF MAIN LOOP
 
 #if defined(HAVE_CUDA)
-  cuMemFree(Tai);
-  cuMemFree(epsi);
-  cuMemFree(epsa);
-  cuMemFree(Tijk);
-  cuMemFree(Zijk);
-  cuMemFree(_t_buffer);
-  cuMemFree(_vhhh);
-#else
-  std::free(Zijk);
-  std::free(Tijk);
+  _CUDA_FREE(Tai);
+  _CUDA_FREE(epsi);
+  _CUDA_FREE(epsa);
 #endif
+
+  FREE_DATA_PTR("Zijk", Zijk);
+  FREE_DATA_PTR("Tijk", Tijk);
+  FREE_DATA_PTR("Doubles Tijk buffer", _t_buffer);
+  FREE_DATA_PTR("Doubles Vijk buffer", _vhhh);
+
   if (jhhha) delete jhhha;
   if (jabph) delete jabph;
   MPI_Barrier(universe);
