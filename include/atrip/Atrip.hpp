@@ -48,9 +48,9 @@ struct Atrip {
   static ClusterInfo *cluster_info;
   static MPI_Comm communicator;
   static Timings chrono;
-  static size_t networkSend;
-  static size_t localSend;
-  static double bytesSent;
+  static size_t network_send;
+  static size_t local_send;
+  static double bytes_sent;
   static size_t ppn;
 #if defined(HAVE_CUDA)
   struct CudaContext {
@@ -135,6 +135,7 @@ struct Atrip {
 
   struct Output {
     double energy;
+    double ct_energy;
   };
   template <typename F = double>
   static Output run(Input<F> const &in);

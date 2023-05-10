@@ -45,9 +45,9 @@ typename Atrip::KernelDimensions Atrip::kernelDimensions;
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
 size_t Atrip::ppn;
-size_t Atrip::networkSend;
-size_t Atrip::localSend;
-double Atrip::bytesSent;
+size_t Atrip::network_send;
+size_t Atrip::local_send;
+double Atrip::bytes_sent;
 
 // user printing block
 IterationDescriptor IterationDescription::descriptor;
@@ -60,9 +60,9 @@ void Atrip::init(MPI_Comm world) {
   MPI_Comm_rank(world, (int *)&Atrip::rank);
   MPI_Comm_size(world, (int *)&Atrip::np);
   Atrip::cluster_info = new ClusterInfo(getClusterInfo(world));
-  Atrip::networkSend = 0UL;
-  Atrip::localSend = 0UL;
-  Atrip::bytesSent = 0.0;
+  Atrip::network_send = 0UL;
+  Atrip::local_send = 0UL;
+  Atrip::bytes_sent = 0.0;
   Atrip::ppn = Atrip::cluster_info->ranksPerNode;
 }
 
@@ -213,7 +213,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   _CHECK_CUDA_SUCCESS("Tijk", cuMemAlloc(&Tijk, sizeof(F) * No * No * No));
   _CHECK_CUDA_SUCCESS("Zijk", cuMemAlloc(&Zijk, sizeof(F) * No * No * No));
 #else
-  DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data(), epsa = _epsa.data();
+  DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data();
   MALLOC_DATA_PTR("Zijk", &Zijk, sizeof(DataFieldType<F>) * No * No * No);
   MALLOC_DATA_PTR("Tijk", &Tijk, sizeof(DataFieldType<F>) * No * No * No);
 #endif
@@ -425,7 +425,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           "db:comm:ldb", typename Slice<F>::LocalDatabase ldb;
           for (auto const &tensor
                : unions) {
-            auto const &tensorDb = tensor->buildLocalDatabase(abc);
+            auto const &tensorDb = tensor->build_local_database(abc);
             ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
           })
 
@@ -457,6 +457,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           Database const &db,
           ABCTuple const abc,
           size_t iteration) {
+        IGNORABLE(iteration); // iteration used to print database
         const size_t localDBLength = db.size() / np;
 
         size_t sendTag = 0, recvTag = rank * localDBLength;
@@ -639,8 +640,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
       Checkpoint out = {No,
                         Nv,
-                        0, // TODO
-                        0, // TODO
+                        Atrip::cluster_info->ranksPerNode,
+                        Atrip::cluster_info->nNodes,
                         -globalEnergy,
                         iteration - 1,
                         in.rankRoundRobin};
@@ -659,34 +660,34 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       const double _doubles_time = Atrip::chrono["doubles"].count(),
                    _its_time = Atrip::chrono["iterations"].count();
 
-      size_t networkSend(0);
-      MPI_Reduce(&Atrip::networkSend,
-                 &networkSend,
+      size_t network_send(0);
+      MPI_Reduce(&Atrip::network_send,
+                 &network_send,
                  1,
                  MPI_UINT64_T,
                  MPI_SUM,
                  0,
                  universe);
 
-      size_t localSend(0);
-      MPI_Reduce(&Atrip::localSend,
-                 &localSend,
+      size_t local_send(0);
+      MPI_Reduce(&Atrip::local_send,
+                 &local_send,
                  1,
                  MPI_UINT64_T,
                  MPI_SUM,
                  0,
                  universe);
 
-      double bytesSent(0.0);
-      MPI_Reduce(&Atrip::bytesSent,
-                 &bytesSent,
+      double bytes_sent(0.0);
+      MPI_Reduce(&Atrip::bytes_sent,
+                 &bytes_sent,
                  1,
                  MPI_DOUBLE,
                  MPI_SUM,
                  0,
                  universe);
 
-      const size_t total_send = networkSend + localSend;
+      const size_t total_send = network_send + local_send;
 
       LOG(0, "Atrip")
           << "iteration " << iteration << " [" << 100 * iteration / nIterations
@@ -697,8 +698,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           << "GF)"
           << " ("
           << (_its_time > 0.0 ? doublesFlops * iteration / _its_time : -1)
-          << "GF) :: GB sent per rank: " << bytesSent / 1073741824.0
-          << " :: " << (total_send > 0UL ? networkSend / total_send : 0UL)
+          << "GF) :: GB sent per rank: " << bytes_sent / 1073741824.0
+          << " :: " << (total_send > 0UL ? network_send / total_send : 0UL)
           << " % network communication" << std::endl;
 
       // PRINT TIMINGS
@@ -850,45 +851,44 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 #endif
       if (!isFakeTuple(i) && jhhha && jabph) {
 
-        WITH_CHRONO("oneshot-doubles-J",
-                    WITH_CHRONO("doubles-J",
-                                doublesContribution<F>(
-                                    (size_t)No,
-                                    (size_t)Nv,
-                                    // -- VABCI
-                                    jabph->unwrapSlice(Slice<F>::AB, abc),
-                                    jabph->unwrapSlice(Slice<F>::AC, abc),
-                                    jabph->unwrapSlice(Slice<F>::BC, abc),
-                                    jabph->unwrapSlice(Slice<F>::BA, abc),
-                                    jabph->unwrapSlice(Slice<F>::CA, abc),
-                                    jabph->unwrapSlice(Slice<F>::CB, abc),
-                                    // -- VHHHA,
-                                    jhhha->unwrapSlice(Slice<F>::A, abc),
-                                    jhhha->unwrapSlice(Slice<F>::B, abc),
-                                    jhhha->unwrapSlice(Slice<F>::C, abc),
-                                    // -- TA,
-                                    taphh.unwrapSlice(Slice<F>::A, abc),
-                                    taphh.unwrapSlice(Slice<F>::B, abc),
-                                    taphh.unwrapSlice(Slice<F>::C, abc),
-                                    // -- TABIJ
-                                    tabhh.unwrapSlice(Slice<F>::AB, abc),
-                                    tabhh.unwrapSlice(Slice<F>::AC, abc),
-                                    tabhh.unwrapSlice(Slice<F>::BC, abc),
-                                    // -- TIJK
-                                    (DataFieldType<F> *)Tijk
-      // TODO: have the buffers also in the CPU case
+        WITH_CHRONO(
+            "oneshot-doubles-J",
+            WITH_CHRONO(
+                "doubles-J",
+                doublesContribution<F>((size_t)No,
+                                       (size_t)Nv,
+                                       // -- VABCI
+                                       jabph->unwrapSlice(Slice<F>::AB, abc),
+                                       jabph->unwrapSlice(Slice<F>::AC, abc),
+                                       jabph->unwrapSlice(Slice<F>::BC, abc),
+                                       jabph->unwrapSlice(Slice<F>::BA, abc),
+                                       jabph->unwrapSlice(Slice<F>::CA, abc),
+                                       jabph->unwrapSlice(Slice<F>::CB, abc),
+                                       // -- VHHHA,
+                                       jhhha->unwrapSlice(Slice<F>::A, abc),
+                                       jhhha->unwrapSlice(Slice<F>::B, abc),
+                                       jhhha->unwrapSlice(Slice<F>::C, abc),
+                                       // -- TA,
+                                       taphh.unwrapSlice(Slice<F>::A, abc),
+                                       taphh.unwrapSlice(Slice<F>::B, abc),
+                                       taphh.unwrapSlice(Slice<F>::C, abc),
+                                       // -- TABIJ
+                                       tabhh.unwrapSlice(Slice<F>::AB, abc),
+                                       tabhh.unwrapSlice(Slice<F>::AC, abc),
+                                       tabhh.unwrapSlice(Slice<F>::BC, abc),
+                                       // -- TIJK
+                                       (DataFieldType<F> *)Tijk
+        // TODO: have the buffers also in the CPU case
 #if defined(HAVE_CUDA)
-                                    // -- tmp buffers
-                                    ,
-                                    (DataFieldType<F> *)_t_buffer,
-                                    (DataFieldType<F> *)_vhhh
+                                       // -- tmp buffers
+                                       ,
+                                       (DataFieldType<F> *)_t_buffer,
+                                       (DataFieldType<F> *)_vhhh
 #endif
-                                );
+                );
 
-                                WITH_RANK << iteration << "-th doubles done\n";))
-
+                WITH_RANK << iteration << "-th doubles done\n";))
       }
-
 
       // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       // {{{1
@@ -976,7 +976,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     for (auto const &u : unions) {
       WITH_RANK << "__dups__:" << iteration << "-th n" << u->name
                 << " checking duplicates\n";
-      u->checkForDuplicates();
+      u->check_for_duplicates();
     }
 #endif
 
@@ -1105,7 +1105,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       << "\n";
 
   // TODO: change the sign in  the getEnergy routines
-  return {-globalEnergy};
+  return {-globalEnergy, 0};
 }
 // instantiate
 template Atrip::Output Atrip::run(Atrip::Input<double> const &in);

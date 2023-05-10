@@ -65,11 +65,11 @@ ClusterInfo make_fake_cluster_info(size_t n_nodes, size_t ranks_per_node) {
   for (size_t i = 0; i < n_nodes; i++) {
     names[i] = "node-" + std::to_string(i);
     for (size_t r = 0; r < ranks_per_node; r++) {
-      ranks.push_back({.name = names[i],
-                       .nodeId = i,
-                       .globalRank = i * ranks_per_node + r,
-                       .localRank = r,
-                       .ranksPerNode = ranks_per_node});
+      ranks.push_back({/* .name = */ names[i],
+                       /* .nodeId = */ i,
+                       /* .globalRank = */ i * ranks_per_node + r,
+                       /* .localRank = */ r,
+                       /* .ranksPerNode = */ ranks_per_node});
     }
   }
   return ClusterInfo{n_nodes, n_nodes * ranks_per_node, ranks_per_node, ranks};
@@ -175,7 +175,7 @@ void send(SliceUnion<F> &u,
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 }
 
-LocalDatabase buildLocalDatabase(SliceUnion<F> &u, ABCTuple const &abc) {
+LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
   LocalDatabase result;
 
   auto const needed = u.neededSlices(abc);
@@ -401,7 +401,7 @@ int main(int argc, char **argv) {
         typename Slice<F>::LocalDatabase ldb;
         for (auto const &tensor
              : unions) {
-          auto const &tensorDb = buildLocalDatabase(*tensor, abc);
+          auto const &tensorDb = build_local_database(*tensor, abc);
           ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
         })
 

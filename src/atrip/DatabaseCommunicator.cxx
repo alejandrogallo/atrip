@@ -223,7 +223,7 @@ naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
 
     for (auto const &tensor : unions) {
       if (rank == Atrip::rank) {
-        auto const &tensorDb = tensor->buildLocalDatabase(abc);
+        auto const &tensorDb = tensor->build_local_database(abc);
         ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
       } else {
         auto const &tensorDb =

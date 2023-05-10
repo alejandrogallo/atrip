@@ -70,7 +70,7 @@ public:
    *
    * This means that there can be at most one slice with a given Ty_x_Tu.
    */
-  void checkForDuplicates() const {
+  void check_for_duplicates() const {
     std::vector<typename Slice<F>::Ty_x_Tu> tytus;
     for (auto const &s : slices) {
       if (s.isFree()) continue;
@@ -96,7 +96,7 @@ public:
     return needed;
   }
 
-  /* buildLocalDatabase
+  /* build_local_database
    *
    * It should build a database of slices so that we know what is needed
    * to fetch in the next iteration represented by the tuple 'abc'.
@@ -115,7 +115,7 @@ public:
    * slices.
    *
    */
-  typename Slice<F>::LocalDatabase buildLocalDatabase(ABCTuple const &abc) {
+  typename Slice<F>::LocalDatabase build_local_database(ABCTuple const &abc) {
     typename Slice<F>::LocalDatabase result;
 
     auto const needed = neededSlices(abc);
@@ -543,6 +543,7 @@ public:
             typename Slice<F>::LocalDatabaseElement const &el,
             size_t tag,
             ABCTuple abc) {
+    IGNORABLE(abc); // used for mpi staging only
     MPI_Request *request = (MPI_Request *)malloc(sizeof(MPI_Request));
     bool sendData_p = false;
     auto const &info = el.info;
@@ -613,6 +614,8 @@ public:
     F *isend_buffer = source_buffer;
 #endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
 
+    goto mpi_staging_done; // do not complain that is not used, it is used when
+                           // MPI_STAGING_BUFFERS is on
   mpi_staging_done:
 
     // We count network sends only for the largest buffers
@@ -621,7 +624,7 @@ public:
       if (otherRank / Atrip::ppn == Atrip::rank / Atrip::ppn) {
         Atrip::local_send++;
       } else {
-        Atrip::networkSend++;
+        Atrip::network_send++;
       }
     default:;
     }

@@ -1070,7 +1070,7 @@ namespace atrip {
      ,*
      ,* This means that there can be at most one slice with a given Ty_x_Tu.
      ,*/
-    void checkForDuplicates() const {
+    void check_for_duplicates() const {
       std::vector<typename Slice<F>::Ty_x_Tu> tytus;
       for (auto const& s: slices) {
         if (s.isFree()) continue;
@@ -1096,7 +1096,7 @@ namespace atrip {
       return needed;
     }
 
-    /* buildLocalDatabase
+    /* build_local_database
      *
      * It should build a database of slices so that we know what is needed
      * to fetch in the next iteration represented by the tuple 'abc'.
@@ -1116,7 +1116,7 @@ namespace atrip {
      *
      */
     typename
-    Slice<F>::LocalDatabase buildLocalDatabase(ABCTuple const& abc) {
+    Slice<F>::LocalDatabase build_local_database(ABCTuple const& abc) {
       typename Slice<F>::LocalDatabase result;
 
       auto const needed = neededSlices(abc);
@@ -3753,7 +3753,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
         WITH_CHRONO("db:comm:ldb",
           typename Slice<F>::LocalDatabase ldb;
           for (auto const& tensor: unions) {
-            auto const& tensorDb = tensor->buildLocalDatabase(abc);
+            auto const& tensorDb = tensor->build_local_database(abc);
             ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
           }
         )
@@ -4135,7 +4135,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       WITH_RANK << "__dups__:"
                 << iteration
                 << "-th n" << u->name << " checking duplicates\n";
-      u->checkForDuplicates();
+      u->check_for_duplicates();
     }
 #endif
 
