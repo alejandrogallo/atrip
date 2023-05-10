@@ -583,7 +583,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // START MAIN LOOP ======================================================{{{1
 
   MPI_Barrier(universe);
-  double energy(0.);
+  Output local_output = {0, 0}, global_output = {0, 0};
   size_t first_iteration = 0;
   Checkpoint c;
   const size_t checkpoint_mod =
@@ -612,13 +612,75 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         // take the negative of the energy to correct for the
         // negativity of the equations, the energy in the checkpoint
         // should always be the correct physical one.
-        energy = -(double)c.energy;
+        local_output.energy = -(double)c.energy;
       }
-      LOG(0, "Atrip") << "energy from checkpoint " << energy << "\n";
+      LOG(0, "Atrip") << "energy from checkpoint " << local_output.energy
+                      << "\n";
       LOG(0, "Atrip") << "iteration from checkpoint " << first_iteration
                       << "\n";
     }
   }
+
+  const auto compute_local_energy =
+      [Tijk, Zijk, No, epsi, &_epsa](ABCTuple const &abc,
+                                     bool const fake_tuple_p) {
+#if defined(ATRIP_ONLY_DGEMM)
+        if (false)
+#endif /* defined(ATRIP_ONLY_DGEMM) */
+          if (!fake_tuple_p) {
+#if defined(HAVE_CUDA)
+            double *tupleEnergy;
+            cuMemAlloc((DataPtr<double> *)&tupleEnergy, sizeof(double));
+#else
+          double _tupleEnergy(0.);
+          double *tupleEnergy = &_tupleEnergy;
+#endif /* defined(HAVE_CUDA) */
+
+            int distinct(0);
+            if (abc[0] == abc[1]) distinct++;
+            if (abc[1] == abc[2]) distinct--;
+            const double epsabc =
+                std::real(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
+
+            DataFieldType<F> _epsabc{epsabc};
+
+            WITH_CHRONO(
+                "energy",
+                if (distinct == 0) {
+                  ACC_FUNCALL(getEnergyDistinct<DataFieldType<F>>,
+                              1,
+                              1, // for cuda
+                              _epsabc,
+                              No,
+                              (DataFieldType<F> *)epsi,
+                              (DataFieldType<F> *)Tijk,
+                              (DataFieldType<F> *)Zijk,
+                              tupleEnergy);
+                } else {
+                  ACC_FUNCALL(getEnergySame<DataFieldType<F>>,
+                              1,
+                              1, // for cuda
+                              _epsabc,
+                              No,
+                              (DataFieldType<F> *)epsi,
+                              (DataFieldType<F> *)Tijk,
+                              (DataFieldType<F> *)Zijk,
+                              tupleEnergy);
+                })
+
+#if defined(HAVE_CUDA)
+            double host_tuple_energy;
+            cuMemcpyDtoH((void *)&host_tuple_energy,
+                         (DataPtr<double>)tupleEnergy,
+                         sizeof(double));
+#else
+          double host_tuple_energy = *tupleEnergy;
+#endif /* defined(HAVE_CUDA) */
+
+            return host_tuple_energy;
+          }
+        return 0.0;
+      };
 
   for (size_t i = first_iteration, iteration = first_iteration + 1;
        i < tuplesList.size();
@@ -644,7 +706,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // TODO: ENABLE THIS
     if (iteration % checkpoint_mod == 0 && false) {
       double globalEnergy = 0;
-      MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
+      MPI_Reduce(&local_output.energy,
+                 &globalEnergy,
+                 1,
+                 MPI_DOUBLE,
+                 MPI_SUM,
+                 0,
+                 universe);
       Checkpoint out = {No,
                         Nv,
                         Atrip::cluster_info->ranksPerNode,
@@ -727,7 +795,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                           << (abcNext ? pretty_print(*abcNext) : "None")
                           << "\n";)
 
-    // COMM FIRST DATABASE ================================================{{{1
+    // COMM FIRST DATABASE
+    // ================================================{{{1
     if (i == first_iteration) {
       WITH_RANK << "__first__:first database ............ \n";
       const auto db = communicateDatabase(abc, universe, i);
@@ -741,7 +810,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       MPI_Barrier(universe);
     }
 
-    // COMM NEXT DATABASE ================================================={{{1
+    // COMM NEXT DATABASE
+    // ================================================={{{1
     if (abcNext) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       WITH_CHRONO("db:comm",
@@ -750,7 +820,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       WITH_RANK << "__comm__:" << iteration << "th database io phase DONE\n";
     }
 
-    // COMPUTE DOUBLES ===================================================={{{1
+    // COMPUTE DOUBLES
+    // ===================================================={{{1
     OCD_Barrier(universe);
     if (!isFakeTuple(i)) {
       WITH_RANK << iteration << "-th doubles\n";
@@ -807,7 +878,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                               WITH_RANK << iteration << "-th doubles done\n";))
     }
 
-    // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% {{{1
+    // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // {{{1
     OCD_Barrier(universe);
 #if defined(ATRIP_ONLY_DGEMM)
     if (false)
@@ -842,107 +914,45 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                         (DataFieldType<F> *)Zijk);)
       }
 
-      // COMPUTE (cT) DOUBLES WITH THE J-INTERMEDIATE%%%%%%%%%%%%%%%%%%%%% {{{1
-#if defined(ATRIP_ONLY_DGEMM)
-    if (false)
-#endif
-      if (!isFakeTuple(i) && jhhha && jabph) {
+    local_output.energy += compute_local_energy(abc, isFakeTuple(i));
 
-        WITH_CHRONO(
-            "oneshot-doubles-J",
-            WITH_CHRONO(
-                "doubles-J",
-                doubles_contribution<F>((size_t)No,
-                                        (size_t)Nv,
-                                        // -- VABCI
-                                        jabph->unwrapSlice(Slice<F>::AB, abc),
-                                        jabph->unwrapSlice(Slice<F>::AC, abc),
-                                        jabph->unwrapSlice(Slice<F>::BC, abc),
-                                        jabph->unwrapSlice(Slice<F>::BA, abc),
-                                        jabph->unwrapSlice(Slice<F>::CA, abc),
-                                        jabph->unwrapSlice(Slice<F>::CB, abc),
-                                        // -- VHHHA,
-                                        jhhha->unwrapSlice(Slice<F>::A, abc),
-                                        jhhha->unwrapSlice(Slice<F>::B, abc),
-                                        jhhha->unwrapSlice(Slice<F>::C, abc),
-                                        // -- TA,
-                                        taphh.unwrapSlice(Slice<F>::A, abc),
-                                        taphh.unwrapSlice(Slice<F>::B, abc),
-                                        taphh.unwrapSlice(Slice<F>::C, abc),
-                                        // -- TABIJ
-                                        tabhh.unwrapSlice(Slice<F>::AB, abc),
-                                        tabhh.unwrapSlice(Slice<F>::AC, abc),
-                                        tabhh.unwrapSlice(Slice<F>::BC, abc),
-                                        // -- TIJK
-                                        (DataFieldType<F> *)Tijk,
-                                        // -- tmp buffers
-                                        (DataFieldType<F> *)_t_buffer,
-                                        (DataFieldType<F> *)_vhhh);
+    // COMPUTE (cT) DOUBLES WITH THE J-INTERMEDIATE%%%%%%%%%%%%%%%%%%%%%
+    if (!isFakeTuple(i) && jhhha && jabph) {
 
-                WITH_RANK << iteration << "-th doubles done\n";))
-      }
+      WITH_CHRONO("oneshot-doubles-J",
+                  WITH_CHRONO("doubles-J",
+                              doubles_contribution<F>(
+                                  (size_t)No,
+                                  (size_t)Nv,
+                                  // -- VABCI
+                                  jabph->unwrapSlice(Slice<F>::AB, abc),
+                                  jabph->unwrapSlice(Slice<F>::AC, abc),
+                                  jabph->unwrapSlice(Slice<F>::BC, abc),
+                                  jabph->unwrapSlice(Slice<F>::BA, abc),
+                                  jabph->unwrapSlice(Slice<F>::CA, abc),
+                                  jabph->unwrapSlice(Slice<F>::CB, abc),
+                                  // -- VHHHA,
+                                  jhhha->unwrapSlice(Slice<F>::A, abc),
+                                  jhhha->unwrapSlice(Slice<F>::B, abc),
+                                  jhhha->unwrapSlice(Slice<F>::C, abc),
+                                  // -- TA,
+                                  taphh.unwrapSlice(Slice<F>::A, abc),
+                                  taphh.unwrapSlice(Slice<F>::B, abc),
+                                  taphh.unwrapSlice(Slice<F>::C, abc),
+                                  // -- TABIJ
+                                  tabhh.unwrapSlice(Slice<F>::AB, abc),
+                                  tabhh.unwrapSlice(Slice<F>::AC, abc),
+                                  tabhh.unwrapSlice(Slice<F>::BC, abc),
+                                  // -- TIJK
+                                  (DataFieldType<F> *)Tijk,
+                                  // -- tmp buffers
+                                  (DataFieldType<F> *)_t_buffer,
+                                  (DataFieldType<F> *)_vhhh);
 
-      // COMPUTE ENERGY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      // {{{1
-#if defined(ATRIP_ONLY_DGEMM)
-    if (false)
-#endif /* defined(ATRIP_ONLY_DGEMM) */
-      if (!isFakeTuple(i)) {
-#if defined(HAVE_CUDA)
-        double *tupleEnergy;
-        cuMemAlloc((DataPtr<double> *)&tupleEnergy, sizeof(double));
-#else
-      double _tupleEnergy(0.);
-      double *tupleEnergy = &_tupleEnergy;
-#endif /* defined(HAVE_CUDA) */
+                              WITH_RANK << iteration << "-th doubles done\n";))
+    }
 
-        int distinct(0);
-        if (abc[0] == abc[1]) distinct++;
-        if (abc[1] == abc[2]) distinct--;
-        const double epsabc =
-            std::real(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
-
-        DataFieldType<F> _epsabc{epsabc};
-
-        WITH_CHRONO(
-            "energy",
-            if (distinct == 0) {
-              ACC_FUNCALL(getEnergyDistinct<DataFieldType<F>>,
-                          1,
-                          1, // for cuda
-                          _epsabc,
-                          No,
-                          (DataFieldType<F> *)epsi,
-                          (DataFieldType<F> *)Tijk,
-                          (DataFieldType<F> *)Zijk,
-                          tupleEnergy);
-            } else {
-              ACC_FUNCALL(getEnergySame<DataFieldType<F>>,
-                          1,
-                          1, // for cuda
-                          _epsabc,
-                          No,
-                          (DataFieldType<F> *)epsi,
-                          (DataFieldType<F> *)Tijk,
-                          (DataFieldType<F> *)Zijk,
-                          tupleEnergy);
-            })
-
-#if defined(HAVE_CUDA)
-        double host_tuple_energy;
-        cuMemcpyDtoH((void *)&host_tuple_energy,
-                     (DataPtr<double>)tupleEnergy,
-                     sizeof(double));
-#else
-      double host_tuple_energy = *tupleEnergy;
-#endif /* defined(HAVE_CUDA) */
-
-#if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
-        tupleEnergies[abc] = host_tuple_energy;
-#endif
-
-        energy += host_tuple_energy;
-      }
+    local_output.ct_energy += compute_local_energy(abc, isFakeTuple(i));
 
     // TODO: remove this
     if (isFakeTuple(i)) {
@@ -960,7 +970,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     }
 #endif
 
-    // CLEANUP UNIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+    // CLEANUP UNIONS
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
     OCD_Barrier(universe);
     if (abcNext) {
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
@@ -1012,7 +1023,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     WITH_RANK << iteration << "-th cleaning up....... DONE\n";
 
     Atrip::chrono["iterations"].stop();
-    // ITERATION END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+    // ITERATION END
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
     // AMB: debugging only
     WITH_CHRONO("mpi:barrier", MPI_Barrier(universe););
@@ -1047,7 +1059,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   if (jabph) delete jabph;
   MPI_Barrier(universe);
 
-  // PRINT TUPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+  // PRINT TUPLES
+  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0, "Atrip") << "tuple energies"
                   << "\n";
@@ -1062,14 +1075,32 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   }
 #endif
 
-  // COMMUNICATE THE ENERGIES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+  // COMMUNICATE THE ENERGIES
+  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
   LOG(0, "Atrip") << "COMMUNICATING ENERGIES \n";
-  double globalEnergy = 0;
-  MPI_Reduce(&energy, &globalEnergy, 1, MPI_DOUBLE, MPI_SUM, 0, universe);
+  MPI_Reduce(&local_output.energy,
+             &global_output.energy,
+             1,
+             MPI_DOUBLE,
+             MPI_SUM,
+             0,
+             universe);
+  MPI_Reduce(&local_output.ct_energy,
+             &global_output.ct_energy,
+             1,
+             MPI_DOUBLE,
+             MPI_SUM,
+             0,
+             universe);
 
-  WITH_RANK << "local energy " << energy << "\n";
+  global_output.energy = -global_output.energy;
+  global_output.ct_energy = -global_output.ct_energy;
+
+  WITH_RANK << "local energy " << local_output.energy << "\n";
   LOG(0, "Atrip") << "Energy: " << std::setprecision(15) << std::setw(23)
-                  << (-globalEnergy) << std::endl;
+                  << global_output.energy << std::endl;
+  LOG(0, "Atrip") << "Energy (cT): " << std::setprecision(15) << std::setw(23)
+                  << global_output.ct_energy << std::endl;
 
   // PRINT TIMINGS {{{1
   if (in.chrono)
@@ -1084,7 +1115,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       << "\n";
 
   // TODO: change the sign in  the getEnergy routines
-  return {-globalEnergy, 0};
+  return global_output;
 }
 // instantiate
 template Atrip::Output Atrip::run(Atrip::Input<double> const &in);

@@ -399,6 +399,7 @@ int main(int argc, char **argv) {
       if (!atrip::Atrip::rank) {                                               \
         std::cout << "Used " << #FIELD << " version of atrip" << std::endl;    \
         std::cout << "Energy: " << out.energy << std::endl;                    \
+        std::cout << "Energy (cT): " << out.ct_energy << std::endl;            \
       }                                                                        \
     } catch (const char *msg) {                                                \
       if (!atrip::Atrip::rank)                                                 \
