@@ -146,13 +146,13 @@ build_local_database_fake(ABCTuple const &abc_prev,
   typename Slice<F>::LocalDatabase result;
 
   // vector of type x tuple
-  auto const needed = u->neededSlices(abc);
-  auto const needed_prev = u->neededSlices(abc_prev);
+  auto const needed = u->needed_slices_for_tuple(abc);
+  auto const needed_prev = u->needed_slices_for_tuple(abc_prev);
 
   for (auto const &pair : needed) {
     auto const type = pair.first;
     auto const tuple = pair.second;
-    auto const from = u->rankMap.find(abc, type);
+    auto const from = u->rank_map.find(abc, type);
 
     // Try to find in the previously needed slices
     // one that exactly matches the tuple.
@@ -199,7 +199,7 @@ build_local_database_fake(ABCTuple const &abc_prev,
 
 template <typename F>
 typename Slice<F>::Database
-naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
+naive_database(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
 
   using Database = typename Slice<F>::Database;
   Database db;
@@ -223,12 +223,12 @@ naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
 
     for (auto const &tensor : unions) {
       if (rank == Atrip::rank) {
-        auto const &tensorDb = tensor->build_local_database(abc);
-        ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+        auto const &tensor_db = tensor->build_local_database(abc);
+        ldb.insert(ldb.end(), tensor_db.begin(), tensor_db.end());
       } else {
-        auto const &tensorDb =
+        auto const &tensor_db =
             build_local_database_fake(prev_tuples[rank], abc, rank, tensor);
-        ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+        ldb.insert(ldb.end(), tensor_db.begin(), tensor_db.end());
       }
     }
 
@@ -239,15 +239,15 @@ naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration) {
 }
 
 template typename Slice<double>::Database
-naiveDatabase<double>(Unions<double> &unions,
-                      size_t nv,
-                      size_t np,
-                      size_t iteration);
-
-template typename Slice<Complex>::Database
-naiveDatabase<Complex>(Unions<Complex> &unions,
+naive_database<double>(Unions<double> &unions,
                        size_t nv,
                        size_t np,
                        size_t iteration);
+
+template typename Slice<Complex>::Database
+naive_database<Complex>(Unions<Complex> &unions,
+                        size_t nv,
+                        size_t np,
+                        size_t iteration);
 
 } // namespace atrip

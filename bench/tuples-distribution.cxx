@@ -66,23 +66,23 @@ ClusterInfo make_fake_cluster_info(size_t n_nodes, size_t ranks_per_node) {
     names[i] = "node-" + std::to_string(i);
     for (size_t r = 0; r < ranks_per_node; r++) {
       ranks.push_back({/* .name = */ names[i],
-                       /* .nodeId = */ i,
-                       /* .globalRank = */ i * ranks_per_node + r,
-                       /* .localRank = */ r,
-                       /* .ranksPerNode = */ ranks_per_node});
+                       /* .node_id = */ i,
+                       /* .global_rank = */ i * ranks_per_node + r,
+                       /* .local_rank = */ r,
+                       /* .ranks_per_node = */ ranks_per_node});
     }
   }
   return ClusterInfo{n_nodes, n_nodes * ranks_per_node, ranks_per_node, ranks};
 }
 
 template <typename F>
-void clearUnusedSlicesForNext(SliceUnion<F> &u, ABCTuple const &abc) {
-  auto const needed = u.neededSlices(abc);
+void clear_unused_slices_for_next_tuple(SliceUnion<F> &u, ABCTuple const &abc) {
+  auto const needed = u.needed_slices_for_tuple(abc);
 
   // CLEAN UP SLICES, FREE THE ONES THAT ARE NOT NEEDED ANYMORE
   for (auto &slice : u.slices) {
     // if the slice is free, then it was not used anyways
-    if (slice.isFree()) continue;
+    if (slice.is_free()) continue;
 
     // try to find the slice in the needed slices list
     auto const found =
@@ -102,11 +102,11 @@ void clearUnusedSlicesForNext(SliceUnion<F> &u, ABCTuple const &abc) {
       //
       // For Ready slices, we have to be careful if there are some
       // recycled slices depending on it.
-      bool freeSlicePointer = true;
+      bool free_slice_pointer = true;
 
       // allow to gc unwrapped and recycled, never Fetch,
       // if we have a Fetch slice then something has gone very wrong.
-      if (!slice.isUnwrapped() && slice.info.state != Slice<F>::Recycled)
+      if (!slice.is_unwrapped() && slice.info.state != Slice<F>::Recycled)
         throw std::domain_error(
             "Trying to garbage collect "
             " a non-unwrapped slice! "
@@ -114,15 +114,15 @@ void clearUnusedSlicesForNext(SliceUnion<F> &u, ABCTuple const &abc) {
 
       if (slice.info.state == Slice<F>::Ready) {
         auto recycled =
-            Slice<F>::hasRecycledReferencingToIt(u.slices, slice.info);
+            Slice<F>::has_recycled_referencing_to_it(u.slices, slice.info);
         if (recycled.size()) {
-          Slice<F> *newReady = recycled[0];
-          newReady->markReady();
-          assert(newReady->data == slice.data);
-          freeSlicePointer = false;
+          Slice<F> *new_ready = recycled[0];
+          new_ready->mark_ready();
+          assert(new_ready->data == slice.data);
+          free_slice_pointer = false;
           for (size_t i = 1; i < recycled.size(); i++) {
-            auto newRecyled = recycled[i];
-            newRecyled->info.recycling = newReady->info.type;
+            auto new_recycled = recycled[i];
+            new_recycled->info.recycling = new_ready->info.type;
           }
         }
       }
@@ -131,15 +131,15 @@ void clearUnusedSlicesForNext(SliceUnion<F> &u, ABCTuple const &abc) {
       // pointer, since it is a pointer to our sources in our rank.
       if (slice.info.state == Slice<F>::SelfSufficient
           || slice.info.state == Slice<F>::Recycled) {
-        freeSlicePointer = false;
+        free_slice_pointer = false;
       }
 
       // make sure we get its data pointer to be used later
       // only for non-recycled, since it can be that we need
       // for next iteration the data of the slice that the recycled points
       // to
-      if (freeSlicePointer) {
-        u.freePointers.insert(slice.data);
+      if (free_slice_pointer) {
+        u.free_pointers.insert(slice.data);
       } else {
         // WITH_OCD WITH_RANK << "__gc__:not touching the free Pointer\n";
       }
@@ -151,22 +151,22 @@ void clearUnusedSlicesForNext(SliceUnion<F> &u, ABCTuple const &abc) {
 
 template <typename F>
 void send(SliceUnion<F> &u,
-          size_t otherRank,
+          size_t other_rank,
           typename Slice<F>::LocalDatabaseElement const &el,
           size_t tag,
           ABCTuple abc) {
   IGNORABLE(u);
   IGNORABLE(tag);
   IGNORABLE(abc);
-  bool sendData_p = false;
+  bool send_data_p = false;
   auto const &info = el.info;
 
-  if (info.state == Slice<F>::Fetch) sendData_p = true;
-  if (otherRank == info.from.rank) sendData_p = false;
-  if (!sendData_p) return;
+  if (info.state == Slice<F>::Fetch) send_data_p = true;
+  if (other_rank == info.from.rank) send_data_p = false;
+  if (!send_data_p) return;
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-  DataPtr<F> isend_buffer = u.popFreePointer();
+  DataPtr<F> isend_buffer = u.pop_free_pointers();
   u.mpi_staging_buffers.insert(
       typename SliceUnion<F>::StagingBufferInfo{isend_buffer,
                                                 tag,
@@ -178,16 +178,16 @@ void send(SliceUnion<F> &u,
 LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
   LocalDatabase result;
 
-  auto const needed = u.neededSlices(abc);
+  auto const needed = u.needed_slices_for_tuple(abc);
 
   // BUILD THE DATABASE
-  // we need to loop over all sliceTypes that this TensorUnion
+  // we need to loop over all slice_types that this TensorUnion
   // is representing and find out how we will get the corresponding
   // slice for the abc we are considering right now.
   for (auto const &pair : needed) {
     auto const type = pair.first;
     auto const tuple = pair.second;
-    auto const from = u.rankMap.find(abc, type);
+    auto const from = u.rank_map.find(abc, type);
 
     {
       // FIRST: look up if there is already a *Ready* slice matching what we
@@ -199,7 +199,7 @@ LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
                                           && other.info.type == type
                                           // we only want another slice when it
                                           // has already ready-to-use data
-                                          && other.isUnwrappable();
+                                          && other.is_unwrappable();
                                     });
       if (it != u.slices.end()) {
         // if we find this slice, it means that we don't have to do anything
@@ -212,42 +212,42 @@ LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
     // Try to find a recyling possibility ie. find a slice with the same
     // tuple and that has a valid data pointer.
     //
-    auto const &recycleIt =
+    auto const &recycle_it =
         std::find_if(u.slices.begin(),
                      u.slices.end(),
                      [&tuple, &type](Slice<F> const &other) {
                        return other.info.tuple == tuple
-                           && other.info.type != type && other.isRecyclable();
+                           && other.info.type != type && other.is_recyclable();
                      });
 
     //
     // if we find this recylce, then we find a Blank slice
     // (which should exist by construction :THINK)
     //
-    if (recycleIt != u.slices.end()) {
-      auto &blank = Slice<F>::findOneByType(u.slices, Slice<F>::Blank);
+    if (recycle_it != u.slices.end()) {
+      auto &blank = Slice<F>::find_one_by_type(u.slices, Slice<F>::Blank);
       // TODO: formalize this through a method to copy information
       //       from another slice
-      blank.data = recycleIt->data;
+      blank.data = recycle_it->data;
       blank.info.type = type;
       blank.info.tuple = tuple;
       blank.info.state = Slice<F>::Recycled;
       blank.info.from = from;
-      blank.info.recycling = recycleIt->info.type;
+      blank.info.recycling = recycle_it->info.type;
       result.push_back({u.name, blank.info});
       WITH_RANK << "__db__: RECYCLING: n" << u.name << " " << pretty_print(abc)
                 << " get " << pretty_print(blank.info) << " from "
-                << pretty_print(recycleIt->info) << " ptr " << recycleIt->data
+                << pretty_print(recycle_it->info) << " ptr " << recycle_it->data
                 << "\n";
       continue;
     }
 
     // in this case we have to create a new slice
     // this means that we should have a blank slice at our disposal
-    // and also the freePointers should have some elements inside,
-    // so we pop a data pointer from the freePointers container
+    // and also the free_pointers should have some elements inside,
+    // so we pop a data pointer from the free_pointers container
     {
-      auto &blank = Slice<F>::findOneByType(u.slices, Slice<F>::Blank);
+      auto &blank = Slice<F>::find_one_by_type(u.slices, Slice<F>::Blank);
       blank.info.type = type;
       blank.info.tuple = tuple;
       blank.info.from = from;
@@ -258,7 +258,7 @@ LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
       if (blank.info.state == Slice<F>::SelfSufficient) {
         blank.data = u.sources[from.source].data();
       } else {
-        blank.data = u.popFreePointer();
+        blank.data = u.pop_free_pointers();
       }
 
       result.push_back({u.name, blank.info});
@@ -269,13 +269,13 @@ LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
   return result;
 }
 
-void unwrapSlice(Slice<F>::Type t, ABCTuple abc, SliceUnion<F> *u) {
-  auto &slice = Slice<F>::findByTypeAbc(u->slices, t, abc);
+void unwrap_slice(Slice<F>::Type t, ABCTuple abc, SliceUnion<F> *u) {
+  auto &slice = Slice<F>::find_type_abc(u->slices, t, abc);
   switch (slice.info.state) {
-  case Slice<F>::Dispatched: slice.markReady(); break;
+  case Slice<F>::Dispatched: slice.mark_ready(); break;
   case Slice<F>::Recycled:
-    // unwrapSlice(t, abc, u);
-    unwrapSlice(slice.info.recycling, abc, u);
+    // unwrap_slice(t, abc, u);
+    unwrap_slice(slice.info.recycling, abc, u);
     break;
   case Slice<F>::Fetch:
     throw std::domain_error("Can't unwrap a fetch slice!");
@@ -298,7 +298,7 @@ int main(int argc, char **argv) {
 
   int no(10), nv(100), mod(1000), out_rank(0), n_nodes, ranks_per_node;
   int64_t max_iterations(-1);
-  std::string tuplesDistributionString = "group";
+  std::string tuples_distribution_string = "group";
   bool print_database, print_tuples;
 
   CLI::App app{"Main bench for atrip"};
@@ -306,7 +306,7 @@ int main(int argc, char **argv) {
   defoption(app, "--nodes", n_nodes, "Number of nodes")->required();
   defoption(app, "--no", no, "Occupied orbitals")->required();
   defoption(app, "--nv", nv, "Virtual orbitals")->required();
-  defoption(app, "--dist", tuplesDistributionString, "Which distribution")
+  defoption(app, "--dist", tuples_distribution_string, "Which distribution")
       ->required();
   defoption(app, "--mod", mod, "Every each iteration there is output");
   defoption(app, "--out-rank", out_rank, "Stdout for given rank");
@@ -347,18 +347,18 @@ int main(int argc, char **argv) {
       // print input parameters
       fn();
 
-  atrip::ABCTuples tuplesList;
+  atrip::ABCTuples tuples_list;
   atrip::TuplesDistribution *dist;
   {
     using namespace atrip;
-    if (tuplesDistributionString == "naive") {
+    if (tuples_distribution_string == "naive") {
       dist = new NaiveDistribution();
       if (!rank) std::cout << "Using NAIVE distribution" << std::endl;
-      tuplesList = dist->getTuples(nv, world.comm);
-    } else if (tuplesDistributionString == "group") {
+      tuples_list = dist->get_tuples(nv, world.comm);
+    } else if (tuples_distribution_string == "group") {
       dist = new group_and_sort::Distribution();
       if (!rank) std::cout << "Using group and sort distribution" << std::endl;
-      tuplesList = dist->getTuples(nv, world.comm);
+      tuples_list = dist->get_tuples(nv, world.comm);
     } else {
       if (!rank) std::cout << "--dist should be either naive or group\n";
       exit(1);
@@ -366,7 +366,7 @@ int main(int argc, char **argv) {
   }
 
   if (print_tuples) {
-    for (auto const &t : tuplesList) {
+    for (auto const &t : tuples_list) {
       if (rank == out_rank) {
         std::cout << _FORMAT("%ld %ld %ld", t[0], t[1], t[2]) << std::endl;
       }
@@ -392,17 +392,17 @@ int main(int argc, char **argv) {
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   using Database = typename Slice<F>::Database;
-  auto communicateDatabase = [&unions, np](ABCTuple const &abc,
-                                           MPI_Comm const &c) -> Database {
-    auto MPI_LDB_ELEMENT = Slice<F>::mpi::localDatabaseElement();
+  auto communicate_database = [&unions, np](ABCTuple const &abc,
+                                            MPI_Comm const &c) -> Database {
+    auto MPI_LDB_ELEMENT = Slice<F>::mpi::local_database_element();
 
     WITH_CHRONO(
         "db:comm:ldb", // Build local database
         typename Slice<F>::LocalDatabase ldb;
         for (auto const &tensor
              : unions) {
-          auto const &tensorDb = build_local_database(*tensor, abc);
-          ldb.insert(ldb.end(), tensorDb.begin(), tensorDb.end());
+          auto const &tensor_db = build_local_database(*tensor, abc);
+          ldb.insert(ldb.end(), tensor_db.begin(), tensor_db.end());
         })
 
     Database db(np * ldb.size(), ldb[0]);
@@ -426,130 +426,133 @@ int main(int argc, char **argv) {
     return db;
   };
 
-  auto doIOPhase = [&unions, &rank, &np, mod, out_rank, no, nv, print_database](
-                       Database const &db,
-                       std::vector<LocalDatabaseElement> &to_send,
-                       size_t iteration,
-                       ABCTuple abc) {
-    const size_t localDBLength = db.size() / np;
+  auto do_io_phase =
+      [&unions, &rank, &np, mod, out_rank, no, nv, print_database](
+          Database const &db,
+          std::vector<LocalDatabaseElement> &to_send,
+          size_t iteration,
+          ABCTuple abc) {
+        const size_t localDBLength = db.size() / np;
 
-    size_t sendTag = 0, recvTag = rank * localDBLength;
+        size_t send_tag = 0, recv_tag = rank * localDBLength;
 
-    // RECIEVE PHASE ======================================================
-    {
-      // At this point, we have already send to everyone that fits
-      auto const &begin = &db[rank * localDBLength],
-                 end = begin + localDBLength;
-      for (auto it = begin; it != end; ++it) {
-        recvTag++;
-        auto const &el = *it;
-        auto &u = unionByName(unions, el.name);
-        // receive method
-        if (Atrip::rank != el.info.from.rank) {
-          if (el.info.state == Slice<double>::Fetch) {
-            auto &slice = Slice<F>::findByInfo(u.slices, el.info);
-            slice.info.state = Slice<double>::Dispatched;
-          }
-        }
-        if (print_database)
-          if (rank == out_rank) {
-            std::cout << _FORMAT(
-                "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
-                "RECV",
-                iteration,
-                el.info.from.rank,
-                rank,
-                recvTag,
-                name_to_string<double>(el.name).c_str(),
-                type_to_string<double>(el.info.type).c_str(),
-                state_to_string<double>(el.info.state).c_str(),
-                el.info.tuple[0],
-                el.info.tuple[1],
-                name_to_size<double>(el.name, no, nv),
-                u.freePointers.size(),
+        // RECIEVE PHASE ======================================================
+        {
+          // At this point, we have already send to everyone that fits
+          auto const &begin = &db[rank * localDBLength],
+                     end = begin + localDBLength;
+          for (auto it = begin; it != end; ++it) {
+            recv_tag++;
+            auto const &el = *it;
+            auto &u = union_by_name(unions, el.name);
+            // receive method
+            if (Atrip::rank != el.info.from.rank) {
+              if (el.info.state == Slice<double>::Fetch) {
+                auto &slice = Slice<F>::find_by_info(u.slices, el.info);
+                slice.info.state = Slice<double>::Dispatched;
+              }
+            }
+            if (print_database)
+              if (rank == out_rank) {
+                std::cout << _FORMAT(
+                    "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                    "RECV",
+                    iteration,
+                    el.info.from.rank,
+                    rank,
+                    recv_tag,
+                    name_to_string<double>(el.name).c_str(),
+                    type_to_string<double>(el.info.type).c_str(),
+                    state_to_string<double>(el.info.state).c_str(),
+                    el.info.tuple[0],
+                    el.info.tuple[1],
+                    name_to_size<double>(el.name, no, nv),
+                    u.free_pointers.size(),
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-                u.mpi_staging_buffers.size())
+                    u.mpi_staging_buffers.size())
 #else
-                0UL)
+                    0UL)
 #endif
-                      << "\n";
-          }
+                          << "\n";
+              }
 
-      } //
-    }
-
-    // SEND PHASE =========================================================
-    for (size_t otherRank = 0UL; otherRank < np; otherRank++) {
-      auto const &begin = &db[otherRank * localDBLength],
-                 end = begin + localDBLength;
-      for (auto it = begin; it != end; ++it) {
-        sendTag++;
-        typename Slice<F>::LocalDatabaseElement const &el = *it;
-        if (el.info.from.rank != rank) continue;
-        auto &u = unionByName(unions, el.name);
-        if (el.info.state == Slice<F>::Fetch) { to_send.push_back(el); }
-        if (rank == out_rank) {
-          if (print_database)
-            std::cout << _FORMAT(
-                "%4s %ld %ld %ld %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
-                "SEND",
-                iteration,
-                el.info.from.rank,
-                otherRank,
-                sendTag,
-                name_to_string<double>(el.name).c_str(),
-                type_to_string<double>(el.info.type).c_str(),
-                state_to_string<double>(el.info.state).c_str(),
-                el.info.tuple[0],
-                el.info.tuple[1],
-                name_to_size<double>(el.name, no, nv),
-                u.freePointers.size(),
-#if defined(ATRIP_MPI_STAGING_BUFFERS)
-                u.mpi_staging_buffers.size())
-#else
-                0UL)
-#endif
-                      << "\n";
+          } //
         }
 
-        send(u, otherRank, el, sendTag, abc);
+        // SEND PHASE =========================================================
+        for (size_t other_rank = 0UL; other_rank < np; other_rank++) {
+          auto const &begin = &db[other_rank * localDBLength],
+                     end = begin + localDBLength;
+          for (auto it = begin; it != end; ++it) {
+            send_tag++;
+            typename Slice<F>::LocalDatabaseElement const &el = *it;
+            if (el.info.from.rank != rank) continue;
+            auto &u = union_by_name(unions, el.name);
+            if (el.info.state == Slice<F>::Fetch) { to_send.push_back(el); }
+            if (rank == out_rank) {
+              if (print_database)
+                std::cout << _FORMAT(
+                    "%4s %ld %ld %ld %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                    "SEND",
+                    iteration,
+                    el.info.from.rank,
+                    other_rank,
+                    send_tag,
+                    name_to_string<double>(el.name).c_str(),
+                    type_to_string<double>(el.info.type).c_str(),
+                    state_to_string<double>(el.info.state).c_str(),
+                    el.info.tuple[0],
+                    el.info.tuple[1],
+                    name_to_size<double>(el.name, no, nv),
+                    u.free_pointers.size(),
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+                    u.mpi_staging_buffers.size())
+#else
+                    0UL)
+#endif
+                          << "\n";
+            }
 
-      } // send phase
+            send(u, other_rank, el, send_tag, abc);
 
-    } // otherRank
-  };
+          } // send phase
+
+        } // other_rank
+      };
 
   std::vector<LocalDatabaseElement> to_send;
 
   MPI_Barrier(kaun);
-  for (size_t it = 0; it < tuplesList.size(); it++) {
+  for (size_t it = 0; it < tuples_list.size(); it++) {
 
-    const ABCTuple abc = dist->tupleIsFake(tuplesList[it])
-                           ? tuplesList[tuplesList.size() - 1]
-                           : tuplesList[it],
-                   *abcNext = it == (tuplesList.size() - 1)
-                                ? nullptr
-                                : &tuplesList[it + 1];
+    const ABCTuple abc = dist->tuple_is_fake(tuples_list[it])
+                           ? tuples_list[tuples_list.size() - 1]
+                           : tuples_list[it],
+                   *abc_next = it == (tuples_list.size() - 1)
+                                 ? nullptr
+                                 : &tuples_list[it + 1];
 
     if (it == 0) {
-      const auto db = communicateDatabase(abc, kaun);
-      doIOPhase(db, to_send, it, abc);
+      const auto db = communicate_database(abc, kaun);
+      do_io_phase(db, to_send, it, abc);
       for (auto const &u : unions) {
-        for (auto type : u->sliceTypes) { unwrapSlice(type, abc, u); }
+        for (auto type : u->slice_types) { unwrap_slice(type, abc, u); }
       }
     }
 
-    if (abcNext) {
-      const auto db = communicateDatabase(*abcNext, kaun);
-      doIOPhase(db, to_send, it + 1, *abcNext);
+    if (abc_next) {
+      const auto db = communicate_database(*abc_next, kaun);
+      do_io_phase(db, to_send, it + 1, *abc_next);
     }
 
     for (auto &u : unions) {
-      for (auto type : u->sliceTypes) { unwrapSlice(type, abc, u); }
+      for (auto type : u->slice_types) { unwrap_slice(type, abc, u); }
     }
 
-    if (abcNext) {
-      for (auto &u : unions) { clearUnusedSlicesForNext(*u, *abcNext); }
+    if (abc_next) {
+      for (auto &u : unions) {
+        clear_unused_slices_for_next_tuple(*u, *abc_next);
+      }
     }
 
     if (!print_database)
@@ -558,7 +561,7 @@ int main(int argc, char **argv) {
                              rank,
                              it,
                              100.0 * double(to_send.size())
-                                 / double(tuplesList.size()),
+                                 / double(tuples_list.size()),
                              to_send.size(),
                              double(to_send.size()) * sizeof(to_send[0])
                                  / 1024.0 / 1024.0 / 1024.0);
@@ -574,7 +577,7 @@ int main(int argc, char **argv) {
         if (completed) { to_erase.push_back(i); }
       }
       for (auto &i : to_erase) {
-        u->freePointers.insert(i.data);
+        u->free_pointers.insert(i.data);
         u->mpi_staging_buffers.erase(i);
       }
     }

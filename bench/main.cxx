@@ -62,35 +62,36 @@ int main(int argc, char **argv) {
   MPI_Comm_size(world.comm, &nranks);
 
   size_t checkpoint_it, max_iterations;
-  int no(10), nv(100), itMod(-1), percentageMod(10);
+  int no(10), nv(100), it_mod(-1), percentage_mod(10);
   float checkpoint_percentage;
-  bool nochrono(false), barrier(false), rankRoundRobin(false), keepVppph(false),
-      noCheckpoint = false, blocking = false, complex = false, cT = false;
-  std::string tuplesDistributionString = "naive",
+  bool nochrono(false), barrier(false), rank_round_robin(false),
+      keep_Vppph(false), no_checkpoint = false, blocking = false,
+                         complex = false, cT = false;
+  std::string tuples_distribution_string = "naive",
               checkpoint_path = "checkpoint.yaml";
 
   CLI::App app{"Main bench for atrip"};
 
   defoption(app, "--no", no, "Occupied orbitals")->required();
   defoption(app, "--nv", nv, "Virtual orbitals")->required();
-  defoption(app, "--mod", itMod, "Iteration modifier");
+  defoption(app, "--mod", it_mod, "Iteration modifier");
   defoption(app,
             "--max-iterations",
             max_iterations,
             "Maximum number of iterations to run");
-  defoption(app, "--dist", tuplesDistributionString, "Which distribution")
+  defoption(app, "--dist", tuples_distribution_string, "Which distribution")
       ->required();
   defflag(app, "--complex", complex, "Use the complex version of atrip bench");
-  defflag(app, "--keep-vppph", keepVppph, "Do not delete the tensor Vppph");
+  defflag(app, "--keep-vppph", keep_Vppph, "Do not delete the tensor Vppph");
   defflag(app, "--nochrono", nochrono, "Do not print chrono");
-  defflag(app, "--rank-round-robin", rankRoundRobin, "Do rank round robin");
+  defflag(app, "--rank-round-robin", rank_round_robin, "Do rank round robin");
   defflag(app, "--barrier", barrier, "Use the first barrier");
 
   defflag(app, "--blocking", blocking, "Perform blocking communication");
-  defoption(app, "-%", percentageMod, "Percentage to be printed");
+  defoption(app, "-%", percentage_mod, "Percentage to be printed");
 
   // checkpointing
-  defflag(app, "--nocheckpoint", noCheckpoint, "Do not use checkpoint");
+  defflag(app, "--nocheckpoint", no_checkpoint, "Do not use checkpoint");
   defoption(app, "--checkpoint-path", checkpoint_path, "Path for checkpoint");
   defoption(app,
             "--checkpoint-it",
@@ -136,30 +137,30 @@ int main(int argc, char **argv) {
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
 
   // USER PRINTING TEST BEGIN
-  const double doublesFlops = no * no * no // common parts of the matrices
-                            * (no + nv)    // particles and holes
-                            * 2.0          // flops has to be times 2
-                            * 6.0          // how many dgemms are there
-                            / 1.0e9;       // calculate it in gflops
-  double lastElapsedTime = 0;
-  bool firstHeaderPrinted = false;
-  atrip::registerIterationDescriptor(
-      [doublesFlops, &firstHeaderPrinted, rank, &lastElapsedTime](
+  const double doubles_flops = no * no * no // common parts of the matrices
+                             * (no + nv)    // particles and holes
+                             * 2.0          // flops has to be times 2
+                             * 6.0          // how many dgemms are there
+                             / 1.0e9;       // calculate it in gflops
+  double last_elapsed_time = 0;
+  bool first_header_printed = false;
+  atrip::register_iteration_descriptor(
+      [doubles_flops, &first_header_printed, rank, &last_elapsed_time](
           atrip::IterationDescription const &d) {
         const char *fmt_nums = "%-13.0f%-10.0f%-13.3f";
         char out[256];
-        if (!firstHeaderPrinted) {
+        if (!first_header_printed) {
           const char *fmt_header = "%-13s%-10s%-13s";
           sprintf(out, fmt_header, "Progress(%)", "time(s)", "GFLOP/s");
-          firstHeaderPrinted = true;
+          first_header_printed = true;
           if (rank == 0) std::cout << out << "\n";
         }
         sprintf(out,
                 fmt_nums,
-                double(d.currentIteration) / double(d.totalIterations) * 100,
-                (d.currentElapsedTime - lastElapsedTime),
-                d.currentIteration * doublesFlops / d.currentElapsedTime);
-        lastElapsedTime = d.currentElapsedTime;
+                double(d.current_iteration) / double(d.total_iterations) * 100,
+                (d.current_elapsed_time - last_elapsed_time),
+                d.current_iteration * doubles_flops / d.current_elapsed_time);
+        last_elapsed_time = d.current_elapsed_time;
         if (rank == 0) std::cout << out << "\n";
       });
 
@@ -244,12 +245,12 @@ int main(int argc, char **argv) {
 
   if (complex) {
     using F = atrip::Complex;
-    const auto toComplex = CTF::Transform<double, atrip::Complex>(
+    const auto to_complex = CTF::Transform<double, atrip::Complex>(
         [](double d, atrip::Complex &f) { f = d; });
     epsi = new CTF::Tensor<F>(1, ovoo.data(), symmetries.data(), world);
     epsa = new CTF::Tensor<F>(1, vo.data(), symmetries.data(), world);
-    toComplex((*real_epsi)["i"], (*(CTF::Tensor<F> *)epsi)["i"]);
-    toComplex((*real_epsa)["a"], (*(CTF::Tensor<F> *)epsa)["a"]);
+    to_complex((*real_epsi)["i"], (*(CTF::Tensor<F> *)epsi)["i"]);
+    to_complex((*real_epsa)["a"], (*(CTF::Tensor<F> *)epsa)["a"]);
   } else {
     epsi = (void *)real_epsi;
     epsa = (void *)real_epsa;
@@ -265,13 +266,13 @@ int main(int argc, char **argv) {
 #define RUN_ATRIP(FIELD)                                                       \
   do {                                                                         \
                                                                                \
-    atrip::Atrip::Input<FIELD>::TuplesDistribution tuplesDistribution;         \
+    atrip::Atrip::Input<FIELD>::TuplesDistribution tuples_distribution;        \
     {                                                                          \
       using atrip::Atrip;                                                      \
-      if (tuplesDistributionString == "naive") {                               \
-        tuplesDistribution = Atrip::Input<FIELD>::TuplesDistribution::NAIVE;   \
-      } else if (tuplesDistributionString == "group") {                        \
-        tuplesDistribution =                                                   \
+      if (tuples_distribution_string == "naive") {                             \
+        tuples_distribution = Atrip::Input<FIELD>::TuplesDistribution::NAIVE;  \
+      } else if (tuples_distribution_string == "group") {                      \
+        tuples_distribution =                                                  \
             Atrip::Input<FIELD>::TuplesDistribution::GROUP_AND_SORT;           \
       } else {                                                                 \
         std::cout << "--dist should be either naive or group\n";               \
@@ -328,7 +329,7 @@ int main(int argc, char **argv) {
       MPI_Barrier(world.comm);                                                 \
       /* (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];*/                                \
       const auto conjugate = CTF::Transform<FIELD, FIELD>(                     \
-          [](FIELD d, FIELD &f) { f = atrip::maybeConjugate(d); });            \
+          [](FIELD d, FIELD &f) { f = atrip::maybe_conjugate(d); });           \
       conjugate((*Jhphh)["kaij"], (*Jhhhp)["ijka"]);                           \
       MPI_Barrier(world.comm);                                                 \
       if (!rank) std::cout << "done" << std::endl;                             \
@@ -379,20 +380,20 @@ int main(int argc, char **argv) {
                                                                                \
                         .with_Jabci(Jppph)                                     \
                         .with_Jijka(Jhhhp)                                     \
-                        .with_deleteVppph(!keepVppph)                          \
+                        .with_delete_Vppph(!keep_Vppph)                        \
                         .with_barrier(barrier)                                 \
                         .with_blocking(blocking)                               \
                         .with_chrono(!nochrono)                                \
-                        .with_rankRoundRobin(rankRoundRobin)                   \
-                        .with_iterationMod(itMod)                              \
-                        .with_percentageMod(percentageMod)                     \
-                        .with_tuplesDistribution(tuplesDistribution)           \
-                        .with_maxIterations(max_iterations)                    \
+                        .with_rank_round_robin(rank_round_robin)               \
+                        .with_iteration_mod(it_mod)                            \
+                        .with_percentage_mod(percentage_mod)                   \
+                        .with_tuples_distribution(tuples_distribution)         \
+                        .with_max_iterations(max_iterations)                   \
                                                                                \
-                        .with_checkpointAtEveryIteration(checkpoint_it)        \
-                        .with_checkpointAtPercentage(checkpoint_percentage)    \
-                        .with_checkpointPath(checkpoint_path)                  \
-                        .with_readCheckpointIfExists(!noCheckpoint);           \
+                        .with_checkpoint_at_every_iteration(checkpoint_it)     \
+                        .with_checkpoint_at_percentage(checkpoint_percentage)  \
+                        .with_checkpoint_path(checkpoint_path)                 \
+                        .with_read_checkpoint_if_exists(!no_checkpoint);       \
                                                                                \
     try {                                                                      \
       auto out = atrip::Atrip::run<FIELD>(in);                                 \
@@ -410,7 +411,7 @@ int main(int argc, char **argv) {
   if (complex) RUN_ATRIP(atrip::Complex);
   else RUN_ATRIP(double);
 
-  // if (!in.deleteVppph) delete tensors->[]Vppph;
+  // if (!in.delete_Vppph) delete tensors->[]Vppph;
 
   MPI_Finalize();
   return 0;

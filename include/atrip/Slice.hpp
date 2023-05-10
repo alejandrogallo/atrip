@@ -128,14 +128,14 @@ struct Slice {
       return dt;
     }
 
-    static MPI_Datatype sliceLocation() {
+    static MPI_Datatype slice_location() {
       constexpr int n = 2;
-      // create a sliceLocation to measure in the current architecture
+      // create a slice_location to measure in the current architecture
       // the packing of the struct
       Slice<F>::Location measure;
       MPI_Datatype dt;
       const std::vector<int> lengths(n, 1);
-      const MPI_Datatype types[n] = {usizeDt(), usizeDt()};
+      const MPI_Datatype types[n] = {usize_dt(), usize_dt()};
 
       static_assert(sizeof(Slice<F>::Location) == 2 * sizeof(size_t),
                     "The Location packing is wrong in your compiler");
@@ -154,18 +154,18 @@ struct Slice {
       return dt;
     }
 
-    static MPI_Datatype usizeDt() { return MPI_UINT64_T; }
+    static MPI_Datatype usize_dt() { return MPI_UINT64_T; }
 
-    static MPI_Datatype sliceInfo() {
+    static MPI_Datatype slice_info() {
       constexpr int n = 5;
       MPI_Datatype dt;
       Slice<F>::Info measure;
       const std::vector<int> lengths(n, 1);
       const MPI_Datatype types[n] = {
-          vector(2, usizeDt()),
+          vector(2, usize_dt()),
           vector(sizeof(enum Type), MPI_CHAR),
           vector(sizeof(enum State), MPI_CHAR),
-          sliceLocation(),
+          slice_location(),
           vector(sizeof(enum Type), MPI_CHAR)
           // TODO: Why this does not work on intel mpi?
           /*, MPI_UINT64_T*/
@@ -192,13 +192,13 @@ struct Slice {
       return dt;
     }
 
-    static MPI_Datatype localDatabaseElement() {
+    static MPI_Datatype local_database_element() {
       constexpr int n = 2;
       MPI_Datatype dt;
       LocalDatabaseElement measure;
       const std::vector<int> lengths(n, 1);
       const MPI_Datatype types[n] = {vector(sizeof(enum Name), MPI_CHAR),
-                                     sliceInfo()};
+                                     slice_info()};
 
       // measure the displacements in the struct
       size_t j = 0;
@@ -222,8 +222,8 @@ struct Slice {
   // MPI Types:1 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:1]]
-  static PartialTuple subtupleBySlice(ABCTuple abc, Type sliceType) {
-    switch (sliceType) {
+  static PartialTuple subtuple_by_slice(ABCTuple abc, Type slice_type) {
+    switch (slice_type) {
     case AB: return {abc[0], abc[1]};
     case BC: return {abc[1], abc[2]};
     case AC: return {abc[0], abc[2]};
@@ -240,7 +240,8 @@ struct Slice {
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:2]]
   static std::vector<Slice<F> *>
-  hasRecycledReferencingToIt(std::vector<Slice<F>> &slices, Info const &info) {
+  has_recycled_referencing_to_it(std::vector<Slice<F>> &slices,
+                                 Info const &info) {
     std::vector<Slice<F> *> result;
 
     for (auto &s : slices)
@@ -253,24 +254,24 @@ struct Slice {
   // Static utilities:2 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:3]]
-  static Slice<F> &findOneByType(std::vector<Slice<F>> &slices,
-                                 Slice<F>::Type type) {
-    const auto sliceIt =
+  static Slice<F> &find_one_by_type(std::vector<Slice<F>> &slices,
+                                    Slice<F>::Type type) {
+    const auto slice_it =
         std::find_if(slices.begin(), slices.end(), [&type](Slice<F> const &s) {
           return type == s.info.type;
         });
     WITH_CRAZY_DEBUG
     WITH_RANK << "\t__ looking for " << type << "\n";
-    if (sliceIt == slices.end())
+    if (slice_it == slices.end())
       throw std::domain_error("Slice one by type not found!");
-    return *sliceIt;
+    return *slice_it;
   }
   // Static utilities:3 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:4]]
-  static Slice<F> &findRecycledSource(std::vector<Slice<F>> &slices,
-                                      Slice<F>::Info info) {
-    const auto sliceIt =
+  static Slice<F> &find_recycled_source(std::vector<Slice<F>> &slices,
+                                        Slice<F>::Info info) {
+    const auto slice_it =
         std::find_if(slices.begin(), slices.end(), [&info](Slice<F> const &s) {
           return info.recycling == s.info.type && info.tuple == s.info.tuple
               && State::Recycled != s.info.state;
@@ -279,20 +280,20 @@ struct Slice {
     WITH_CRAZY_DEBUG
     WITH_RANK << "__slice__:find: recycling source of " << pretty_print(info)
               << "\n";
-    if (sliceIt == slices.end())
+    if (slice_it == slices.end())
       throw std::domain_error("Recycled source not found: " + pretty_print(info)
                               + " rank: " + pretty_print(Atrip::rank));
-    WITH_RANK << "__slice__:find: " << pretty_print(sliceIt->info) << "\n";
-    return *sliceIt;
+    WITH_RANK << "__slice__:find: " << pretty_print(slice_it->info) << "\n";
+    return *slice_it;
   }
   // Static utilities:4 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:5]]
-  static Slice<F> &findByTypeAbc(std::vector<Slice<F>> &slices,
+  static Slice<F> &find_type_abc(std::vector<Slice<F>> &slices,
                                  Slice<F>::Type type,
                                  ABCTuple const &abc) {
-    const auto tuple = Slice<F>::subtupleBySlice(abc, type);
-    const auto sliceIt =
+    const auto tuple = Slice<F>::subtuple_by_slice(abc, type);
+    const auto slice_it =
         std::find_if(slices.begin(),
                      slices.end(),
                      [&type, &tuple](Slice<F> const &s) {
@@ -301,18 +302,18 @@ struct Slice {
     WITH_CRAZY_DEBUG
     WITH_RANK << "__slice__:find:" << type << " and tuple "
               << pretty_print(tuple) << "\n";
-    if (sliceIt == slices.end())
+    if (slice_it == slices.end())
       throw std::domain_error("Slice by type not found: " + pretty_print(tuple)
                               + ", " + std::to_string(type)
                               + " rank: " + std::to_string(Atrip::rank));
-    return *sliceIt;
+    return *slice_it;
   }
   // Static utilities:5 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Static%20utilities][Static utilities:6]]
-  static Slice<F> &findByInfo(std::vector<Slice<F>> &slices,
-                              Slice<F>::Info const &info) {
-    const auto sliceIt =
+  static Slice<F> &find_by_info(std::vector<Slice<F>> &slices,
+                                Slice<F>::Info const &info) {
+    const auto slice_it =
         std::find_if(slices.begin(), slices.end(), [&info](Slice<F> const &s) {
           // TODO: maybe implement comparison in Info struct
           return info.type == s.info.type && info.state == s.info.state
@@ -322,9 +323,9 @@ struct Slice {
         });
     WITH_CRAZY_DEBUG
     WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
-    if (sliceIt == slices.end())
+    if (slice_it == slices.end())
       throw std::domain_error("Slice by info not found: " + pretty_print(info));
-    return *sliceIt;
+    return *slice_it;
   }
   // Static utilities:6 ends here
 
@@ -348,24 +349,24 @@ struct Slice {
   // Attributes:4 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:1]]
-  void markReady() noexcept {
+  void mark_ready() noexcept {
     info.state = Ready;
     info.recycling = Blank;
   }
   // Member functions:1 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:2]]
-  bool isUnwrapped() const noexcept {
+  bool is_unwrapped() const noexcept {
     return info.state == Ready || info.state == SelfSufficient;
   }
   // Member functions:2 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:3]]
-  bool isUnwrappable() const noexcept {
-    return isUnwrapped() || info.state == Recycled || info.state == Dispatched;
+  bool is_unwrappable() const noexcept {
+    return is_unwrapped() || info.state == Recycled || info.state == Dispatched;
   }
 
-  inline bool isDirectlyFetchable() const noexcept {
+  inline bool is_directly_fetchable() const noexcept {
     return info.state == Ready || info.state == Dispatched;
   }
 
@@ -378,7 +379,7 @@ struct Slice {
     data = DataNullPtr;
   }
 
-  inline bool isFree() const noexcept {
+  inline bool is_free() const noexcept {
     return info.tuple == PartialTuple{0, 0} && info.type == Blank
         && info.state == Acceptor && info.from.rank == 0
         && info.from.source == 0 && info.recycling == Blank
@@ -387,32 +388,32 @@ struct Slice {
   // Member functions:3 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:4]]
-  inline bool isRecyclable() const noexcept {
+  inline bool is_recyclable() const noexcept {
     return (info.state == Dispatched || info.state == Ready
             || info.state == Fetch)
-        && hasValidDataPointer();
+        && has_valid_data_pointer();
   }
   // Member functions:4 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:5]]
-  inline bool hasValidDataPointer() const noexcept {
+  inline bool has_valid_data_pointer() const noexcept {
     return data != DataNullPtr && info.state != Acceptor && info.type != Blank;
   }
   // Member functions:5 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Member%20functions][Member functions:6]]
-  void unwrapAndMarkReady() {
+  void unwrap_and_mark_ready() {
     if (info.state == Ready) return;
     if (info.state != Dispatched)
       throw std::domain_error(
           "Can't unwrap a non-ready, non-dispatched slice!");
-    markReady();
+    mark_ready();
     MPI_Status status;
 #ifdef HAVE_OCD
     WITH_RANK << "__slice__:mpi: waiting "
               << "\n";
 #endif
-    const int errorCode = MPI_Wait(&request, &status);
+    const int error_code = MPI_Wait(&request, &status);
 
     // FIXME: it appears not to work to free
     // this request, investigate if this is necessary or not
@@ -421,7 +422,7 @@ struct Slice {
     // if (MPI_SUCCESS != _mpi_request_free)
     // throw "Atrip: Error freeing MPI request";
 
-    if (errorCode != MPI_SUCCESS) throw "Atrip: Unexpected error MPI ERROR";
+    if (error_code != MPI_SUCCESS) throw "Atrip: Unexpected error MPI ERROR";
 
 #if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
     // copy the retrieved mpi data to the device
@@ -433,14 +434,15 @@ struct Slice {
 #endif
 
 #ifdef HAVE_OCD
-    char errorString[MPI_MAX_ERROR_STRING];
-    int errorSize;
-    MPI_Error_string(errorCode, errorString, &errorSize);
+    char error_string[MPI_MAX_ERROR_STRING];
+    int error_size;
+    MPI_Error_string(error_code, error_string, &error_size);
 
     WITH_RANK << "__slice__:mpi: status "
               << "{ .source=" << status.MPI_SOURCE
               << ", .tag=" << status.MPI_TAG << ", .error=" << status.MPI_ERROR
-              << ", .errCode=" << errorCode << ", .err=" << errorString << " }"
+              << ", .errCode=" << error_code << ", .err=" << error_string
+              << " }"
               << "\n";
 #endif
   }

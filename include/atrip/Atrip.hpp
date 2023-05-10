@@ -62,7 +62,7 @@ struct Atrip {
     struct {
       size_t blocks, threads;
     } ooo;
-  } kernelDimensions;
+  } kernel_dimensions;
 #endif
 
   static void init(MPI_Comm);
@@ -113,23 +113,23 @@ struct Atrip {
       GROUP_AND_SORT,
     };
 
-    ADD_ATTRIBUTE(bool, deleteVppph, false)
-    ADD_ATTRIBUTE(bool, rankRoundRobin, false)
+    ADD_ATTRIBUTE(bool, delete_Vppph, false)
+    ADD_ATTRIBUTE(bool, rank_round_robin, false)
     ADD_ATTRIBUTE(bool, chrono, false)
     ADD_ATTRIBUTE(bool, barrier, false)
     ADD_ATTRIBUTE(bool, blocking, false)
-    ADD_ATTRIBUTE(size_t, maxIterations, 0)
-    ADD_ATTRIBUTE(int, iterationMod, -1)
-    ADD_ATTRIBUTE(int, percentageMod, -1)
-    ADD_ATTRIBUTE(TuplesDistribution, tuplesDistribution, NAIVE)
-    ADD_ATTRIBUTE(std::string, checkpointPath, "atrip-checkpoint.yaml")
-    ADD_ATTRIBUTE(bool, readCheckpointIfExists, true)
+    ADD_ATTRIBUTE(size_t, max_iterations, 0)
+    ADD_ATTRIBUTE(int, iteration_mod, -1)
+    ADD_ATTRIBUTE(int, percentage_mod, -1)
+    ADD_ATTRIBUTE(TuplesDistribution, tuples_distribution, NAIVE)
+    ADD_ATTRIBUTE(std::string, checkpoint_path, "atrip-checkpoint.yaml")
+    ADD_ATTRIBUTE(bool, read_checkpoint_if_exists, true)
     ADD_ATTRIBUTE(bool, writeCheckpoint, true)
-    ADD_ATTRIBUTE(float, checkpointAtPercentage, 10)
-    ADD_ATTRIBUTE(size_t, checkpointAtEveryIteration, 0)
+    ADD_ATTRIBUTE(float, checkpoint_at_percentage, 10)
+    ADD_ATTRIBUTE(size_t, checkpoint_at_every_iteration, 0)
 #if defined(HAVE_CUDA)
-    ADD_ATTRIBUTE(size_t, oooThreads, 0)
-    ADD_ATTRIBUTE(size_t, oooBlocks, 0)
+    ADD_ATTRIBUTE(size_t, ooo_threads, 0)
+    ADD_ATTRIBUTE(size_t, ooo_blocks, 0)
 #endif
   };
 

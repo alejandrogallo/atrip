@@ -98,20 +98,20 @@ _MAKE_REORDER_(KJI, GO(to[idx], from[_IJK_(k, j, i)]))
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
-__MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
-                                        size_t const No,
-                                        F *const epsi,
-                                        F *const Tijk,
-                                        F *const Zijk,
-                                        double *energy) {
-  constexpr size_t blockSize = 16;
+__MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
+                                          size_t const No,
+                                          F *const epsi,
+                                          F *const Tijk,
+                                          F *const Zijk,
+                                          double *energy) {
+  constexpr size_t block_size = 16;
   F _energy = {0.};
-  for (size_t kk = 0; kk < No; kk += blockSize) {
-    const size_t kend(MIN(No, kk + blockSize));
-    for (size_t jj(kk); jj < No; jj += blockSize) {
-      const size_t jend(MIN(No, jj + blockSize));
-      for (size_t ii(jj); ii < No; ii += blockSize) {
-        const size_t iend(MIN(No, ii + blockSize));
+  for (size_t kk = 0; kk < No; kk += block_size) {
+    const size_t kend(MIN(No, kk + block_size));
+    for (size_t jj(kk); jj < No; jj += block_size) {
+      const size_t jend(MIN(No, jj + block_size));
+      for (size_t ii(jj); ii < No; ii += block_size) {
+        const size_t iend(MIN(No, ii + block_size));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
@@ -130,12 +130,18 @@ __MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
                   X(Zijk[j + No * k + No * No * i]),
                   Y(Zijk[k + No * i + No * No * j]),
                   Z(Zijk[k + No * j + No * No * i]),
-                  A(acc::maybeConjugateScalar(Tijk[i + No * j + No * No * k])),
-                  B(acc::maybeConjugateScalar(Tijk[i + No * k + No * No * j])),
-                  C(acc::maybeConjugateScalar(Tijk[j + No * i + No * No * k])),
-                  D(acc::maybeConjugateScalar(Tijk[j + No * k + No * No * i])),
-                  E(acc::maybeConjugateScalar(Tijk[k + No * i + No * No * j])),
-                  _F(acc::maybeConjugateScalar(Tijk[k + No * j + No * No * i])),
+                  A(acc::maybe_conjugate_scalar(
+                      Tijk[i + No * j + No * No * k])),
+                  B(acc::maybe_conjugate_scalar(
+                      Tijk[i + No * k + No * No * j])),
+                  C(acc::maybe_conjugate_scalar(
+                      Tijk[j + No * i + No * No * k])),
+                  D(acc::maybe_conjugate_scalar(
+                      Tijk[j + No * k + No * No * i])),
+                  E(acc::maybe_conjugate_scalar(
+                      Tijk[k + No * i + No * No * j])),
+                  _F(acc::maybe_conjugate_scalar(
+                      Tijk[k + No * j + No * No * i])),
                   AU = acc::prod(A, U), BV = acc::prod(B, V),
                   CW = acc::prod(C, W), DX = acc::prod(D, X),
                   EY = acc::prod(E, Y), FZ = acc::prod(_F, Z),
@@ -170,20 +176,20 @@ __MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
 }
 
 template <typename F>
-__MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
-                                    size_t const No,
-                                    F *const epsi,
-                                    F *const Tijk,
-                                    F *const Zijk,
-                                    double *energy) {
-  constexpr size_t blockSize = 16;
+__MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
+                                      size_t const No,
+                                      F *const epsi,
+                                      F *const Tijk,
+                                      F *const Zijk,
+                                      double *energy) {
+  constexpr size_t block_size = 16;
   F _energy = F{0.};
-  for (size_t kk = 0; kk < No; kk += blockSize) {
-    const size_t kend(MIN(kk + blockSize, No));
-    for (size_t jj(kk); jj < No; jj += blockSize) {
-      const size_t jend(MIN(jj + blockSize, No));
-      for (size_t ii(jj); ii < No; ii += blockSize) {
-        const size_t iend(MIN(ii + blockSize, No));
+  for (size_t kk = 0; kk < No; kk += block_size) {
+    const size_t kend(MIN(kk + block_size, No));
+    for (size_t jj(kk); jj < No; jj += block_size) {
+      const size_t jend(MIN(jj + block_size, No));
+      for (size_t ii(jj); ii < No; ii += block_size) {
+        const size_t iend(MIN(ii + block_size, No));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
@@ -198,9 +204,12 @@ __MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
                   U(Zijk[i + No * j + No * No * k]),
                   V(Zijk[j + No * k + No * No * i]),
                   W(Zijk[k + No * i + No * No * j]),
-                  A(acc::maybeConjugateScalar(Tijk[i + No * j + No * No * k])),
-                  B(acc::maybeConjugateScalar(Tijk[j + No * k + No * No * i])),
-                  C(acc::maybeConjugateScalar(Tijk[k + No * i + No * No * j])),
+                  A(acc::maybe_conjugate_scalar(
+                      Tijk[i + No * j + No * No * k])),
+                  B(acc::maybe_conjugate_scalar(
+                      Tijk[j + No * k + No * No * i])),
+                  C(acc::maybe_conjugate_scalar(
+                      Tijk[k + No * i + No * No * j])),
                   ABC = acc::add(A, acc::add(B, C)),
                   UVW = acc::add(U, acc::add(V, W)), AU = acc::prod(A, U),
                   BV = acc::prod(B, V), CW = acc::prod(C, W),
@@ -227,20 +236,20 @@ __MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
-__MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
-                                        size_t const No,
-                                        F *const epsi,
-                                        F *const Tijk,
-                                        F *const Zijk,
-                                        double *_energy) {
-  constexpr size_t blockSize = 16;
+__MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
+                                          size_t const No,
+                                          F *const epsi,
+                                          F *const Tijk,
+                                          F *const Zijk,
+                                          double *_energy) {
+  constexpr size_t block_size = 16;
   F energy(0.);
-  for (size_t kk = 0; kk < No; kk += blockSize) {
-    const size_t kend(MIN(No, kk + blockSize));
-    for (size_t jj(kk); jj < No; jj += blockSize) {
-      const size_t jend(MIN(No, jj + blockSize));
-      for (size_t ii(jj); ii < No; ii += blockSize) {
-        const size_t iend(MIN(No, ii + blockSize));
+  for (size_t kk = 0; kk < No; kk += block_size) {
+    const size_t kend(MIN(No, kk + block_size));
+    for (size_t jj(kk); jj < No; jj += block_size) {
+      const size_t jend(MIN(No, jj + block_size));
+      for (size_t ii(jj); ii < No; ii += block_size) {
+        const size_t iend(MIN(No, ii + block_size));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
@@ -258,17 +267,17 @@ __MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
                   X(Zijk[j + No * k + No * No * i]),
                   Y(Zijk[k + No * i + No * No * j]),
                   Z(Zijk[k + No * j + No * No * i]),
-                  A(acc::maybeConjugateScalar<F>(
+                  A(acc::maybe_conjugate_scalar<F>(
                       Tijk[i + No * j + No * No * k])),
-                  B(acc::maybeConjugateScalar<F>(
+                  B(acc::maybe_conjugate_scalar<F>(
                       Tijk[i + No * k + No * No * j])),
-                  C(acc::maybeConjugateScalar<F>(
+                  C(acc::maybe_conjugate_scalar<F>(
                       Tijk[j + No * i + No * No * k])),
-                  D(acc::maybeConjugateScalar<F>(
+                  D(acc::maybe_conjugate_scalar<F>(
                       Tijk[j + No * k + No * No * i])),
-                  E(acc::maybeConjugateScalar<F>(
+                  E(acc::maybe_conjugate_scalar<F>(
                       Tijk[k + No * i + No * No * j])),
-                  _F(acc::maybeConjugateScalar<F>(
+                  _F(acc::maybe_conjugate_scalar<F>(
                       Tijk[k + No * j + No * No * i])),
                   value = 3.0 * (A * U + B * V + C * W + D * X + E * Y + _F * Z)
                         + ((U + X + Y) - 2.0 * (V + W + Z)) * (A + D + E)
@@ -284,20 +293,20 @@ __MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
 }
 
 template <typename F>
-__MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
-                                    size_t const No,
-                                    F *const epsi,
-                                    F *const Tijk,
-                                    F *const Zijk,
-                                    double *_energy) {
-  constexpr size_t blockSize = 16;
+__MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
+                                      size_t const No,
+                                      F *const epsi,
+                                      F *const Tijk,
+                                      F *const Zijk,
+                                      double *_energy) {
+  constexpr size_t block_size = 16;
   F energy = F(0.);
-  for (size_t kk = 0; kk < No; kk += blockSize) {
-    const size_t kend(MIN(kk + blockSize, No));
-    for (size_t jj(kk); jj < No; jj += blockSize) {
-      const size_t jend(MIN(jj + blockSize, No));
-      for (size_t ii(jj); ii < No; ii += blockSize) {
-        const size_t iend(MIN(ii + blockSize, No));
+  for (size_t kk = 0; kk < No; kk += block_size) {
+    const size_t kend(MIN(kk + block_size, No));
+    for (size_t jj(kk); jj < No; jj += block_size) {
+      const size_t jend(MIN(jj + block_size, No));
+      for (size_t ii(jj); ii < No; ii += block_size) {
+        const size_t iend(MIN(ii + block_size, No));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);
           const size_t jstart = jj > k ? jj : k;
@@ -311,11 +320,11 @@ __MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
                   U(Zijk[i + No * j + No * No * k]),
                   V(Zijk[j + No * k + No * No * i]),
                   W(Zijk[k + No * i + No * No * j]),
-                  A(acc::maybeConjugateScalar<F>(
+                  A(acc::maybe_conjugate_scalar<F>(
                       Tijk[i + No * j + No * No * k])),
-                  B(acc::maybeConjugateScalar<F>(
+                  B(acc::maybe_conjugate_scalar<F>(
                       Tijk[j + No * k + No * No * i])),
-                  C(acc::maybeConjugateScalar<F>(
+                  C(acc::maybe_conjugate_scalar<F>(
                       Tijk[k + No * i + No * No * j])),
                   value = F(3.0) * (A * U + B * V + C * W)
                         - (A + B + C) * (U + V + W);
@@ -334,36 +343,37 @@ __MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:3]]
 // instantiate double
 template __MAYBE_GLOBAL__ void
-getEnergyDistinct(DataFieldType<double> const epsabc,
-                  size_t const No,
-                  DataFieldType<double> *const epsi,
-                  DataFieldType<double> *const Tijk,
-                  DataFieldType<double> *const Zijk,
-                  DataFieldType<double> *energy);
+get_energy_distinct(DataFieldType<double> const epsabc,
+                    size_t const No,
+                    DataFieldType<double> *const epsi,
+                    DataFieldType<double> *const Tijk,
+                    DataFieldType<double> *const Zijk,
+                    DataFieldType<double> *energy);
 
-template __MAYBE_GLOBAL__ void getEnergySame(DataFieldType<double> const epsabc,
-                                             size_t const No,
-                                             DataFieldType<double> *const epsi,
-                                             DataFieldType<double> *const Tijk,
-                                             DataFieldType<double> *const Zijk,
-                                             DataFieldType<double> *energy);
+template __MAYBE_GLOBAL__ void
+get_energy_same(DataFieldType<double> const epsabc,
+                size_t const No,
+                DataFieldType<double> *const epsi,
+                DataFieldType<double> *const Tijk,
+                DataFieldType<double> *const Zijk,
+                DataFieldType<double> *energy);
 
 // instantiate Complex
 template __MAYBE_GLOBAL__ void
-getEnergyDistinct(DataFieldType<Complex> const epsabc,
-                  size_t const No,
-                  DataFieldType<Complex> *const epsi,
-                  DataFieldType<Complex> *const Tijk,
-                  DataFieldType<Complex> *const Zijk,
-                  DataFieldType<double> *energy);
+get_energy_distinct(DataFieldType<Complex> const epsabc,
+                    size_t const No,
+                    DataFieldType<Complex> *const epsi,
+                    DataFieldType<Complex> *const Tijk,
+                    DataFieldType<Complex> *const Zijk,
+                    DataFieldType<double> *energy);
 
 template __MAYBE_GLOBAL__ void
-getEnergySame(DataFieldType<Complex> const epsabc,
-              size_t const No,
-              DataFieldType<Complex> *const epsi,
-              DataFieldType<Complex> *const Tijk,
-              DataFieldType<Complex> *const Zijk,
-              DataFieldType<double> *energy);
+get_energy_same(DataFieldType<Complex> const epsabc,
+                size_t const No,
+                DataFieldType<Complex> *const epsi,
+                DataFieldType<Complex> *const Tijk,
+                DataFieldType<Complex> *const Zijk,
+                DataFieldType<double> *energy);
 // Energy:3 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles
@@ -510,9 +520,9 @@ void doubles_contribution(size_t const No,
                       (int const *)&NoNo)
 #    define MAYBE_CONJ(_conj, _buffer)                                         \
       do {                                                                     \
-        acc::maybeConjugate<<<1, 1>>>((DataFieldType<F> *)_conj,               \
-                                      (DataFieldType<F> *)_buffer,             \
-                                      NoNoNo);                                 \
+        acc::maybe_conjugate<<<1, 1>>>((DataFieldType<F> *)_conj,              \
+                                       (DataFieldType<F> *)_buffer,            \
+                                       NoNoNo);                                \
       } while (0)
 
   // END CUDA
@@ -557,9 +567,9 @@ void doubles_contribution(size_t const No,
                       _t_buffer,                                               \
                       (int const *)&NoNo)
 #    define MAYBE_CONJ(_conj, _buffer)                                         \
-      acc::maybeConjugate((DataFieldType<F> *)_conj,                           \
-                          (DataFieldType<F> *)_buffer,                         \
-                          NoNoNo);
+      acc::maybe_conjugate((DataFieldType<F> *)_conj,                          \
+                           (DataFieldType<F> *)_buffer,                        \
+                           NoNoNo);
 #  endif
 
   F one{1.0}, m_one{-1.0}, zero{0.0};

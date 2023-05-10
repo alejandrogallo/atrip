@@ -19,54 +19,54 @@
 namespace atrip {
 
 template <typename F = double>
-static void sliceIntoVector
+static void slice_into_vector
 #if defined(ATRIP_SOURCES_IN_GPU)
     (DataPtr<F> &source,
 #else
     (std::vector<F> &source,
 #endif
-     size_t sliceSize,
-     CTF::Tensor<F> &toSlice,
+     size_t slice_size,
+     CTF::Tensor<F> &to_slice,
      std::vector<int64_t> const low,
      std::vector<int64_t> const up,
      CTF::Tensor<F> const &origin,
-     std::vector<int64_t> const originLow,
-     std::vector<int64_t> const originUp) {
+     std::vector<int64_t> const origin_low,
+     std::vector<int64_t> const origin_up) {
   // Thank you CTF for forcing me to do this
   struct {
     std::vector<int> up, low;
-  } toSlice_ = {{up.begin(), up.end()}, {low.begin(), low.end()}},
-    origin_ = {{originUp.begin(), originUp.end()},
-               {originLow.begin(), originLow.end()}};
+  } to_slice_ = {{up.begin(), up.end()}, {low.begin(), low.end()}},
+    origin_ = {{origin_up.begin(), origin_up.end()},
+               {origin_low.begin(), origin_low.end()}};
 
   WITH_OCD
-  WITH_RANK << "slicing into " << pretty_print(toSlice_.up) << ","
-            << pretty_print(toSlice_.low) << " from "
+  WITH_RANK << "slicing into " << pretty_print(to_slice_.up) << ","
+            << pretty_print(to_slice_.low) << " from "
             << pretty_print(origin_.up) << "," << pretty_print(origin_.low)
             << "\n";
 
 #if !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY)
-  toSlice.slice(toSlice_.low.data(),
-                toSlice_.up.data(),
-                0.0,
-                origin,
-                origin_.low.data(),
-                origin_.up.data(),
-                1.0);
+  to_slice.slice(to_slice_.low.data(),
+                 to_slice_.up.data(),
+                 0.0,
+                 origin,
+                 origin_.low.data(),
+                 origin_.up.data(),
+                 1.0);
 
 #  if defined(ATRIP_SOURCES_IN_GPU)
   WITH_CHRONO("cuda:sources",
               _CHECK_CUDA_SUCCESS(
                   "copying sources data to device",
-                  cuMemcpyHtoD(source, toSlice.data, sizeof(F) * sliceSize));)
+                  cuMemcpyHtoD(source, to_slice.data, sizeof(F) * slice_size));)
 #  else
-  memcpy(source.data(), toSlice.data, sizeof(F) * sliceSize);
+  memcpy(source.data(), to_slice.data, sizeof(F) * slice_size);
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) */
 
 #else
   IGNORABLE(source);
-  IGNORABLE(sliceSize);
-  IGNORABLE(toSlice);
+  IGNORABLE(slice_size);
+  IGNORABLE(to_slice);
   IGNORABLE(origin);
 #  pragma message("WARNING: COMPILING WITHOUT SLICING THE TENSORS")
 #endif /* !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY) */
@@ -74,7 +74,7 @@ static void sliceIntoVector
 
 template <typename F = double>
 struct TAPHH : public SliceUnion<F> {
-  TAPHH(CTF::Tensor<F> const &sourceTensor,
+  TAPHH(CTF::Tensor<F> const &source_tensor,
         size_t No,
         size_t Nv,
         size_t np,
@@ -89,30 +89,30 @@ struct TAPHH : public SliceUnion<F> {
                       global_world,
                       Slice<F>::TA,
                       6) {
-    this->init(sourceTensor);
+    this->init(source_tensor);
   }
 
-  void sliceIntoBuffer(size_t it,
-                       CTF::Tensor<F> &to,
-                       CTF::Tensor<F> const &from) override {
+  void slice_into_buffer(size_t it,
+                         CTF::Tensor<F> &to,
+                         CTF::Tensor<F> const &from) override {
 
-    const int Nv = this->sliceLength[0], No = this->sliceLength[1],
-              a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
+    const int Nv = this->slice_length[0], No = this->slice_length[1],
+              a = this->rank_map.find({static_cast<size_t>(Atrip::rank), it});
 
-    sliceIntoVector<F>(this->sources[it],
-                       this->sliceSize,
-                       to,
-                       {0, 0, 0},
-                       {Nv, No, No},
-                       from,
-                       {a, 0, 0, 0},
-                       {a + 1, Nv, No, No});
+    slice_into_vector<F>(this->sources[it],
+                         this->slice_size,
+                         to,
+                         {0, 0, 0},
+                         {Nv, No, No},
+                         from,
+                         {a, 0, 0, 0},
+                         {a + 1, Nv, No, No});
   }
 };
 
 template <typename F = double>
 struct HHHA : public SliceUnion<F> {
-  HHHA(CTF::Tensor<F> const &sourceTensor,
+  HHHA(CTF::Tensor<F> const &source_tensor,
        size_t No,
        size_t Nv,
        size_t np,
@@ -128,30 +128,30 @@ struct HHHA : public SliceUnion<F> {
                       global_world,
                       Slice<F>::VIJKA,
                       6) {
-    this->init(sourceTensor);
+    this->init(source_tensor);
   }
 
-  void sliceIntoBuffer(size_t it,
-                       CTF::Tensor<F> &to,
-                       CTF::Tensor<F> const &from) override {
+  void slice_into_buffer(size_t it,
+                         CTF::Tensor<F> &to,
+                         CTF::Tensor<F> const &from) override {
 
-    const int No = this->sliceLength[0],
-              a = this->rankMap.find({static_cast<size_t>(Atrip::rank), it});
+    const int No = this->slice_length[0],
+              a = this->rank_map.find({static_cast<size_t>(Atrip::rank), it});
 
-    sliceIntoVector<F>(this->sources[it],
-                       this->sliceSize,
-                       to,
-                       {0, 0, 0},
-                       {No, No, No},
-                       from,
-                       {0, 0, 0, a},
-                       {No, No, No, a + 1});
+    slice_into_vector<F>(this->sources[it],
+                         this->slice_size,
+                         to,
+                         {0, 0, 0},
+                         {No, No, No},
+                         from,
+                         {0, 0, 0, a},
+                         {No, No, No, a + 1});
   }
 };
 
 template <typename F = double>
 struct ABPH : public SliceUnion<F> {
-  ABPH(CTF::Tensor<F> const &sourceTensor,
+  ABPH(CTF::Tensor<F> const &source_tensor,
        size_t No,
        size_t Nv,
        size_t np,
@@ -172,31 +172,31 @@ struct ABPH : public SliceUnion<F> {
                       global_world,
                       Slice<F>::VABCI,
                       2 * 6) {
-    this->init(sourceTensor);
+    this->init(source_tensor);
   }
 
-  void sliceIntoBuffer(size_t it,
-                       CTF::Tensor<F> &to,
-                       CTF::Tensor<F> const &from) override {
+  void slice_into_buffer(size_t it,
+                         CTF::Tensor<F> &to,
+                         CTF::Tensor<F> const &from) override {
 
-    const int Nv = this->sliceLength[0], No = this->sliceLength[1],
-              el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+    const int Nv = this->slice_length[0], No = this->slice_length[1],
+              el = this->rank_map.find({static_cast<size_t>(Atrip::rank), it}),
               a = el % Nv, b = el / Nv;
 
-    sliceIntoVector<F>(this->sources[it],
-                       this->sliceSize,
-                       to,
-                       {0, 0},
-                       {Nv, No},
-                       from,
-                       {a, b, 0, 0},
-                       {a + 1, b + 1, Nv, No});
+    slice_into_vector<F>(this->sources[it],
+                         this->slice_size,
+                         to,
+                         {0, 0},
+                         {Nv, No},
+                         from,
+                         {a, b, 0, 0},
+                         {a + 1, b + 1, Nv, No});
   }
 };
 
 template <typename F = double>
 struct ABHH : public SliceUnion<F> {
-  ABHH(CTF::Tensor<F> const &sourceTensor,
+  ABHH(CTF::Tensor<F> const &source_tensor,
        size_t No,
        size_t Nv,
        size_t np,
@@ -212,31 +212,31 @@ struct ABHH : public SliceUnion<F> {
                       global_world,
                       Slice<F>::VABIJ,
                       6) {
-    this->init(sourceTensor);
+    this->init(source_tensor);
   }
 
-  void sliceIntoBuffer(size_t it,
-                       CTF::Tensor<F> &to,
-                       CTF::Tensor<F> const &from) override {
+  void slice_into_buffer(size_t it,
+                         CTF::Tensor<F> &to,
+                         CTF::Tensor<F> const &from) override {
 
-    const int Nv = from.lens[0], No = this->sliceLength[1],
-              el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+    const int Nv = from.lens[0], No = this->slice_length[1],
+              el = this->rank_map.find({static_cast<size_t>(Atrip::rank), it}),
               a = el % Nv, b = el / Nv;
 
-    sliceIntoVector<F>(this->sources[it],
-                       this->sliceSize,
-                       to,
-                       {0, 0},
-                       {No, No},
-                       from,
-                       {a, b, 0, 0},
-                       {a + 1, b + 1, No, No});
+    slice_into_vector<F>(this->sources[it],
+                         this->slice_size,
+                         to,
+                         {0, 0},
+                         {No, No},
+                         from,
+                         {a, b, 0, 0},
+                         {a + 1, b + 1, No, No});
   }
 };
 
 template <typename F = double>
 struct TABHH : public SliceUnion<F> {
-  TABHH(CTF::Tensor<F> const &sourceTensor,
+  TABHH(CTF::Tensor<F> const &source_tensor,
         size_t No,
         size_t Nv,
         size_t np,
@@ -252,26 +252,26 @@ struct TABHH : public SliceUnion<F> {
                       global_world,
                       Slice<F>::TABIJ,
                       6) {
-    this->init(sourceTensor);
+    this->init(source_tensor);
   }
 
-  void sliceIntoBuffer(size_t it,
-                       CTF::Tensor<F> &to,
-                       CTF::Tensor<F> const &from) override {
+  void slice_into_buffer(size_t it,
+                         CTF::Tensor<F> &to,
+                         CTF::Tensor<F> const &from) override {
     // TODO: maybe generalize this with ABHH
 
-    const int Nv = from.lens[0], No = this->sliceLength[1],
-              el = this->rankMap.find({static_cast<size_t>(Atrip::rank), it}),
+    const int Nv = from.lens[0], No = this->slice_length[1],
+              el = this->rank_map.find({static_cast<size_t>(Atrip::rank), it}),
               a = el % Nv, b = el / Nv;
 
-    sliceIntoVector<F>(this->sources[it],
-                       this->sliceSize,
-                       to,
-                       {0, 0},
-                       {No, No},
-                       from,
-                       {a, b, 0, 0},
-                       {a + 1, b + 1, No, No});
+    slice_into_vector<F>(this->sources[it],
+                         this->slice_size,
+                         to,
+                         {0, 0},
+                         {No, No},
+                         from,
+                         {a, b, 0, 0},
+                         {a + 1, b + 1, No, No});
   }
 };
 

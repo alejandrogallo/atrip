@@ -26,7 +26,8 @@ namespace acc {
 
 ////
 template <typename F>
-__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F maybeConjugateScalar(const F &a) {
+__MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F
+maybe_conjugate_scalar(const F &a) {
   return a;
 }
 
@@ -35,14 +36,14 @@ __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ F maybeConjugateScalar(const F &a) {
 #if defined(HAVE_CUDA)
 template <>
 __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ cuDoubleComplex
-maybeConjugateScalar(const cuDoubleComplex &a) {
+maybe_conjugate_scalar(const cuDoubleComplex &a) {
   return {a.x, -a.y};
 }
 #endif /*  defined(HAVE_CUDA) */
 
 template <typename F>
-__MAYBE_GLOBAL__ void maybeConjugate(F *to, F *from, size_t n) {
-  for (size_t i = 0; i < n; ++i) { to[i] = maybeConjugateScalar<F>(from[i]); }
+__MAYBE_GLOBAL__ void maybe_conjugate(F *to, F *from, size_t n) {
+  for (size_t i = 0; i < n; ++i) { to[i] = maybe_conjugate_scalar<F>(from[i]); }
 }
 
 template <typename F>

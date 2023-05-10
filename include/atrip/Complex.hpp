@@ -29,7 +29,7 @@ namespace atrip {
 using Complex = std::complex<double>;
 
 template <typename F>
-F maybeConjugate(const F);
+F maybe_conjugate(const F);
 
 #if defined(HAVE_CUDA)
 cuDoubleComplex &operator+=(cuDoubleComplex &lz, cuDoubleComplex const &rz);
@@ -38,11 +38,11 @@ cuDoubleComplex &operator+=(cuDoubleComplex &lz, cuDoubleComplex const &rz);
 namespace traits {
 
 template <typename FF>
-bool isComplex();
+bool is_complex();
 
 namespace mpi {
 template <typename F>
-MPI_Datatype datatypeOf(void);
+MPI_Datatype datatype_of(void);
 }
 
 } // namespace traits

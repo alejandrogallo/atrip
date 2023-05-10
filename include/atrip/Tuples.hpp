@@ -47,45 +47,45 @@ constexpr ABCTuple INVALID_TUPLE = {1, 1, 1};
 // [[file:~/cuda/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the
 // tuples:1]]
 struct TuplesDistribution {
-  virtual ABCTuples getTuples(size_t Nv, MPI_Comm universe) = 0;
-  virtual bool tupleIsFake(ABCTuple const &t) { return t == FAKE_TUPLE; }
+  virtual ABCTuples get_tuples(size_t Nv, MPI_Comm universe) = 0;
+  virtual bool tuple_is_fake(ABCTuple const &t) { return t == FAKE_TUPLE; }
 };
 // Distributing the tuples:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Node%20information][Node information:1]]
-std::vector<std::string> getNodeNames(MPI_Comm comm);
+std::vector<std::string> get_node_names(MPI_Comm comm);
 // Node information:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Node%20information][Node information:2]]
 struct RankInfo {
   const std::string name;
-  const size_t nodeId;
-  const size_t globalRank;
-  const size_t localRank;
-  const size_t ranksPerNode;
+  const size_t node_id;
+  const size_t global_rank;
+  const size_t local_rank;
+  const size_t ranks_per_node;
 };
 
-std::vector<RankInfo> getNodeInfos(std::vector<string> const &nodeNames);
+std::vector<RankInfo> get_node_infos(std::vector<string> const &node_names);
 
 struct ClusterInfo {
-  const size_t nNodes, np, ranksPerNode;
-  const std::vector<RankInfo> rankInfos;
+  const size_t n_nodes, np, ranks_per_node;
+  const std::vector<RankInfo> rank_infos;
 };
 
-ClusterInfo getClusterInfo(MPI_Comm comm);
+ClusterInfo get_cluster_info(MPI_Comm comm);
 // Node information:2 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:1]]
-ABCTuples getTuplesList(size_t Nv, size_t rank, size_t np);
+ABCTuples get_tuples_list(size_t Nv, size_t rank, size_t np);
 // Naive list:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:2]]
-ABCTuples getAllTuplesList(const size_t Nv);
+ABCTuples get_all_tuples_list(const size_t Nv);
 // Naive list:2 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:3]]
 struct NaiveDistribution : public TuplesDistribution {
-  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override;
+  ABCTuples get_tuples(size_t Nv, MPI_Comm universe) override;
 };
 // Naive list:3 ends here
 
@@ -97,20 +97,20 @@ namespace group_and_sort {
 // Provides the node on which the slice-element is found
 // Right now we distribute the slices in a round robin fashion
 // over the different nodes (NOTE: not mpi ranks but nodes)
-inline size_t isOnNode(size_t tuple, size_t nNodes);
+inline size_t is_on_node(size_t tuple, size_t n_nodes);
 
 // return the node (or all nodes) where the elements of this
 // tuple are located
-std::vector<size_t> getTupleNodes(ABCTuple const &t, size_t nNodes);
+std::vector<size_t> get_tuple_nodes(ABCTuple const &t, size_t n_nodes);
 
 struct Info {
-  size_t nNodes;
-  size_t nodeId;
+  size_t n_nodes;
+  size_t node_id;
 };
 // Utils:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Distribution][Distribution:1]]
-ABCTuples specialDistribution(Info const &info, ABCTuples const &allTuples);
+ABCTuples special_distribution(Info const &info, ABCTuples const &all_tuples);
 // Distribution:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Main][Main:1]]
@@ -119,7 +119,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv);
 
 // [[file:~/cuda/atrip/atrip.org::*Interface][Interface:1]]
 struct Distribution : public TuplesDistribution {
-  ABCTuples getTuples(size_t Nv, MPI_Comm universe) override;
+  ABCTuples get_tuples(size_t Nv, MPI_Comm universe) override;
 };
 // Interface:1 ends here
 

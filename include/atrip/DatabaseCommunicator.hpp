@@ -11,6 +11,6 @@ using Unions = std::vector<SliceUnion<F> *>;
 
 template <typename F>
 typename Slice<F>::Database
-naiveDatabase(Unions<F> &unions, size_t nv, size_t np, size_t iteration);
+naive_database(Unions<F> &unions, size_t nv, size_t np, size_t iteration);
 
 } // namespace atrip

@@ -32,7 +32,7 @@ struct Checkpoint {
   size_t iteration;
   // TODO
   // Input<F>::TuplesDistribution distribution(GROUP_AND_SORT);
-  bool rankRoundRobin;
+  bool rank_round_robin;
 };
 // checkpoint-definition ends here
 
@@ -45,7 +45,7 @@ void write_checkpoint(Checkpoint const &c, std::string const &filepath) {
       << "Nnodes: " << c.nnodes << "\n"
       << "Energy: " << std::setprecision(19) << c.energy << "\n"
       << "Iteration: " << c.iteration << "\n"
-      << "RankRoundRobin: " << (c.rankRoundRobin ? "true" : "false") << "\n";
+      << "RankRoundRobin: " << (c.rank_round_robin ? "true" : "false") << "\n";
 }
 
 Checkpoint read_checkpoint(std::ifstream &in) {
@@ -68,7 +68,7 @@ Checkpoint read_checkpoint(std::ifstream &in) {
     else if (header == "Nnodes") c.nnodes = std::atoi(value.c_str());
     else if (header == "Energy") c.energy = std::atof(value.c_str());
     else if (header == "Iteration") c.iteration = std::atoi(value.c_str());
-    else if (header == "RankRoundRobin") c.rankRoundRobin = (value[0] == 't');
+    else if (header == "RankRoundRobin") c.rank_round_robin = (value[0] == 't');
   }
   return c;
 }

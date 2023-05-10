@@ -19,34 +19,34 @@
 namespace atrip {
 
 template <>
-double maybeConjugate(const double a) {
+double maybe_conjugate(const double a) {
   return a;
 }
 template <>
-Complex maybeConjugate(const Complex a) {
+Complex maybe_conjugate(const Complex a) {
   return std::conj(a);
 }
 
 namespace traits {
 template <typename F>
-bool isComplex() {
+bool is_complex() {
   return false;
 }
 template <>
-bool isComplex<double>() {
+bool is_complex<double>() {
   return false;
 }
 template <>
-bool isComplex<Complex>() {
+bool is_complex<Complex>() {
   return true;
 }
 namespace mpi {
 template <>
-MPI_Datatype datatypeOf<double>() {
+MPI_Datatype datatype_of<double>() {
   return MPI_DOUBLE;
 }
 template <>
-MPI_Datatype datatypeOf<Complex>() {
+MPI_Datatype datatype_of<Complex>() {
   return MPI_DOUBLE_COMPLEX;
 }
 } // namespace mpi

@@ -45,10 +45,10 @@ int main() {
       const size_t iteration = 546;
       std::cout << "\twriting to " << out_checkpoint << std::endl;
 
-      for (bool rankRoundRobin
+      for (bool rank_round_robin
            : {true, false}) {
         atrip::Checkpoint
-            out = {no, nv, nranks, nnodes, energy, iteration, rankRoundRobin},
+            out = {no, nv, nranks, nnodes, energy, iteration, rank_round_robin},
             in;
 
         write_checkpoint(out, out_checkpoint);
@@ -59,7 +59,7 @@ int main() {
         _CMP_CHECK(nranks);
         _CMP_CHECK(nnodes);
         _CMP_CHECK(iteration);
-        _CMP_CHECK(rankRoundRobin);
+        _CMP_CHECK(rank_round_robin);
         _CMP_CHECK(energy);
       }
 
@@ -76,7 +76,7 @@ int main() {
   TESTCASE(
       "simple operations should work", const double a = 41.549, b = 1321.181;
       double aa = a, bb = b;
-      _CHECK(atrip::acc::maybeConjugateScalar<double>(a), a);
+      _CHECK(atrip::acc::maybe_conjugate_scalar<double>(a), a);
       _CHECK(atrip::acc::prod<double>(a, b), a * b);
       // _CHECK(atrip::acc::real<double>(a), a);
       _CHECK(atrip::acc::sub<double>(a, b), a - b);

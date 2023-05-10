@@ -99,12 +99,12 @@ struct IterationDescription;
 using IterationDescriptor = std::function<void(IterationDescription const &)>;
 struct IterationDescription {
   static IterationDescriptor descriptor;
-  size_t currentIteration;
-  size_t totalIterations;
-  double currentElapsedTime;
+  size_t current_iteration;
+  size_t total_iterations;
+  double current_elapsed_time;
 };
 
-void registerIterationDescriptor(IterationDescriptor);
+void register_iteration_descriptor(IterationDescriptor);
 
 } // namespace atrip
 // IterationDescriptor ends here

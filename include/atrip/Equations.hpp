@@ -33,20 +33,20 @@ using ABCTuples = std::vector<ABCTuple>;
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:1]]
 template <typename F = double>
-__MAYBE_GLOBAL__ void getEnergyDistinct(F const epsabc,
-                                        size_t const No,
-                                        F *const epsi,
-                                        F *const Tijk,
-                                        F *const Zijk,
-                                        double *energy);
+__MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
+                                          size_t const No,
+                                          F *const epsi,
+                                          F *const Tijk,
+                                          F *const Zijk,
+                                          double *energy);
 
 template <typename F = double>
-__MAYBE_GLOBAL__ void getEnergySame(F const epsabc,
-                                    size_t const No,
-                                    F *const epsi,
-                                    F *const Tijk,
-                                    F *const Zijk,
-                                    double *energy);
+__MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
+                                      size_t const No,
+                                      F *const epsi,
+                                      F *const Tijk,
+                                      F *const Zijk,
+                                      double *energy);
 // Energy:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles

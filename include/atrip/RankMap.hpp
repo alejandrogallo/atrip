@@ -30,7 +30,7 @@ struct RankMap {
   static bool RANK_ROUND_ROBIN;
   std::vector<size_t> const lengths;
   size_t const np, size;
-  ClusterInfo const clusterInfo;
+  ClusterInfo const cluster_info;
 
   RankMap(std::vector<size_t> lens, size_t np_)
       : lengths(lens)
@@ -39,7 +39,7 @@ struct RankMap {
                              lengths.end(),
                              1UL,
                              std::multiplies<size_t>()))
-      , clusterInfo(*Atrip::cluster_info) {
+      , cluster_info(*Atrip::cluster_info) {
     assert(lengths.size() <= 2);
   }
 
@@ -47,30 +47,31 @@ struct RankMap {
     if (RANK_ROUND_ROBIN) {
       return p.source * np + p.rank;
     } else {
-      const size_t rankPosition = p.source * clusterInfo.ranksPerNode
-                                + clusterInfo.rankInfos[p.rank].localRank;
-      return rankPosition * clusterInfo.nNodes
-           + clusterInfo.rankInfos[p.rank].nodeId;
+      const size_t rank_position = p.source * cluster_info.ranks_per_node
+                                 + cluster_info.rank_infos[p.rank].local_rank;
+      return rank_position * cluster_info.n_nodes
+           + cluster_info.rank_infos[p.rank].node_id;
     }
   }
 
-  size_t nSources() const noexcept {
+  size_t n_sources() const noexcept {
     return size / np + size_t(size % np != 0);
   }
 
-  bool isPaddingRank(size_t rank) const noexcept {
+  bool is_padding_rank(size_t rank) const noexcept {
     return size % np == 0 ? false : rank > (size % np - 1);
   }
 
-  bool isSourcePadding(const size_t rank, const size_t source) const noexcept {
-    return source == nSources() && isPaddingRank(rank);
+  bool is_source_padding(const size_t rank,
+                         const size_t source) const noexcept {
+    return source == n_sources() && is_padding_rank(rank);
   }
 
   typename Slice<F>::Location find(ABCTuple const &abc,
-                                   typename Slice<F>::Type sliceType) const {
-    // tuple = {11, 8} when abc = {11, 8, 9} and sliceType = AB
-    // tuple = {11, 0} when abc = {11, 8, 9} and sliceType = A
-    const auto tuple = Slice<F>::subtupleBySlice(abc, sliceType);
+                                   typename Slice<F>::Type slice_type) const {
+    // tuple = {11, 8} when abc = {11, 8, 9} and slice_type = AB
+    // tuple = {11, 0} when abc = {11, 8, 9} and slice_type = A
+    const auto tuple = Slice<F>::subtuple_by_slice(abc, slice_type);
 
     const size_t index =
         tuple[0] + tuple[1] * (lengths.size() > 1 ? lengths[0] : 0);
@@ -87,33 +88,33 @@ struct RankMap {
       size_t const
 
           // the node that will be assigned to
-          nodeId = index % clusterInfo.nNodes
+          node_id = index % cluster_info.n_nodes
 
           // how many times it has been assigned to the node
           ,
-          s_n = index / clusterInfo.nNodes
+          s_n = index / cluster_info.n_nodes
 
           // which local rank in the node should be
           ,
-          localRank = s_n % clusterInfo.ranksPerNode
+          local_rank = s_n % cluster_info.ranks_per_node
 
           // and the local source (how many times we chose this local rank)
           ,
-          localSource = s_n / clusterInfo.ranksPerNode;
+          local_source = s_n / cluster_info.ranks_per_node;
 
-      // find the localRank-th entry in clusterInfo
-      auto const &it = std::find_if(clusterInfo.rankInfos.begin(),
-                                    clusterInfo.rankInfos.end(),
-                                    [nodeId, localRank](RankInfo const &ri) {
-                                      return ri.nodeId == nodeId
-                                          && ri.localRank == localRank;
+      // find the local_rank-th entry in cluster_info
+      auto const &it = std::find_if(cluster_info.rank_infos.begin(),
+                                    cluster_info.rank_infos.end(),
+                                    [node_id, local_rank](RankInfo const &ri) {
+                                      return ri.node_id == node_id
+                                          && ri.local_rank == local_rank;
                                     });
-      if (it == clusterInfo.rankInfos.end()) {
+      if (it == cluster_info.rank_infos.end()) {
         throw "FATAL! Error in node distribution of the slices";
       }
 
-      rank = (*it).globalRank;
-      source = localSource;
+      rank = (*it).global_rank;
+      source = local_source;
     }
 
     return {rank, source};
