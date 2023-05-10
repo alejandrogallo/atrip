@@ -437,42 +437,38 @@ singlesContribution<Complex>(size_t No,
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles
 // contribution:2]]
 template <typename F>
-void doublesContribution(size_t const No,
-                         size_t const Nv
-                         // -- VABCI
-                         ,
-                         DataPtr<F> const VABph,
-                         DataPtr<F> const VACph,
-                         DataPtr<F> const VBCph,
-                         DataPtr<F> const VBAph,
-                         DataPtr<F> const VCAph,
-                         DataPtr<F> const VCBph
-                         // -- VHHHA
-                         ,
-                         DataPtr<F> const VhhhA,
-                         DataPtr<F> const VhhhB,
-                         DataPtr<F> const VhhhC
-                         // -- TA
-                         ,
-                         DataPtr<F> const TAphh,
-                         DataPtr<F> const TBphh,
-                         DataPtr<F> const TCphh
-                         // -- TABIJ
-                         ,
-                         DataPtr<F> const TABhh,
-                         DataPtr<F> const TAChh,
-                         DataPtr<F> const TBChh
-                         // -- TIJK
-                         // , DataPtr<F> Tijk_
-                         ,
-                         DataFieldType<F> *Tijk_
-#if defined(HAVE_CUDA)
-                         // -- tmp buffers
-                         ,
-                         DataFieldType<F> *_t_buffer,
-                         DataFieldType<F> *_vhhh
-#endif
-) {
+void doubles_contribution(size_t const No,
+                          size_t const Nv
+                          // -- VABCI
+                          ,
+                          DataPtr<F> const VABph,
+                          DataPtr<F> const VACph,
+                          DataPtr<F> const VBCph,
+                          DataPtr<F> const VBAph,
+                          DataPtr<F> const VCAph,
+                          DataPtr<F> const VCBph
+                          // -- VHHHA
+                          ,
+                          DataPtr<F> const VhhhA,
+                          DataPtr<F> const VhhhB,
+                          DataPtr<F> const VhhhC
+                          // -- TA
+                          ,
+                          DataPtr<F> const TAphh,
+                          DataPtr<F> const TBphh,
+                          DataPtr<F> const TCphh
+                          // -- TABIJ
+                          ,
+                          DataPtr<F> const TABhh,
+                          DataPtr<F> const TAChh,
+                          DataPtr<F> const TBChh
+                          // -- TIJK
+                          // , DataPtr<F> Tijk_
+                          ,
+                          DataFieldType<F> *Tijk_,
+                          // -- tmp buffers
+                          DataFieldType<F> *_t_buffer,
+                          DataFieldType<F> *_vhhh) {
   const size_t NoNo = No * No;
 
   DataFieldType<F> *Tijk = (DataFieldType<F> *)Tijk_;
@@ -589,8 +585,6 @@ void doublesContribution(size_t const No,
 #    endif
 
 #  else
-  DataFieldType<F> *_t_buffer = (DataFieldType<F> *)malloc(NoNoNo * sizeof(F));
-  DataFieldType<F> *_vhhh = (DataFieldType<F> *)malloc(NoNoNo * sizeof(F));
   std::memset((void *)_t_buffer, 0x00, NoNoNo * sizeof(DataFieldType<F>));
   std::memset((void *)_vhhh, 0x00, NoNoNo * sizeof(DataFieldType<F>));
   std::memset((void *)Tijk, 0x00, NoNoNo * sizeof(DataFieldType<F>));
@@ -636,44 +630,26 @@ void doublesContribution(size_t const No,
 #  undef MAYBE_CONJ
 
   // PARTICLES
-  WITH_CHRONO(
-      "doubles:particles",
-      {
-        // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
-        WITH_CHRONO("doubles:particles:1", DGEMM_PARTICLES(TAphh, VBCph);
-                    REORDER(I, J, K);)
-        // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
-        WITH_CHRONO("doubles:particles:2", DGEMM_PARTICLES(TAphh, VCBph);
-                    REORDER(I, K, J);)
-        // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
-        WITH_CHRONO("doubles:particles:3", DGEMM_PARTICLES(TCphh, VABph);
-                    REORDER(K, I, J);)
-        // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
-        WITH_CHRONO("doubles:particles:4", DGEMM_PARTICLES(TCphh, VBAph);
-                    REORDER(K, J, I);)
-        // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
-        WITH_CHRONO("doubles:particles:5", DGEMM_PARTICLES(TBphh, VACph);
-                    REORDER(J, I, K);)
-        // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
-        WITH_CHRONO("doubles:particles:6", DGEMM_PARTICLES(TBphh, VCAph);
-                    REORDER(J, K, I);)
-      })
-
-  { // free resources
-#  ifdef HAVE_CUDA
-    // we need to synchronize here since we need
-    // the Tijk for next process in the pipeline
-    //_CHECK_CUDA_SUCCESS("Synchronizing",
-    //                    cuCtxSynchronize());
-    //_CHECK_CUDA_SUCCESS("Freeing _vhhh",
-    //                    cuMemFree((CUdeviceptr)_vhhh));
-    //_CHECK_CUDA_SUCCESS("Freeing _t_buffer",
-    //                    cuMemFree((CUdeviceptr)_t_buffer));
-#  else
-    free(_vhhh);
-    free(_t_buffer);
-#  endif /* defined(HAVE_CUDA) */
-  }
+  WITH_CHRONO("doubles:particles", {
+    // TAphh[E + i*Nv + j*NoNv] * VBCph[E + k*Nv]; P0
+    WITH_CHRONO("doubles:particles:1", DGEMM_PARTICLES(TAphh, VBCph);
+                REORDER(I, J, K);)
+    // TAphh[E + i*Nv + k*NoNv] * VCBph[E + j*Nv]; P3
+    WITH_CHRONO("doubles:particles:2", DGEMM_PARTICLES(TAphh, VCBph);
+                REORDER(I, K, J);)
+    // TCphh[E + k*Nv + i*NoNv] * VABph[E + j*Nv]; P5
+    WITH_CHRONO("doubles:particles:3", DGEMM_PARTICLES(TCphh, VABph);
+                REORDER(K, I, J);)
+    // TCphh[E + k*Nv + j*NoNv] * VBAph[E + i*Nv]; P2
+    WITH_CHRONO("doubles:particles:4", DGEMM_PARTICLES(TCphh, VBAph);
+                REORDER(K, J, I);)
+    // TBphh[E + j*Nv + i*NoNv] * VACph[E + k*Nv]; P1
+    WITH_CHRONO("doubles:particles:5", DGEMM_PARTICLES(TBphh, VACph);
+                REORDER(J, I, K);)
+    // TBphh[E + j*Nv + k*NoNv] * VCAph[E + i*Nv]; P4
+    WITH_CHRONO("doubles:particles:6", DGEMM_PARTICLES(TBphh, VCAph);
+                REORDER(J, K, I);)
+  })
 
 #  undef REORDER
 #  undef DGEMM_HOLES
@@ -724,79 +700,69 @@ void doublesContribution(size_t const No,
 }
 
 // instantiate templates
-template void doublesContribution<double>(size_t const No,
-                                          size_t const Nv
-                                          // -- VABCI
-                                          ,
-                                          DataPtr<double> const VABph,
-                                          DataPtr<double> const VACph,
-                                          DataPtr<double> const VBCph,
-                                          DataPtr<double> const VBAph,
-                                          DataPtr<double> const VCAph,
-                                          DataPtr<double> const VCBph
-                                          // -- VHHHA
-                                          ,
-                                          DataPtr<double> const VhhhA,
-                                          DataPtr<double> const VhhhB,
-                                          DataPtr<double> const VhhhC
-                                          // -- TA
-                                          ,
-                                          DataPtr<double> const TAphh,
-                                          DataPtr<double> const TBphh,
-                                          DataPtr<double> const TCphh
-                                          // -- TABIJ
-                                          ,
-                                          DataPtr<double> const TABhh,
-                                          DataPtr<double> const TAChh,
-                                          DataPtr<double> const TBChh
-                                          // -- TIJK
-                                          ,
-                                          DataFieldType<double> *Tijk
-#if defined(HAVE_CUDA)
-                                          // -- tmp buffers
-                                          ,
-                                          DataFieldType<double> *_t_buffer,
-                                          DataFieldType<double> *_vhhh
-#endif
-
-);
-
-template void doublesContribution<Complex>(size_t const No,
+template void doubles_contribution<double>(size_t const No,
                                            size_t const Nv
                                            // -- VABCI
                                            ,
-                                           DataPtr<Complex> const VABph,
-                                           DataPtr<Complex> const VACph,
-                                           DataPtr<Complex> const VBCph,
-                                           DataPtr<Complex> const VBAph,
-                                           DataPtr<Complex> const VCAph,
-                                           DataPtr<Complex> const VCBph
+                                           DataPtr<double> const VABph,
+                                           DataPtr<double> const VACph,
+                                           DataPtr<double> const VBCph,
+                                           DataPtr<double> const VBAph,
+                                           DataPtr<double> const VCAph,
+                                           DataPtr<double> const VCBph
                                            // -- VHHHA
                                            ,
-                                           DataPtr<Complex> const VhhhA,
-                                           DataPtr<Complex> const VhhhB,
-                                           DataPtr<Complex> const VhhhC
+                                           DataPtr<double> const VhhhA,
+                                           DataPtr<double> const VhhhB,
+                                           DataPtr<double> const VhhhC
                                            // -- TA
                                            ,
-                                           DataPtr<Complex> const TAphh,
-                                           DataPtr<Complex> const TBphh,
-                                           DataPtr<Complex> const TCphh
+                                           DataPtr<double> const TAphh,
+                                           DataPtr<double> const TBphh,
+                                           DataPtr<double> const TCphh
                                            // -- TABIJ
                                            ,
-                                           DataPtr<Complex> const TABhh,
-                                           DataPtr<Complex> const TAChh,
-                                           DataPtr<Complex> const TBChh
+                                           DataPtr<double> const TABhh,
+                                           DataPtr<double> const TAChh,
+                                           DataPtr<double> const TBChh
                                            // -- TIJK
                                            ,
-                                           DataFieldType<Complex> *Tijk
-#if defined(HAVE_CUDA)
+                                           DataFieldType<double> *Tijk,
                                            // -- tmp buffers
-                                           ,
-                                           DataFieldType<Complex> *_t_buffer,
-                                           DataFieldType<Complex> *_vhhh
-#endif
+                                           DataFieldType<double> *_t_buffer,
+                                           DataFieldType<double> *_vhhh);
 
-);
+template void doubles_contribution<Complex>(size_t const No,
+                                            size_t const Nv
+                                            // -- VABCI
+                                            ,
+                                            DataPtr<Complex> const VABph,
+                                            DataPtr<Complex> const VACph,
+                                            DataPtr<Complex> const VBCph,
+                                            DataPtr<Complex> const VBAph,
+                                            DataPtr<Complex> const VCAph,
+                                            DataPtr<Complex> const VCBph
+                                            // -- VHHHA
+                                            ,
+                                            DataPtr<Complex> const VhhhA,
+                                            DataPtr<Complex> const VhhhB,
+                                            DataPtr<Complex> const VhhhC
+                                            // -- TA
+                                            ,
+                                            DataPtr<Complex> const TAphh,
+                                            DataPtr<Complex> const TBphh,
+                                            DataPtr<Complex> const TCphh
+                                            // -- TABIJ
+                                            ,
+                                            DataPtr<Complex> const TABhh,
+                                            DataPtr<Complex> const TAChh,
+                                            DataPtr<Complex> const TBChh
+                                            // -- TIJK
+                                            ,
+                                            DataFieldType<Complex> *Tijk,
+                                            // -- tmp buffers
+                                            DataFieldType<Complex> *_t_buffer,
+                                            DataFieldType<Complex> *_vhhh);
 // Doubles contribution:2 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:2]]

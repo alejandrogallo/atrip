@@ -2920,7 +2920,7 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
   __device__
 #endif
   template <typename F=double>
-  void doublesContribution
+  void doubles_contribution
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
@@ -2957,7 +2957,7 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
   __device__
 #endif
   template <typename F=double>
-  void doublesContribution
+  void doubles_contribution
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
@@ -3235,7 +3235,7 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
   __device__
 #endif
   template
-  void doublesContribution<double>
+  void doubles_contribution<double>
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
@@ -3266,7 +3266,7 @@ V^{{\color{blue}ab}}_{{\color{red}e}i}  T^{{\color{blue}c}{\color{red}e}}_{ij} \
   __device__
 #endif
   template
-  void doublesContribution<Complex>
+  void doubles_contribution<Complex>
     ( const ABCTuple &abc
     , size_t const No
     , size_t const Nv
@@ -4034,7 +4034,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const& in) {
       )))
       WITH_CHRONO("oneshot-doubles",
       WITH_CHRONO("doubles",
-        doublesContribution<F>( abc, (size_t)No, (size_t)Nv
+        doubles_contribution<F>( abc, (size_t)No, (size_t)Nv
                               // -- VABCI
                               , abph.unwrapSlice(Slice<F>::AB, abc)
                               , abph.unwrapSlice(Slice<F>::AC, abc)

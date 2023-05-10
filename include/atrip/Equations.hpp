@@ -71,42 +71,38 @@ __global__
 // [[file:~/cuda/atrip/atrip.org::*Doubles%20contribution][Doubles
 // contribution:1]]
 template <typename F = double>
-void doublesContribution(size_t const No,
-                         size_t const Nv
-                         // -- VABCI
-                         ,
-                         DataPtr<F> const VABph,
-                         DataPtr<F> const VACph,
-                         DataPtr<F> const VBCph,
-                         DataPtr<F> const VBAph,
-                         DataPtr<F> const VCAph,
-                         DataPtr<F> const VCBph
-                         // -- VHHHA
-                         ,
-                         DataPtr<F> const VhhhA,
-                         DataPtr<F> const VhhhB,
-                         DataPtr<F> const VhhhC
-                         // -- TA
-                         ,
-                         DataPtr<F> const TAphh,
-                         DataPtr<F> const TBphh,
-                         DataPtr<F> const TCphh
-                         // -- TABIJ
-                         ,
-                         DataPtr<F> const TABhh,
-                         DataPtr<F> const TAChh,
-                         DataPtr<F> const TBChh
-                         // -- TIJK
-                         // , DataPtr<F> Tijk
-                         ,
-                         DataFieldType<F> *Tijk_
-#if defined(HAVE_CUDA)
-                         // -- tmp buffers
-                         ,
-                         DataFieldType<F> *_t_buffer,
-                         DataFieldType<F> *_vhhh
-#endif
-);
+void doubles_contribution(size_t const No,
+                          size_t const Nv
+                          // -- VABCI
+                          ,
+                          DataPtr<F> const VABph,
+                          DataPtr<F> const VACph,
+                          DataPtr<F> const VBCph,
+                          DataPtr<F> const VBAph,
+                          DataPtr<F> const VCAph,
+                          DataPtr<F> const VCBph
+                          // -- VHHHA
+                          ,
+                          DataPtr<F> const VhhhA,
+                          DataPtr<F> const VhhhB,
+                          DataPtr<F> const VhhhC
+                          // -- TA
+                          ,
+                          DataPtr<F> const TAphh,
+                          DataPtr<F> const TBphh,
+                          DataPtr<F> const TCphh
+                          // -- TABIJ
+                          ,
+                          DataPtr<F> const TABhh,
+                          DataPtr<F> const TAChh,
+                          DataPtr<F> const TBChh
+                          // -- TIJK
+                          // , DataPtr<F> Tijk
+                          ,
+                          DataFieldType<F> *Tijk_,
+                          // -- tmp buffers
+                          DataFieldType<F> *_t_buffer,
+                          DataFieldType<F> *_vhhh);
 // Doubles contribution:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
