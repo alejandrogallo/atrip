@@ -44,7 +44,7 @@ jobs:
             compiler: clang5
 
     steps:
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v3
 
     - name: Install Nix
       uses: cachix/install-nix-action@v20
