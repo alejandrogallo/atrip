@@ -213,13 +213,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       "memcpy epsa",
       cuMemcpyHtoD(epsa, (void *)_epsa.data(), sizeof(F) * _epsa.size()));
 
-  _CHECK_CUDA_SUCCESS("Tijk", cuMemAlloc(&Tijk, sizeof(F) * No * No * No));
-  _CHECK_CUDA_SUCCESS("Zijk", cuMemAlloc(&Zijk, sizeof(F) * No * No * No));
 #else
   DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data();
+#endif
+
   MALLOC_DATA_PTR("Zijk", &Zijk, sizeof(DataFieldType<F>) * No * No * No);
   MALLOC_DATA_PTR("Tijk", &Tijk, sizeof(DataFieldType<F>) * No * No * No);
-#endif
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rank_round_robin;
   if (RankMap<F>::RANK_ROUND_ROBIN) {
