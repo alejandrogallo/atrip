@@ -336,35 +336,31 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   // IF (cT) IS USED: HANDLE TWO FURTHER SLICES==========================={{{1
-  HHHA<F>* jhhha = nullptr;
-  ABPH<F>* jabph = nullptr;
+  HHHA<F> *jhhha = nullptr;
+  ABPH<F> *jabph = nullptr;
   if (in.Jhhhp) {
-    WITH_CHRONO(
-        "Jhhha-slice",
-        LOG(0, "Atrip") << "slicing Jijka" << std::endl;
-        jhhha = new HHHA<F>(*in.Jhhhp,
-                      (size_t)No,
-                      (size_t)Nv,
-                      (size_t)np,
-                      child_comm,
-                      universe);)
+    WITH_CHRONO("Jhhha-slice", LOG(0, "Atrip") << "slicing Jijka" << std::endl;
+                jhhha = new HHHA<F>(*in.Jhhhp,
+                                    (size_t)No,
+                                    (size_t)Nv,
+                                    (size_t)np,
+                                    child_comm,
+                                    universe);)
     jhhha->name = Slice<F>::Name::JIJKA;
     unions.push_back(jhhha);
   }
 
   if (in.Jppph) {
-    WITH_CHRONO(
-        "Jabph-slice", LOG(0, "Atrip") << "slicing Jabci" << std::endl;
-        jabph = new ABPH<F>(*in.Jppph,
-          (size_t)No,
-          (size_t)Nv,
-          (size_t)np,
-          child_comm,
-          universe);)
+    WITH_CHRONO("Jabph-slice", LOG(0, "Atrip") << "slicing Jabci" << std::endl;
+                jabph = new ABPH<F>(*in.Jppph,
+                                    (size_t)No,
+                                    (size_t)Nv,
+                                    (size_t)np,
+                                    child_comm,
+                                    universe);)
     jabph->name = Slice<F>::Name::JABCI;
     unions.push_back(jabph);
   }
-
 
 #ifdef HAVE_CUDA
   DataFieldType<F> *_t_buffer;

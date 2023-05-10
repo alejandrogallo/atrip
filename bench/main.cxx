@@ -1,4 +1,6 @@
 #include "atrip/Atrip.hpp"
+#include "atrip/Complex.hpp"
+#include "mpi.h"
 #include <iostream>
 #include <vector>
 #include <functional>
@@ -23,9 +25,6 @@ template <typename F>
 class InputTensors {
 public:
   using T = CTF::Tensor<F>;
-  using Map = std::map<std::string, T *>;
-
-  Map map;
 
   T *read_or_fill(std::string const &name,
                   int order,
@@ -42,8 +41,10 @@ public:
     };
     int rank;
     MPI_Comm_rank(world.comm, &rank);
-    map[name] = new T(order, lens, syms, world);
-    auto tsr = map[name];
+    auto tsr = new T(order, lens, syms, world);
+    if (!rank)
+      std::cout << _FORMAT("made tsr %s<%p>", name.c_str(), (void *)tsr)
+                << std::endl;
     if (path.size() && file_exists(path)) {
       tsr->read_dense_from_file(path.c_str());
     } else {
@@ -228,6 +229,37 @@ int main(int argc, char **argv) {
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
 
+  void *epsi, *epsa;
+  CTF::Tensor<double> *real_epsi = read_or_fill<double>("real-ei",
+                                                        1,
+                                                        ovoo.data(),
+                                                        symmetries.data(),
+                                                        world,
+                                                        ei_path,
+                                                        -40.0,
+                                                        -2),
+                      *real_epsa = read_or_fill<double>("real-ea",
+                                                        1,
+                                                        vo.data(),
+                                                        symmetries.data(),
+                                                        world,
+                                                        ea_path,
+                                                        -40.0,
+                                                        -2);
+
+  if (complex) {
+    using F = atrip::Complex;
+    const auto toComplex = CTF::Transform<double, atrip::Complex>(
+        [](double d, atrip::Complex &f) { f = d; });
+    epsi = new CTF::Tensor<F>(1, ovoo.data(), symmetries.data(), world);
+    epsa = new CTF::Tensor<F>(1, vo.data(), symmetries.data(), world);
+    toComplex((*real_epsi)["i"], (*(CTF::Tensor<F> *)epsi)["i"]);
+    toComplex((*real_epsa)["a"], (*(CTF::Tensor<F> *)epsa)["a"]);
+  } else {
+    epsi = (void *)real_epsi;
+    epsa = (void *)real_epsa;
+  }
+
   if (!rank)
     for (auto const &fn : input_printer)
       // print input parameters
@@ -256,115 +288,117 @@ int main(int argc, char **argv) {
     CTF::Tensor<FIELD> *Jppph = nullptr, *Jhphh = nullptr, *Jhhhp = nullptr;   \
     if (cT || (Jppph_path.size() && Jhphh_path.size())) {                      \
       if (!rank) std::cout << "doing cT" << std::endl;                         \
-      Jppph = tensors.read_or_fill("Jppph",                                    \
-                                   4,                                          \
-                                   vvvo.data(),                                \
-                                   symmetries.data(),                          \
-                                   world,                                      \
-                                   Jppph_path,                                 \
-                                   0,                                          \
-                                   1);                                         \
-      if (!rank)                                                               \
-        std::cout << _FORMAT("init Jppph done <%p>", Jppph) << std::endl;      \
-      Jhphh = tensors.read_or_fill("Jhphh",                                    \
+      /**/                                                                     \
+      /**/                                                                     \
+      /**/                                                                     \
+      Jhphh =                                                                  \
+          new CTF::Tensor<FIELD>(4, ovoo.data(), symmetries.data(), world);    \
+      Jhphh->read_dense_from_file(Jhphh_path.c_str());                         \
+      /*Jhphh = tensors.read_or_fill("Jhphh",                                  \
                                    4,                                          \
                                    ovoo.data(),                                \
                                    symmetries.data(),                          \
                                    world,                                      \
                                    Jhphh_path,                                 \
                                    0,                                          \
-                                   1);                                         \
+                                   1);*/                                       \
+      MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
-        std::cout << _FORMAT("init Jhphh done <%p>", Jhphh) << std::endl;      \
-      Jhhhp = tensors.read_or_fill("Jhhhp",                                    \
-                                   4,                                          \
-                                   ooov.data(),                                \
-                                   symmetries.data(),                          \
-                                   world,                                      \
-                                   "",                                         \
-                                   0,                                          \
-                                   1);                                         \
+        std::cout << _FORMAT("init Jhphh done <%p>", (void *)Jhphh)            \
+                  << std::endl;                                                \
+      /**/                                                                     \
+      /**/                                                                     \
+      /**/                                                                     \
+      Jhhhp =                                                                  \
+          new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);    \
+      MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
-        std::cout << _FORMAT("init Jhhhp done <%p>", Jhhhp) << std::endl;      \
+        std::cout << _FORMAT("made Jhhhp done <%p>", (void *)Jhhhp)            \
+                  << std::endl;                                                \
+      MPI_Barrier(world.comm);                                                 \
+      /**/                                                                     \
+      /**/                                                                     \
+      /**/                                                                     \
+      Jppph =                                                                  \
+          new CTF::Tensor<FIELD>(4, vvvo.data(), symmetries.data(), world);    \
+      if (!rank)                                                               \
+        std::cout << _FORMAT("made Jppph done <%p>", (void *)Jppph)            \
+                  << std::endl;                                                \
+      Jppph->read_dense_from_file(Jppph_path.c_str());                         \
+      MPI_Barrier(world.comm);                                                 \
+      if (!rank)                                                               \
+        std::cout << _FORMAT("read Jppph done <%p>", (void *)Jppph)            \
+                  << std::endl;                                                \
+      MPI_Barrier(world.comm);                                                 \
       if (!rank) std::cout << "Setting Jhhhp from Jhphh" << std::endl;         \
-      (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];                                     \
+      MPI_Barrier(world.comm);                                                 \
+      /* (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];*/                                \
+      const auto conjugate = CTF::Transform<FIELD, FIELD>(                     \
+          [](FIELD d, FIELD &f) { f = atrip::maybeConjugate(d); });            \
+      conjugate((*Jhphh)["kaij"], (*Jhhhp)["ijka"]);                           \
+      MPI_Barrier(world.comm);                                                 \
       if (!rank) std::cout << "done" << std::endl;                             \
     }                                                                          \
-    const auto in =                                                            \
-        atrip::Atrip::Input<FIELD>()                                           \
-            .with_epsilon_i(tensors.read_or_fill("ei",                         \
-                                                 1,                            \
-                                                 ooov.data(),                  \
-                                                 symmetries.data(),            \
-                                                 world,                        \
-                                                 ei_path,                      \
-                                                 -40.0,                        \
-                                                 -2))                          \
-            .with_epsilon_a(tensors.read_or_fill("ea",                         \
-                                                 1,                            \
-                                                 vo.data(),                    \
-                                                 symmetries.data(),            \
-                                                 world,                        \
-                                                 ea_path,                      \
-                                                 2,                            \
-                                                 50))                          \
-            .with_Tai(tensors.read_or_fill("Tph",                              \
-                                           2,                                  \
-                                           vo.data(),                          \
-                                           symmetries.data(),                  \
-                                           world,                              \
-                                           Tph_path,                           \
-                                           0,                                  \
-                                           1))                                 \
-            .with_Tabij(tensors.read_or_fill("Tpphh",                          \
-                                             4,                                \
-                                             vvoo.data(),                      \
-                                             symmetries.data(),                \
-                                             world,                            \
-                                             Tpphh_path,                       \
-                                             0,                                \
-                                             1))                               \
-            .with_Vabij(tensors.read_or_fill("Vpphh",                          \
-                                             4,                                \
-                                             vvoo.data(),                      \
-                                             symmetries.data(),                \
-                                             world,                            \
-                                             Vpphh_path,                       \
-                                             0,                                \
-                                             1))                               \
-            .with_Vijka(tensors.read_or_fill("Vhhhp",                          \
-                                             4,                                \
-                                             ooov.data(),                      \
-                                             symmetries.data(),                \
-                                             world,                            \
-                                             Vhhhp_path,                       \
-                                             0,                                \
-                                             1))                               \
-            .with_Vabci(tensors.read_or_fill("Vppph",                          \
-                                             4,                                \
-                                             vvvo.data(),                      \
-                                             symmetries.data(),                \
-                                             world,                            \
-                                             Vppph_path,                       \
-                                             0,                                \
-                                             1))                               \
+    const auto in = atrip::Atrip::Input<FIELD>()                               \
+                        .with_epsilon_i((CTF::Tensor<FIELD> *)epsi)            \
+                        .with_epsilon_a((CTF::Tensor<FIELD> *)epsa)            \
+                        .with_Tai(tensors.read_or_fill("Tph",                  \
+                                                       2,                      \
+                                                       vo.data(),              \
+                                                       symmetries.data(),      \
+                                                       world,                  \
+                                                       Tph_path,               \
+                                                       0,                      \
+                                                       1))                     \
+                        .with_Tabij(tensors.read_or_fill("Tpphh",              \
+                                                         4,                    \
+                                                         vvoo.data(),          \
+                                                         symmetries.data(),    \
+                                                         world,                \
+                                                         Tpphh_path,           \
+                                                         0,                    \
+                                                         1))                   \
+                        .with_Vabij(tensors.read_or_fill("Vpphh",              \
+                                                         4,                    \
+                                                         vvoo.data(),          \
+                                                         symmetries.data(),    \
+                                                         world,                \
+                                                         Vpphh_path,           \
+                                                         0,                    \
+                                                         1))                   \
+                        .with_Vijka(tensors.read_or_fill("Vhhhp",              \
+                                                         4,                    \
+                                                         ooov.data(),          \
+                                                         symmetries.data(),    \
+                                                         world,                \
+                                                         Vhhhp_path,           \
+                                                         0,                    \
+                                                         1))                   \
+                        .with_Vabci(tensors.read_or_fill("Vppph",              \
+                                                         4,                    \
+                                                         vvvo.data(),          \
+                                                         symmetries.data(),    \
+                                                         world,                \
+                                                         Vppph_path,           \
+                                                         0,                    \
+                                                         1))                   \
                                                                                \
-            .with_Jabci(Jppph)                                                 \
-            .with_Jijka(Jhhhp)                                                 \
-            .with_deleteVppph(!keepVppph)                                      \
-            .with_barrier(barrier)                                             \
-            .with_blocking(blocking)                                           \
-            .with_chrono(!nochrono)                                            \
-            .with_rankRoundRobin(rankRoundRobin)                               \
-            .with_iterationMod(itMod)                                          \
-            .with_percentageMod(percentageMod)                                 \
-            .with_tuplesDistribution(tuplesDistribution)                       \
-            .with_maxIterations(max_iterations)                                \
+                        .with_Jabci(Jppph)                                     \
+                        .with_Jijka(Jhhhp)                                     \
+                        .with_deleteVppph(!keepVppph)                          \
+                        .with_barrier(barrier)                                 \
+                        .with_blocking(blocking)                               \
+                        .with_chrono(!nochrono)                                \
+                        .with_rankRoundRobin(rankRoundRobin)                   \
+                        .with_iterationMod(itMod)                              \
+                        .with_percentageMod(percentageMod)                     \
+                        .with_tuplesDistribution(tuplesDistribution)           \
+                        .with_maxIterations(max_iterations)                    \
                                                                                \
-            .with_checkpointAtEveryIteration(checkpoint_it)                    \
-            .with_checkpointAtPercentage(checkpoint_percentage)                \
-            .with_checkpointPath(checkpoint_path)                              \
-            .with_readCheckpointIfExists(!noCheckpoint);                       \
+                        .with_checkpointAtEveryIteration(checkpoint_it)        \
+                        .with_checkpointAtPercentage(checkpoint_percentage)    \
+                        .with_checkpointPath(checkpoint_path)                  \
+                        .with_readCheckpointIfExists(!noCheckpoint);           \
                                                                                \
     try {                                                                      \
       auto out = atrip::Atrip::run<FIELD>(in);                                 \
