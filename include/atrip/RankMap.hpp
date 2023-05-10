@@ -88,18 +88,15 @@ struct RankMap {
       size_t const
 
           // the node that will be assigned to
-          node_id = index % cluster_info.n_nodes
+          node_id = index % cluster_info.n_nodes,
 
           // how many times it has been assigned to the node
-          ,
-          s_n = index / cluster_info.n_nodes
+          s_n = index / cluster_info.n_nodes,
 
           // which local rank in the node should be
-          ,
-          local_rank = s_n % cluster_info.ranks_per_node
+          local_rank = s_n % cluster_info.ranks_per_node,
 
           // and the local source (how many times we chose this local rank)
-          ,
           local_source = s_n / cluster_info.ranks_per_node;
 
       // find the local_rank-th entry in cluster_info

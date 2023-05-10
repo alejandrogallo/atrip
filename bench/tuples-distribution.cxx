@@ -455,7 +455,7 @@ int main(int argc, char **argv) {
             if (print_database)
               if (rank == out_rank) {
                 std::cout << _FORMAT(
-                    "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                    "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld ",
                     "RECV",
                     iteration,
                     el.info.from.rank,
@@ -467,11 +467,12 @@ int main(int argc, char **argv) {
                     el.info.tuple[0],
                     el.info.tuple[1],
                     name_to_size<double>(el.name, no, nv),
-                    u.free_pointers.size(),
+                    u.free_pointers.size())
+                          <<
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-                    u.mpi_staging_buffers.size())
+                    u.mpi_staging_buffers.size()
 #else
-                    0UL)
+                    0UL
 #endif
                           << "\n";
               }
@@ -480,19 +481,19 @@ int main(int argc, char **argv) {
         }
 
         // SEND PHASE =========================================================
-        for (size_t other_rank = 0UL; other_rank < np; other_rank++) {
+        for (int other_rank = 0UL; other_rank < np; other_rank++) {
           auto const &begin = &db[other_rank * localDBLength],
                      end = begin + localDBLength;
           for (auto it = begin; it != end; ++it) {
             send_tag++;
             typename Slice<F>::LocalDatabaseElement const &el = *it;
-            if (el.info.from.rank != rank) continue;
+            if ((int)el.info.from.rank != rank) continue;
             auto &u = union_by_name(unions, el.name);
             if (el.info.state == Slice<F>::Fetch) { to_send.push_back(el); }
             if (rank == out_rank) {
               if (print_database)
                 std::cout << _FORMAT(
-                    "%4s %ld %ld %ld %5ld %5s %2s %14s (%ld,%ld) %ld %ld %ld",
+                    "%4s %ld %ld %d %5ld %5s %2s %14s (%ld,%ld) %ld %ld ",
                     "SEND",
                     iteration,
                     el.info.from.rank,
@@ -504,11 +505,12 @@ int main(int argc, char **argv) {
                     el.info.tuple[0],
                     el.info.tuple[1],
                     name_to_size<double>(el.name, no, nv),
-                    u.free_pointers.size(),
+                    u.free_pointers.size())
+                          <<
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-                    u.mpi_staging_buffers.size())
+                    u.mpi_staging_buffers.size()
 #else
-                    0UL)
+                    0UL
 #endif
                           << "\n";
             }
@@ -566,7 +568,7 @@ int main(int argc, char **argv) {
                              double(to_send.size()) * sizeof(to_send[0])
                                  / 1024.0 / 1024.0 / 1024.0);
 
-    if (max_iterations > 0 && max_iterations < it) { break; }
+    if (max_iterations > 0 && max_iterations < (int64_t)it) { break; }
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
     // Cleanup mpi staging buffers
