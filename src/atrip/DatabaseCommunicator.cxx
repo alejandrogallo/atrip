@@ -74,7 +74,8 @@ static inline ABCTuple nth_atrip(size_t it, size_t nv) {
     }
   }
 
-  int64_t a = -1, block_a = 0;
+  int64_t a = -1;
+  size_t block_a = 0;
   for (const auto &sum : a_sums) {
     ++a;
     if (sum > it) {
