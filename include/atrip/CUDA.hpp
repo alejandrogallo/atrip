@@ -66,3 +66,5 @@
       throw s.str();                                                           \
     }                                                                          \
   } while (0)
+
+#define _CUDA_FREE(msg, ptr) _CHECK_CUDA_SUCCESS(msg, cuMemFree(ptr))

@@ -1,6 +1,13 @@
 #include <atrip/CUDA.hpp>
 #include <type_traits>
 
+// This can be used also in ATRIP_DRY
+#if defined(HAVE_CUDA)
+#  define FREE_DATA_PTR(msg, ptr) _CUDA_FREE(msg, ptr)
+#else
+#  define FREE_DATA_PTR(msg, ptr) std::free(ptr)
+#endif /* defined(HAVE_CUDA) */
+
 #if defined(ATRIP_DRY)
 
 #  define MALLOC_HOST_DATA(msg, ptr, size) *(void **)ptr = (void *)malloc(16)
