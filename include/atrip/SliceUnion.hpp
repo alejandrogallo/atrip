@@ -726,6 +726,8 @@ public:
     return slice.data;
   }
 
+  // DESTRUCTOR
+
   ~SliceUnion() {
     for (auto &ptr : slice_buffers)
 #if defined(HAVE_CUDA)

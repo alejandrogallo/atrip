@@ -39,7 +39,9 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
   MPI_Comm_rank(world.comm, &rank);
   auto tsr = new CTF::Tensor<F>(order, lens, syms, world);
   if (!rank)
-    std::cout << _FORMAT("made tsr %s<%p>", name.c_str(), (void *)tsr)
+    std::cout << _FORMAT("made tsr %s<%p>",
+                         name.c_str(),
+                         static_cast<void *>(tsr))
               << std::endl;
   if (path.size() && file_exists(path)) {
     tsr->read_dense_from_file(path.c_str());
@@ -252,8 +254,8 @@ int main(int argc, char **argv) {
     to_complex((*real_epsi)["i"], (*(CTF::Tensor<F> *)epsi)["i"]);
     to_complex((*real_epsa)["a"], (*(CTF::Tensor<F> *)epsa)["a"]);
   } else {
-    epsi = (void *)real_epsi;
-    epsa = (void *)real_epsa;
+    epsi = static_cast<void *>(real_epsi);
+    epsa = static_cast<void *>(real_epsa);
   }
 
   if (!rank)
@@ -299,7 +301,8 @@ int main(int argc, char **argv) {
                                    1);*/                                       \
       MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
-        std::cout << _FORMAT("init Jhphh done <%p>", (void *)Jhphh)            \
+        std::cout << _FORMAT("init Jhphh done <%p>",                           \
+                             static_cast<void *>(Jhphh))                       \
                   << std::endl;                                                \
       /**/                                                                     \
       /**/                                                                     \
@@ -308,7 +311,8 @@ int main(int argc, char **argv) {
           new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);    \
       MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
-        std::cout << _FORMAT("made Jhhhp done <%p>", (void *)Jhhhp)            \
+        std::cout << _FORMAT("made Jhhhp done <%p>",                           \
+                             static_cast<void *>(Jhhhp))                       \
                   << std::endl;                                                \
       MPI_Barrier(world.comm);                                                 \
       /**/                                                                     \
@@ -317,12 +321,14 @@ int main(int argc, char **argv) {
       Jppph =                                                                  \
           new CTF::Tensor<FIELD>(4, vvvo.data(), symmetries.data(), world);    \
       if (!rank)                                                               \
-        std::cout << _FORMAT("made Jppph done <%p>", (void *)Jppph)            \
+        std::cout << _FORMAT("made Jppph done <%p>",                           \
+                             static_cast<void *>(Jppph))                       \
                   << std::endl;                                                \
       Jppph->read_dense_from_file(Jppph_path.c_str());                         \
       MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
-        std::cout << _FORMAT("read Jppph done <%p>", (void *)Jppph)            \
+        std::cout << _FORMAT("read Jppph done <%p>",                           \
+                             static_cast<void *>(Jppph))                       \
                   << std::endl;                                                \
       MPI_Barrier(world.comm);                                                 \
       if (!rank) std::cout << "Setting Jhhhp from Jhphh" << std::endl;         \
