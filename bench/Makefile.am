@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = subdir-objects
 include $(top_srcdir)/atrip.mk
 
-AM_CPPFLAGS = -I$(top_srcdir)/include/ -I$(top_srcdir) $(CTF_CPPFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir) $(CTF_CPPFLAGS)
 AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 
 if WITH_BUILD_CTF
