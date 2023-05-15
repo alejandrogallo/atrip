@@ -1,18 +1,21 @@
 AUTOMAKE_OPTIONS = subdir-objects
-include $(top_srcdir)/atrip.mk
+AM_CPPFLAGS =
+AM_CXXFLAGS =
+AM_LDFLAGS =
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir) -fmax-errors=1 -I@LIBCTF_CPATH@
-AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
-
-if WITH_BUILD_CTF
-ATRIP_CTF = $(CTF_BUILD_PATH)/lib/libctf.a
-else
 ATRIP_CTF = @LIBCTF_PATH@/lib/libctf.a
-endif
 ATRIP_LIB = $(top_builddir)/src/libatrip.a
 
+BENCH_CXXFLAGS = -I$(top_srcdir)/src/ \
+                 -I$(top_srcdir) \
+                  -fmax-errors=1 \
+                  -Wextra \
+                  -I@LIBCTF_PATH@/include
+BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF) @LAPACK_LIBS@ @BLAS_LIBS@
+
+AM_CXXFLAGS += $(BENCH_CXXFLAGS)
+
 bin_PROGRAMS =
-BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF)
 
 
 ##
@@ -20,7 +23,6 @@ BENCHES_LDADD = $(ATRIP_LIB) $(ATRIP_CTF)
 ##
 bin_PROGRAMS += atrip
 atrip_SOURCES = main.cxx
-atrip_CPPFLAGS = $(AM_CPPFLAGS)
 atrip_LDADD = $(BENCHES_LDADD)
 
 
@@ -34,11 +36,16 @@ tuples_distribution_SOURCES = tuples-distribution.cxx
 endif
 
 
+
+################################################################################
+## CUDA BENCHES
+################################################################################
+
 if WITH_CUDA
 AM_CPPFLAGS += $(CUDA_CXXFLAGS)
 BENCHES_LDADD += $(CUDA_LDFLAGS)
 
-AM_CXXFLAGS = $(CUDA_CXXFLAGS)
+AM_CXXFLAGS += $(CUDA_CXXFLAGS)
 AM_LDFLAGS += $(CUDA_LDFLAGS)
 
 bin_PROGRAMS += test-cublas-parallel-atrip

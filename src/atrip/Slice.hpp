@@ -19,6 +19,7 @@
 #include <vector>
 
 #include <atrip/mpi.hpp>
+#include <atrip/Types.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/CUDA.hpp>

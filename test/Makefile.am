@@ -1,6 +1,5 @@
-include $(top_srcdir)/atrip.mk
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ $(CTF_CPPFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I@LIBCTF_CPATH@
 AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 
 bin_PROGRAMS = main
