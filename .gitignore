@@ -32,3 +32,4 @@ config.mk
 /compile_commands.json
 \#*
 libatrip.a
+/.dir-locals.el
