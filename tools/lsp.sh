@@ -1,0 +1,2 @@
+bear -- make -kj
+clangd
