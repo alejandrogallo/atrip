@@ -1,13 +1,13 @@
 AUTOMAKE_OPTIONS = subdir-objects
 include $(top_srcdir)/atrip.mk
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir) $(CTF_CPPFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir) -fmax-errors=1 -I@LIBCTF_CPATH@
 AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 
 if WITH_BUILD_CTF
 ATRIP_CTF = $(CTF_BUILD_PATH)/lib/libctf.a
 else
-ATRIP_CTF = @LIBCTF_LD_LIBRARY_PATH@/libctf.a
+ATRIP_CTF = @LIBCTF_PATH@/lib/libctf.a
 endif
 ATRIP_LIB = $(top_builddir)/src/libatrip.a
 

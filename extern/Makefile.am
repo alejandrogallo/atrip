@@ -1,0 +1,5 @@
+SUBDIRS =
+
+if WITH_BUILD_CTF
+SUBDIRS += ctf
+endif

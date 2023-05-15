@@ -10,11 +10,7 @@ main_SOURCES = main.cxx
 main_LDADD  = \
 	$(top_builddir)/src/libatrip.a
 
-if WITH_BUILD_CTF
-main_LDADD += $(CTF_BUILD_PATH)/lib/libctf.a
-else
-main_LDADD += @LIBCTF_LD_LIBRARY_PATH@/libctf.a
-endif
+main_LDADD += @LIBCTF_PATH@/lib/libctf.a
 
 if WITH_CUDA
 main_CXXFLAGS = $(CUDA_CXXFLAGS)

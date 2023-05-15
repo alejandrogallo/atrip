@@ -27,7 +27,8 @@ AC_ARG_ENABLE([docs],
                               [Enable building docs])],
               [build_docs=YES], [build_docs=NO])
 
-dnl LIBGC library options
+dnl LIBCTTF library options
+
 AC_ARG_WITH(ctf,
             [AS_HELP_STRING([--with-ctf],
                            [prefix for CTF includes and libraries] )],
@@ -35,7 +36,11 @@ AC_ARG_WITH(ctf,
              LIBCTF_CPATH="`readlink -f $withval`/include";
              LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
              BUILD_CTF=NO],
-            [BUILD_CTF=YES])
+            [BUILD_CTF=YES
+             LIBCTF_PATH="$ac_pwd"/extern/ctf
+             LIBCTF_CPATH="${LIBCTF_PATH}/include"
+             LIBCTF_LD_LIBRARY_PATH="${LIBCTF_PATH}/lib"
+             ])
 
 AC_ARG_WITH([clang-check],
             [AS_HELP_STRING([--with-clang-check],
@@ -126,7 +131,11 @@ ATRIP_LDFLAGS="-L$PWD/src -latrip"
 AC_SUBST(ATRIP_LDFLAGS)
 
 dnl -----------------------------------------------------------------------
+dnl CTF EXPORT ------------------------------------------------------------
+dnl -----------------------------------------------------------------------
 AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
+CTF_COMMIT="53ae5daad851bf3b198ebe1fa761c13b12291116"
+AC_SUBST([CTF_COMMIT])
 AC_SUBST(LIBCTF_PATH)
 AC_SUBST(LIBCTF_CPATH)
 AC_SUBST(LIBCTF_LD_LIBRARY_PATH)
@@ -149,6 +158,8 @@ AC_PROG_CXX
 AX_MPI([], [AC_MSG_FAILURE([No MPI C++ compiler found.])])
 AX_COMPILER_VENDOR
 CXX="${MPICXX}"
+ATRIP_MPI=$(${MPICXX} -show | awk '{$1=""; print $NL}' | sed "s/^ //")
+AC_SUBST([ATRIP_MPI])
 
 AM_PROG_AR
 AC_PROG_CPP           dnl sets variable CPP
@@ -186,7 +197,11 @@ AC_TYPE_SIZE_T
 dnl -----------------------------------------------------------------------
 dnl CHECK CTF
 if test xYES = x${BUILD_CTF}; then
-  AC_MSG_WARN([You will have to do make ctf before building the project.])
+AC_MSG_WARN([
+
+             You will have to do make ctf before building the project.
+
+    ])
 else
   CPPFLAGS="$CPPFLAGS -I${LIBCTF_CPATH}"
   LDFLAGS="$LDFLAGS -L${LIBCTF_LD_LIBRARY_PATH} -lctf"
@@ -194,6 +209,7 @@ else
                   [],
                   [AC_MSG_ERROR([no ctf.hpp])])
 fi
+
 
 dnl CUDA NVIDIA -----------------------------------------------------------
 
@@ -228,7 +244,10 @@ fi
 dnl -----------------------------------------------------------------------
 AC_CONFIG_FILES([Makefile
                  src/Makefile
+                 .dir-locals.el:tools/dir-locals.el.in
                  bench/Makefile
+                 extern/Makefile
+                 extern/ctf/Makefile
                  test/Makefile
                  docs/Makefile
                  docs/conf.py:docs/conf.py

@@ -13,7 +13,6 @@ configure
 
 include/dbg.h
 doc/doxygen/
-extern
 lib
 *.o
 *.d

@@ -1,7 +1,7 @@
 include $(top_srcdir)/etc/make/emacs.mk
-include $(top_srcdir)/atrip.mk
+## include $(top_srcdir)/atrip.mk
 
-SUBDIRS = src bench test
+SUBDIRS = src bench test extern
 
 
 _ATRIPSRCS = Sources.mk
@@ -14,7 +14,10 @@ tangle: $(ORG_MAIN)
 clean-emacs:
 	-rm -v $(_ATRIPSRCS)
 
-.PHONY: dbg tangle
+.PHONY: dbg tangle extern
 dbg: src/dbg.h
 include/dbg.h:
 	wget -O $@ "https://raw.githubusercontent.com/sharkdp/dbg-macro/master/dbg.h"
+
+extern:
+	$(MAKE) -C extern
