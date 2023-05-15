@@ -6,7 +6,7 @@ AM_CPPFLAGS = -I@LIBCTF_CPATH@
 lib_LIBRARIES = libatrip.a
 
 libatrip_a_CPPFLAGS =
-libatrip_a_SOURCES = ./atrip/Blas.cxx ./atrip/Tuples.cxx ./atrip/RankMap.cxx
+libatrip_a_SOURCES = ./atrip/Blas.cxx ./atrip/Tuples.cxx ./atrip/RankMap.cxx ./atrip/Slice.cxx
 NVCC_FILES = ./atrip/Equations.cxx ./atrip/Complex.cxx ./atrip/Atrip.cxx  ./atrip/DatabaseCommunicator.cxx ./atrip/SliceUnion.cxx
 
 if WITH_CUDA
