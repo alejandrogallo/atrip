@@ -13,12 +13,15 @@
 // limitations under the License.
 
 // [[file:~/cuda/atrip/atrip.org::*Header][Header:1]]
-#pragma once
+#ifndef ATRIP_HPP_
+#define ATRIP_HPP_
+
 #include <sstream>
 #include <string>
 #include <map>
 #include "config.h"
 
+#include <atrip/Chrono.hpp>
 #include <atrip/mpi.hpp>
 
 #if defined(HAVE_CUDA)
@@ -145,3 +148,5 @@ struct Atrip {
 
 #undef ADD_ATTRIBUTE
 // Header:1 ends here
+
+#endif

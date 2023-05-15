@@ -13,7 +13,6 @@
 // limitations under the License.
 
 // [[file:~/cuda/atrip/atrip.org::*Main][Main:1]]
-#include "atrip/CUDA.hpp"
 #include <iomanip>
 
 #include <atrip/Atrip.hpp>
