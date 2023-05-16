@@ -7,8 +7,8 @@ type -f clang-format || {
   exit 1
 }
 
-fmt="clang-format -i {}"
-vendor="-not -path *vendor*"
+fmt="clang-format -i {} && echo {}"
 set -x
-find src/ $vendor -name '*.cxx' -exec $fmt \; \
-      -or $vendor -name '*.hpp' -exec $fmt \;
+find \
+  src/ -name '*.cxx' -exec sh -c "$fmt" \; \
+  -or -name '*.hpp' -exec sh -c "$fmt" \;
