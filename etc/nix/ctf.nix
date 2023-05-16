@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
       LD_LIBS="-L${openblas}/lib -lopenblas -L${scalapack}/lib -lscalapack"
   '';
 
+  installPhase = ''
+    make install INSTALL_DIR=$out
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/cyclops-community/ctf";
     description = "Cyclops tensor framework";

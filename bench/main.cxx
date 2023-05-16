@@ -141,9 +141,10 @@ int main(int argc, char **argv) {
   // USER PRINTING TEST BEGIN
   const double doubles_flops = no * no * no // common parts of the matrices
                              * (no + nv)    // particles and holes
-                             * 2.0          // flops has to be times 2
-                             * 6.0          // how many dgemms are there
-                             / 1.0e9;       // calculate it in gflops
+                             * (complex ? 4.0 : 1.0)
+                             * 2.0    // flops has to be times 2
+                             * 6.0    // how many dgemms are there
+                             / 1.0e9; // calculate it in gflops
   double last_elapsed_time = 0;
   bool first_header_printed = false;
   atrip::register_iteration_descriptor(
