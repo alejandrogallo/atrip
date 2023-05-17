@@ -71,7 +71,7 @@ jobs:
       run: |
         mkdir -p build/${{matrix.compiler}}
         cd build/${{matrix.compiler}}
-        $WITH_SHELL 'make ctf'
+        $WITH_SHELL 'make extern'
 
     - name: Make main (${{matrix.compiler}})
       run: |
