@@ -31,6 +31,11 @@ maybe_conjugate_scalar(const F &a) {
   return a;
 }
 
+template <>
+__MAYBE_HOST__ __INLINE__ Complex maybe_conjugate_scalar(const Complex &a) {
+  return std::conj(a);
+}
+
 // TODO: instantiate for std::complex<double>
 
 #if defined(HAVE_CUDA)

@@ -22,11 +22,31 @@
   } while (0)
 
 template <typename F>
+F _conj(const F &i) {
+  return i;
+}
+
+template <>
+atrip::Complex _conj(const atrip::Complex &i) {
+  return std::conj(i);
+}
+
+template <typename F>
+double complex_norm2(CTF::Tensor<F> *i, std::string const idx) {
+  CTF::Tensor<F> o(*i);
+  const auto add_to_conj =
+      CTF::Transform<F, F>([](F const &d, F &f) { f -= _conj<F>(d); });
+
+  add_to_conj((*i)[idx.c_str()], o[idx.c_str()]);
+  return o.norm2();
+}
+
+template <typename F>
 CTF::Tensor<F> *read_or_fill(std::string const &name,
                              int order,
                              int *lens,
                              int *syms,
-                             CTF::World world,
+                             CTF::World &world,
                              std::string const &path,
                              F const a,
                              F const b) {
@@ -259,12 +279,15 @@ int main(int argc, char **argv) {
     epsa = static_cast<void *>(real_epsa);
   }
 
-  if (!rank)
+  if (!rank) {
+    std::cout << "np " << nranks << std::endl;
+    std::cout << "np " << world.np << std::endl;
     for (auto const &fn : input_printer)
       // print input parameters
       fn();
+  }
 
-  atrip::Atrip::init(MPI_COMM_WORLD);
+  atrip::Atrip::init(world.comm);
 
 #define RUN_ATRIP(FIELD)                                                       \
   do {                                                                         \
@@ -341,6 +364,7 @@ int main(int argc, char **argv) {
       MPI_Barrier(world.comm);                                                 \
       if (!rank) std::cout << "done" << std::endl;                             \
     }                                                                          \
+                                                                               \
     const auto in = atrip::Atrip::Input<FIELD>()                               \
                         .with_epsilon_i((CTF::Tensor<FIELD> *)epsi)            \
                         .with_epsilon_a((CTF::Tensor<FIELD> *)epsa)            \

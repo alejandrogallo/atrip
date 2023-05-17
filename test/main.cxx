@@ -74,15 +74,22 @@ int main() {
   } while (0)
 
   TESTCASE(
-      "simple operations should work", const double a = 41.549, b = 1321.181;
-      double aa = a, bb = b;
-      _CHECK(atrip::acc::maybe_conjugate_scalar<double>(a), a);
-      _CHECK(atrip::acc::prod<double>(a, b), a * b);
-      // _CHECK(atrip::acc::real<double>(a), a);
-      _CHECK(atrip::acc::sub<double>(a, b), a - b);
-      _CHECK(atrip::acc::add<double>(a, b), a + b);
-      atrip::acc::sum_in_place(&aa, &bb);
-      _CHECK(aa, a + b);
+      "simple operations should work",
+      {
+        const double a = 41.549, b = 1321.181;
+        double aa = a, bb = b;
+        _CHECK(atrip::acc::maybe_conjugate_scalar<double>(a), a);
+        _CHECK(atrip::acc::prod<double>(a, b), a * b);
+        // _CHECK(atrip::acc::real<double>(a), a);
+        _CHECK(atrip::acc::sub<double>(a, b), a - b);
+        _CHECK(atrip::acc::add<double>(a, b), a + b);
+        atrip::acc::sum_in_place(&aa, &bb);
+        _CHECK(aa, a + b);
+      } {
+        using C = atrip::Complex;
+        const C a = {41.549, -5}, b = {1321.181, -0.57};
+        _CHECK(atrip::acc::maybe_conjugate_scalar<C>(a), std::conj(a));
+      }
 
       /*end*/)
 
