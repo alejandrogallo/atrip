@@ -55,14 +55,10 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
     ifstream file(filename.c_str());
     return file.good();
   };
+
   int rank;
   MPI_Comm_rank(world.comm, &rank);
   auto tsr = new CTF::Tensor<F>(order, lens, syms, world);
-  if (!rank)
-    std::cout << _FORMAT("made tsr %s<%p>",
-                         name.c_str(),
-                         static_cast<void *>(tsr))
-              << std::endl;
   if (path.size() && file_exists(path)) {
     tsr->read_dense_from_file(path.c_str());
   } else {
@@ -73,6 +69,13 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
       std::cout << "Random initialization for tensor " << name << std::endl;
     tsr->fill_random(a, b);
   }
+
+  if (!rank)
+    std::cout << _FORMAT("made tsr %s<%p>",
+                         name.c_str(),
+                         static_cast<void *>(tsr))
+              << std::endl;
+
   return tsr;
 }
 
@@ -316,13 +319,13 @@ int main(int argc, char **argv) {
           new CTF::Tensor<FIELD>(4, ovoo.data(), symmetries.data(), world);    \
       Jhphh->read_dense_from_file(Jhphh_path.c_str());                         \
       /*Jhphh = read_or_fill<FIELD>("Jhphh",                                   \
-                                   4,                                          \
-                                   ovoo.data(),                                \
-                                   symmetries.data(),                          \
-                                   world,                                      \
-                                   Jhphh_path,                                 \
-                                   0,                                          \
-                                   1);*/                                       \
+        4,                                                                     \
+        ovoo.data(),                                                           \
+        symmetries.data(),                                                     \
+        world,                                                                 \
+        Jhphh_path,                                                            \
+        0,                                                                     \
+        1);*/                                                                  \
       MPI_Barrier(world.comm);                                                 \
       if (!rank)                                                               \
         std::cout << _FORMAT("init Jhphh done <%p>",                           \
