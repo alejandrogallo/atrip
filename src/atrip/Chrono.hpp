@@ -3,6 +3,7 @@
 
 #include <map>
 #include <chrono>
+#include <string>
 
 // [[file:~/cuda/atrip/atrip.org::*Chrono][Chrono:1]]
 #if defined(HAVE_CUDA)
