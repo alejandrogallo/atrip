@@ -21,6 +21,15 @@
     }                                                                          \
   } while (0)
 
+#define _flip(one, two)                                                        \
+  do {                                                                         \
+    auto tmp = one;                                                            \
+    one = two;                                                                 \
+    two = tmp;                                                                 \
+  } while (0)
+
+
+
 template <typename F>
 F _conj(const F &i) {
   return i;
@@ -90,8 +99,8 @@ int main(int argc, char **argv) {
   int no(10), nv(100), it_mod(-1), percentage_mod(10);
   float checkpoint_percentage;
   bool nochrono(false), barrier(false), rank_round_robin(false),
-      keep_Vppph(false), no_checkpoint = false, blocking = false,
-                         complex = false, cT = false;
+       keep_Vppph(false), no_checkpoint = false, blocking = false,
+       complex = false, cT = false, ijkabc = false;
   std::string tuples_distribution_string = "naive",
               checkpoint_path = "checkpoint.yaml";
 
@@ -99,6 +108,7 @@ int main(int argc, char **argv) {
 
   defoption(app, "--no", no, "Occupied orbitals")->required();
   defoption(app, "--nv", nv, "Virtual orbitals")->required();
+  defflag(app, "--ijkabc", ijkabc, "Use the ijkabc-algorithm");
   defoption(app, "--mod", it_mod, "Iteration modifier");
   defoption(app,
             "--max-iterations",
@@ -131,7 +141,7 @@ int main(int argc, char **argv) {
 
   // Optional tensor files
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
-      Vppph_path, Jppph_path, Jhphh_path;
+      Vppph_path, Jppph_path, Jhhhp_path;
   defoption(app, "--ei", ei_path, "Path for ei");
   defoption(app, "--ea", ea_path, "Path for ea");
   defoption(app, "--Tpphh", Tpphh_path, "Path for Tpphh");
@@ -141,7 +151,7 @@ int main(int argc, char **argv) {
   defoption(app, "--Vppph", Vppph_path, "Path for Vppph");
 
   defoption(app, "--Jppph", Jppph_path, "Path for Jppph");
-  defoption(app, "--Jhphh", Jhphh_path, "Path for Jhphh");
+  defoption(app, "--Jhhhp", Jhhhp_path, "Path for Jhhhp");
 
 #if defined(HAVE_CUDA)
   size_t ooo_threads = 0, ooo_blocks = 0;
@@ -160,6 +170,7 @@ int main(int argc, char **argv) {
   CLI11_PARSE(app, argc, argv);
 
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
+  if (ijkabc) { _flip(no, nv); }
 
   // USER PRINTING TEST BEGIN
   const double doubles_flops = no * no * no // common parts of the matrices
@@ -269,6 +280,7 @@ int main(int argc, char **argv) {
                                                         -40.0,
                                                         -2);
 
+
   if (complex) {
     using F = atrip::Complex;
     const auto to_complex = CTF::Transform<double, atrip::Complex>(
@@ -282,13 +294,18 @@ int main(int argc, char **argv) {
     epsa = static_cast<void *>(real_epsa);
   }
 
+  // For the printing we work with the 'correct' definition of no && nv
+  if (ijkabc) { _flip(no, nv); }
   if (!rank) {
     std::cout << "np " << nranks << std::endl;
     std::cout << "np " << world.np << std::endl;
     for (auto const &fn : input_printer)
       // print input parameters
       fn();
+    if (ijkabc)
+      std::cout << "ijkabc used, we flip No && Nv internally" << std::endl;
   }
+  if (ijkabc) { _flip(no, nv); }
 
   atrip::Atrip::init(world.comm);
 
@@ -309,28 +326,56 @@ int main(int argc, char **argv) {
       }                                                                        \
     }                                                                          \
                                                                                \
-    CTF::Tensor<FIELD> *Jppph = nullptr, *Jhphh = nullptr, *Jhhhp = nullptr;   \
-    if (cT || (Jppph_path.size() && Jhphh_path.size())) {                      \
+    /* We use the notation p = v and q = o for the initial load of T1&T2 */    \
+    /* If we use the p <-> h algorithm we will flip the T-amplitudes     */    \
+    std::vector<int> pq({nv,no}), ppqq({nv,nv,no,no});                         \
+    if (ijkabc) {                                                              \
+      pq = {no,nv}; ppqq = {no,no,nv,nv};                                      \
+    }                                                                          \
+                                                                               \
+    CTF::Tensor<FIELD> *Tph = nullptr, *Tpphh = nullptr, *Vpphh = nullptr;     \
+    CTF::Tensor<FIELD> *iTph =  read_or_fill<FIELD>("tph",                     \
+                                                    2,                         \
+                                                    pq.data(),                 \
+                                                    symmetries.data(),         \
+                                                    world,                     \
+                                                    Tph_path,                  \
+                                                    0.0,                       \
+                                                    1.0),                      \
+                      *iTpphh = read_or_fill<FIELD>("tpphh",                   \
+                                                    4,                         \
+                                                    ppqq.data(),               \
+                                                    symmetries.data(),         \
+                                                    world,                     \
+                                                    Tpphh_path,                \
+                                                    0.0,                       \
+                                                    1.0),                      \
+                      *iVpphh = read_or_fill<FIELD>("Vpphh",                   \
+                                                    4,                         \
+                                                    ppqq.data(),               \
+                                                    symmetries.data(),         \
+                                                    world,                     \
+                                                    Vpphh_path,                \
+                                                    0,                         \
+                                                    1);                        \
+    /*if (P<->H) Switch Tph */                                                 \
+    if (ijkabc) {                                                              \
+      Tph   = new CTF::Tensor<FIELD>(2, vo.data(), symmetries.data(), world);  \
+      Tpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);\
+      Vpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);\
+                                                                               \
+      (*Tph)["ia"] = (*iTph)["ai"];                                            \
+      (*Tpphh)["ijab"] = (*iTpphh)["abij"];                                    \
+      (*Vpphh)["ijab"] = (*iVpphh)["abij"];                                    \
+    } else {                                                                   \
+      Tph = iTph;                                                              \
+      Tpphh = iTpphh;                                                          \
+      Vpphh = iVpphh;                                                          \
+    }                                                                          \
+                                                                               \
+    CTF::Tensor<FIELD> *Jppph = nullptr,  *Jhhhp = nullptr;   \
+    if (cT || (Jppph_path.size() && Jhhhp_path.size())) {                      \
       if (!rank) std::cout << "doing cT" << std::endl;                         \
-      /**/                                                                     \
-      /**/                                                                     \
-      /**/                                                                     \
-      Jhphh =                                                                  \
-          new CTF::Tensor<FIELD>(4, ovoo.data(), symmetries.data(), world);    \
-      Jhphh->read_dense_from_file(Jhphh_path.c_str());                         \
-      /*Jhphh = read_or_fill<FIELD>("Jhphh",                                   \
-        4,                                                                     \
-        ovoo.data(),                                                           \
-        symmetries.data(),                                                     \
-        world,                                                                 \
-        Jhphh_path,                                                            \
-        0,                                                                     \
-        1);*/                                                                  \
-      MPI_Barrier(world.comm);                                                 \
-      if (!rank)                                                               \
-        std::cout << _FORMAT("init Jhphh done <%p>",                           \
-                             static_cast<void *>(Jhphh))                       \
-                  << std::endl;                                                \
       /**/                                                                     \
       /**/                                                                     \
       /**/                                                                     \
@@ -341,6 +386,7 @@ int main(int argc, char **argv) {
         std::cout << _FORMAT("made Jhhhp done <%p>",                           \
                              static_cast<void *>(Jhhhp))                       \
                   << std::endl;                                                \
+      Jhhhp->read_dense_from_file(Jhhhp_path.c_str());                         \
       MPI_Barrier(world.comm);                                                 \
       /**/                                                                     \
       /**/                                                                     \
@@ -358,43 +404,16 @@ int main(int argc, char **argv) {
                              static_cast<void *>(Jppph))                       \
                   << std::endl;                                                \
       MPI_Barrier(world.comm);                                                 \
-      if (!rank) std::cout << "Setting Jhhhp from Jhphh" << std::endl;         \
+      if (!rank) std::cout << "Setting Jhhhp from Jhhhp" << std::endl;         \
       MPI_Barrier(world.comm);                                                 \
-      /* (*Jhhhp)["ijka"] = (*Jhphh)["kaij"];*/                                \
-      const auto conjugate = CTF::Transform<FIELD, FIELD>(                     \
-          [](FIELD d, FIELD &f) { f = atrip::maybe_conjugate(d); });           \
-      conjugate((*Jhphh)["kaij"], (*Jhhhp)["ijka"]);                           \
-      MPI_Barrier(world.comm);                                                 \
-      if (!rank) std::cout << "done" << std::endl;                             \
     }                                                                          \
                                                                                \
     const auto in = atrip::Atrip::Input<FIELD>()                               \
                         .with_epsilon_i((CTF::Tensor<FIELD> *)epsi)            \
                         .with_epsilon_a((CTF::Tensor<FIELD> *)epsa)            \
-                        .with_Tai(read_or_fill<FIELD>("Tph",                   \
-                                                      2,                       \
-                                                      vo.data(),               \
-                                                      symmetries.data(),       \
-                                                      world,                   \
-                                                      Tph_path,                \
-                                                      0,                       \
-                                                      1))                      \
-                        .with_Tabij(read_or_fill<FIELD>("Tpphh",               \
-                                                        4,                     \
-                                                        vvoo.data(),           \
-                                                        symmetries.data(),     \
-                                                        world,                 \
-                                                        Tpphh_path,            \
-                                                        0,                     \
-                                                        1))                    \
-                        .with_Vabij(read_or_fill<FIELD>("Vpphh",               \
-                                                        4,                     \
-                                                        vvoo.data(),           \
-                                                        symmetries.data(),     \
-                                                        world,                 \
-                                                        Vpphh_path,            \
-                                                        0,                     \
-                                                        1))                    \
+                        .with_Tai(Tph)                                         \
+                        .with_Tabij(Tpphh)                                     \
+                        .with_Vabij(Vpphh)                                     \
                         .with_Vijka(read_or_fill<FIELD>("Vhhhp",               \
                                                         4,                     \
                                                         ooov.data(),           \
@@ -427,8 +446,9 @@ int main(int argc, char **argv) {
                         .with_checkpoint_at_every_iteration(checkpoint_it)     \
                         .with_checkpoint_at_percentage(checkpoint_percentage)  \
                         .with_checkpoint_path(checkpoint_path)                 \
-                        .with_read_checkpoint_if_exists(!no_checkpoint);       \
+                        .with_read_checkpoint_if_exists(!no_checkpoint)        \
                                                                                \
+                        .with_ijkabc(ijkabc);                                  \
     try {                                                                      \
       auto out = atrip::Atrip::run<FIELD>(in);                                 \
       if (!atrip::Atrip::rank) {                                               \

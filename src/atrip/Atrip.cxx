@@ -190,6 +190,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   in.ea->read_all(_epsa.data());
   in.Tph->read_all(_Tai.data());
 
+  if (in.ijkabc) {
+    std::transform(
+      _Tai.begin(), _Tai.end(), _Tai.begin(), [](F& c){return -c;}
+    );
+  }
   // TODO: free memory pointers in the end of the algorithm
   DataPtr<F> Tijk, Zijk;
 
@@ -776,7 +781,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           << " ("
           << (_its_time > 0.0 ? doubles_flops * iteration / _its_time : -1)
           << "GF) :: GB sent per rank: " << bytes_sent / 1073741824.0
-          << " :: " << (total_send > 0UL ? network_send / total_send : 0UL)
+          << " :: "
+          << (total_send > 0UL ? (double) network_send / total_send : 0UL)
           << " % network communication" << std::endl;
 
       // PRINT TIMINGS
@@ -1096,10 +1102,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
              MPI_SUM,
              0,
              universe);
-
-  global_output.energy = -global_output.energy;
-  global_output.ct_energy = -global_output.ct_energy;
-
+  if (!in.ijkabc) {
+    global_output.energy = -global_output.energy;
+    global_output.ct_energy = -global_output.ct_energy;
+  }
   WITH_RANK << "local energy " << local_output.energy << "\n";
   LOG(0, "Atrip") << "Energy: " << std::setprecision(15) << std::setw(23)
                   << global_output.energy << std::endl;

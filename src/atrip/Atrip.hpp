@@ -130,6 +130,7 @@ struct Atrip {
     ADD_ATTRIBUTE(bool, writeCheckpoint, true)
     ADD_ATTRIBUTE(float, checkpoint_at_percentage, 10)
     ADD_ATTRIBUTE(size_t, checkpoint_at_every_iteration, 0)
+    ADD_ATTRIBUTE(bool, ijkabc, 0)
 #if defined(HAVE_CUDA)
     ADD_ATTRIBUTE(size_t, ooo_threads, 0)
     ADD_ATTRIBUTE(size_t, ooo_blocks, 0)
