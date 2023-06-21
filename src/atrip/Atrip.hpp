@@ -44,8 +44,8 @@
 
 namespace atrip {
 
-struct Atrip {
-
+class Atrip {
+public:
   static size_t rank;
   static size_t np;
   static ClusterInfo *cluster_info;
@@ -71,7 +71,8 @@ struct Atrip {
   static void init(MPI_Comm);
 
   template <typename F = double>
-  struct Input {
+  class Input {
+  public:
     CTF::Tensor<F> *ei = nullptr, *ea = nullptr, *Tph = nullptr,
                    *Tpphh = nullptr, *Vpphh = nullptr, *Vhhhp = nullptr,
                    *Vppph = nullptr, *Jppph = nullptr, *Jhhhp = nullptr;
