@@ -17,7 +17,7 @@
 // Printer for options
 std::vector<std::function<void(void)>> input_printer;
 #define _register_printer(flag, variable)                                      \
-  input_printer.push_back([&variable]() {                                      \
+  input_printer.push_back([&]() {                                              \
     std::cout << "Input " << flag << " " << variable << std::endl;             \
   })
 
