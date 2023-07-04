@@ -382,6 +382,10 @@ void SliceUnion<F>::send(size_t other_rank,
   F *source_buffer = SOURCES_DATA(sources[info.from.source]);
 #endif
 
+  DataPtr<F> isend_buffer;
+
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+
   // SECTION TO START DOING THE STAGING BUFFERS
   //
   // in general it has to check whether or not the receiving buffer
@@ -392,53 +396,42 @@ void SliceUnion<F>::send(size_t other_rank,
 
   size_t target_node = Atrip::cluster_info->rank_infos[other_rank].node_id,
          from_node = Atrip::cluster_info->rank_infos[info.from.rank].node_id;
+
   const bool inter_node_communication = target_node == from_node;
-
-  if (inter_node_communication) { goto no_mpi_staging; }
-
-#if defined(ATRIP_MPI_STAGING_BUFFERS)
-  DataPtr<F> isend_buffer = pop_free_pointers();
+  if (!inter_node_communication) {
+    isend_buffer = pop_free_pointers();
 
 #  if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
-  WITH_CHRONO(
-      "cuda:memcpy",
-      WITH_CHRONO(
-          "cuda:memcpy:staging",
-          _CHECK_CUDA_SUCCESS(
-              "copying to staging buffer",
-              cuMemcpy(isend_buffer, source_buffer, sizeof(F) * slice_size));))
+    WITH_CHRONO(
+        "cuda:memcpy",
+        WITH_CHRONO("cuda:memcpy:staging",
+                    _CHECK_CUDA_SUCCESS("copying to staging buffer",
+                                        cuMemcpy(isend_buffer,
+                                                 source_buffer,
+                                                 sizeof(F) * slice_size));))
 
 #  elif !defined(HAVE_CUDA)
-  // do cpu mpi memory staging
-  WITH_CHRONO(
-      "memcpy",
-      WITH_CHRONO("memcpy:staging",
-                  memcpy(isend_buffer, source_buffer, sizeof(F) * slice_size);))
+    // do cpu mpi memory staging
+    WITH_CHRONO(
+        "memcpy",
+        WITH_CHRONO(
+            "memcpy:staging",
+            memcpy(isend_buffer, source_buffer, sizeof(F) * slice_size);))
 
 #  else
 #    pragma error("Not possible to do MPI_STAGING_BUFFERS with your config.h")
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
 
-  goto mpi_staging_done;
+  } else {
+
+    isend_buffer = source_buffer;
+  }
 
 #else
 
-  // otherwise the isend_buffer will be the source buffer itself
-  goto no_mpi_staging;
+  isend_buffer = source_buffer;
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
-
-no_mpi_staging:
-
-#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
-  DataPtr<F> isend_buffer = source_buffer;
-#else
-  F *isend_buffer = source_buffer;
-#endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
-
-  goto mpi_staging_done; // do not complain that is not used, it is used when
-                         // MPI_STAGING_BUFFERS is on
-mpi_staging_done:
 
   // We count network sends only for the largest buffers
   switch (el.name) {

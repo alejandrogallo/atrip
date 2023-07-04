@@ -40,26 +40,6 @@ class SliceUnion {
 public:
   using Tensor = CTF::Tensor<F>;
 
-  const RankMap<F> rank_map;
-  const MPI_Comm world;
-  const MPI_Comm universe;
-  const std::vector<size_t> slice_length;
-  const size_t slice_size;
-#if defined(ATRIP_SOURCES_IN_GPU)
-  std::vector<DataPtr<F>> sources;
-#else
-  std::vector<std::vector<F>> sources;
-#endif
-  std::vector<Slice<F>> slices;
-  typename Slice<F>::Name name;
-  const std::vector<typename Slice<F>::Type> slice_types;
-  std::vector<DataPtr<F>> slice_buffers;
-  std::set<DataPtr<F>> free_pointers;
-#if defined(ATRIP_MPI_STAGING_BUFFERS)
-  std::unordered_set<StagingBufferInfo, StagingBufferInfoHash>
-      mpi_staging_buffers;
-#endif
-
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
   struct StagingBufferInfo {
     DataPtr<F> data;
@@ -82,6 +62,26 @@ public:
     }
   };
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
+
+  const RankMap<F> rank_map;
+  const MPI_Comm world;
+  const MPI_Comm universe;
+  const std::vector<size_t> slice_length;
+  const size_t slice_size;
+#if defined(ATRIP_SOURCES_IN_GPU)
+  std::vector<DataPtr<F>> sources;
+#else
+  std::vector<std::vector<F>> sources;
+#endif
+  std::vector<Slice<F>> slices;
+  typename Slice<F>::Name name;
+  const std::vector<typename Slice<F>::Type> slice_types;
+  std::vector<DataPtr<F>> slice_buffers;
+  std::set<DataPtr<F>> free_pointers;
+#if defined(ATRIP_MPI_STAGING_BUFFERS)
+  std::unordered_set<StagingBufferInfo, StagingBufferInfoHash>
+      mpi_staging_buffers;
+#endif
 
   virtual void
   slice_into_buffer(size_t iteration, Tensor &to, Tensor const &from) = 0;
