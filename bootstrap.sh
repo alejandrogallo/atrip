@@ -41,7 +41,6 @@ cat <<EOF
   mkdir build
   cd build
   ../configure
-  make ctf
-  make all
+  make # or make -j4
 
 EOF

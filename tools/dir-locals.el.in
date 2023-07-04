@@ -9,7 +9,8 @@
                                    (project-root (project-current)))))
                         (setq-local flycheck-gcc-args "@ATRIP_MPI@")
                         (setq-local flycheck-gcc-include-path
-                                    (list "@abs_top_builddir@"
+                                    (list "@abs_top_builddir@" ;; for config.h
+                                          "@abs_top_srcdir@/" ;; for bench
                                           "@abs_top_srcdir@/src/"
                                           "@LIBCTF_PATH@/include"))
                         (setq-local flycheck-cppcheck-include-path
