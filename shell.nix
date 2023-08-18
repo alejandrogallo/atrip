@@ -1,17 +1,23 @@
-{ compiler ? "gcc", pkgs ? import <nixpkgs> { }, mkl ? false, cuda ? false
-, docs ? true }:
+{ compiler ? "gcc", mkl ? false, cuda ? false, docs ? true
+, openmpi-version ? "3.1.0" }:
 
 let
 
-  unfree-pkgs = import <nixpkgs> { config.allowUnfree = true; };
+  pkgs = import <nixpkgs> {
+    config.allowUnfree = true;
+    overlays = [ (import ./etc/nix/overlays/openmpi.nix openmpi-version) ];
+  };
+
+  # unfree-pkgs = import <nixpkgs> { config.allowUnfree = true; };
 
   ctf = pkgs.callPackage ./etc/nix/ctf.nix { };
 
   openblas = import ./etc/nix/openblas.nix { inherit pkgs; };
   vendor = import ./etc/nix/vendor-shell.nix;
 
-  mkl-pkg = import ./etc/nix/mkl.nix { pkgs = unfree-pkgs; };
-  cuda-pkg = if cuda then (import ./cuda.nix { pkgs = unfree-pkgs; }) else { };
+  mkl-pkg = import ./etc/nix/mkl.nix { inherit pkgs; };
+  cuda-pkg = if cuda then (import ./cuda.nix { inherit pkgs; }) else { };
+  aatrip = import ./etc/nix/default.nix { inherit pkgs; };
 
 in pkgs.mkShell rec {
 
