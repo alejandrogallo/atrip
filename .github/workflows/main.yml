@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: "Build ${{matrix.compiler}} cuda?(${{matrix.cuda}}) openmpi?(${{matrix.openmpi-version}}) "
     runs-on: ubuntu-latest
     env:
       WITH_CURRENT_SHELL: "nix-shell --argstr compiler ${{matrix.compiler}} --arg cuda ${{matrix.cuda}} --run"
