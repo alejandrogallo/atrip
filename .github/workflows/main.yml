@@ -16,6 +16,7 @@ jobs:
 
 
     strategy:
+      fail-fast: False
       matrix:
         compiler:
           - gcc11
