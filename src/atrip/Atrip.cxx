@@ -23,11 +23,7 @@
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 #include <atrip/Malloc.hpp>
-
-#if defined(HAVE_CUDA)
-#  include <nvToolsExt.h>
-#  include <atrip/CUDA.hpp>
-#endif
+#include <atrip/Acc.hpp>
 
 using namespace atrip;
 
@@ -38,7 +34,7 @@ template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 size_t Atrip::rank;
 size_t Atrip::np;
 ClusterInfo *Atrip::cluster_info;
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
 typename Atrip::CudaContext Atrip::cuda;
 typename Atrip::KernelDimensions Atrip::kernel_dimensions;
 #endif
@@ -79,10 +75,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   LOG(0, "Atrip") << "Nv: " << Nv << "\n";
   LOG(0, "Atrip") << "np: " << np << "\n";
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
   int ngcards;
-  _CHECK_CUDA_SUCCESS("initializing cuda", cuInit(0));
-  _CHECK_CUDA_SUCCESS("getting device count", cuDeviceGetCount(&ngcards));
+  ACC_CHECK_SUCCESS("initializing accelerator", ACC_INIT(0));
+  ACC_CHECK_SUCCESS("getting device count", ACC_DEVICE_GET_COUNT(&ngcards));
   const auto cluster_info = *Atrip::cluster_info;
   LOG(0, "Atrip") << "ngcards: " << ngcards << "\n";
   if (cluster_info.ranks_per_node > ngcards) {
@@ -104,9 +100,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   for (size_t _rank = 0; _rank < np; _rank++) {
     if (rank == _rank) {
-      CUcontext ctx;
-      CUdevice dev;
-      CUdevprop prop;
+      ACC_CONTEXT ctx;
+      ACC_DEVICE dev;
       struct {
         struct {
           size_t free, total;
@@ -120,43 +115,38 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       //           to ngcards with the formula =rank % ngcards=.
 
       // set current device
-      _CHECK_CUDA_SUCCESS("getting device for index <rank>",
-                          cuDeviceGet(&dev, rank % ngcards));
-      _CHECK_CUDA_SUCCESS("creating a cuda context", cuCtxCreate(&ctx, 0, dev));
-      _CHECK_CUDA_SUCCESS("setting the context", cuCtxSetCurrent(ctx));
+      ACC_CHECK_SUCCESS("getting device for index <rank>",
+                        ACC_DEVICE_GET(&dev, rank % ngcards));
+      ACC_CHECK_SUCCESS("creating a accelerator context",
+                        ACC_CONTEXT_CREATE(&ctx, 0, dev));
+      ACC_CHECK_SUCCESS("setting the context", ACC_CONTEXT_SET_CURRENT(ctx));
 
       // get information of the device
-      _CHECK_CUDA_SUCCESS("getting  properties of current device",
-                          cuDeviceGetProperties(&prop, dev));
-      _CHECK_CUDA_SUCCESS(
+      ACC_CHECK_SUCCESS(
           "getting memory information",
-          cuMemGetInfo(&memory.avail.free, &memory.avail.total));
-      _CHECK_CUDA_SUCCESS("getting name", cuDeviceGetName(name, 256, dev));
-      _CHECK_CUDA_SUCCESS("getting total memory",
-                          cuDeviceTotalMem(&memory.total, dev));
+          ACC_MEM_GET_INFO(&memory.avail.free, &memory.avail.total));
+      ACC_CHECK_SUCCESS("getting name", ACC_GET_DEVICE_NAME(name, 256, dev));
+      ACC_CHECK_SUCCESS("getting total memory",
+                        ACC_DEVICE_TOTAL_MEM(&memory.total, dev));
 
       printf(
           "\n"
-          "CUDA CARD RANK %d\n"
-          "=================\n"
+          "CARD RANK %d\n"
+          "============\n"
           "\tnumber: %1$ld\n"
           "\tname: %s\n"
-          "\tMem. clock rate (KHz): %ld\n"
-          "\tShared Mem Per Block (KB): %f\n"
           "\tAvail. Free/Total mem (GB): %f/%f\n"
           "\tFree memory (GB): %f\n"
           "\n",
           Atrip::rank,
           name,
-          prop.clockRate,
-          prop.sharedMemPerBlock / 1024.0,
           memory.avail.free / 1024.0 / 1024.0 / 1024.0,
           memory.avail.total / 1024.0 / 1024.0 / 1024.0,
           memory.total / 1024.0 / 1024.0 / 1024.0);
       std::free((void *)name);
 
-      _CHECK_CUBLAS_SUCCESS("creating a cublas handle",
-                            cublasCreate(&Atrip::cuda.handle));
+      ACC_CHECK_BLAS("creating a cublas handle",
+                     ACC_BLAS_CREATE(&Atrip::cuda.handle));
     }
     MPI_Barrier(universe);
   }
@@ -191,31 +181,34 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   in.Tph->read_all(_Tai.data());
 
   if (in.ijkabc) {
-    std::transform(
-      _Tai.begin(), _Tai.end(), _Tai.begin(), [](F& c){return -c;}
-    );
+    std::transform(_Tai.begin(), _Tai.end(), _Tai.begin(), [](F &c) {
+      return -c;
+    });
   }
   // TODO: free memory pointers in the end of the algorithm
   DataPtr<F> Tijk, Zijk;
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
   DataPtr<F> Tai, epsi, epsa;
 
   // TODO: free memory pointers in the end of the algorithm
 
-  _CHECK_CUDA_SUCCESS("Tai", cuMemAlloc(&Tai, sizeof(F) * _Tai.size()));
-  _CHECK_CUDA_SUCCESS("epsi", cuMemAlloc(&epsi, sizeof(F) * _epsi.size()));
-  _CHECK_CUDA_SUCCESS("epsa", cuMemAlloc(&epsa, sizeof(F) * _epsa.size()));
+  MALLOC_DATA_PTR("Tai", &Tai, sizeof(F) * _Tai.size());
+  MALLOC_DATA_PTR("epsi", &epsi, sizeof(F) * _epsi.size());
+  MALLOC_DATA_PTR("epsa", &epsa, sizeof(F) * _epsa.size());
 
-  _CHECK_CUDA_SUCCESS(
-      "memcpy Tai",
-      cuMemcpyHtoD(Tai, (void *)_Tai.data(), sizeof(F) * _Tai.size()));
-  _CHECK_CUDA_SUCCESS(
-      "memcpy epsi",
-      cuMemcpyHtoD(epsi, (void *)_epsi.data(), sizeof(F) * _epsi.size()));
-  _CHECK_CUDA_SUCCESS(
-      "memcpy epsa",
-      cuMemcpyHtoD(epsa, (void *)_epsa.data(), sizeof(F) * _epsa.size()));
+  ACC_CHECK_SUCCESS("memcpy Tai",
+                    ACC_MEMCPY_HOST_TO_DEV(Tai,
+                                           (void *)_Tai.data(),
+                                           sizeof(F) * _Tai.size()));
+  ACC_CHECK_SUCCESS("memcpy epsi",
+                    ACC_MEMCPY_HOST_TO_DEV(epsi,
+                                           (void *)_epsi.data(),
+                                           sizeof(F) * _epsi.size()));
+  ACC_CHECK_SUCCESS("memcpy epsa",
+                    ACC_MEMCPY_HOST_TO_DEV(epsa,
+                                           (void *)_epsa.data(),
+                                           sizeof(F) * _epsa.size()));
 
 #else
   DataPtr<F> Tai = _Tai.data(), epsi = _epsi.data();
@@ -376,15 +369,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                   &_vhhh,
                   sizeof(DataFieldType<F>) * No * No * No);
 
-#ifdef HAVE_CUDA
-  WITH_CHRONO(
-      "double:cuda:alloc",
-      _CHECK_CUDA_SUCCESS("Allocating _t_buffer",
-                          cuMemAlloc((CUdeviceptr *)&_t_buffer,
-                                     No * No * No * sizeof(DataFieldType<F>)));
-      _CHECK_CUDA_SUCCESS("Allocating _vhhh",
-                          cuMemAlloc((CUdeviceptr *)&_vhhh,
-                                     No * No * No * sizeof(DataFieldType<F>)));)
+#if defined(HAVE_ACC)
+  WITH_CHRONO("double:acc:alloc",
+              MALLOC_DATA_PTR("t_buffer",
+                              (ACC_DEVICE_PTR *)&_t_buffer,
+                              No * No * No * sizeof(DataFieldType<F>));
+              MALLOC_DATA_PTR("vhhh",
+                              (ACC_DEVICE_PTR *)&_vhhh,
+                              No * No * No * sizeof(DataFieldType<F>));)
 #endif
 
   // get tuples for the current rank
@@ -635,13 +627,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         if (false)
 #endif /* defined(ATRIP_ONLY_DGEMM) */
           if (!fake_tuple_p) {
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
             double *tuple_energy;
-            cuMemAlloc((DataPtr<double> *)&tuple_energy, sizeof(double));
+            MALLOC_DATA_PTR("tuple energy",
+                            (DataPtr<double> *)&tuple_energy,
+                            sizeof(double));
 #else
           double _tuple_energy(0.);
           double *tuple_energy = &_tuple_energy;
-#endif /* defined(HAVE_CUDA) */
+#endif /* defined(HAVE_ACC) */
 
             int distinct(0);
             if (abc[0] == abc[1]) distinct++;
@@ -675,14 +669,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                               tuple_energy);
                 })
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
             double host_tuple_energy;
-            cuMemcpyDtoH((void *)&host_tuple_energy,
-                         (DataPtr<double>)tuple_energy,
-                         sizeof(double));
+            ACC_MEMCPY_DEV_TO_HOST((void *)&host_tuple_energy,
+                                   (DataPtr<double>)tuple_energy,
+                                   sizeof(double));
 #else
           double host_tuple_energy = *tuple_energy;
-#endif /* defined(HAVE_CUDA) */
+#endif /* defined(HAVE_ACC) */
 
             return host_tuple_energy;
           }
@@ -695,11 +689,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     Atrip::chrono["iterations"].start();
     Atrip::chrono["db-last-iteration"].start();
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
     char nvtx_name[60];
-    sprintf(nvtx_name, "iteration: %d", i);
+    sprintf(nvtx_name, "iteration: %ld", i);
+#if defined(HAVE_CUDA)
     nvtxRangePushA(nvtx_name);
 #endif /* defined(HAVE_CUDA) */
+#if defined(HAVE_HIP)
+    omnitrace_user_push_region(nvtx_name);
+#endif /* defined(HAVE_CUDA) */
+#endif /* defined(HAVE_ACC) */
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
@@ -780,9 +779,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           << "GF)"
           << " ("
           << (_its_time > 0.0 ? doubles_flops * iteration / _its_time : -1)
-          << "GF) :: GB sent per rank: " << bytes_sent / 1073741824.0
-          << " :: "
-          << (total_send > 0UL ? (double) network_send / total_send : 0UL)
+          << "GF) :: GB sent per rank: " << bytes_sent / 1073741824.0 << " :: "
+          << (total_send > 0UL ? (double)network_send / total_send : 0UL)
           << " % network communication" << std::endl;
 
       // PRINT TIMINGS
@@ -1037,11 +1035,16 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
     // AMB: debugging only
-    WITH_CHRONO("mpi:barrier", MPI_Barrier(universe););
+    // WITH_CHRONO("mpi:barrier", MPI_Barrier(universe););
+    ACC_DEVICE_SYNCHRONIZE();
+#if defined(HAVE_ACC)
 #if defined(HAVE_CUDA)
-    cudaDeviceSynchronize();
     nvtxRangePop();
-#endif
+#endif /* defined(HAVE_CUDA) */
+#if defined(HAVE_HIP)
+    omnitrace_user_pop_region(nvtx_name);
+#endif /* defined(HAVE_HIP) */
+#endif /* defined(HAVE_ACC) */
 
     Atrip::chrono["db-last-iteration"].stop();
     db_last_iteration_time = Atrip::chrono["db-last-iteration"].count();
@@ -1054,10 +1057,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   }
   // END OF MAIN LOOP
 
-#if defined(HAVE_CUDA)
-  _CUDA_FREE(Tai);
-  _CUDA_FREE(epsi);
-  _CUDA_FREE(epsa);
+#if defined(HAVE_ACC)
+  ACC_FREE(Tai);
+  ACC_FREE(epsi);
+  ACC_FREE(epsa);
 #endif
 
   FREE_DATA_PTR("Zijk", Zijk);

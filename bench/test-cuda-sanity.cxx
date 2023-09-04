@@ -6,21 +6,9 @@
 #include <string>
 #include <vector>
 
-#include <cuda.h>
+#include "config.h"
 
-#define _CHECK_CUDA_SUCCESS(message, ...)                                      \
-  do {                                                                         \
-    CUresult result = __VA_ARGS__;                                             \
-    printf("doing %s\n", message);                                             \
-    if (result != CUDA_SUCCESS) {                                              \
-      printf("\t!!CUDA_ERROR(%d): %s:%d %s\n",                                 \
-             result,                                                           \
-             __FILE__,                                                         \
-             __LINE__,                                                         \
-             message);                                                         \
-      return 1;                                                                \
-    }                                                                          \
-  } while (0)
+#include <atrip/Acc.hpp>
 
 int main() {
   int rank, np, ngcards;
@@ -28,52 +16,48 @@ int main() {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &np);
 
-  _CHECK_CUDA_SUCCESS("init for cuda", cuInit(0));
+  ACC_CHECK_SUCCESS("init for cuda", ACC_INIT(0));
 
-  _CHECK_CUDA_SUCCESS("get ncards", cuDeviceGetCount(&ngcards));
+  ACC_CHECK_SUCCESS("get ncards", ACC_DEVICE_GET_COUNT(&ngcards));
 
   for (size_t rank = 0; rank < ngcards; rank++) {
-    CUcontext ctx;
-    CUdevice dev;
-    CUdevprop_st prop;
+    ACC_CONTEXT ctx;
+    ACC_DEVICE dev;
     size_t _free, total, total2;
     char *name = (char *)malloc(256);
 
     printf("Setting contexts\n");
     // set contexts
-    _CHECK_CUDA_SUCCESS("device get", cuDeviceGet(&dev, rank));
-    _CHECK_CUDA_SUCCESS("creating context", cuCtxCreate(&ctx, 0, dev));
-    _CHECK_CUDA_SUCCESS("setting context", cuCtxSetCurrent(ctx));
-    _CHECK_CUDA_SUCCESS("synchronizing", cuCtxSynchronize());
+    ACC_CHECK_SUCCESS("device get", ACC_DEVICE_GET(&dev, rank));
+    ACC_CHECK_SUCCESS("creating context", ACC_CONTEXT_CREATE(&ctx, 0, dev));
+    ACC_CHECK_SUCCESS("setting context", ACC_CONTEXT_SET_CURRENT(ctx));
+    ACC_CHECK_SUCCESS("synchronizing", ACC_DEVICE_SYNCHRONIZE());
 
-    _CHECK_CUDA_SUCCESS("prop get", cuDeviceGetProperties(&prop, dev));
-    _CHECK_CUDA_SUCCESS("meminfo get", cuMemGetInfo(&_free, &total));
-    _CHECK_CUDA_SUCCESS("name get", cuDeviceGetName(name, 256, dev));
-    _CHECK_CUDA_SUCCESS("totalmem get", cuDeviceTotalMem(&total2, dev));
+    ACC_CHECK_SUCCESS("meminfo get", ACC_MEM_GET_INFO(&_free, &total));
+    ACC_CHECK_SUCCESS("name get", ACC_GET_DEVICE_NAME(name, 256, dev));
+    ACC_CHECK_SUCCESS("totalmem get", ACC_DEVICE_TOTAL_MEM(&total2, dev));
 
     printf(
         "\n"
         "CUDA CARD RANK %d\n"
         "=================\n"
         "\tname: %s\n"
-        "\tShared Mem Per Block (KB): %f\n"
         "\tFree/Total mem (GB): %f/%f\n"
         "\total2 mem (GB): %f\n"
         "\n",
         dev,
         name,
-        prop.sharedMemPerBlock / 1024.0,
         _free / 1024.0 / 1024.0 / 1024.0,
         total / 1024.0 / 1024.0 / 1024.0,
         total2 / 1024.0 / 1024.0 / 1024.0);
 
     if (_free == 0 || total == 0 || total2 == 0) return 1;
 
-    CUdeviceptr data;
-    _CHECK_CUDA_SUCCESS("memalloc 1",
-                        cuMemAlloc(&data, sizeof(double) * 10000));
-    _CHECK_CUDA_SUCCESS("memalloc 2",
-                        cuMemAlloc(&data, sizeof(double) * 10000));
+    ACC_DEVICE_PTR data;
+    ACC_CHECK_SUCCESS("memalloc 1",
+                        ACC_MEM_ALLOC(&data, sizeof(double) * 10000));
+    ACC_CHECK_SUCCESS("memalloc 2",
+                        ACC_MEM_ALLOC(&data, sizeof(double) * 10000));
   }
 
   MPI_Finalize();

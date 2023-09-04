@@ -14,7 +14,6 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Complex%20numbers][Complex numbers:2]]
 #include <atrip/Complex.hpp>
-#include <atrip/CUDA.hpp>
 
 namespace atrip {
 

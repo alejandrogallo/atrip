@@ -40,6 +40,19 @@ endif
 ################################################################################
 ## CUDA BENCHES
 ################################################################################
+if WITH_HIP
+
+atrip_LDADD += -L/pfs/lustrep2/projappl/project_462000125/samantao-public/omnitools/rocm-5.2.x/omnitrace/lib -lomnitrace-user
+
+
+bin_PROGRAMS += test-cuda-sanity
+test_cuda_sanity_SOURCES = test-cuda-sanity.cxx
+bin_PROGRAMS += test-cublas-parallel
+test_cublas_parallel_SOURCES = test-cublas-parallel.cxx
+
+bin_PROGRAMS += test-cublas-parallel-atrip
+test_cublas_parallel_atrip_SOURCES = test-cublas-parallel-atrip.cxx
+endif
 
 if WITH_CUDA
 AM_CPPFLAGS += $(CUDA_CXXFLAGS)

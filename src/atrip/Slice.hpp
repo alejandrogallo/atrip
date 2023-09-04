@@ -22,7 +22,7 @@
 #include <atrip/Types.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>
-#include <atrip/CUDA.hpp>
+#include <atrip/Acc.hpp>
 
 namespace atrip {
 
@@ -260,7 +260,7 @@ public:
 
   // [[file:~/cuda/atrip/atrip.org::*Attributes][Attributes:2]]
   DataPtr<F> data;
-#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
   F *mpi_data;
 #endif
   // Attributes:2 ends here

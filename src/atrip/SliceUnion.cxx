@@ -138,17 +138,18 @@ SliceUnion<F>::build_local_database(ABCTuple const &abc) {
       blank.info.state =
           Atrip::rank == from.rank ? Slice<F>::SelfSufficient : Slice<F>::Fetch;
       if (blank.info.state == Slice<F>::SelfSufficient) {
-#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
         const size_t _size = sizeof(F) * slice_size;
         blank.data = pop_free_pointers();
-        WITH_CHRONO("cuda:memcpy",
-                    WITH_CHRONO("cuda:memcpy:self-sufficient",
-                                _CHECK_CUDA_SUCCESS(
-                                    "copying mpi data to device",
-                                    cuMemcpyHtoD(blank.data,
-                                                 (void *)SOURCES_DATA(
-                                                     sources[from.source]),
-                                                 sizeof(F) * slice_size));))
+        WITH_CHRONO(
+            "acc:memcpy",
+            WITH_CHRONO("cuda:memcpy:self-sufficient",
+                        ACC_CHECK_SUCCESS(
+                            "copying mpi data to device",
+                            ACC_MEMCPY_HOST_TO_DEV(
+                                blank.data,
+                                (void *)SOURCES_DATA(sources[from.source]),
+                                sizeof(F) * slice_size));))
 #else
         blank.data = SOURCES_DATA(sources[from.source]);
 #endif
@@ -245,7 +246,7 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
         }
       }
 
-#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
       // In cuda, SelfSufficient slices have an ad-hoc pointer
       // since it is a pointer on the device and has to be
       // brought back to the free pointer bucket of the SliceUnion.
@@ -333,7 +334,7 @@ void SliceUnion<F>::init(Tensor const &source_tensor) {
 template <typename F>
 void SliceUnion<F>::allocate_free_buffer() {
   DataPtr<F> new_pointer;
-#if defined(HAVE_CUDA) && defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && defined(ATRIP_SOURCES_IN_GPU)
   MALLOC_DATA_PTR("Additional free buffer",
                   &new_pointer,
                   sizeof(DataFieldType<F>) * slice_size);
@@ -376,7 +377,7 @@ void SliceUnion<F>::send(size_t other_rank,
   if (other_rank == info.from.rank) send_data_p = false;
   if (!send_data_p) return;
 
-#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
   DataPtr<const F> source_buffer = SOURCES_DATA(sources[info.from.source]);
 #else
   F *source_buffer = SOURCES_DATA(sources[info.from.source]);
@@ -394,21 +395,22 @@ void SliceUnion<F>::send(size_t other_rank,
          from_node = Atrip::cluster_info->rank_infos[info.from.rank].node_id;
   const bool inter_node_communication = target_node == from_node;
 
-  if (inter_node_communication) { goto no_mpi_staging; }
+  //if (inter_node_communication) { goto no_mpi_staging; }
+
+	DataPtr<F> isend_buffer = pop_free_pointers();
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
-  DataPtr<F> isend_buffer = pop_free_pointers();
 
-#  if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+#  if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
   WITH_CHRONO(
       "cuda:memcpy",
-      WITH_CHRONO(
-          "cuda:memcpy:staging",
-          _CHECK_CUDA_SUCCESS(
-              "copying to staging buffer",
-              cuMemcpy(isend_buffer, source_buffer, sizeof(F) * slice_size));))
+      WITH_CHRONO("cuda:memcpy:staging",
+                  ACC_CHECK_SUCCESS("copying to staging buffer",
+                                    ACC_MEMCPY(isend_buffer,
+                                               source_buffer,
+                                               sizeof(F) * slice_size));))
 
-#  elif !defined(HAVE_CUDA)
+#  elif !defined(HAVE_ACC)
   // do cpu mpi memory staging
   WITH_CHRONO(
       "memcpy",
@@ -417,28 +419,28 @@ void SliceUnion<F>::send(size_t other_rank,
 
 #  else
 #    pragma error("Not possible to do MPI_STAGING_BUFFERS with your config.h")
-#  endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
+#  endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC) */
 
-  goto mpi_staging_done;
+  //goto mpi_staging_done;
 
 #else
 
   // otherwise the isend_buffer will be the source buffer itself
-  goto no_mpi_staging;
+  //goto no_mpi_staging;
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
-no_mpi_staging:
+//no_mpi_staging:
 
-#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
-  DataPtr<F> isend_buffer = source_buffer;
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
+  //DataPtr<F> isend_buffer = source_buffer;
 #else
-  F *isend_buffer = source_buffer;
-#endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA) */
+  //F *isend_buffer = source_buffer;
+#endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC) */
 
-  goto mpi_staging_done; // do not complain that is not used, it is used when
+  //goto mpi_staging_done; // do not complain that is not used, it is used when
                          // MPI_STAGING_BUFFERS is on
-mpi_staging_done:
+//mpi_staging_done:
 
   // We count network sends only for the largest buffers
   switch (el.name) {
@@ -486,7 +488,7 @@ void SliceUnion<F>::receive(typename Slice<F>::Info const &info,
 #    error "You need CUDA aware MPI to have slices on the GPU"
 #  endif
     MPI_Irecv((void *)slice.data,
-#elif defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#elif defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
     slice.mpi_data = (F *)malloc(sizeof(F) * slice.size);
     MPI_Irecv(slice.mpi_data,
 #else
@@ -549,12 +551,7 @@ DataPtr<F> SliceUnion<F>::unwrap_slice(typename Slice<F>::Type type,
 
 template <typename F>
 SliceUnion<F>::~SliceUnion() {
-  for (auto &ptr : slice_buffers)
-#if defined(HAVE_CUDA)
-    cuMemFree(ptr);
-#else
-    std::free(ptr);
-#endif
+  for (auto &ptr : slice_buffers) ACC_FREE(ptr);
 }
 
 // instantiate SliceUnion

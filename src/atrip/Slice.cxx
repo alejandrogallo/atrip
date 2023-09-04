@@ -175,12 +175,13 @@ void Slice<F>::unwrap_and_mark_ready() {
 
   if (error_code != MPI_SUCCESS) throw "Atrip: Unexpected error MPI ERROR";
 
-#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
   // copy the retrieved mpi data to the device
-  WITH_CHRONO("cuda:memcpy",
-              _CHECK_CUDA_SUCCESS(
-                  "copying mpi data to device",
-                  cuMemcpyHtoD(data, (void *)mpi_data, sizeof(F) * size));)
+  WITH_CHRONO(
+      "cuda:memcpy",
+      ACC_CHECK_SUCCESS(
+          "copying mpi data to device",
+          ACC_MEMCPY_HOST_TO_DEV(data, (void *)mpi_data, sizeof(F) * size));)
   std::free(mpi_data);
 #endif
 
@@ -201,7 +202,7 @@ template <typename F>
 Slice<F>::Slice(size_t size_)
     : info({})
     , data(DataNullPtr)
-#if defined(HAVE_CUDA) && !defined(ATRIP_SOURCES_IN_GPU)
+#if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)
     , mpi_data(nullptr)
 #endif
     , size(size_) {

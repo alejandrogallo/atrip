@@ -23,13 +23,7 @@
 
 #include <atrip/Chrono.hpp>
 #include <atrip/mpi.hpp>
-
-#if defined(HAVE_CUDA)
-#  include <cuda.h>
-#  define CUBLASAPI
-#  include <cublas_api.h>
-#  include <cublas_v2.h>
-#endif
+#include <atrip/Acc.hpp>
 
 #include <atrip/Utils.hpp>
 #include <atrip/Types.hpp>
@@ -55,10 +49,10 @@ struct Atrip {
   static size_t local_send;
   static double bytes_sent;
   static size_t ppn;
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
   struct CudaContext {
-    cublasStatus_t status;
-    cublasHandle_t handle;
+    ACC_BLAS_STATUS status;
+    ACC_BLAS_HANDLE handle;
   };
   static CudaContext cuda;
   static struct KernelDimensions {
@@ -131,7 +125,7 @@ struct Atrip {
     ADD_ATTRIBUTE(float, checkpoint_at_percentage, 10)
     ADD_ATTRIBUTE(size_t, checkpoint_at_every_iteration, 0)
     ADD_ATTRIBUTE(bool, ijkabc, 0)
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
     ADD_ATTRIBUTE(size_t, ooo_threads, 0)
     ADD_ATTRIBUTE(size_t, ooo_blocks, 0)
 #endif

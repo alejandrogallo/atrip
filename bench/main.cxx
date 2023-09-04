@@ -459,6 +459,9 @@ int main(int argc, char **argv) {
     } catch (const char *msg) {                                                \
       if (!atrip::Atrip::rank)                                                 \
         std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";          \
+    } catch (const std::string &msg) {                                         \
+      if (!atrip::Atrip::rank)                                                 \
+        std::cout << "Atrip throwed with msg:\n\t\t " << msg << "\n";          \
     }                                                                          \
   } while (0)
 

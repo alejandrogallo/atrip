@@ -55,10 +55,12 @@ static void slice_into_vector
                  1.0);
 
 #  if defined(ATRIP_SOURCES_IN_GPU)
-  WITH_CHRONO("cuda:sources",
-              _CHECK_CUDA_SUCCESS(
-                  "copying sources data to device",
-                  cuMemcpyHtoD(source, to_slice.data, sizeof(F) * slice_size));)
+  WITH_CHRONO(
+      "acc:sources",
+      ACC_CHECK_SUCCESS("copying sources data to device",
+                        ACC_MEMCPY_HOST_TO_DEV(source,
+                                               to_slice.data,
+                                               sizeof(F) * slice_size));)
 #  else
   memcpy(source.data(), to_slice.data, sizeof(F) * slice_size);
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) */

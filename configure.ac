@@ -50,6 +50,9 @@ AC_ARG_WITH([clang-check],
             [clang_check=NO])
 AM_CONDITIONAL([WITH_CLANG_CHECK], [test x${clang_check} = xYES])
 
+
+dnl CUDA ----
+
 AC_ARG_ENABLE([cuda],
               [AS_HELP_STRING([--enable-cuda],
                               [Build with cuda])],
@@ -58,6 +61,25 @@ AC_ARG_ENABLE([cuda],
 AC_ARG_VAR([NVCC], [Path to the nvidia cuda compiler.])
 AC_ARG_VAR([CUDA_LDFLAGS], [LDFLAGS to find libraries -lcuda, -lcudart, -lcublas.])
 AC_ARG_VAR([CUDA_CXXFLAGS], [CXXFLAGS to find the CUDA headers])
+
+dnl HIP ----
+AC_ARG_ENABLE([hip],
+              [AS_HELP_STRING([--enable-hip],
+                              [Build with hip])],
+                              [WITH_HIP=yes],
+                              [WITH_HIP=no])
+AC_ARG_VAR([HIPCC], [Path to the nvidia hip compiler.])
+AC_ARG_VAR([HIP_LDFLAGS], [LDFLAGS for the HIPCC compiler])
+AC_ARG_VAR([HIP_CXXFLAGS], [CXXFLAGS to find the HIP headers])
+
+dnl profile ----
+
+AC_ARG_ENABLE([profiler],
+              [AS_HELP_STRING([--enable-profiler],
+                              [Enable profiler tools for HIP or CUDA])],
+                              [WITH_PROFILER=yes],
+                              [WITH_PROFILER=no])
+AC_ARG_VAR([PROFILER_PATH], [Path to the profiler include and lib directories])
 
 dnl -----------------------------------------------------------------------
 dnl ATRIP CPP DEFINES
@@ -216,15 +238,66 @@ dnl CUDA NVIDIA -----------------------------------------------------------
 AM_CONDITIONAL([WITH_CUDA], [test x${WITH_CUDA} = xyes])
 if test x${WITH_CUDA} = xyes; then
   AC_MSG_RESULT([
-                     CUDA SUPPORT IS ENABLED
-                     -----------------------
+                     CUDA SUPPORT IS ENABLED (NVIDIA)
+                     --------------------------------
   ])
   AC_CHECK_PROGS([NVCC], [nvcc])
   AC_SUBST([CUDA_LDFLAGS])
-  AC_DEFINE([HAVE_CUDA],1,[Wether we are using CUDA])
+  AC_DEFINE([HAVE_CUDA],1,[AMD CUDA support flag])
   # TODO: make sure to find cuda and cudart
   # AC_SEARCH_LIBS([cudaMalloc], [cuda cudart], [FOUND_CUDA=yes])
   ATRIP_CUBLAS
+fi
+
+dnl HIP AMD -----------------------------------------------------------
+
+AM_CONDITIONAL([WITH_HIP], [test x${WITH_HIP} = xyes])
+if test x${WITH_HIP} = xyes; then
+  AC_MSG_RESULT([
+                     HIP SUPPORT IS ENABLED AMD
+                     --------------------------
+  ])
+  AC_SUBST([HIPBLAS])
+  AC_CHECK_PROGS([HIPCC], [hipcc])
+  AC_SUBST([HIP_LDFLAGS])
+  CPPFLAGS="$CPPFLAGS -I$HIPBLAS/include"
+  LDFLAGS="$LDFLAGS -lamdhip64 -lhipblas"
+  AC_DEFINE([HAVE_HIP],1,[Wether we are using HIP])
+  AC_DEFINE([HOP_TARGET_HIP],1,[Wether we are using HIP])
+fi
+
+dnl PROFILER -----------------------------------------------------------
+
+if test x${WITH_PROFILER} = xyes; then
+  AC_DEFINE([WITH_PROFILER],1,[Use profiler for HIP or CUDA])
+  AC_MSG_RESULT([
+                     Checking profilers
+                     ------------------
+  ])
+  if test x${WITH_HIP} = xyes; then
+  LDFLAGS="$LDFLAGS -L${PROFILER_PATH}/lib"
+  AC_CHECK_HEADER([omnitrace/user.h],
+		  [],
+		  [AC_MSG_ERROR([No omnitrace/user.h header library found, set the PROFILER_PATH variable maybe])])
+  AC_CHECK_LIB([omnitrace-user],
+               [omnitrace_user_push_region],
+               [],
+               [AC_MSG_ERROR([No omnitrace-user library found, set the PROFILER_PATH variable maybe])])
+  fi
+fi
+
+dnl HIP AMD -----------------------------------------------------------
+
+if test x${WITH_CUDA} = xyes -o x${WITH_HIP} = xyes; then
+  WITH_ACC=yes
+else
+  WITH_ACC=no
+fi
+AM_CONDITIONAL([WITH_ACC], [test x${WITH_ACC} = xyes])
+if test x${WITH_ACC} = xyes; then
+  AC_DEFINE([HAVE_ACC],
+            1,
+            [Code with accelerator support])
 fi
 
 dnl -----------------------------------------------------------------------

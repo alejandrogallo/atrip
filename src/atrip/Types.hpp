@@ -27,15 +27,15 @@ struct DataField<double> {
   using type = double;
 };
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
 
 template <typename F>
-using DataPtr = CUdeviceptr;
+using DataPtr = ACC_DEVICE_PTR;
 #  define DataNullPtr 0x00
 
 template <>
 struct DataField<Complex> {
-  using type = cuDoubleComplex;
+  using type = ACC_DOUBLE_COMPLEX;
 };
 
 #else

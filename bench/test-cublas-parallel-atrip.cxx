@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cuda.h>
 #include <chrono>
 #include <map>
 #include <cstdlib>
@@ -13,56 +12,10 @@
 
 #include <CLI11.hpp>
 
-#define CUBLASAPI
-#include <cublas_api.h>
-#include <cublas_v2.h>
+#include "config.h"
 
-struct Timer {
-  using Clock = std::chrono::high_resolution_clock;
-  using Event = std::chrono::time_point<Clock>;
-  std::chrono::duration<double> duration;
-  Event _start;
-  inline void start() noexcept { _start = Clock::now(); }
-  inline void stop() noexcept { duration += Clock::now() - _start; }
-  inline void clear() noexcept { duration *= 0; }
-  inline double count() const noexcept { return duration.count(); }
-};
-using Timings = std::map<std::string, Timer>;
-
-#define _FORMAT(_fmt, ...)                                                     \
-  ([&](void) -> std::string {                                                  \
-    int _sz = std::snprintf(nullptr, 0, _fmt, __VA_ARGS__);                    \
-    std::vector<char> _out(_sz + 1);                                           \
-    std::snprintf(&_out[0], _out.size(), _fmt, __VA_ARGS__);                   \
-    return std::string(_out.data());                                           \
-  })()
-
-#define _CHECK_CUDA_SUCCESS(message, ...)                                      \
-  do {                                                                         \
-    CUresult result = __VA_ARGS__;                                             \
-    printf("doing %s\n", message);                                             \
-    if (result != CUDA_SUCCESS) {                                              \
-      printf("\t!!CUDA_ERROR(%d): %s:%d %s\n",                                 \
-             result,                                                           \
-             __FILE__,                                                         \
-             __LINE__,                                                         \
-             message);                                                         \
-      return 1;                                                                \
-    }                                                                          \
-  } while (0)
-
-#define _CHECK_CUBLAS_SUCCESS(message, ...)                                    \
-  do {                                                                         \
-    cublasStatus_t result = __VA_ARGS__;                                       \
-    if (result != 0) {                                                         \
-      printf("\t!!CUBLAS_ERROR(%d): %s:%d  %s\n",                              \
-             result,                                                           \
-             __FILE__,                                                         \
-             __LINE__,                                                         \
-             message);                                                         \
-      return 1;                                                                \
-    }                                                                          \
-  } while (0)
+#include <atrip/Acc.hpp>
+#include <atrip/Chrono.hpp>
 
 int main(int argc, char **argv) {
 
@@ -90,29 +43,29 @@ int main(int argc, char **argv) {
 
   MPI_Barrier(MPI_COMM_WORLD);
 
-  _CHECK_CUDA_SUCCESS("init for cuda", cuInit(0));
+  ACC_CHECK_SUCCESS("init for cuda", ACC_INIT(0));
 
-  _CHECK_CUDA_SUCCESS("get ncards", cuDeviceGetCount(&ngcards));
+  ACC_CHECK_SUCCESS("get ncards", ACC_DEVICE_GET_COUNT(&ngcards));
 
-  CUcontext ctx;
-  CUdevice dev;
+  ACC_CONTEXT ctx;
+  ACC_DEVICE dev;
 
   char hostname[256];
   gethostname(hostname, 256);
   printf("%s with rank %d gets card %d\n", hostname, rank, rank % ngcards);
 
   // set contexts
-  _CHECK_CUDA_SUCCESS("device get", cuDeviceGet(&dev, rank % ngcards));
-  _CHECK_CUDA_SUCCESS("creating context", cuCtxCreate(&ctx, 0, dev));
-  _CHECK_CUDA_SUCCESS("setting context", cuCtxSetCurrent(ctx));
-  _CHECK_CUDA_SUCCESS("synchronizing", cuCtxSynchronize());
+  ACC_CHECK_SUCCESS("device get", ACC_DEVICE_GET(&dev, rank % ngcards));
+  ACC_CHECK_SUCCESS("creating context", ACC_CONTEXT_CREATE(&ctx, 0, dev));
+  ACC_CHECK_SUCCESS("setting context", ACC_CONTEXT_SET_CURRENT(ctx));
+  ACC_CHECK_SUCCESS("synchronizing", ACC_DEVICE_SYNCHRONIZE());
   MPI_Barrier(MPI_COMM_WORLD);
 
   using host_slice_t = vector<double>;
 
   vector<size_t> sizes = {nv * oo, nv * no, oo, oo * no, oo * no};
-  vector<CUdeviceptr> P_phh(3), P_ph(6), H_hh(3), H_hhh(3), T_hhh(1);
-  vector<vector<CUdeviceptr> *> slices_d = {&P_phh,
+  vector<ACC_DEVICE_PTR> P_phh(3), P_ph(6), H_hh(3), H_hhh(3), T_hhh(1);
+  vector<vector<ACC_DEVICE_PTR> *> slices_d = {&P_phh,
                                             &P_ph,
                                             &H_hh,
                                             &H_hhh,
@@ -123,8 +76,8 @@ int main(int argc, char **argv) {
     for (auto &v : slices_d) {
       i++;
       for (auto &ptr : *v) {
-        _CHECK_CUDA_SUCCESS("malloc",
-                            cuMemAlloc(&ptr, sizes[i] * sizeof(double)));
+        ACC_CHECK_SUCCESS("malloc",
+                            ACC_MEM_ALLOC(&ptr, sizes[i] * sizeof(double)));
         slices_h[i].push_back(std::move(std::vector<double>(sizes[i])));
       }
     }
@@ -144,8 +97,8 @@ int main(int argc, char **argv) {
       {"holes", ooo * no * 6.0 * 2.0 * its / 1e12},
       {"particles", ooo * nv * 6.0 * 2.0 * its / 1e12}};
 
-  cublasHandle_t handle;
-  _CHECK_CUBLAS_SUCCESS("handle create", cublasCreate(&handle));
+  ACC_BLAS_HANDLE handle;
+  ACC_CHECK_BLAS("handle create", ACC_BLAS_CREATE(&handle));
   printf("handle %ld\n", handle);
 
   timings["dgemm"].start();
@@ -159,7 +112,7 @@ int main(int argc, char **argv) {
           // for (size_t _b = 0; _b < 1 ; _b++) {
           auto device = (*slices_d[_s])[_b];
           auto host = slices_h[_s][_b].data();
-          cuMemcpyHtoD(device, host, sizes[_s]);
+          ACC_MEMCPY_HOST_TO_DEV(device, host, sizes[_s]);
         }
       }
       timings["memcpy"].stop();
@@ -168,10 +121,10 @@ int main(int argc, char **argv) {
     timings["holes"].start();
     for (size_t j = 0; j < 3; j++) {
 
-      _CHECK_CUBLAS_SUCCESS(" > 'geming ...",
-                            cublasDgemm(handle,
-                                        CUBLAS_OP_N,
-                                        CUBLAS_OP_N,
+      ACC_CHECK_BLAS(" > 'geming ...",
+                            ACC_BLAS_DGEMM(handle,
+                                        ACC_BLAS_OP_N,
+                                        ACC_BLAS_OP_N,
                                         oo,
                                         no,
                                         no,
@@ -184,10 +137,10 @@ int main(int argc, char **argv) {
                                         (double *)T_hhh[0],
                                         oo));
 
-      _CHECK_CUBLAS_SUCCESS(" > 'geming ...",
-                            cublasDgemm(handle,
-                                        CUBLAS_OP_N,
-                                        CUBLAS_OP_T,
+      ACC_CHECK_BLAS(" > 'geming ...",
+                            ACC_BLAS_DGEMM(handle,
+                                        ACC_BLAS_OP_N,
+                                        ACC_BLAS_OP_T,
                                         oo,
                                         no,
                                         no,
@@ -204,10 +157,10 @@ int main(int argc, char **argv) {
 
     timings["particles"].start();
     for (size_t j = 0; j < 6; j++) {
-      _CHECK_CUBLAS_SUCCESS(" > 'geming ...",
-                            cublasDgemm(handle,
-                                        CUBLAS_OP_T,
-                                        CUBLAS_OP_N,
+      ACC_CHECK_BLAS(" > 'geming ...",
+                            ACC_BLAS_DGEMM(handle,
+                                        ACC_BLAS_OP_T,
+                                        ACC_BLAS_OP_N,
                                         oo,
                                         no,
                                         nv,
@@ -222,14 +175,20 @@ int main(int argc, char **argv) {
     }
     timings["particles"].stop();
 
-    cuCtxSynchronize();
+    ACC_DEVICE_SYNCHRONIZE();
   }
 
   timings["dgemm"].stop();
 
   printf("Performance: \n");
   for (auto name : {"holes", "particles", "dgemm"})
-    printf("%10s TFlops: %4.1f\n", name, tflopss[name] / timings[name].count());
+    printf("no: %ld %10s TFlops: %4.1f its: %ld np: %d/%d\n",
+		    no,
+		    name,
+		    tflopss[name] / timings[name].count(),
+		    its,
+		    rank,
+		    np);
 
   printf("Timings: \n");
   for (auto const &kv : timings)

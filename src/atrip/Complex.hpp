@@ -32,7 +32,8 @@ template <typename F>
 F maybe_conjugate(const F);
 
 #if defined(HAVE_CUDA)
-cuDoubleComplex &operator+=(cuDoubleComplex &lz, cuDoubleComplex const &rz);
+ACC_DOUBLE_COMPLEX &operator+=(ACC_DOUBLE_COMPLEX &lz,
+                               ACC_DOUBLE_COMPLEX const &rz);
 #endif
 
 namespace traits {

@@ -1,0 +1,91 @@
+#vim:ft=sh
+
+# module purge
+
+modules=(
+PrgEnv-amd
+craype-accel-amd-gfx90a
+# craype-x86-rome # cpu
+#Autoconf
+#Automake
+#craype-accel-amd-gfx90a
+rocm/5.2.3 
+)
+
+#set -x
+module load --force "${modules[@]}"
+#set +x
+
+#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CRAY_LD_LIBRARY_PATH}
+export MPICH_GPU_SUPPORT_ENABLED=1
+
+
+return
+
+------------------------------------------------------------------------- EasyBuild managed software for software stack unknown on LUMI-X --------------------------------------------------------------------------
+   ARMForge/22.0.1    Vampir/10.0.0    Vampir/10.2.1 (D)    lumi-tools/23.03 (S)    lumi-tools/23.04 (S,L,D)    lumi-vnc/20230110    lumi-workspaces/0.1    lumio-ext-tools/1.0.0    lumio/1.0.0
+
+----------------------------------------------------------------------------------------------- HPE-Cray PE modules ------------------------------------------------------------------------------------------------
+   PrgEnv-amd/8.3.3                       cray-R/4.2.1.1              (D)    cray-libsci/22.12.1.1         (L,D)    cray-pmi/6.0.17               papi/6.0.0.15
+   PrgEnv-aocc/8.3.3                      cray-ccdb/4.12.13                  cray-libsci/23.02.1.1                  cray-pmi/6.1.3                papi/6.0.0.17          (D)
+   PrgEnv-cray-amd/8.3.3                  cray-cti/2.15.13                   cray-libsci_acc/22.08.1.1              cray-pmi/6.1.8       (D)      papi/7.0.0.1
+   PrgEnv-cray/8.3.3     (L)              cray-cti/2.15.14                   cray-libsci_acc/22.12.1.1     (D)      cray-pmi/6.1.10               perftools
+   PrgEnv-gnu-amd/8.3.3                   cray-cti/2.16.0                    cray-mpich-abi/8.1.18                  cray-python/3.9.12.1          perftools-base/22.06.0
+   PrgEnv-gnu/8.3.3                       cray-cti/2.17.1             (D)    cray-mpich-abi/8.1.23         (D)      cray-python/3.9.13.1 (D)      perftools-base/22.12.0 (L,D)
+   amd-mixed/5.2.3                        cray-cti/2.17.2                    cray-mpich-abi/8.1.25                  cray-stat/4.11.12             perftools-base/23.03.0
+   amd/5.2.3             (5.0.2:5.2.0)    cray-dsmml/0.2.2            (L)    cray-mpich/8.1.18                      cray-stat/4.11.13    (D)      perftools-lite
+   aocc-mixed/3.2.0                       cray-dyninst/12.1.1                cray-mpich/8.1.23             (L,D)    craype/2.7.17                 perftools-lite-events
+   aocc/3.2.0                             cray-fftw/3.3.8.13                 cray-mpich/8.1.25                      craype/2.7.19        (L,D)    perftools-lite-gpu
+   atp/3.14.13                            cray-fftw/3.3.10.1                 cray-mpixlate/1.0.0.6                  craype/2.7.20                 perftools-lite-hbm
+   atp/3.14.16           (D)              cray-fftw/3.3.10.3          (D)    cray-mpixlate/1.0.1.10        (D)      craypkg-gen/1.3.25            perftools-lite-loops
+   atp/3.14.18                            cray-hdf5-parallel/1.12.1.5        cray-mrnet/5.0.4                       craypkg-gen/1.3.28   (D)      perftools-preload
+   cce-mixed/14.0.2                       cray-hdf5-parallel/1.12.2.1 (D)    cray-openshmemx/11.5.6                 gcc-mixed/11.2.0              rocm/5.2.3             (D:5.0.2:5.2.0)
+   cce-mixed/15.0.0                       cray-hdf5-parallel/1.12.2.3        cray-openshmemx/11.5.7        (D)      gcc-mixed/12.2.0     (D)      sanitizers4hpc/1.0.1
+   cce-mixed/15.0.1      (D)              cray-hdf5/1.12.1.5                 cray-openshmemx/11.5.8                 gcc/10.3.0                    sanitizers4hpc/1.0.4   (D)
+   cce/14.0.2                             cray-hdf5/1.12.2.1          (D)    cray-pals/1.2.0                        gcc/11.2.0                    settarg
+   cce/15.0.0            (L,D)            cray-hdf5/1.12.2.3                 cray-pals/1.2.5               (D)      gcc/12.2.0           (D)      valgrind4hpc/2.12.10   (D)
+   cce/15.0.1                             cray-libpals/1.2.0                 cray-pals/1.2.11                       gdb4hpc/4.14.2                valgrind4hpc/2.12.11
+   cpe/22.08                              cray-libpals/1.2.5          (D)    cray-parallel-netcdf/1.12.2.5          gdb4hpc/4.14.6       (D)
+   cpe/22.12             (D)              cray-libpals/1.2.11                cray-parallel-netcdf/1.12.3.1 (D)      gdb4hpc/4.14.7
+   cpe/23.03                              cray-libsci/21.08.1.2              cray-parallel-netcdf/1.12.3.3          iobuf/2.0.10
+   cray-R/4.1.3.1                         cray-libsci/22.08.1.1              cray-pmi-lib/6.0.17                    lmod
+
+-------------------------------------------------------------------------------------------- HPE-Cray PE target modules --------------------------------------------------------------------------------------------
+   craype-accel-amd-gfx908    craype-accel-nvidia80    craype-hugepages1G      craype-hugepages32M     craype-hugepages8M         craype-x86-genoa          craype-x86-spr
+   craype-accel-amd-gfx90a    craype-arm-grace         craype-hugepages256M    craype-hugepages4M      craype-network-none        craype-x86-milan          craype-x86-spr-hbm
+   craype-accel-host          craype-hugepages128M     craype-hugepages2G      craype-hugepages512M    craype-network-ofi  (L)    craype-x86-milan-x        craype-x86-trento
+   craype-accel-nvidia70      craype-hugepages16M      craype-hugepages2M      craype-hugepages64M     craype-network-ucx         craype-x86-rome    (L)
+
+------------------------------------------------------------------------------------------------- Software stacks --------------------------------------------------------------------------------------------------
+   CrayEnv (S)    LUMI/22.08 (S,D)    LUMI/22.12 (S)    LUMI/23.03 (S)    spack/22.08    spack/22.08-2    spack/23.03    spack/23.03-2 (D)
+
+----------------------------------------------------------------------------------------- Modify the module display style ------------------------------------------------------------------------------------------
+   ModuleColour/off (S)    ModuleColour/on (S,D)    ModuleLabel/label (S,L,D)    ModuleLabel/PEhierarchy (S)    ModuleLabel/system (S)    ModulePowerUser/LUMI (S)    ModuleStyle/default    ModuleStyle/reset (D)
+
+---------------------------------------------------------------------------------------------- System initialisation -----------------------------------------------------------------------------------------------
+   init-lumi/0.2 (S,L)
+
+--------------------------------------------------------------------------------------------- Non-PE HPE-Cray modules ----------------------------------------------------------------------------------------------
+   chapel/1.28.0                                                                          dvs/2.15_4.4.205-2.4_39.2__gf0c8872a        rocm/5.2.3                            (5.0.2:5.2.0)
+   cray-lustre-client-ofed/2.15.0.4_rc2_cray_178_gf28cb6f-2.4_16.1__gf28cb6f4f3.shasta    libfabric/1.15.2.0                   (L)    xpmem/2.5.2-2.4_3.47__gd0f7936.shasta (L)
+
+--------------------------------------------------------------------------------------- This is a list of module extensions ----------------------------------------------------------------------------------------
+    Autoconf         (E)     Bison   (E)     CubeWriter (E)     M4    (E)     Ninja  (E)     SCons (E)     flex     (E)     htop    (E)     make     (E)     rclone (E)     s3cmd (E)     xxd (E)
+    Autoconf-archive (E)     CMake   (E)     Doxygen    (E)     Meson (E)     OPARI2 (E)     Yasm  (E)     gperf    (E)     libtool (E)     makeinfo (E)     re2c   (E)     sec   (E)
+    Automake         (E)     CubeLib (E)     GPP        (E)     NASM  (E)     OTF2   (E)     byacc (E)     help2man (E)     libtree (E)     patchelf (E)     restic (E)     tree  (E)
+
+These extensions cannot be loaded directly, use "module spider extension_name" for more information.
+
+  Where:
+   Aliases:  Aliases exist: foo/1.2.3 (1.2) means that "module load foo/1.2" will load foo/1.2.3
+   D:        Default Module
+   E:        Extension that is provided by another module
+   L:        Module is loaded
+   S:        Module is Sticky, requires --force to unload or purge
+
+Additional ways to search for software:
+* Use "module spider" to find all possible modules and extensions.
+* Use "module keyword key1 key2 ..." to search for all possible modules matching any of the "keys".
+See the LUMI documentation at https://docs.lumi-supercomputer.eu/runjobs/lumi_env/Lmod_modules/ for more information on searching modules.
+If then you still miss software, contact LUMI User Support via https://lumi-supercomputer.eu/user-support/need-help/.
+

@@ -15,18 +15,29 @@
 // [[file:~/cuda/atrip/atrip.org::*Blas][Blas:2]]
 #include <atrip/Blas.hpp>
 #include <atrip/Atrip.hpp>
-#include <atrip/CUDA.hpp>
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
 #  include <cstring>
 
 static size_t dgem_call = 0;
 
-static inline cublasOperation_t char_to_cublasOperation(const char *trans) {
+#  if defined(HAVE_CUDA)
+
+static inline cublasOperation_t char_to_accblasOperation(const char *trans) {
   if (strncmp("N", trans, 1) == 0) return CUBLAS_OP_N;
   else if (strncmp("T", trans, 1) == 0) return CUBLAS_OP_T;
   else return CUBLAS_OP_C;
 }
+
+#  elif defined(HAVE_HIP)
+
+static inline hipblasOperation_t char_to_accblasOperation(const char *trans) {
+  if (strncmp("N", trans, 1) == 0) return HIPBLAS_OP_N;
+  else if (strncmp("T", trans, 1) == 0) return HIPBLAS_OP_T;
+  else return HIPBLAS_OP_C;
+}
+
+#  endif
 
 #endif
 
@@ -46,25 +57,25 @@ void xgemm<double>(const char *transa,
                    double *beta,
                    typename DataField<double>::type *C,
                    const int *ldc) {
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
   // TODO: remove this verbose checking
-  const cublasStatus_t error = cublasDgemm(Atrip::cuda.handle,
-                                           char_to_cublasOperation(transa),
-                                           char_to_cublasOperation(transb),
-                                           *m,
-                                           *n,
-                                           *k,
-                                           alpha,
-                                           A,
-                                           *lda,
-                                           B,
-                                           *ldb,
-                                           beta,
-                                           C,
-                                           *ldc);
+  const ACC_BLAS_STATUS error = ACC_BLAS_DGEMM(Atrip::cuda.handle,
+                                               char_to_accblasOperation(transa),
+                                               char_to_accblasOperation(transb),
+                                               *m,
+                                               *n,
+                                               *k,
+                                               alpha,
+                                               A,
+                                               *lda,
+                                               B,
+                                               *ldb,
+                                               beta,
+                                               C,
+                                               *ldc);
   if (error != 0)
     printf(
-        ":%-3ld (%4ldth) ERR<%4d> cublasDgemm: "
+        ":%-3ld (%4ldth) ERR<%4d> blasDgemm: "
         "A = %20ld "
         "B = %20ld "
         "C = %20ld "
@@ -94,25 +105,25 @@ void xgemm<Complex>(const char *transa,
                     Complex *beta,
                     typename DataField<Complex>::type *C,
                     const int *ldc) {
-#if defined(HAVE_CUDA)
-  cuDoubleComplex cu_alpha = {std::real(*alpha), std::imag(*alpha)},
-                  cu_beta = {std::real(*beta), std::imag(*beta)};
+#if defined(HAVE_ACC)
+  ACC_DOUBLE_COMPLEX cu_alpha = {std::real(*alpha), std::imag(*alpha)},
+                     cu_beta = {std::real(*beta), std::imag(*beta)};
 
-  _CHECK_CUBLAS_SUCCESS("cublasZgemm",
-                        cublasZgemm(Atrip::cuda.handle,
-                                    char_to_cublasOperation(transa),
-                                    char_to_cublasOperation(transb),
-                                    *m,
-                                    *n,
-                                    *k,
-                                    &cu_alpha,
-                                    A,
-                                    *lda,
-                                    B,
-                                    *ldb,
-                                    &cu_beta,
-                                    C,
-                                    *ldc));
+  ACC_CHECK_BLAS("cublasZgemm",
+                 ACC_BLAS_ZGEMM(Atrip::cuda.handle,
+                                char_to_accblasOperation(transa),
+                                char_to_accblasOperation(transb),
+                                *m,
+                                *n,
+                                *k,
+                                &cu_alpha,
+                                A,
+                                *lda,
+                                B,
+                                *ldb,
+                                &cu_beta,
+                                C,
+                                *ldc));
 #else
   zgemm_(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 #endif
@@ -124,8 +135,8 @@ void xcopy<double>(int *n,
                    int *incx,
                    DataFieldType<double> *y,
                    int *incy) {
-#if defined(HAVE_CUDA)
-  cublasDcopy(Atrip::cuda.handle, *n, x, *incx, y, *incy);
+#if defined(HAVE_ACC)
+  ACC_BLAS_DCOPY(Atrip::cuda.handle, *n, x, *incx, y, *incy);
 #else
   dcopy_(n, x, incx, y, incy);
 #endif
@@ -137,8 +148,8 @@ void xcopy<Complex>(int *n,
                     int *incx,
                     DataFieldType<Complex> *y,
                     int *incy) {
-#if defined(HAVE_CUDA)
-  cublasZcopy(Atrip::cuda.handle, *n, x, *incx, y, *incy);
+#if defined(HAVE_ACC)
+  ACC_BLAS_ZCOPY(Atrip::cuda.handle, *n, x, *incx, y, *incy);
 #else
   zcopy_(n, x, incx, y, incy);
 #endif

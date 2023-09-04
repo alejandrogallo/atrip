@@ -21,7 +21,7 @@
 
 namespace atrip {
 
-#if !defined(HAVE_CUDA)
+#if !defined(HAVE_ACC)
 extern "C" {
 void dgemm_(const char *transa,
             const char *transb,

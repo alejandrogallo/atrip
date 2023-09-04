@@ -1,18 +1,22 @@
-#pragma once
+#ifndef HIP_HPP_
+#define HIP_HPP_
 
-#include <atrip/Utils.hpp>
-
-#if defined(HAVE_CUDA)
-#  include <cuda.h>
-#  define CUBLASAPI
-#  include <cublas_api.h>
-#  include <cublas_v2.h>
-#  include <nvToolsExt.h>
+#ifndef __HIP_PLATFORM_AMD__
+#  define __HIP_PLATFORM_AMD__
 #endif
 
-#include <sstream>
+#include <hip/hip_runtime.h>
+#include <hip/hip_complex.h>
 
-#if defined(HAVE_CUDA) && defined(__CUDACC__)
+#include <omnitrace/categories.h>
+#include <omnitrace/types.h>
+#include <omnitrace/user.h>
+
+#define HIPBLAS_V2
+#define ROCM_MATHLIBS_API_USE_HIP_COMPLEX
+#include <hipblas.h>
+
+#if defined(HAVE_HIP) && defined(__HIPCC__)
 #  define __MAYBE_GLOBAL__ __global__
 #  define __MAYBE_DEVICE__ __device__
 #  define __MAYBE_HOST__ __host__
@@ -24,17 +28,19 @@
 #  define __INLINE__ inline
 #endif
 
-#define _CUDA_MALLOC(msg, ptr, __size)                                         \
+#define _HIP_MALLOC(msg, ptr, __size)                                          \
   do {                                                                         \
     WITH_CHRONO("malloc:device",                                               \
-                const CUresult error = cuMemAlloc((ptr), (__size));)           \
+                const hipError_t error = hipMalloc((ptr), (__size));)          \
     if (*(ptr) == 0UL) { throw("UNSUFICCIENT GPU MEMORY for " msg); }          \
-    if (error != CUDA_SUCCESS) {                                               \
+    if (error != hipSuccess) {                                                 \
       std::stringstream s;                                                     \
-      s << "CUDA Error allocating memory for " << (msg) << "code " << error    \
+      s << "HIP Error allocating memory for " << (msg) << "code " << error     \
         << "\n";                                                               \
       throw s.str();                                                           \
     }                                                                          \
   } while (0)
 
-#define _CUDA_FREE(msg, ptr) ACC_CHECK_SUCCESS(msg, cuMemFree(ptr))
+#define _HIP_FREE(msg, ptr) ACC_CHECK_SUCCESS(msg, hipFree(ptr))
+
+#endif

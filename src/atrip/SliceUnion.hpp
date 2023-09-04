@@ -55,10 +55,6 @@ public:
   const std::vector<typename Slice<F>::Type> slice_types;
   std::vector<DataPtr<F>> slice_buffers;
   std::set<DataPtr<F>> free_pointers;
-#if defined(ATRIP_MPI_STAGING_BUFFERS)
-  std::unordered_set<StagingBufferInfo, StagingBufferInfoHash>
-      mpi_staging_buffers;
-#endif
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
   struct StagingBufferInfo {
@@ -81,6 +77,10 @@ public:
       return (size_t)i.data;
     }
   };
+
+  std::unordered_set<StagingBufferInfo, StagingBufferInfoHash>
+      mpi_staging_buffers;
+
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
   virtual void
@@ -167,9 +167,9 @@ public:
       , slice_types(slice_types_)
       , slice_buffers(n_slice_buffers) { // constructor begin
 
-#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_CUDA)
+#if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
     for (auto &ptr : sources) {
-      MALLOC_DATA_POINTER("SOURCES", &ptr, sizeof(F) * slice_size);
+      MALLOC_DATA_PTR("SOURCES", &ptr, sizeof(F) * slice_size);
     }
 #endif
 
@@ -186,10 +186,10 @@ public:
                    std::inserter(free_pointers, free_pointers.begin()),
                    [](DataPtr<F> ptr) { return ptr; });
 
-#if defined(HAVE_CUDA)
+#if defined(HAVE_ACC)
     LOG(1, "Atrip") << "warming communication up " << slices.size() << "\n";
     WITH_CHRONO(
-        "cuda:warmup", int n_ranks = Atrip::np, request_count = 0;
+        "acc:warmup", int n_ranks = Atrip::np, request_count = 0;
         int n_sends = slice_buffers.size() * n_ranks;
         MPI_Request *requests =
             (MPI_Request *)malloc(n_sends * 2 * sizeof(MPI_Request));
