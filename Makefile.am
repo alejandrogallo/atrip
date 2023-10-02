@@ -1,6 +1,6 @@
 include $(top_srcdir)/etc/make/emacs.mk
 
-SUBDIRS = src bench test extern
+SUBDIRS = src bench test extern integration-tests
 
 all: atrip
 

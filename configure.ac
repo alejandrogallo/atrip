@@ -322,6 +322,8 @@ AC_CONFIG_FILES([Makefile
                  extern/Makefile
                  extern/ctf/Makefile
                  test/Makefile
+                 integration-tests/Makefile
+                 integration-tests/run-h2o.sh
                  docs/Makefile
                  docs/conf.py:docs/conf.py
                  docs/Doxyfile:docs/Doxyfile

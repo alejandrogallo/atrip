@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+resources=H2O
+atrip="@top_builddir@/bench/atrip"
+
+cmd=(
+  mpirun # -np 4
+
+  ${atrip}
+
+  --no 4
+
+  --nv 36
+  # --complex
+
+  --checkpoint-% 1
+
+  # --max-iterations 50
+
+  --ei ./${resources}/EigenEnergies.components.h.elements
+  --ea ./${resources}/EigenEnergies.components.p.elements
+  --Tpphh ./${resources}/Amplitudes.components.pphh.elements
+  --Tph ./${resources}/Amplitudes.components.ph.elements
+  --Vpphh ./${resources}/CoulombIntegrals.components.pphh.elements
+  --Vhhhp ./${resources}/CoulombIntegrals.components.hhhp.elements
+  --Vppph ./${resources}/CoulombIntegrals.components.ppph.elements
+  # J for ct
+  --Jhhhp ./${resources}/CoulombIntegrals.components.hhhp.elements
+  --Jppph ./${resources}/CoulombIntegrals.components.ppph.elements
+
+  # --complex
+
+  # dist can also be naive
+  --nocheckpoint
+  --dist group
+  # --dist naive
+
+  # --mod 10
+  # -% 0
+)
+
+set -x
+date
+"${cmd[@]}"
+date
+set +x
