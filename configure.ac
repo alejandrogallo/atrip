@@ -341,6 +341,7 @@ AC_MSG_RESULT([
                        CPPFLAGS = $CPPFLAGS
                        LDFLAGS  = $LDFLAGS
                        ATRIP_LDFLAGS  = $ATRIP_LDFLAGS
+                       SCALAPACK = ${SCALAPACK_LIBS}
                        BLAS = ${BLAS_LIBS}
                        LIBS = ${LIBS}
 ])

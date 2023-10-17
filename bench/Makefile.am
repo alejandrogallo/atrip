@@ -25,6 +25,10 @@ bin_PROGRAMS += atrip
 atrip_SOURCES = main.cxx
 atrip_LDADD = $(BENCHES_LDADD)
 
+bin_PROGRAMS += disk-io
+disk_io_SOURCES = disk-io.cxx
+disk_io_LDADD = $(BENCHES_LDADD)
+
 
 if !WITH_CUDA
 ##
