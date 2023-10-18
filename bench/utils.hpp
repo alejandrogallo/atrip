@@ -17,9 +17,12 @@
 // Printer for options
 std::vector<std::function<void(void)>> input_printer;
 #define _register_printer(flag, variable)                                      \
-  input_printer.push_back([&variable]() {                                      \
-    std::cout << "Input " << flag << " " << variable << std::endl;             \
-  })
+  do {                                                                         \
+    decltype(variable) &___var = variable;                                     \
+    input_printer.push_back([&___var]() {                                      \
+      std::cout << "Input " << flag << " " << ___var << std::endl;             \
+    });                                                                        \
+  } while (0)
 
 #define defoption(app, flag, variable, description)                            \
   _register_printer(flag, variable);                                           \

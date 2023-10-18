@@ -108,9 +108,10 @@ void clear_unused_slices_for_next_tuple(SliceUnion<F> &u, ABCTuple const &abc) {
       // if we have a Fetch slice then something has gone very wrong.
       if (!slice.is_unwrapped() && slice.info.state != Slice<F>::Recycled)
         throw std::domain_error(
-            "Trying to garbage collect "
-            " a non-unwrapped slice! "
-            + pretty_print(&slice) + pretty_print(slice.info));
+            _FORMAT("Trying to garbage collect "
+                    " a non-unwrapped slice! %p %s",
+                    &slice,
+                    slice.info));
 
       if (slice.info.state == Slice<F>::Ready) {
         auto recycled =
@@ -235,10 +236,9 @@ LocalDatabase build_local_database(SliceUnion<F> &u, ABCTuple const &abc) {
       blank.info.from = from;
       blank.info.recycling = recycle_it->info.type;
       result.push_back({u.name, blank.info});
-      WITH_RANK << "__db__: RECYCLING: n" << u.name << " " << pretty_print(abc)
-                << " get " << pretty_print(blank.info) << " from "
-                << pretty_print(recycle_it->info) << " ptr " << recycle_it->data
-                << "\n";
+      WITH_RANK << "__db__: RECYCLING: n" << u.name << " " << abc << " get "
+                << blank.info << " from " << recycle_it->info << " ptr "
+                << recycle_it->data << "\n";
       continue;
     }
 
