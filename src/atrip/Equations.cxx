@@ -107,7 +107,7 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                                           double *energy) {
   constexpr size_t block_size = 16;
   // TODO: zero this number generically and implement in Operations
-  F _energy; // = {0.};
+  F _energy = F{0.};
   for (size_t kk = 0; kk < No; kk += block_size) {
     const size_t kend(MIN(No, kk + block_size));
     for (size_t jj(kk); jj < No; jj += block_size) {
@@ -150,22 +150,23 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                   UXY = acc::add(U, acc::add(X, Y)),
                   VWZ = acc::add(V, acc::add(W, Z)),
                   ADE = acc::add(A, acc::add(D, E)),
-                  BCF = acc::add(B, acc::add(C, _F))
-                  // I just might as well write this in CL
-                  ,
+                  BCF = acc::add(B, acc::add(C, _F)),
                   _first = acc::add(
                       AU,
                       acc::add(BV,
                                acc::add(CW, acc::add(DX, acc::add(EY, FZ))))),
                   _second =
-                      acc::prod(acc::sub(UXY, acc::prod(F{-2.0}, VWZ)), ADE),
+                      acc::prod(acc::sub(UXY, acc::prod(F{+2.0}, VWZ)), ADE),
                   _third =
-                      acc::prod(acc::sub(VWZ, acc::prod(F{-2.0}, UXY)), BCF),
+                      acc::prod(acc::sub(VWZ, acc::prod(F{+2.0}, UXY)), BCF),
                   value = acc::add(acc::prod(F{3.0}, _first),
                                    acc::add(_second, _third)),
                   _loop_energy =
-                      acc::prod(acc::prod(F{2.0}, value),
-                                acc::div(acc::prod(facjk, facij), denominator));
+                      acc::prod(acc::div(acc::prod(F{2.0}, value), denominator),
+                                acc::prod(facjk, facij));
+              // _loop_energy =
+              // acc::prod(acc::prod(F{2.0}, value),
+              // acc::div(acc::prod(facjk, facij), denominator));
               acc::sum_in_place(&_energy, &_loop_energy);
             } // i
           }   // j
@@ -174,7 +175,8 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
     }         // jj
   }           // kk
   const double real_part = acc::real(_energy);
-  acc::sum_in_place(energy, &real_part);
+  *energy = real_part;
+  // acc::sum_in_place(energy, &real_part);
 }
 
 template <typename F>
@@ -186,7 +188,7 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                                       double *energy) {
   constexpr size_t block_size = 16;
   // TODO: zero this number generically and implement in Operations
-  F _energy; // = F{0.};
+  F _energy = F{0.};
   for (size_t kk = 0; kk < No; kk += block_size) {
     const size_t kend(MIN(kk + block_size, No));
     for (size_t jj(kk); jj < No; jj += block_size) {
@@ -220,8 +222,8 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                   value = acc::sub(acc::prod(F{3.0}, AU_and_BV_and_CW),
                                    acc::prod(ABC, UVW)),
                   _loop_energy =
-                      acc::prod(acc::prod(F{2.0}, value),
-                                acc::div(acc::prod(facjk, facij), denominator));
+                      acc::prod(acc::div(acc::prod(F{2.0}, value), denominator),
+                                acc::prod(facjk, facij));
 
               acc::sum_in_place(&_energy, &_loop_energy);
             } // i
@@ -231,7 +233,8 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
     }         // jj
   }           // kk
   const double real_part = acc::real(_energy);
-  acc::sum_in_place(energy, &real_part);
+  *energy = real_part;
+  // acc::sum_in_place(energy, &real_part);
 }
 // Energy:2 ends here
 
