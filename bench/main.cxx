@@ -311,13 +311,12 @@ void run(int argc, char **argv, Settings &s) {
     Vpphh = iVpphh;
   }
 
-  CTF::Tensor<FIELD> *Jppph = nullptr, *Jhhhp = nullptr, *Jhphh = nullptr;
+  CTF::Tensor<FIELD> *Jppph = nullptr, *Jhhhp = nullptr;
   if (s.cT || (s.Jppph_path.size() && s.Jhhhp_path.size())) {
     if (!rank) std::cout << "doing cT" << std::endl;
     /**/
     /**/
     /**/
-    Jhphh = new CTF::Tensor<FIELD>(4, ovoo.data(), symmetries.data(), world);
     Jhhhp = new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);
     MPI_Barrier(world.comm);
     if (!rank)
@@ -326,8 +325,7 @@ void run(int argc, char **argv, Settings &s) {
     const auto conjugate = CTF::Transform<FIELD, FIELD>([](FIELD d, FIELD &f) {
       f = atrip::acc::maybe_conjugate_scalar<FIELD>(d);
     });
-    Jhphh->read_dense_from_file(s.Jhhhp_path.c_str());
-    conjugate((*Jhphh)["kaij"], (*Jhhhp)["ijka"]);
+    Jhhhp->read_dense_from_file(s.Jhhhp_path.c_str());
     MPI_Barrier(world.comm);
     /**/
     /**/

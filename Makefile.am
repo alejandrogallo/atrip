@@ -14,11 +14,7 @@ tangle: $(ORG_MAIN)
 clean-emacs:
 	-rm -v $(_ATRIPSRCS)
 
-.PHONY: dbg tangle extern all atrip
-dbg: src/dbg.h
-include/dbg.h:
-	wget -O $@ "https://raw.githubusercontent.com/sharkdp/dbg-macro/master/dbg.h"
-
+.PHONY: tangle extern all atrip
 
 atrip: extern
 	$(MAKE) -C src
