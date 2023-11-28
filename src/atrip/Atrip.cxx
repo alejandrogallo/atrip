@@ -692,13 +692,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 #if defined(HAVE_ACC)
     char nvtx_name[60];
     sprintf(nvtx_name, "iteration: %ld", i);
-#if defined(HAVE_CUDA)
+#  if defined(HAVE_CUDA)
     nvtxRangePushA(nvtx_name);
-#endif /* defined(HAVE_CUDA) */
-#if defined(HAVE_HIP)
+#  endif /* defined(HAVE_CUDA) */
+#  if defined(HAVE_HIP)
     omnitrace_user_push_region(nvtx_name);
-#endif /* defined(HAVE_CUDA) */
-#endif /* defined(HAVE_ACC) */
+#  endif /* defined(HAVE_CUDA) */
+#endif   /* defined(HAVE_ACC) */
 
     // check overhead from chrono over all iterations
     WITH_CHRONO("start:stop", {})
@@ -1036,13 +1036,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // WITH_CHRONO("mpi:barrier", MPI_Barrier(universe););
     ACC_DEVICE_SYNCHRONIZE();
 #if defined(HAVE_ACC)
-#if defined(HAVE_CUDA)
+#  if defined(HAVE_CUDA)
     nvtxRangePop();
-#endif /* defined(HAVE_CUDA) */
-#if defined(HAVE_HIP)
+#  endif /* defined(HAVE_CUDA) */
+#  if defined(HAVE_HIP)
     omnitrace_user_pop_region(nvtx_name);
-#endif /* defined(HAVE_HIP) */
-#endif /* defined(HAVE_ACC) */
+#  endif /* defined(HAVE_HIP) */
+#endif   /* defined(HAVE_ACC) */
 
     Atrip::chrono["db-last-iteration"].stop();
     db_last_iteration_time = Atrip::chrono["db-last-iteration"].count();
