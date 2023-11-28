@@ -397,9 +397,11 @@ void SliceUnion<F>::send(size_t other_rank,
          from_node = Atrip::cluster_info->rank_infos[info.from.rank].node_id;
   const bool inter_node_communication = target_node == from_node;
 
-  //if (inter_node_communication) { goto no_mpi_staging; }
+  DataPtr<F> isend_buffer;
 
-	DataPtr<F> isend_buffer = pop_free_pointers();
+  if (inter_node_communication) { goto no_mpi_staging; }
+
+  isend_buffer = pop_free_pointers();
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
 
@@ -423,26 +425,28 @@ void SliceUnion<F>::send(size_t other_rank,
 #    pragma error("Not possible to do MPI_STAGING_BUFFERS with your config.h")
 #  endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC) */
 
-  //goto mpi_staging_done;
+  goto mpi_staging_done;
 
 #else
 
   // otherwise the isend_buffer will be the source buffer itself
-  //goto no_mpi_staging;
+  goto no_mpi_staging;
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 
-//no_mpi_staging:
+no_mpi_staging:
+
+  isend_buffer = source_buffer;
 
 #if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
-  //DataPtr<F> isend_buffer = source_buffer;
+  // DataPtr<F> isend_buffer = source_buffer;
 #else
-  //F *isend_buffer = source_buffer;
+  // F *isend_buffer = source_buffer;
 #endif /* defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC) */
 
-  //goto mpi_staging_done; // do not complain that is not used, it is used when
-                         // MPI_STAGING_BUFFERS is on
-//mpi_staging_done:
+// goto mpi_staging_done; // do not complain that is not used, it is used when
+//  MPI_STAGING_BUFFERS is on
+mpi_staging_done:
 
   // We count network sends only for the largest buffers
   switch (el.name) {
