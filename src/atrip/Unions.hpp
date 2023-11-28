@@ -40,10 +40,8 @@ static void slice_into_vector
                {origin_low.begin(), origin_low.end()}};
 
   WITH_OCD
-  WITH_RANK << "slicing into " << pretty_print(to_slice_.up) << ","
-            << pretty_print(to_slice_.low) << " from "
-            << pretty_print(origin_.up) << "," << pretty_print(origin_.low)
-            << "\n";
+  WITH_RANK << "slicing into " << to_slice_.up << "," << to_slice_.low
+            << " from " << origin_.up << "," << origin_.low << "\n";
 
 #if !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY)
   to_slice.slice(to_slice_.low.data(),

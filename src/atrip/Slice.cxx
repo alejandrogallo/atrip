@@ -1,4 +1,5 @@
 #include <atrip/Slice.hpp>
+#include <atrip/Utils.hpp>
 
 namespace atrip {
 
@@ -79,7 +80,7 @@ Slice<F> &Slice<F>::find_one_by_type(std::vector<Slice<F>> &slices,
 
 template <typename F>
 Slice<F> &Slice<F>::find_recycled_source(std::vector<Slice<F>> &slices,
-                                         Slice<F>::Info info) {
+                                         typename Slice<F>::Info info) {
   const auto slice_it =
       std::find_if(slices.begin(), slices.end(), [&info](Slice<F> const &s) {
         return info.recycling == s.info.type && info.tuple == s.info.tuple
@@ -87,12 +88,12 @@ Slice<F> &Slice<F>::find_recycled_source(std::vector<Slice<F>> &slices,
       });
 
   WITH_CRAZY_DEBUG
-  WITH_RANK << "__slice__:find: recycling source of " << pretty_print(info)
+  WITH_RANK << "__slice__:find: recycling source of " << info_to_string<F>(info)
             << "\n";
   if (slice_it == slices.end())
-    throw std::domain_error("Recycled source not found: " + pretty_print(info)
-                            + " rank: " + pretty_print(Atrip::rank));
-  WITH_RANK << "__slice__:find: " << pretty_print(slice_it->info) << "\n";
+    throw std::domain_error(
+        _FORMAT("Recycled source not found: %s rank: %d", info, Atrip::rank));
+  WITH_RANK << "__slice__:find: " << info_to_string<F>(slice_it->info) << "\n";
   return *slice_it;
 }
 
@@ -108,12 +109,12 @@ Slice<F> &Slice<F>::find_type_abc(std::vector<Slice<F>> &slices,
                      return type == s.info.type && tuple == s.info.tuple;
                    });
   WITH_CRAZY_DEBUG
-  WITH_RANK << "__slice__:find:" << type << " and tuple " << pretty_print(tuple)
-            << "\n";
+  WITH_RANK << "__slice__:find:" << type << " and tuple " << tuple << "\n";
   if (slice_it == slices.end())
-    throw std::domain_error("Slice by type not found: " + pretty_print(tuple)
-                            + ", " + std::to_string(type)
-                            + " rank: " + std::to_string(Atrip::rank));
+    throw std::domain_error(_FORMAT("Slice by type not found: %s, %s rank: %d",
+                                    tuple,
+                                    std::to_string(type),
+                                    std::to_string(Atrip::rank)));
   return *slice_it;
 }
 
@@ -128,9 +129,10 @@ Slice<F> &Slice<F>::find_by_info(std::vector<Slice<F>> &slices,
             && info.from.source == s.info.from.source;
       });
   WITH_CRAZY_DEBUG
-  WITH_RANK << "__slice__:find:looking for " << pretty_print(info) << "\n";
+  WITH_RANK << "__slice__:find:looking for " << info_to_string<F>(info) << "\n";
   if (slice_it == slices.end())
-    throw std::domain_error("Slice by info not found: " + pretty_print(info));
+    throw std::domain_error("Slice by info not found: "
+                            + info_to_string<F>(info));
   return *slice_it;
 }
 
@@ -209,6 +211,16 @@ Slice<F>::Slice(size_t size_)
 }
 
 // utility functions
+
+template <typename F>
+std::string info_to_string(typename Slice<F>::Info const &i) {
+  std::stringstream out;
+  out << "«" << type_to_string<F>(i.type) << ", " << i.state << "»"
+      << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
+      << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"
+      << " ♲" << i.recycling;
+  return out.str();
+}
 
 template <typename F>
 std::string type_to_string(typename Slice<F>::Type t) {

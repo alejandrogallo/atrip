@@ -317,12 +317,12 @@ std::ostream &operator<<(std::ostream &out,
   return out;
 }
 
+template <typename F>
+std::string info_to_string(typename Slice<F>::Info const &t);
+
 template <typename F = double>
 std::ostream &operator<<(std::ostream &out, typename Slice<F>::Info const &i) {
-  out << "«" << i.type << ", " << i.state << "»"
-      << " ⊙ {" << i.from.rank << ", " << i.from.source << "}"
-      << " ∴ {" << i.tuple[0] << ", " << i.tuple[1] << "}"
-      << " ♲" << i.recycling;
+  out << info_to_string<F>(i);
   return out;
 }
 

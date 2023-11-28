@@ -186,7 +186,7 @@ public:
                    std::inserter(free_pointers, free_pointers.begin()),
                    [](DataPtr<F> ptr) { return ptr; });
 
-#if defined(HAVE_ACC)
+#if defined(HAVE_CUDA)
     LOG(1, "Atrip") << "warming communication up " << slices.size() << "\n";
     WITH_CHRONO(
         "acc:warmup", int n_ranks = Atrip::np, request_count = 0;

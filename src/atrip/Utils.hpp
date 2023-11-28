@@ -51,22 +51,6 @@
 namespace atrip {
 // Prolog:1 ends here
 
-// [[file:~/cuda/atrip/atrip.org::*Pretty%20printing][Pretty printing:1]]
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-template <typename T>
-std::string pretty_print(T &&value) {
-#if ATRIP_DEBUG > 2
-  std::stringstream stream;
-  dbg::pretty_print(stream, std::forward<T>(value));
-  return stream.str();
-#else
-  return "";
-#endif
-}
-#pragma GCC diagnostic pop
-// Pretty printing:1 ends here
-
 //  A nice handy macro to do formatting
 #define _FORMAT(_fmt, ...)                                                     \
   ([&](void) -> std::string {                                                  \

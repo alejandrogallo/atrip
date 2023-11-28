@@ -1,6 +1,7 @@
 #include <atrip/SliceUnion.hpp>
 #include <atrip/Types.hpp>
 #include <atrip/Chrono.hpp>
+#include <atrip/Tuples.hpp>
 
 namespace atrip {
 
@@ -40,7 +41,8 @@ SliceUnion<F>::build_local_database(ABCTuple const &abc) {
 
   auto const needed = needed_slices_for_tuple(abc);
 
-  WITH_RANK << "__db__:needed:" << pretty_print(needed) << "\n";
+  // TODO#C: write this needed for debug output
+  // WITH_RANK << "__db__:needed:" << pretty_print(needed) << "\n";
   // BUILD THE DATABASE
   // we need to loop over all slice_types that this TensorUnion
   // is representing and find out how we will get the corresponding
@@ -51,7 +53,11 @@ SliceUnion<F>::build_local_database(ABCTuple const &abc) {
     auto const from = rank_map.find(abc, type);
 
 #ifdef HAVE_OCD
-    WITH_RANK << "__db__:want:" << pretty_print(pair) << "\n";
+    WITH_RANK << "__db__:want:"
+              << " {" << pair.first  /**/
+              << ", " << pair.second /**/
+              << " }"
+              << "\n";
     for (auto const &s : slices)
       WITH_RANK << "__db__:guts:ocd " << s.info << " pt " << s.data << "\n";
 #endif
@@ -110,10 +116,10 @@ SliceUnion<F>::build_local_database(ABCTuple const &abc) {
       blank.info.from = from;
       blank.info.recycling = recycle_it->info.type;
       result.push_back({name, blank.info});
-      WITH_RANK << "__db__: RECYCLING: n" << name << " " << pretty_print(abc)
-                << " get " << pretty_print(blank.info) << " from "
-                << pretty_print(recycle_it->info) << " ptr " << recycle_it->data
-                << "\n";
+      WITH_RANK << "__db__: RECYCLING: n" << name << " " << abc << " get "
+                << info_to_string<F>(blank.info) << " from "
+                << info_to_string<F>(recycle_it->info) << " ptr "
+                << recycle_it->data << "\n";
       continue;
     }
 
@@ -203,9 +209,11 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
       // if we have a Fetch slice then something has gone very wrong.
       if (!slice.is_unwrapped() && slice.info.state != Slice<F>::Recycled)
         throw std::domain_error(
-            "Trying to garbage collect "
-            " a non-unwrapped slice! "
-            + pretty_print(&slice) + pretty_print(slice.info));
+            _FORMAT("Trying to garbage collect "
+                    " a non-unwrapped slice! "
+                    "%p %s",
+                    &slice,
+                    info_to_string<F>(slice.info)));
 
       // it can be that our slice is ready, but it has some hanging
       // references lying around in the form of a recycled slice.
@@ -230,8 +238,8 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
           Slice<F> *new_ready = recycled[0];
           WITH_OCD WITH_RANK << "__gc__:"
                              << "swaping recycled "
-                             << pretty_print(new_ready->info) << " and "
-                             << pretty_print(slice.info) << "\n";
+                             << info_to_string<F>(new_ready->info) << " and "
+                             << info_to_string<F>(slice.info) << "\n";
           new_ready->mark_ready();
           assert(new_ready->data == slice.data);
           free_slice_pointer = false;
@@ -241,7 +249,7 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
             new_recycled->info.recycling = new_ready->info.type;
             WITH_OCD WITH_RANK << "__gc__:"
                                << "updating recycled "
-                               << pretty_print(new_recycled->info) << "\n";
+                               << info_to_string<F>(new_recycled->info) << "\n";
           }
         }
       }
@@ -270,9 +278,6 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
       // to
       if (free_slice_pointer) {
         free_pointers.insert(slice.data);
-        WITH_RANK << "~~~:cl(" << name << ")"
-                  << " added to freePointer " << pretty_print(free_pointers)
-                  << "\n";
       } else {
         WITH_OCD WITH_RANK << "__gc__:not touching the free Pointer\n";
       }
@@ -280,10 +285,7 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
       // at this point, let us blank the slice
       WITH_RANK << "~~~:cl(" << name << ")"
                 << " freeing up slice "
-                // TODO: make this possible because of Templates
-                // TODO: there is a deduction error here
-                // << " info " << slice.info
-                << "\n";
+                << " info " << info_to_string<F>(slice.info) << "\n";
       slice.free();
     } // we did not find the slice
   }
@@ -512,30 +514,30 @@ template <typename F>
 DataPtr<F> SliceUnion<F>::unwrap_slice(typename Slice<F>::Type type,
                                        ABCTuple const &abc) {
   WITH_CRAZY_DEBUG
-  WITH_RANK << "__unwrap__:slice " << type << " w n " << name << " abc"
-            << pretty_print(abc) << "\n";
+  WITH_RANK << "__unwrap__:slice " << type << " w n " << name << " abc" << abc
+            << "\n";
   auto &slice = Slice<F>::find_type_abc(slices, type, abc);
   // WITH_RANK << "__unwrap__:info " << slice.info << "\n";
   switch (slice.info.state) {
   case Slice<F>::Dispatched:
     WITH_RANK << "__unwrap__:Fetch: " << &slice << " info "
-              << pretty_print(slice.info) << "\n";
+              << info_to_string<F>(slice.info) << "\n";
     slice.unwrap_and_mark_ready();
     return slice.data;
     break;
   case Slice<F>::SelfSufficient:
     WITH_RANK << "__unwrap__:SelfSufficient: " << &slice << " info "
-              << pretty_print(slice.info) << "\n";
+              << info_to_string<F>(slice.info) << "\n";
     return slice.data;
     break;
   case Slice<F>::Ready:
     WITH_RANK << "__unwrap__:READY: UNWRAPPED ALREADY" << &slice << " info "
-              << pretty_print(slice.info) << "\n";
+              << info_to_string<F>(slice.info) << "\n";
     return slice.data;
     break;
   case Slice<F>::Recycled:
     WITH_RANK << "__unwrap__:RECYCLED " << &slice << " info "
-              << pretty_print(slice.info) << "\n";
+              << info_to_string<F>(slice.info) << "\n";
     return unwrap_slice(slice.info.recycling, abc);
     break;
   case Slice<F>::Fetch:

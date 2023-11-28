@@ -796,11 +796,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                                  ? nullptr
                                  : &tuples_list[i + 1];
 
-    WITH_CHRONO("with_rank",
-                WITH_RANK << " :it " << iteration << " :abc "
-                          << pretty_print(abc) << " :abcN "
-                          << (abc_next ? pretty_print(*abc_next) : "None")
-                          << "\n";)
+    WITH_CHRONO(
+        "with_rank",
+        WITH_RANK << " :it " << iteration << " :abc " << abc << " :abcN "
+                  << (abc_next ? array_to_string(*abc_next) : "None") << "\n";)
 
     // COMM FIRST DATABASE
     // ================================================{{{1
@@ -987,8 +986,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
         u->unwrap_all(abc);
         WITH_RANK << "__gc__:n" << u->name << " :it " << iteration << " :abc "
-                  << pretty_print(abc) << " :abcN " << pretty_print(*abc_next)
-                  << "\n";
+                  << abc << " :abcN " << *abc_next << "\n";
         // for (auto const& slice: u->slices)
         //   WITH_RANK << "__gc__:guts:" << slice.info << "\n";
         u->clear_unused_slices_for_next_tuple(*abc_next);
@@ -1004,8 +1002,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                 && slice.is_directly_fetchable()) {
               if (slice.info.state == Slice<F>::Dispatched)
                 throw std::domain_error(
-                    "This slice should not be undispatched! "
-                    + pretty_print(slice.info));
+                    _FORMAT("This slice should not be undispatched! %s",
+                            slice.info));
             }
           }
         }

@@ -18,6 +18,7 @@
 #include <vector>
 #include <array>
 #include <numeric>
+#include <sstream>
 
 // TODO: remove some
 #include <stdio.h>
@@ -42,6 +43,28 @@ using ABCTuples = std::vector<ABCTuple>;
 
 constexpr ABCTuple FAKE_TUPLE = {0, 0, 0};
 constexpr ABCTuple INVALID_TUPLE = {1, 1, 1};
+
+template <typename F, long unsigned N>
+std::string array_to_string(std::array<F, N> const &v) {
+  std::stringstream s;
+  s << "{ ";
+  for (auto const &i : v) s << i << ", ";
+  s << "}";
+  return s.str();
+}
+
+template <typename F, long unsigned N>
+std::ostream &operator<<(std::ostream &out, std::array<F, N> const &i) {
+  out << array_to_string<F, N>(i);
+  return out;
+}
+
+template <typename F>
+std::ostream &operator<<(std::ostream &out, std::vector<F> const &i) {
+  for (auto const &v : i) out << v << " ";
+  return out;
+}
+
 // Tuples types:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Distributing%20the%20tuples][Distributing the
