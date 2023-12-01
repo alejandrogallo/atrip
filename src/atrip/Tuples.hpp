@@ -88,7 +88,8 @@ struct RankInfo {
   const size_t ranks_per_node;
 };
 
-std::vector<RankInfo> get_node_infos(std::vector<string> const &node_names);
+std::vector<RankInfo>
+get_node_infos(std::vector<std::string> const &node_names);
 
 struct ClusterInfo {
   const size_t n_nodes, np, ranks_per_node;

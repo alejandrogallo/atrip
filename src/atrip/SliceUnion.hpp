@@ -24,6 +24,7 @@
 #include <atrip/RankMap.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Malloc.hpp>
+#include <atrip/Reader.hpp>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
 #  define SOURCES_DATA(s) (s)
@@ -38,8 +39,6 @@ namespace atrip {
 template <typename F = double>
 class SliceUnion {
 public:
-  using Tensor = CTF::Tensor<F>;
-
   const RankMap<F> rank_map;
   const MPI_Comm world;
   const MPI_Comm universe;
@@ -55,6 +54,7 @@ public:
   const std::vector<typename Slice<F>::Type> slice_types;
   std::vector<DataPtr<F>> slice_buffers;
   std::set<DataPtr<F>> free_pointers;
+  Reader *reader = nullptr;
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
   struct StagingBufferInfo {
@@ -82,9 +82,6 @@ public:
       mpi_staging_buffers;
 
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
-
-  virtual void
-  slice_into_buffer(size_t iteration, Tensor &to, Tensor const &from) = 0;
 
   /*
    * This function should enforce an important property of a SliceUnion.
@@ -217,19 +214,20 @@ public:
         free(statuses);)
 #endif
 
-    LOG(1, "Atrip") << "#slices " << slices.size() << "\n";
-    WITH_RANK << "#slices[0] " << slices[0].size << "\n";
-    LOG(1, "Atrip") << "#sources " << sources.size() << "\n";
-    WITH_RANK << "#sources[0] " << slice_size << "\n";
-    WITH_RANK << "#free_pointers " << free_pointers.size() << "\n";
-    LOG(1, "Atrip") << "#slice_buffers " << slice_buffers.size() << "\n";
-    LOG(1, "Atrip") << "GB*" << np << " "
+    LOG(1, "Atrip") << "Initializing " << name_to_string<F>(name) << "\n";
+    LOG(1, "Atrip") << "\t#slices " << slices.size() << "\n";
+    WITH_RANK << "\t#slices[0] " << slices[0].size << "\n";
+    LOG(1, "Atrip") << "\t#sources " << sources.size() << "\n";
+    WITH_RANK << "\t#sources[0] " << slice_size << "\n";
+    WITH_RANK << "\t#free_pointers " << free_pointers.size() << "\n";
+    LOG(1, "Atrip") << "\t#slice_buffers " << slice_buffers.size() << "\n";
+    LOG(1, "Atrip") << "\tGB*" << np << " "
                     << double(sources.size() + slice_buffers.size())
                            * slice_size * 8 * np / 1073741824.0
                     << "\n";
   } // constructor ends
 
-  void init(Tensor const &source_tensor);
+  void init();
 
   /*
    */

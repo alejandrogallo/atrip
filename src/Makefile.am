@@ -5,7 +5,7 @@ AM_CPPFLAGS = -I@LIBCTF_CPATH@
 
 lib_LIBRARIES = libatrip.a
 
-NO_ACC_FILES = ./atrip/Blas.cxx ./atrip/Tuples.cxx ./atrip/RankMap.cxx ./atrip/Slice.cxx
+NO_ACC_FILES = ./atrip/Blas.cxx ./atrip/Tuples.cxx ./atrip/RankMap.cxx ./atrip/Slice.cxx ./atrip/CTFReader.cxx ./atrip/DiskReader.cxx
 
 libatrip_a_CPPFLAGS =
 if !WITH_HIP

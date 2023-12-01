@@ -94,6 +94,8 @@ struct Settings {
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
       complex, cT, ijkabc;
+  bool ei_ctf, ea_ctf, Tph_ctf, Tpphh_ctf, Vpphh_ctf, Vhhhp_ctf, Vppph_ctf,
+      Jppph_ctf, Jhhhp_ctf;
   std::string tuples_distribution_string, checkpoint_path;
   // paths
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
@@ -101,24 +103,40 @@ struct Settings {
 };
 
 template <typename FIELD>
-void run(int argc, char **argv, Settings &s) {
+void run(int argc, char **argv, Settings const &s) {
 
   MPI_Init(&argc, &argv);
   CTF::World world(argc, argv);
   int rank, nranks;
   MPI_Comm_rank(world.comm, &rank);
   MPI_Comm_size(world.comm, &nranks);
+  int no = s.no, nv = s.nv;
+
+  auto in = atrip::Atrip::Input<FIELD>()
+                .with_delete_Vppph(!s.keep_Vppph)
+                .with_barrier(s.barrier)
+                .with_blocking(s.blocking)
+                .with_chrono(!s.nochrono)
+                .with_rank_round_robin(s.rank_round_robin)
+                .with_iteration_mod(s.it_mod)
+                .with_percentage_mod(s.percentage_mod)
+                .with_max_iterations(s.max_iterations)
+                .with_checkpoint_at_every_iteration(s.checkpoint_it)
+                .with_checkpoint_at_percentage(s.checkpoint_percentage)
+                .with_checkpoint_path(s.checkpoint_path)
+                .with_read_checkpoint_if_exists(!s.no_checkpoint)
+                .with_ijkabc(s.ijkabc);
 
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
-  if (s.ijkabc) { _flip(s.no, s.nv); }
+  if (s.ijkabc) { _flip(no, nv); }
 
   // USER PRINTING TEST BEGIN
-  const double doubles_flops =
-      s.no * s.no * s.no              // common parts of the matrices
-      * (s.no + s.nv)                 // particles and holes
-      * (s.complex ? 4.0 : 1.0) * 2.0 // flops has to be times 2
-      * 6.0                           // how many dgemms are there
-      / 1.0e9;                        // calculate it in gflops
+  const double doubles_flops = no * no * no // common parts of the matrices
+                             * (no + nv)    // particles and holes
+                             * (s.complex ? 4.0 : 1.0)
+                             * 2.0    // flops has to be times 2
+                             * 6.0    // how many dgemms are there
+                             / 1.0e9; // calculate it in gflops
   double last_elapsed_time = 0;
   bool first_header_printed = false;
   atrip::register_iteration_descriptor(
@@ -149,7 +167,7 @@ void run(int argc, char **argv, Settings &s) {
 
       n_tuples =
 
-          s.nv * (s.nv + 1) * (s.nv + 2) / 6 - s.nv, // All tuples
+          nv * (nv + 1) * (nv + 2) / 6 - nv, // All tuples
 
       atrip_memory =
 
@@ -159,49 +177,48 @@ void run(int argc, char **argv, Settings &s) {
           // one dimensional slices (all ranks)
           //
 
-          + f * nranks * 6 * s.nv * s.no * s.no // taphh
-          + f * nranks * 6 * s.no * s.no * s.no // hhha
+          + f * nranks * 6 * nv * no * no // taphh
+          + f * nranks * 6 * no * no * no // hhha
 
           //
           // two dimensional slices (all ranks)
           //
 
-          + f * nranks * 12 * s.nv * s.no // abph
-          + f * nranks * 6 * s.no * s.no  // abhh
-          + f * nranks * 6 * s.no * s.no  // tabhh
+          + f * nranks * 12 * nv * no // abph
+          + f * nranks * 6 * no * no  // abhh
+          + f * nranks * 6 * no * no  // tabhh
 
           //
           // distributed sources (all ranks)
           //
 
-          + f * s.nv * s.nv * s.no * s.no // tpphh
-          + f * s.no * s.no * s.no * s.nv // vhhhp
-          + f * s.nv * s.nv * s.nv * s.no // vppph
-          + f * s.nv * s.nv * s.no * s.no // vpphh
-          + f * s.nv * s.nv * s.no * s.no // tpphh2
+          + f * nv * nv * no * no // tpphh
+          + f * no * no * no * nv // vhhhp
+          + f * nv * nv * nv * no // vppph
+          + f * nv * nv * no * no // vpphh
+          + f * nv * nv * no * no // tpphh2
 
           //
           // tensors in every rank
           //
 
-          + f * nranks * s.no * s.no * s.no // tijk
-          + f * nranks * s.no * s.no * s.no // zijk
-          + f * nranks * (s.no + s.nv)      // epsp
-          + f * nranks * s.no * s.nv        // tai
-      ;                                     // end
+          + f * nranks * no * no * no // tijk
+          + f * nranks * no * no * no // zijk
+          + f * nranks * (no + nv)    // epsp
+          + f * nranks * no * nv      // tai
+      ;                               // end
 
   if (rank == 0) {
     std::cout << "Tentative MEMORY USAGE (GB): "
               << double(atrip_memory) / 1024.0 / 1024.0 / 1024.0 << "\n";
   }
 
-  std::vector<int> symmetries(4, NS), vo({s.nv, s.no}),
-      vvoo({s.nv, s.nv, s.no, s.no}), ooov({s.no, s.no, s.no, s.nv}),
-      vvvo({s.nv, s.nv, s.nv, s.no}), ovoo({s.no, s.nv, s.no, s.no});
+  std::vector<int> symmetries(4, NS), vo({nv, no}), vvoo({nv, nv, no, no}),
+      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no}), ovoo({no, nv, no, no});
 
-  _print_size(Vabci, s.no * s.nv * s.nv * s.nv);
-  _print_size(Vabij, s.no * s.no * s.nv * s.nv);
-  _print_size(Vijka, s.no * s.no * s.no * s.nv);
+  _print_size(Vabci, no * nv * nv * nv);
+  _print_size(Vabij, no * no * nv * nv);
+  _print_size(Vijka, no * no * no * nv);
 
   void *epsi, *epsa;
   CTF::Tensor<double> *real_epsi = read_or_fill<double>("real-ei",
@@ -233,9 +250,12 @@ void run(int argc, char **argv, Settings &s) {
     epsi = static_cast<void *>(real_epsi);
     epsa = static_cast<void *>(real_epsa);
   }
+  // input: set epsilon as input
+  in.with_epsilon_i((CTF::Tensor<FIELD> *)epsi)
+      .with_epsilon_a((CTF::Tensor<FIELD> *)epsa);
 
   // For the printing we work with the 'correct' definition of no && nv
-  if (s.ijkabc) { _flip(s.no, s.nv); }
+  if (s.ijkabc) { _flip(no, nv); }
   if (!rank) {
     std::cout << "np " << nranks << std::endl;
     std::cout << "np " << world.np << std::endl;
@@ -245,7 +265,7 @@ void run(int argc, char **argv, Settings &s) {
     if (s.ijkabc)
       std::cout << "ijkabc used, we flip No && Nv internally" << std::endl;
   }
-  if (s.ijkabc) { _flip(s.no, s.nv); }
+  if (s.ijkabc) { _flip(no, nv); }
 
   atrip::Atrip::init(world.comm);
 
@@ -262,13 +282,14 @@ void run(int argc, char **argv, Settings &s) {
       std::exit(1);
     }
   }
+  in.with_tuples_distribution(tuples_distribution);
 
   /* We use the s.notation p = v and q = o for the initial load of T1&T2 */
   /* If we use the p <-> h algorithm we will flip the T-amplitudes     */
-  std::vector<int> pq({s.nv, s.no}), ppqq({s.nv, s.nv, s.no, s.no});
+  std::vector<int> pq({nv, no}), ppqq({nv, nv, no, no});
   if (s.ijkabc) {
-    pq = {s.no, s.nv};
-    ppqq = {s.no, s.no, s.nv, s.nv};
+    pq = {no, nv};
+    ppqq = {no, no, nv, nv};
   }
 
   CTF::Tensor<FIELD> *Tph = nullptr, *Tpphh = nullptr, *Vpphh = nullptr;
@@ -311,78 +332,91 @@ void run(int argc, char **argv, Settings &s) {
     Vpphh = iVpphh;
   }
 
+  in.with_Tph(Tph);
+
+  if (s.Vpphh_ctf) {
+    in.with_Vpphh(Vpphh);
+  } else {
+    in.with_Vpphh_path(s.Vpphh_path);
+  }
+
+  if (s.Tpphh_ctf) {
+    in.with_Tpphh(Tpphh);
+  } else {
+    in.with_Tpphh_path(s.Tpphh_path);
+  }
+
   CTF::Tensor<FIELD> *Jppph = nullptr, *Jhhhp = nullptr;
   if (s.cT || (s.Jppph_path.size() && s.Jhhhp_path.size())) {
     if (!rank) std::cout << "doing cT" << std::endl;
+    // TODO: do it with read_or_fill
+    if (s.Jhhhp_ctf) {
+      /**/
+      /**/
+      /**/
+      Jhhhp = new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);
+      MPI_Barrier(world.comm);
+      if (!rank)
+        std::cout << _FORMAT("made Jhhhp done <%p>", static_cast<void *>(Jhhhp))
+                  << std::endl;
+      const auto conjugate =
+          CTF::Transform<FIELD, FIELD>([](FIELD d, FIELD &f) {
+            f = atrip::acc::maybe_conjugate_scalar<FIELD>(d);
+          });
+      Jhhhp->read_dense_from_file(s.Jhhhp_path.c_str());
+      MPI_Barrier(world.comm);
+      // input: Jhhhp
+      in.with_Jhhhp(Jhhhp);
+    } else {
+      in.with_Jhhhp_path(s.Jhhhp_path);
+    }
     /**/
     /**/
     /**/
-    Jhhhp = new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);
-    MPI_Barrier(world.comm);
-    if (!rank)
-      std::cout << _FORMAT("made Jhhhp done <%p>", static_cast<void *>(Jhhhp))
-                << std::endl;
-    const auto conjugate = CTF::Transform<FIELD, FIELD>([](FIELD d, FIELD &f) {
-      f = atrip::acc::maybe_conjugate_scalar<FIELD>(d);
-    });
-    Jhhhp->read_dense_from_file(s.Jhhhp_path.c_str());
-    MPI_Barrier(world.comm);
-    /**/
-    /**/
-    /**/
-    Jppph = new CTF::Tensor<FIELD>(4, vvvo.data(), symmetries.data(), world);
-    if (!rank)
-      std::cout << _FORMAT("made Jppph done <%p>", static_cast<void *>(Jppph))
-                << std::endl;
-    Jppph->read_dense_from_file(s.Jppph_path.c_str());
-    MPI_Barrier(world.comm);
-    if (!rank)
-      std::cout << _FORMAT("read Jppph done <%p>", static_cast<void *>(Jppph))
-                << std::endl;
-    MPI_Barrier(world.comm);
+    if (s.Jppph_ctf) {
+      Jppph = new CTF::Tensor<FIELD>(4, vvvo.data(), symmetries.data(), world);
+      if (!rank)
+        std::cout << _FORMAT("made Jppph done <%p>", static_cast<void *>(Jppph))
+                  << std::endl;
+      Jppph->read_dense_from_file(s.Jppph_path.c_str());
+      MPI_Barrier(world.comm);
+      if (!rank)
+        std::cout << _FORMAT("read Jppph done <%p>", static_cast<void *>(Jppph))
+                  << std::endl;
+      MPI_Barrier(world.comm);
+      // input: Jppph
+      in.with_Jppph(Jppph);
+    } else {
+      in.with_Jppph_path(s.Jppph_path);
+    }
   }
 
-  const auto in = atrip::Atrip::Input<FIELD>()
-                      .with_epsilon_i((CTF::Tensor<FIELD> *)epsi)
-                      .with_epsilon_a((CTF::Tensor<FIELD> *)epsa)
-                      .with_Tai(Tph)
-                      .with_Tabij(Tpphh)
-                      .with_Vabij(Vpphh)
-                      .with_Vijka(read_or_fill<FIELD>("Vhhhp",
-                                                      4,
-                                                      ooov.data(),
-                                                      symmetries.data(),
-                                                      world,
-                                                      s.Vhhhp_path,
-                                                      0,
-                                                      1))
-                      .with_Vabci(read_or_fill<FIELD>("Vppph",
-                                                      4,
-                                                      vvvo.data(),
-                                                      symmetries.data(),
-                                                      world,
-                                                      s.Vppph_path,
-                                                      0,
-                                                      1))
+  if (s.Vhhhp_ctf) {
+    in.with_Vhhhp(read_or_fill<FIELD>("Vhhhp",
+                                      4,
+                                      ooov.data(),
+                                      symmetries.data(),
+                                      world,
+                                      s.Vhhhp_path,
+                                      0,
+                                      1));
+  } else {
+    in.with_Vhhhp_path(s.Vhhhp_path);
+  }
 
-                      .with_Jabci(Jppph)
-                      .with_Jijka(Jhhhp)
-                      .with_delete_Vppph(!s.keep_Vppph)
-                      .with_barrier(s.barrier)
-                      .with_blocking(s.blocking)
-                      .with_chrono(!s.nochrono)
-                      .with_rank_round_robin(s.rank_round_robin)
-                      .with_iteration_mod(s.it_mod)
-                      .with_percentage_mod(s.percentage_mod)
-                      .with_tuples_distribution(tuples_distribution)
-                      .with_max_iterations(s.max_iterations)
+  if (s.Vppph_ctf) {
+    in.with_Vppph(read_or_fill<FIELD>("Vppph",
+                                      4,
+                                      vvvo.data(),
+                                      symmetries.data(),
+                                      world,
+                                      s.Vppph_path,
+                                      0,
+                                      1));
+  } else {
+    in.with_Vppph_path(s.Vppph_path);
+  }
 
-                      .with_checkpoint_at_every_iteration(s.checkpoint_it)
-                      .with_checkpoint_at_percentage(s.checkpoint_percentage)
-                      .with_checkpoint_path(s.checkpoint_path)
-                      .with_read_checkpoint_if_exists(!s.no_checkpoint)
-
-                      .with_ijkabc(s.ijkabc);
   try {
     auto out = atrip::Atrip::run<FIELD>(in);
     if (!atrip::Atrip::rank) {
@@ -485,7 +519,6 @@ int main(int argc, char **argv) {
   defoption(app, "--Vppph", s.Vppph_path, "Path for Vppph (Vabci)")
       ->check(CLI::ExistingFile);
 
-  //
   // completeTriples
   //
   defflag(app, "--cT", s.cT, "Perform (cT) calculation")->default_val(false);
@@ -493,6 +526,45 @@ int main(int argc, char **argv) {
       ->check(CLI::ExistingFile);
   defoption(app, "--Jhhhp", s.Jhhhp_path, "Path for Jhhhp intermediates")
       ->check(CLI::ExistingFile);
+
+  // Use reader from ctf or not
+  defflag(app, "--ei-from-ctf", s.ei_ctf, "Read using CTF the HF energies ε_i")
+      ->default_val(true);
+  defflag(app, "--ea-from-ctf", s.ea_ctf, "Read using CTF the HF energies ε_a")
+      ->default_val(true);
+  defflag(app,
+          "--Tpphh-from-ctf",
+          s.Tpphh_ctf,
+          "Read using CTF the Tpphh (Tabij)")
+      ->default_val(true);
+  defflag(app, "--Tph-from-ctf", s.Tph_ctf, "Read using CTF the Tph (Tai)")
+      ->default_val(true);
+  defflag(app,
+          "--Vpphh-from-ctf",
+          s.Vpphh_ctf,
+          "Read using CTF the Vpphh (Vabij)")
+      ->default_val(true);
+  defflag(app,
+          "--Vhhhp-from-ctf",
+          s.Vhhhp_ctf,
+          "Read using CTF the Vhhhp (Vijka)")
+      ->default_val(true);
+  defflag(app,
+          "--Vppph-from-ctf",
+          s.Vppph_ctf,
+          "Read using CTF the Vppph (Vabci)")
+      ->default_val(true);
+
+  defflag(app,
+          "--Jppph-from-ctf",
+          s.Jppph_ctf,
+          "Read using CTF for Jppph intermediates")
+      ->default_val(true);
+  defflag(app,
+          "--Jhhhp-from-ctf",
+          s.Jhhhp_ctf,
+          "Read using CTF for Jhhhp intermediates")
+      ->default_val(true);
 
   CLI11_PARSE(app, argc, argv);
 

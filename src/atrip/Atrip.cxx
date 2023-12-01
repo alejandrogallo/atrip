@@ -69,8 +69,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   const size_t rank = Atrip::rank;
   MPI_Comm universe = Atrip::communicator;
 
-  const size_t No = in.ei->lens[0];
-  const size_t Nv = in.ea->lens[0];
+  const size_t No = in.epsilon_i->lens[0];
+  const size_t Nv = in.epsilon_a->lens[0];
   LOG(0, "Atrip") << "No: " << No << "\n";
   LOG(0, "Atrip") << "Nv: " << Nv << "\n";
   LOG(0, "Atrip") << "np: " << np << "\n";
@@ -176,8 +176,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   std::vector<F> _epsi(No), _epsa(Nv), _Tai(No * Nv);
 
   // copy the data from the tensors into the vectors
-  in.ei->read_all(_epsi.data());
-  in.ea->read_all(_epsa.data());
+  in.epsilon_i->read_all(_epsi.data());
+  in.epsilon_a->read_all(_epsa.data());
   in.Tph->read_all(_Tai.data());
 
   if (in.ijkabc) {
@@ -280,6 +280,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
       ABPH<F> abph(*in.Vppph,
+                   in.Vppph_path,
+                   Slice<F>::Name::VABCI,
                    (size_t)No,
                    (size_t)Nv,
                    (size_t)np,
@@ -290,6 +292,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
       ABHH<F> abhh(*in.Vpphh,
+                   in.Vpphh_path,
+                   Slice<F>::Name::VABIJ,
                    (size_t)No,
                    (size_t)Nv,
                    (size_t)np,
@@ -299,12 +303,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-      TABHH<F> tabhh(*in.Tpphh,
-                     (size_t)No,
-                     (size_t)Nv,
-                     (size_t)np,
-                     child_comm,
-                     universe);)
+      ABHH<F> tabhh(*in.Tpphh,
+                    in.Tpphh_path,
+                    Slice<F>::Name::TABIJ,
+                    (size_t)No,
+                    (size_t)Nv,
+                    (size_t)np,
+                    child_comm,
+                    universe);)
 
   // delete the Vppph so that we don't have a HWM situation for the NV slices
   if (in.delete_Vppph) { delete in.Vppph; }
@@ -315,16 +321,20 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-      TAPHH<F> taphh(*in.Tpphh,
-                     (size_t)No,
-                     (size_t)Nv,
-                     (size_t)np,
-                     child_comm,
-                     universe);
+      APHH<F> taphh(*in.Tpphh,
+                    in.Tpphh_path,
+                    Slice<F>::Name::TA,
+                    (size_t)No,
+                    (size_t)Nv,
+                    (size_t)np,
+                    child_comm,
+                    universe);
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
       HHHA<F> hhha(*in.Vhhhp,
+                   in.Vhhhp_path,
+                   Slice<F>::Name::VIJKA,
                    (size_t)No,
                    (size_t)Nv,
                    (size_t)np,
@@ -337,27 +347,31 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // IF (cT) IS USED: HANDLE TWO FURTHER SLICES==========================={{{1
   HHHA<F> *jhhha = nullptr;
   ABPH<F> *jabph = nullptr;
-  if (in.Jhhhp) {
-    WITH_CHRONO("Jhhha-slice", LOG(0, "Atrip") << "slicing Jijka" << std::endl;
+  if (in.Jhhhp != nullptr || in.Jhhhp_path.size()) {
+    WITH_CHRONO("Jhhha-slice",
+                /**/ LOG(0, "Atrip") << "slicing Jijka" << std::endl;
                 jhhha = new HHHA<F>(*in.Jhhhp,
+                                    in.Jhhhp_path,
+                                    Slice<F>::Name::JIJKA,
                                     (size_t)No,
                                     (size_t)Nv,
                                     (size_t)np,
                                     child_comm,
                                     universe);)
-    jhhha->name = Slice<F>::Name::JIJKA;
     unions.push_back(jhhha);
   }
 
-  if (in.Jppph) {
-    WITH_CHRONO("Jabph-slice", LOG(0, "Atrip") << "slicing Jabci" << std::endl;
+  if (in.Jppph != nullptr || in.Jppph_path.size()) {
+    WITH_CHRONO("Jabph-slice",
+                /**/ LOG(0, "Atrip") << "slicing Jabci" << std::endl;
                 jabph = new ABPH<F>(*in.Jppph,
+                                    in.Jppph_path,
+                                    Slice<F>::Name::JABCI,
                                     (size_t)No,
                                     (size_t)Nv,
                                     (size_t)np,
                                     child_comm,
                                     universe);)
-    jabph->name = Slice<F>::Name::JABCI;
     unions.push_back(jabph);
   }
 

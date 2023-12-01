@@ -31,7 +31,6 @@ public:
       , No(No_)
       , Nv(Nv_) {
 
-    std::cout << "Opening MPI File" << std::endl;
     MPI_File_open(MPI_COMM_WORLD,
                   file_path.c_str(),
                   MPI_MODE_RDONLY,
@@ -39,6 +38,7 @@ public:
                   &handle);
   }
   void close() { MPI_File_close(&handle); }
+  std::string name() override { return "Disk MPI Reader"; }
 };
 
 DECLARE_DISK_READER(APHH);

@@ -24,7 +24,6 @@
 #  include <nvToolsExt.h>
 #endif /* defined(HAVE_CUDA) */
 
-#include <atrip/CTF.hpp>
 #include <atrip/Debug.hpp>
 
 namespace atrip {

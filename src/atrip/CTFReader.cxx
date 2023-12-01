@@ -10,7 +10,7 @@
 namespace atrip {
 
 template <typename F>
-void TAPHH_CTFReader<F>::read(const size_t slice_index) {
+void APHH_CTFReader<F>::read(const size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -32,7 +32,7 @@ void TAPHH_CTFReader<F>::read(const size_t slice_index) {
                        {a + 1, this->Nv, this->No, this->No});
 }
 
-INSTANTIATE_READER(TAPHH);
+INSTANTIATE_READER(APHH);
 
 template <typename F>
 void HHHA_CTFReader<F>::read(size_t slice_index) {
@@ -81,10 +81,6 @@ void ABPH_CTFReader<F>::read(size_t slice_index) {
                        *this->source_tensor,
                        {a, b, 0, 0},
                        {a + 1, b + 1, this->Nv, this->No});
-
-  F sum(0);
-  for (auto const &s : this->slice_union->sources[slice_index]) sum += s * s;
-  std::cout << _FORMAT("sum(%d): %f\n", slice_index, sum);
 }
 
 INSTANTIATE_READER(ABPH);

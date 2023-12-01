@@ -47,7 +47,8 @@ std::vector<std::string> get_node_names(MPI_Comm comm) {
   return node_list;
 }
 
-std::vector<RankInfo> get_node_infos(std::vector<string> const &node_names) {
+std::vector<RankInfo>
+get_node_infos(std::vector<std::string> const &node_names) {
   std::vector<RankInfo> result;
   std::vector<std::string> unique_names;
   for (auto const &name : node_names) {

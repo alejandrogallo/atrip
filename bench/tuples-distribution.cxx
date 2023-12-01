@@ -383,11 +383,46 @@ int main(int argc, char **argv) {
   INIT_DRY(t_taphh, {nv, nv, no, no});
   INIT_DRY(t_hhha, {no, no, no, nv});
 
-  ABPH<F> abph(t_abph, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
-  ABHH<F> abhh(t_abhh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
-  TABHH<F> tabhh(t_tabhh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
-  TAPHH<F> taphh(t_taphh, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
-  HHHA<F> hhha(t_hhha, (size_t)no, (size_t)nv, (size_t)np, kaun, kaun);
+  ABPH<F> abph(t_abph,
+               "",
+               Slice<F>::Name::VABCI,
+               (size_t)no,
+               (size_t)nv,
+               (size_t)np,
+               kaun,
+               kaun);
+  ABHH<F> abhh(t_abhh,
+               "",
+               Slice<F>::Name::VABIJ,
+               (size_t)no,
+               (size_t)nv,
+               (size_t)np,
+               kaun,
+               kaun);
+  ABHH<F> tabhh(t_tabhh,
+                "",
+                Slice<F>::Name::TABIJ,
+                (size_t)no,
+                (size_t)nv,
+                (size_t)np,
+                kaun,
+                kaun);
+  APHH<F> taphh(t_taphh,
+                "",
+                Slice<F>::Name::TA,
+                (size_t)no,
+                (size_t)nv,
+                (size_t)np,
+                kaun,
+                kaun);
+  HHHA<F> hhha(t_hhha,
+               "",
+               Slice<F>::Name::VIJKA,
+               (size_t)no,
+               (size_t)nv,
+               (size_t)np,
+               kaun,
+               kaun);
 
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 

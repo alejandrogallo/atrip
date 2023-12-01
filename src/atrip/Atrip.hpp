@@ -29,6 +29,8 @@
 #include <atrip/Types.hpp>
 #include <atrip/Tuples.hpp>
 
+#include <atrip/CTF.hpp>
+
 #define ADD_ATTRIBUTE(_type, _name, _default)                                  \
   _type _name = _default;                                                      \
   Input &with_##_name(_type i) {                                               \
@@ -66,50 +68,35 @@ struct Atrip {
 
   template <typename F = double>
   struct Input {
-    CTF::Tensor<F> *ei = nullptr, *ea = nullptr, *Tph = nullptr,
-                   *Tpphh = nullptr, *Vpphh = nullptr, *Vhhhp = nullptr,
-                   *Vppph = nullptr, *Jppph = nullptr, *Jhhhp = nullptr;
-    Input &with_epsilon_i(CTF::Tensor<F> *t) {
-      ei = t;
-      return *this;
-    }
-    Input &with_epsilon_a(CTF::Tensor<F> *t) {
-      ea = t;
-      return *this;
-    }
-    Input &with_Tai(CTF::Tensor<F> *t) {
-      Tph = t;
-      return *this;
-    }
-    Input &with_Tabij(CTF::Tensor<F> *t) {
-      Tpphh = t;
-      return *this;
-    }
-    Input &with_Vabij(CTF::Tensor<F> *t) {
-      Vpphh = t;
-      return *this;
-    }
-    Input &with_Vijka(CTF::Tensor<F> *t) {
-      Vhhhp = t;
-      return *this;
-    }
-    Input &with_Vabci(CTF::Tensor<F> *t) {
-      Vppph = t;
-      return *this;
-    }
-    Input &with_Jijka(CTF::Tensor<F> *t) {
-      Jhhhp = t;
-      return *this;
-    }
-    Input &with_Jabci(CTF::Tensor<F> *t) {
-      Jppph = t;
-      return *this;
-    }
+
     enum TuplesDistribution {
       NAIVE,
       GROUP_AND_SORT,
     };
 
+    // Tensor handles coming from CTF
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, epsilon_i, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, epsilon_a, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Tph, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Tpphh, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Vpphh, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Vhhhp, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Vppph, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Jppph, nullptr);
+    ADD_ATTRIBUTE(CTF::Tensor<F> *, Jhhhp, nullptr);
+
+    // File handles coming from disk reader
+    ADD_ATTRIBUTE(std::string, epsilon_i_path, "");
+    ADD_ATTRIBUTE(std::string, epsilon_a_path, "");
+    ADD_ATTRIBUTE(std::string, Tph_path, "");
+    ADD_ATTRIBUTE(std::string, Tpphh_path, "");
+    ADD_ATTRIBUTE(std::string, Vpphh_path, "");
+    ADD_ATTRIBUTE(std::string, Vhhhp_path, "");
+    ADD_ATTRIBUTE(std::string, Vppph_path, "");
+    ADD_ATTRIBUTE(std::string, Jppph_path, "");
+    ADD_ATTRIBUTE(std::string, Jhhhp_path, "");
+
+    // Miscellaneous options
     ADD_ATTRIBUTE(bool, delete_Vppph, false)
     ADD_ATTRIBUTE(bool, rank_round_robin, false)
     ADD_ATTRIBUTE(bool, chrono, false)

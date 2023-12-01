@@ -31,12 +31,13 @@ public:
       , Nv(Nv_) {}
 
   void close() override { delete temp_tensor; }
+  std::string name() override { return "CTF Reader"; }
 
   CTF::Tensor<F> *temp_tensor = nullptr;
   CTF::World *world;
 };
 
-DECLARE_CTF_READER(TAPHH);
+DECLARE_CTF_READER(APHH);
 DECLARE_CTF_READER(HHHA);
 DECLARE_CTF_READER(ABPH);
 DECLARE_CTF_READER(ABHH);

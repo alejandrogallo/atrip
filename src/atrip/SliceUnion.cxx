@@ -305,22 +305,13 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
 // }
 
 template <typename F>
-void SliceUnion<F>::init(Tensor const &source_tensor) {
+void SliceUnion<F>::init() {
 
-  CTF::World w(world);
   const int rank = Atrip::rank;
-#if defined(ATRIP_DRY)
-  const int order = 0;
-#else
-  const int order = slice_length.size();
-#endif /* defined(ATRIP_DRY) */
-  std::vector<int> const syms(order, NS);
-  std::vector<int> __slice_length(slice_length.begin(), slice_length.end());
-  Tensor to_slice_into(order, __slice_length.data(), syms.data(), w);
-
-  WITH_OCD WITH_RANK << "slicing... \n";
 
   // setUp sources
+  LOG(0, "Atrip") << "\tReading and slicing using reader: " << reader->name()
+                  << "\n";
   size_t last_source = 0;
   for (size_t it(0); it < rank_map.n_sources(); ++it) {
     const size_t source =
@@ -328,9 +319,10 @@ void SliceUnion<F>::init(Tensor const &source_tensor) {
     WITH_OCD
     WITH_RANK << "Init:to_slice_into it-" << it << " :: source " << source
               << "\n";
-    slice_into_buffer(source, to_slice_into, source_tensor);
+    reader->read(source);
     last_source = source;
   }
+  reader->close();
 }
 
 template <typename F>
