@@ -6,11 +6,6 @@
 
 namespace atrip {
 
-enum ReaderType {
-  CTF,
-  DISK
-};
-
 class Reader {
 public:
   virtual void read(const size_t slice_index) = 0;

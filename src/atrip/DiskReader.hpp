@@ -8,24 +8,27 @@
 
 #define DECLARE_DISK_READER(name_)                                             \
   template <typename F>                                                        \
-  class name_##_DiskReader : public DiskReader<F> {                            \
-    using DiskReader<F>::DiskReader;                                           \
+  class name_;                                                                 \
+  template <typename F>                                                        \
+  class DiskReader<name_<F>> : public DiskReaderProxy<F> {                     \
+    using DiskReaderProxy<F>::DiskReaderProxy;                                 \
     void read(const size_t slice_index) override;                              \
+    std::string name() override { return "Disk MPI Reader: " #name_; }         \
   }
 
 namespace atrip {
 
 template <typename F>
-class DiskReader : public Reader {
+class DiskReaderProxy : public Reader {
 public:
   const std::string file_path;
   SliceUnion<F> *slice_union;
   const int No, Nv;
   MPI_File handle;
-  DiskReader(const std::string file_path_,
-             SliceUnion<F> *slice_union_,
-             int No_,
-             int Nv_)
+  DiskReaderProxy(const std::string file_path_,
+                  SliceUnion<F> *slice_union_,
+                  int No_,
+                  int Nv_)
       : file_path(file_path_)
       , slice_union(slice_union_)
       , No(No_)
@@ -37,9 +40,11 @@ public:
                   MPI_INFO_NULL,
                   &handle);
   }
-  void close() { MPI_File_close(&handle); }
-  std::string name() override { return "Disk MPI Reader"; }
+  void close() override { MPI_File_close(&handle); }
 };
+
+template <typename F>
+class DiskReader;
 
 DECLARE_DISK_READER(APHH);
 DECLARE_DISK_READER(ABPH);

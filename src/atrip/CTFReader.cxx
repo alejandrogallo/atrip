@@ -4,13 +4,13 @@
 #include <atrip/CTFReader.hpp>
 
 #define INSTANTIATE_READER(name_)                                              \
-  template void name_##_CTFReader<double>::read(const size_t slice_index);     \
-  template void name_##_CTFReader<Complex>::read(const size_t slice_index)
+  template void CTFReader<name_<double>>::read(const size_t slice_index);      \
+  template void CTFReader<name_<Complex>>::read(const size_t slice_index)
 
 namespace atrip {
 
 template <typename F>
-void APHH_CTFReader<F>::read(const size_t slice_index) {
+void CTFReader<APHH<F>>::read(const size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -25,17 +25,17 @@ void APHH_CTFReader<F>::read(const size_t slice_index) {
   slice_into_vector<F>(this->slice_union->sources[slice_index],
                        this->slice_union->slice_size,
                        *this->temp_tensor,
-                       {0, 0, 0},
-                       {this->Nv, this->No, this->No},
+                       std::vector<int>({0, 0, 0}),
+                       std::vector<int>({this->Nv, this->No, this->No}),
                        *this->source_tensor,
-                       {a, 0, 0, 0},
-                       {a + 1, this->Nv, this->No, this->No});
+                       std::vector<int>({a, 0, 0, 0}),
+                       std::vector<int>({a + 1, this->Nv, this->No, this->No}));
 }
 
 INSTANTIATE_READER(APHH);
 
 template <typename F>
-void HHHA_CTFReader<F>::read(size_t slice_index) {
+void CTFReader<HHHA<F>>::read(size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -57,10 +57,10 @@ void HHHA_CTFReader<F>::read(size_t slice_index) {
                        {this->No, this->No, this->No, a + 1});
 }
 
-INSTANTIATE_READER(HHHA);
+INSTANTIATE_READER(atrip::HHHA);
 
 template <typename F>
-void ABPH_CTFReader<F>::read(size_t slice_index) {
+void CTFReader<ABPH<F>>::read(size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
@@ -83,10 +83,10 @@ void ABPH_CTFReader<F>::read(size_t slice_index) {
                        {a + 1, b + 1, this->Nv, this->No});
 }
 
-INSTANTIATE_READER(ABPH);
+INSTANTIATE_READER(atrip::ABPH);
 
 template <typename F>
-void ABHH_CTFReader<F>::read(size_t slice_index) {
+void CTFReader<ABHH<F>>::read(size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
@@ -109,6 +109,6 @@ void ABHH_CTFReader<F>::read(size_t slice_index) {
                        {a + 1, b + 1, this->No, this->No});
 }
 
-INSTANTIATE_READER(ABHH);
+INSTANTIATE_READER(atrip::ABHH);
 
 } // namespace atrip

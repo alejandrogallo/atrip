@@ -3,13 +3,13 @@
 #include <atrip/Unions.hpp>
 
 #define INSTANTIATE_READER(name_)                                              \
-  template void name_##_DiskReader<double>::read(const size_t slice_index);    \
-  template void name_##_DiskReader<Complex>::read(const size_t slice_index)
+  template void DiskReader<name_<double>>::read(const size_t slice_index);     \
+  template void DiskReader<name_<Complex>>::read(const size_t slice_index)
 
 namespace atrip {
 
 template <typename F>
-void APHH_DiskReader<F>::read(const size_t slice_index) {
+void DiskReader<APHH<F>>::read(const size_t slice_index) {
 
   const int /**/
       a = this->slice_union->rank_map.find(
@@ -40,7 +40,7 @@ void APHH_DiskReader<F>::read(const size_t slice_index) {
 INSTANTIATE_READER(APHH);
 
 template <typename F>
-void ABPH_DiskReader<F>::read(const size_t slice_index) {
+void DiskReader<ABPH<F>>::read(const size_t slice_index) {
 
   const int /**/
       el = this->slice_union->rank_map.find(
@@ -71,7 +71,7 @@ void ABPH_DiskReader<F>::read(const size_t slice_index) {
 INSTANTIATE_READER(ABPH);
 
 template <typename F>
-void HHHA_DiskReader<F>::read(const size_t slice_index) {
+void DiskReader<HHHA<F>>::read(const size_t slice_index) {
 
   const int /**/
       a = this->slice_union->rank_map.find(
@@ -94,7 +94,7 @@ void HHHA_DiskReader<F>::read(const size_t slice_index) {
 INSTANTIATE_READER(HHHA);
 
 template <typename F>
-void ABHH_DiskReader<F>::read(const size_t slice_index) {
+void DiskReader<ABHH<F>>::read(const size_t slice_index) {
 
   const int /**/
       el = this->slice_union->rank_map.find(

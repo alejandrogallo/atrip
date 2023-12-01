@@ -23,7 +23,7 @@
 
 namespace atrip {
 
-template <typename F = double>
+template <typename F>
 static void slice_into_vector
 #if defined(ATRIP_SOURCES_IN_GPU)
     (DataPtr<F> &source,
@@ -32,29 +32,23 @@ static void slice_into_vector
 #endif
      size_t slice_size,
      CTF::Tensor<F> &to_slice,
-     std::vector<int64_t> const low,
-     std::vector<int64_t> const up,
+     std::vector<int> const low,
+     std::vector<int> const up,
      CTF::Tensor<F> const &origin,
-     std::vector<int64_t> const origin_low,
-     std::vector<int64_t> const origin_up) {
-  // Thank you CTF for forcing me to do this
-  struct {
-    std::vector<int> up, low;
-  } to_slice_ = {{up.begin(), up.end()}, {low.begin(), low.end()}},
-    origin_ = {{origin_up.begin(), origin_up.end()},
-               {origin_low.begin(), origin_low.end()}};
+     std::vector<int> const origin_low,
+     std::vector<int> const origin_up) {
 
   WITH_OCD
-  WITH_RANK << "slicing into " << to_slice_.up << "," << to_slice_.low
-            << " from " << origin_.up << "," << origin_.low << "\n";
+  WITH_RANK << "slicing into " << up << "," << low << " from " << origin_up
+            << "," << origin_low << "\n";
 
 #if !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY)
-  to_slice.slice(to_slice_.low.data(),
-                 to_slice_.up.data(),
+  to_slice.slice(low.data(),
+                 up.data(),
                  0.0,
                  origin,
-                 origin_.low.data(),
-                 origin_.up.data(),
+                 origin_low.data(),
+                 origin_up.data(),
                  1.0);
 
 #  if defined(ATRIP_SOURCES_IN_GPU)
@@ -77,8 +71,9 @@ static void slice_into_vector
 #endif /* !defined(ATRIP_DONT_SLICE) && !defined(ATRIP_DRY) */
 }
 
-template <typename F = double>
-struct APHH : public SliceUnion<F> {
+template <typename F>
+class APHH : public SliceUnion<F> {
+public:
   APHH(CTF::Tensor<F> const &source_tensor,
        std::string const &tensor_path,
        typename Slice<F>::Name name,
@@ -97,17 +92,17 @@ struct APHH : public SliceUnion<F> {
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new APHH_DiskReader<F>(tensor_path, this, No, Nv);
+      this->reader = new DiskReader<APHH<F>>(tensor_path, this, No, Nv);
     } else {
-      this->reader = dynamic_cast<Reader *>(
-          new APHH_CTFReader<F>(&source_tensor, this, No, Nv));
+      this->reader = new CTFReader<APHH<F>>(&source_tensor, this, No, Nv);
     }
     this->init();
   }
 };
 
-template <typename F = double>
-struct HHHA : public SliceUnion<F> {
+template <typename F>
+class HHHA : public SliceUnion<F> {
+public:
   HHHA(CTF::Tensor<F> const &source_tensor,
        std::string const &tensor_path,
        typename Slice<F>::Name name,
@@ -127,17 +122,17 @@ struct HHHA : public SliceUnion<F> {
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new HHHA_DiskReader<F>(tensor_path, this, No, Nv);
+      this->reader = new DiskReader<HHHA<F>>(tensor_path, this, No, Nv);
     } else {
-      this->reader = dynamic_cast<Reader *>(
-          new HHHA_CTFReader<F>(&source_tensor, this, No, Nv));
+      this->reader = new CTFReader<HHHA<F>>(&source_tensor, this, No, Nv);
     }
     this->init();
   }
 };
 
-template <typename F = double>
-struct ABPH : public SliceUnion<F> {
+template <typename F>
+class ABPH : public SliceUnion<F> {
+public:
   ABPH(CTF::Tensor<F> const &source_tensor,
        std::string const &tensor_path,
        typename Slice<F>::Name name,
@@ -160,17 +155,17 @@ struct ABPH : public SliceUnion<F> {
                       name,
                       2 * 6) {
     if (tensor_path.size()) {
-      this->reader = new ABPH_DiskReader<F>(tensor_path, this, No, Nv);
+      this->reader = new DiskReader<ABPH<F>>(tensor_path, this, No, Nv);
     } else {
-      this->reader = dynamic_cast<Reader *>(
-          new ABPH_CTFReader<F>(&source_tensor, this, No, Nv));
+      this->reader = new CTFReader<ABPH<F>>(&source_tensor, this, No, Nv);
     }
     this->init();
   }
 };
 
-template <typename F = double>
-struct ABHH : public SliceUnion<F> {
+template <typename F>
+class ABHH : public SliceUnion<F> {
+public:
   ABHH(CTF::Tensor<F> const &source_tensor,
        std::string const &tensor_path,
        typename Slice<F>::Name name,
@@ -188,10 +183,9 @@ struct ABHH : public SliceUnion<F> {
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new ABHH_DiskReader<F>(tensor_path, this, No, Nv);
+      this->reader = new DiskReader<ABHH<F>>(tensor_path, this, No, Nv);
     } else {
-      this->reader = dynamic_cast<Reader *>(
-          new ABHH_CTFReader<F>(&source_tensor, this, No, Nv));
+      this->reader = new CTFReader<ABHH<F>>(&source_tensor, this, No, Nv);
     }
     this->init();
   }
