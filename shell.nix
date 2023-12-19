@@ -5,7 +5,7 @@ let
 
   pkgs = import <nixpkgs> {
     config.allowUnfree = true;
-    overlays = [ (import ./etc/nix/overlays/openmpi.nix openmpi-version) ];
+    #overlays = [ (import ./etc/nix/overlays/openmpi.nix openmpi-version) ];
   };
 
   # unfree-pkgs = import <nixpkgs> { config.allowUnfree = true; };

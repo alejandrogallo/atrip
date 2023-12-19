@@ -307,6 +307,10 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
 template <typename F>
 void SliceUnion<F>::init() {
 
+  if (this->reader == nullptr) {
+    throw "Reader object not set, can not read slices of tensor";
+  }
+
   const int rank = Atrip::rank;
 
   // setUp sources

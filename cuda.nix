@@ -1,5 +1,5 @@
-{pkgs}:
-{
+{ pkgs }: {
+  buildInputs = with pkgs; [ cudatoolkit.lib cudatoolkit.out ];
 
   shellHook = ''
     export NVCC=${pkgs.cudatoolkit}/bin/nvcc

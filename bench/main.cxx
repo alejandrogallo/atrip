@@ -9,6 +9,7 @@
 #include <bench/utils.hpp>
 
 #include <atrip/Atrip.hpp>
+#include <atrip/CTFReader.hpp>
 #include <atrip/Complex.hpp>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
@@ -41,15 +42,31 @@ atrip::Complex _conj(const atrip::Complex &i) {
 }
 
 template <typename F>
-double complex_norm2(CTF::Tensor<F> *i, std::string const idx) {
-  CTF::Tensor<F> o(*i);
-  const auto add_to_conj =
-      CTF::Transform<F, F>([](F const &d, F &f) { f -= _conj<F>(d); });
-
-  add_to_conj((*i)[idx.c_str()], o[idx.c_str()]);
-  return o.norm2();
+std::vector<F> *
+get_epsilon(std::string const &path, size_t const len, MPI_Comm comm) {
+  auto result = new std::vector<F>(len, 0.5);
+  if (path.size()) *result = atrip::read_all<F>({len}, path, comm);
+  return result;
 }
 
+template std::vector<double> *
+get_epsilon<double>(std::string const &path, size_t const len, MPI_Comm comm);
+
+template <>
+std::vector<atrip::Complex> *
+get_epsilon<atrip::Complex>(std::string const &path,
+                            size_t const len,
+                            MPI_Comm comm) {
+  std::vector<double> *real = get_epsilon<double>(path, len, comm);
+  auto result = new std::vector<atrip::Complex>(len, 0.5);
+  for (size_t i = 0; i < len; i++) {
+    (*result)[i] = atrip::Complex((*real)[i]);
+  }
+  delete real;
+  return result;
+}
+
+#if defined(HAVE_CTF)
 template <typename F>
 CTF::Tensor<F> *read_or_fill(std::string const &name,
                              int order,
@@ -87,6 +104,7 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
 
   return tsr;
 }
+#endif /*   defined(HAVE_CTF) */
 
 struct Settings {
   size_t checkpoint_it, max_iterations;
@@ -94,8 +112,10 @@ struct Settings {
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
       complex, cT, ijkabc;
+#if defined(HAVE_CTF)
   bool ei_ctf, ea_ctf, Tph_ctf, Tpphh_ctf, Vpphh_ctf, Vhhhp_ctf, Vppph_ctf,
       Jppph_ctf, Jhhhp_ctf;
+#endif /*   defined(HAVE_CTF) */
   std::string tuples_distribution_string, checkpoint_path;
   // paths
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
@@ -106,10 +126,15 @@ template <typename FIELD>
 void run(int argc, char **argv, Settings const &s) {
 
   MPI_Init(&argc, &argv);
+#if defined(HAVE_CTF)
   CTF::World world(argc, argv);
+  MPI_Comm comm = world.comm;
+#else
+  MPI_Comm comm = MPI_COMM_WORLD;
+#endif /* defined(HAVE_CTF) */
   int rank, nranks;
-  MPI_Comm_rank(world.comm, &rank);
-  MPI_Comm_size(world.comm, &nranks);
+  MPI_Comm_rank(comm, &rank);
+  MPI_Comm_size(comm, &nranks);
   int no = s.no, nv = s.nv;
 
   auto in = atrip::Atrip::Input<FIELD>()
@@ -213,52 +238,29 @@ void run(int argc, char **argv, Settings const &s) {
               << double(atrip_memory) / 1024.0 / 1024.0 / 1024.0 << "\n";
   }
 
-  std::vector<int> symmetries(4, NS), vo({nv, no}), vvoo({nv, nv, no, no}),
-      ooov({no, no, no, nv}), vvvo({nv, nv, nv, no}), ovoo({no, nv, no, no});
+#if defined(HAVE_CTF)
+  std::vector<int> symmetries(4, NS);
+#endif /* defined(HAVE_CTF) */
+
+  std::vector<int>
+
+      vo({nv, no}), vvoo({nv, nv, no, no}), ooov({no, no, no, nv}),
+      vvvo({nv, nv, nv, no}), ovoo({no, nv, no, no});
 
   _print_size(Vabci, no * nv * nv * nv);
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
 
-  void *epsi, *epsa;
-  CTF::Tensor<double> *real_epsi = read_or_fill<double>("real-ei",
-                                                        1,
-                                                        ovoo.data(),
-                                                        symmetries.data(),
-                                                        world,
-                                                        s.ei_path,
-                                                        -40.0,
-                                                        -2),
-                      *real_epsa = read_or_fill<double>("real-ea",
-                                                        1,
-                                                        vo.data(),
-                                                        symmetries.data(),
-                                                        world,
-                                                        s.ea_path,
-                                                        -40.0,
-                                                        -2);
+  std::vector<FIELD> *epsi = get_epsilon<FIELD>(s.ei_path, no, comm),
+                     *epsa = get_epsilon<FIELD>(s.ea_path, nv, comm);
+  in.with_epsilon_i(epsi).with_epsilon_a(epsa);
 
-  if (s.complex) {
-    using F = atrip::Complex;
-    const auto to_complex = CTF::Transform<double, atrip::Complex>(
-        [](double d, atrip::Complex &f) { f = d; });
-    epsi = new CTF::Tensor<F>(1, ovoo.data(), symmetries.data(), world);
-    epsa = new CTF::Tensor<F>(1, vo.data(), symmetries.data(), world);
-    to_complex((*real_epsi)["i"], (*(CTF::Tensor<F> *)epsi)["i"]);
-    to_complex((*real_epsa)["a"], (*(CTF::Tensor<F> *)epsa)["a"]);
-  } else {
-    epsi = static_cast<void *>(real_epsi);
-    epsa = static_cast<void *>(real_epsa);
-  }
-  // input: set epsilon as input
-  in.with_epsilon_i((CTF::Tensor<FIELD> *)epsi)
-      .with_epsilon_a((CTF::Tensor<FIELD> *)epsa);
+  MPI_Barrier(comm);
 
   // For the printing we work with the 'correct' definition of no && nv
   if (s.ijkabc) { _flip(no, nv); }
   if (!rank) {
     std::cout << "np " << nranks << std::endl;
-    std::cout << "np " << world.np << std::endl;
     for (auto const &fn : input_printer)
       // print input parameters
       fn();
@@ -267,7 +269,7 @@ void run(int argc, char **argv, Settings const &s) {
   }
   if (s.ijkabc) { _flip(no, nv); }
 
-  atrip::Atrip::init(world.comm);
+  atrip::Atrip::init(comm);
 
   typename atrip::Atrip::Input<FIELD>::TuplesDistribution tuples_distribution;
   {
@@ -292,48 +294,48 @@ void run(int argc, char **argv, Settings const &s) {
     ppqq = {no, no, nv, nv};
   }
 
-  CTF::Tensor<FIELD> *Tph = nullptr, *Tpphh = nullptr, *Vpphh = nullptr;
-  CTF::Tensor<FIELD> *iTph = read_or_fill<FIELD>("tph",
+  std::vector<FIELD> *Tph = new std::vector<FIELD>(no * nv, 0.1);
+
+#if defined(HAVE_CTF)
+  CTF::Tensor<FIELD> *Tpphh = nullptr, *Vpphh = nullptr;
+  CTF::Tensor<FIELD> /**iTph = read_or_fill<FIELD>("tph",
                                                  2,
                                                  pq.data(),
                                                  symmetries.data(),
                                                  world,
                                                  s.Tph_path,
                                                  0.0,
-                                                 1.0),
-                     *iTpphh = read_or_fill<FIELD>("tpphh",
-                                                   4,
-                                                   ppqq.data(),
-                                                   symmetries.data(),
-                                                   world,
-                                                   s.Tpphh_path,
-                                                   0.0,
-                                                   1.0),
-                     *iVpphh = read_or_fill<FIELD>("Vpphh",
-                                                   4,
-                                                   ppqq.data(),
-                                                   symmetries.data(),
-                                                   world,
-                                                   s.Vpphh_path,
-                                                   0,
-                                                   1);
+                                                 1.0),*/
+      *iTpphh = read_or_fill<FIELD>("tpphh",
+                                    4,
+                                    ppqq.data(),
+                                    symmetries.data(),
+                                    world,
+                                    s.Tpphh_path,
+                                    0.0,
+                                    1.0),
+      *iVpphh = read_or_fill<FIELD>("Vpphh",
+                                    4,
+                                    ppqq.data(),
+                                    symmetries.data(),
+                                    world,
+                                    s.Vpphh_path,
+                                    0,
+                                    1);
   /*if (P<->H) Switch Tph */
   if (s.ijkabc) {
-    Tph = new CTF::Tensor<FIELD>(2, vo.data(), symmetries.data(), world);
     Tpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
     Vpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
 
-    (*Tph)["ia"] = (*iTph)["ai"];
     (*Tpphh)["ijab"] = (*iTpphh)["abij"];
     (*Vpphh)["ijab"] = (*iVpphh)["abij"];
   } else {
-    Tph = iTph;
     Tpphh = iTpphh;
     Vpphh = iVpphh;
   }
+#endif /*   defined(HAVE_CTF) */
 
-  in.with_Tph(Tph);
-
+#if defined(HAVE_CTF)
   if (s.Vpphh_ctf) {
     in.with_Vpphh(Vpphh);
   } else {
@@ -345,7 +347,9 @@ void run(int argc, char **argv, Settings const &s) {
   } else {
     in.with_Tpphh_path(s.Tpphh_path);
   }
+#endif /* defined(HAVE_CTF) */
 
+#if defined(HAVE_CTF)
   CTF::Tensor<FIELD> *Jppph = nullptr, *Jhhhp = nullptr;
   if (s.cT || (s.Jppph_path.size() && s.Jhhhp_path.size())) {
     if (!rank) std::cout << "doing cT" << std::endl;
@@ -355,7 +359,7 @@ void run(int argc, char **argv, Settings const &s) {
       /**/
       /**/
       Jhhhp = new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);
-      MPI_Barrier(world.comm);
+      MPI_Barrier(comm);
       if (!rank)
         std::cout << _FORMAT("made Jhhhp done <%p>", static_cast<void *>(Jhhhp))
                   << std::endl;
@@ -364,7 +368,7 @@ void run(int argc, char **argv, Settings const &s) {
             f = atrip::acc::maybe_conjugate_scalar<FIELD>(d);
           });
       Jhhhp->read_dense_from_file(s.Jhhhp_path.c_str());
-      MPI_Barrier(world.comm);
+      MPI_Barrier(comm);
       // input: Jhhhp
       in.with_Jhhhp(Jhhhp);
     } else {
@@ -379,11 +383,11 @@ void run(int argc, char **argv, Settings const &s) {
         std::cout << _FORMAT("made Jppph done <%p>", static_cast<void *>(Jppph))
                   << std::endl;
       Jppph->read_dense_from_file(s.Jppph_path.c_str());
-      MPI_Barrier(world.comm);
+      MPI_Barrier(comm);
       if (!rank)
         std::cout << _FORMAT("read Jppph done <%p>", static_cast<void *>(Jppph))
                   << std::endl;
-      MPI_Barrier(world.comm);
+      MPI_Barrier(comm);
       // input: Jppph
       in.with_Jppph(Jppph);
     } else {
@@ -416,6 +420,20 @@ void run(int argc, char **argv, Settings const &s) {
   } else {
     in.with_Vppph_path(s.Vppph_path);
   }
+#endif
+
+  *Tph = atrip::read_all<FIELD>({nv, no}, s.Tph_path, comm);
+  in.with_Tph(Tph);
+
+#if !defined(HAVE_CTF)
+  in.with_Vpphh_path(s.Vpphh_path);
+  in.with_Tpphh_path(s.Tpphh_path);
+
+  in.with_Jhhhp_path(s.Jhhhp_path);
+  in.with_Jppph_path(s.Jppph_path);
+  in.with_Vhhhp_path(s.Vhhhp_path);
+  in.with_Vppph_path(s.Vppph_path);
+#endif /* defined(HAVE_CTF) */
 
   try {
     auto out = atrip::Atrip::run<FIELD>(in);
@@ -527,6 +545,7 @@ int main(int argc, char **argv) {
   defoption(app, "--Jhhhp", s.Jhhhp_path, "Path for Jhhhp intermediates")
       ->check(CLI::ExistingFile);
 
+#if defined(HAVE_CTF)
   // Use reader from ctf or not
   defflag(app, "--ei-from-ctf", s.ei_ctf, "Read using CTF the HF energies ε_i")
       ->default_val(true);
@@ -554,7 +573,6 @@ int main(int argc, char **argv) {
           s.Vppph_ctf,
           "Read using CTF the Vppph (Vabci)")
       ->default_val(true);
-
   defflag(app,
           "--Jppph-from-ctf",
           s.Jppph_ctf,
@@ -565,6 +583,7 @@ int main(int argc, char **argv) {
           s.Jhhhp_ctf,
           "Read using CTF for Jhhhp intermediates")
       ->default_val(true);
+#endif /* defined(HAVE_CTF) */
 
   CLI11_PARSE(app, argc, argv);
 

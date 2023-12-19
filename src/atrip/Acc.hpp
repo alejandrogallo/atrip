@@ -1,6 +1,7 @@
 #ifndef ACC_HPP_
 #define ACC_HPP_
 
+#include "config.h"
 #include <atrip/Utils.hpp>
 
 // --------------------------------------------------------------------------------
@@ -64,6 +65,7 @@
 #  define ACC_MEMCPY_DEV_TO_HOST(hostptr, devptr, size)                        \
     cuMemcpyDtoH((hostptr), (devptr), size)
 // types
+
 #  define ACC_DOUBLE_COMPLEX cuDoubleComplex
 #  define ACC_BLAS_DOUBLE_COMPLEX cuDoubleComplex
 #  define ACC_DEVICE_PTR CUdeviceptr

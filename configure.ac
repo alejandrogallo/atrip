@@ -27,6 +27,7 @@ AC_ARG_ENABLE([docs],
                               [Enable building docs])],
               [build_docs=YES], [build_docs=NO])
 
+dnl ///////////////////////
 dnl LIBCTTF library options
 
 AC_ARG_WITH(ctf,
@@ -41,6 +42,18 @@ AC_ARG_WITH(ctf,
              LIBCTF_CPATH="${LIBCTF_PATH}/include"
              LIBCTF_LD_LIBRARY_PATH="${LIBCTF_PATH}/lib"
              ])
+
+AC_ARG_ENABLE([ctf],
+              [AS_HELP_STRING([--enable-ctf],
+                              [Use CTF library for its reader capabilities])],
+                              [WITH_CTF=yes],
+                              [WITH_CTF=no])
+if test x${WITH_CTF} = xyes; then
+AC_DEFINE([HAVE_CTF],1,[Use CTF library])
+fi
+
+dnl ///////////////////////
+dnl CLANG
 
 AC_ARG_WITH([clang-check],
             [AS_HELP_STRING([--with-clang-check],
@@ -156,6 +169,7 @@ dnl -----------------------------------------------------------------------
 dnl CTF EXPORT ------------------------------------------------------------
 dnl -----------------------------------------------------------------------
 AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
+AM_CONDITIONAL([WITH_CTF], [test x${WITH_CTF} = xyes])
 CTF_COMMIT="53ae5daad851bf3b198ebe1fa761c13b12291116"
 AC_SUBST([CTF_COMMIT])
 AC_SUBST(LIBCTF_PATH)
@@ -218,6 +232,7 @@ AC_TYPE_SIZE_T
 
 dnl -----------------------------------------------------------------------
 dnl CHECK CTF
+if test xyes = ${WITH_CTF}; then
 if test xYES = x${BUILD_CTF}; then
 AC_MSG_WARN([
 
@@ -230,6 +245,7 @@ else
   AC_CHECK_HEADER([ctf.hpp],
                   [],
                   [AC_MSG_ERROR([no ctf.hpp])])
+fi
 fi
 
 

@@ -25,6 +25,7 @@ public:
   SliceUnion<F> *slice_union;
   const int No, Nv;
   MPI_File handle;
+  std::vector<F> reorder_buffer, mpi_buffer;
   DiskReaderProxy(const std::string file_path_,
                   SliceUnion<F> *slice_union_,
                   int No_,
@@ -41,6 +42,11 @@ public:
                   &handle);
   }
   void close() override { MPI_File_close(&handle); }
+  void
+  read_into_buffer(const size_t slice_index,
+                   const size_t count,
+                   const MPI_Offset offset,
+                   std::function<void(std::vector<F> &, std::vector<F> &)>);
 };
 
 template <typename F>

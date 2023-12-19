@@ -14,6 +14,7 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Blas][Blas:2]]
 #include <atrip/Blas.hpp>
+#include <atrip/Acc.hpp>
 #include <atrip/Atrip.hpp>
 
 #if defined(HAVE_ACC)

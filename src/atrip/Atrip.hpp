@@ -21,9 +21,9 @@
 #include <map>
 #include "config.h"
 
+#include <atrip/Acc.hpp>
 #include <atrip/Chrono.hpp>
 #include <atrip/mpi.hpp>
-#include <atrip/Acc.hpp>
 
 #include <atrip/Utils.hpp>
 #include <atrip/Types.hpp>
@@ -75,15 +75,18 @@ struct Atrip {
     };
 
     // Tensor handles coming from CTF
-    ADD_ATTRIBUTE(CTF::Tensor<F> *, epsilon_i, nullptr);
-    ADD_ATTRIBUTE(CTF::Tensor<F> *, epsilon_a, nullptr);
-    ADD_ATTRIBUTE(CTF::Tensor<F> *, Tph, nullptr);
+    ADD_ATTRIBUTE(std::vector<F> *, epsilon_i, nullptr);
+    ADD_ATTRIBUTE(std::vector<F> *, epsilon_a, nullptr);
+    ADD_ATTRIBUTE(std::vector<F> *, Tph, nullptr);
+
+#if defined(HAVE_CTF)
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Tpphh, nullptr);
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Vpphh, nullptr);
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Vhhhp, nullptr);
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Vppph, nullptr);
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Jppph, nullptr);
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Jhhhp, nullptr);
+#endif /* defined(HAVE_CTF) */
 
     // File handles coming from disk reader
     ADD_ATTRIBUTE(std::string, epsilon_i_path, "");

@@ -31,18 +31,24 @@ maybe_conjugate_scalar(const F &a) {
   return a;
 }
 
-template <>
-#if defined(HAVE_HIP)
-// HIP Complains if the attributes are different in the template
-// declaration
-__MAYBE_DEVICE__
-#endif
-    __MAYBE_HOST__ __INLINE__ Complex
-    maybe_conjugate_scalar(const Complex &a) {
-  return std::conj(a);
-}
+// template <>
+// #if defined(HAVE_HIP)
+// // HIP Complains if the attributes are different in the template
+// // declaration
+// __MAYBE_DEVICE__
+// #endif
+//     __MAYBE_DEVICE__ __MAYBE_HOST__ __INLINE__ Complex
+//     maybe_conjugate_scalar(const Complex &a) {
+//   return std::conj(a);
+// }
 
 // TODO: instantiate for std::complex<double>
+
+// template <>
+// __MAYBE_DEVICE__ __INLINE__ Complex maybe_conjugate_scalar(const Complex &a)
+// {
+//   return std::conj(a);
+// }
 
 #if defined(HAVE_ACC)
 template <>

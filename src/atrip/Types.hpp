@@ -14,6 +14,7 @@
 
 // [[file:~/cuda/atrip/atrip.org::*Data%20pointer][Data pointer:1]]
 #pragma once
+#include <atrip/Acc.hpp>
 #include <atrip/Complex.hpp>
 #include <atrip/Atrip.hpp>
 

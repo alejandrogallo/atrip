@@ -8,7 +8,7 @@
 
 // This can be used also in ATRIP_DRY
 #if defined(HAVE_CUDA)
-#  define FREE_DATA_PTR(msg, ptr) _CUDA_FREE(msg, ptr)
+#  define FREE_DATA_PTR(msg, ptr) _CUDA_FREE(msg, (CUdeviceptr)ptr)
 #else
 #  define FREE_DATA_PTR(msg, ptr) std::free(ptr)
 #endif /* defined(HAVE_CUDA) */
@@ -18,7 +18,8 @@
 #  define MALLOC_HOST_DATA(msg, ptr, size) *(void **)ptr = (void *)malloc(16)
 
 #  if defined(HAVE_CUDA)
-#    define MALLOC_DATA_PTR(msg, ptr, _size) _CUDA_MALLOC(msg, ptr, 16)
+#    define MALLOC_DATA_PTR(msg, ptr, _size)                                   \
+      _CUDA_MALLOC(msg, (CUdeviceptr *)ptr, 16)
 #  elif defined(HAVE_HIP)
 #    define MALLOC_DATA_PTR(msg, ptr, _size) _HIP_MALLOC(msg, ptr, 16)
 #  else
@@ -30,7 +31,8 @@
 #  define MALLOC_HOST_DATA(msg, ptr, size) *(void **)ptr = (void *)malloc(size)
 
 #  if defined(HAVE_CUDA)
-#    define MALLOC_DATA_PTR(msg, ptr, _size) _CUDA_MALLOC(msg, ptr, _size)
+#    define MALLOC_DATA_PTR(msg, ptr, _size)                                   \
+      _CUDA_MALLOC(msg, (CUdeviceptr *)ptr, _size)
 #  elif defined(HAVE_HIP)
 #    define MALLOC_DATA_PTR(msg, ptr, _size) _HIP_MALLOC(msg, ptr, _size)
 #  else

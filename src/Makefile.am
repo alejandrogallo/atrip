@@ -5,14 +5,25 @@ AM_CPPFLAGS = -I@LIBCTF_CPATH@
 
 lib_LIBRARIES = libatrip.a
 
-NO_ACC_FILES = ./atrip/Blas.cxx ./atrip/Tuples.cxx ./atrip/RankMap.cxx ./atrip/Slice.cxx ./atrip/CTFReader.cxx ./atrip/DiskReader.cxx
+NO_ACC_FILES = \
+./atrip/Blas.cxx \
+./atrip/Tuples.cxx \
+./atrip/RankMap.cxx \
+./atrip/Slice.cxx \
+./atrip/CTFReader.cxx \
+./atrip/DiskReader.cxx
 
 libatrip_a_CPPFLAGS =
 if !WITH_HIP
 libatrip_a_SOURCES = $(NO_ACC_FILES)
 endif
 
-ACC_FILES = ./atrip/Equations.cxx ./atrip/Complex.cxx ./atrip/Atrip.cxx  ./atrip/DatabaseCommunicator.cxx ./atrip/SliceUnion.cxx
+ACC_FILES = \
+./atrip/Atrip.cxx \
+./atrip/Equations.cxx \
+./atrip/Complex.cxx  \
+./atrip/DatabaseCommunicator.cxx \
+./atrip/SliceUnion.cxx
 
 if WITH_CUDA
 
@@ -21,7 +32,17 @@ libatrip_a_CPPFLAGS += $(CUDA_CXXFLAGS)
 libatrip_a_DEPENDENCIES = $(NVCC_OBJS)
 libatrip_a_LIBADD = $(NVCC_OBJS)
 %.nvcc.o: %.cxx
-	$(NVCC) -c -x cu -ccbin="${MPICXX}" -I../ $(CPPFLAGS) -I$(LIBCTF_CPATH) $(DEFS) $(libatrip_a_CPPFLAGS) $< -o $@
+	$(NVCC) \
+		-allow-unsupported-compiler \
+		-c \
+		-x cu \
+		-ccbin="${MPICXX}" \
+		-I../ \
+		-I../../../src/ \
+		$(CPPFLAGS) \
+		-I$(LIBCTF_CPATH) \
+		$(DEFS) \
+		$(libatrip_a_CPPFLAGS) $< -o $@
 
 endif
 
@@ -33,7 +54,15 @@ libatrip_a_CPPFLAGS += $(HIP_CXXFLAGS)
 libatrip_a_DEPENDENCIES = $(HIPCC_OBJS)
 libatrip_a_LIBADD = $(HIPCC_OBJS)
 %.hipcc.o: %.cxx
-	$(HIPCC) -x hip -craype-verbose -c -I../../../src -I../ $(CPPFLAGS) -I$(LIBCTF_CPATH) $(DEFS) $(libatrip_a_CPPFLAGS) $< -o $@
+	$(HIPCC) \
+		-x hip \
+		-craype-verbose \
+		-c \
+		-I../../../src \
+		-I../ $(CPPFLAGS) \
+		-I$(LIBCTF_CPATH) \
+		$(DEFS) \
+		$(libatrip_a_CPPFLAGS) $< -o $@
 
 endif
 
