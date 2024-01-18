@@ -471,6 +471,7 @@ mpi_staging_done:
         StagingBufferInfo{isend_buffer, tag, request, abc});
   else free(request);
 #else
+  MPI_Request_free(request);
   free(request);
 #endif /* defined(ATRIP_MPI_STAGING_BUFFERS) */
 }
