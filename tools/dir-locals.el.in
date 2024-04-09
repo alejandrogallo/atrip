@@ -9,9 +9,16 @@
                                    (project-root (project-current)))))
                         (setq-local flycheck-gcc-args "@ATRIP_MPI@")
                         (setq-local flycheck-gcc-include-path
-                                    (list "@abs_top_builddir@"
-                                          "@abs_top_srcdir@/src/"
-                                          "@LIBCTF_PATH@/include"))
+                                    `("@abs_top_builddir@"
+                                      ,@(mapcar (lambda (s)
+                                                  (string-replace "-I" "" s))
+                                                (remove-if-not
+                                                 (lambda (s)
+                                                   (string-match-p "-I" s))
+                                                 (string-split "@ATRIP_MPI@"
+                                                               " ")))
+                                      "@abs_top_srcdir@/src/"
+                                      "@LIBCTF_PATH@/include"))
                         (setq-local flycheck-cppcheck-include-path
                                     flycheck-gcc-include-path)
                         (setq-local flycheck-gcc-openmp t

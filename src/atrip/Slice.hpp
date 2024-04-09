@@ -158,71 +158,8 @@ public:
 
     static MPI_Datatype usize_dt() { return MPI_UINT64_T; }
 
-// airmler: The following lines contain a memory leak.
-//         However, they are currently not used.
-/*
-    static MPI_Datatype slice_info() {
-      constexpr int n = 5;
-      MPI_Datatype dt;
-      Slice<F>::Info measure;
-      const std::vector<int> lengths(n, 1);
-      const MPI_Datatype types[n] = {
-          vector(2, usize_dt()),
-          vector(sizeof(enum Type), MPI_CHAR),
-          vector(sizeof(enum State), MPI_CHAR),
-          slice_location(),
-          vector(sizeof(enum Type), MPI_CHAR)
-          // TODO: Why this does not work on intel mpi?
-          //, MPI_UINT64_T //
-      };
-
-      static_assert(sizeof(enum Type) == 4, "Enum type not 4 bytes long");
-      static_assert(sizeof(enum State) == 4, "Enum State not 4 bytes long");
-      static_assert(sizeof(enum Name) == 4, "Enum Name not 4 bytes long");
-
-      // create the displacements from the info measurement struct
-      size_t j = 0;
-      MPI_Aint base_address, displacements[n];
-      MPI_Get_address(&measure, &base_address);
-      MPI_Get_address(&measure.tuple[0], &displacements[j++]);
-      MPI_Get_address(&measure.type, &displacements[j++]);
-      MPI_Get_address(&measure.state, &displacements[j++]);
-      MPI_Get_address(&measure.from, &displacements[j++]);
-      MPI_Get_address(&measure.recycling, &displacements[j++]);
-      for (size_t i = 0; i < n; i++)
-        displacements[i] = MPI_Aint_diff(displacements[i], base_address);
-
-      MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
-      MPI_Type_commit(&dt);
-      return dt;
-    }
-*/
     static MPI_Datatype local_database_element() {
-      constexpr int n = 2;
-      MPI_Datatype dt;
-      LocalDatabaseElement measure;
-      const std::vector<int> lengths(n, 1);
-// airmler: remove memory leaks, unused anyways
-//      const MPI_Datatype types[n] = {vector(sizeof(enum Name), MPI_CHAR),
-//                                     slice_info()};
-
-      // measure the displacements in the struct
-      size_t j = 0;
-      MPI_Aint base_address, displacements[n];
-      MPI_Get_address(&measure, &base_address);
-      MPI_Get_address(&measure.name, &displacements[j++]);
-      MPI_Get_address(&measure.info, &displacements[j++]);
-      for (size_t i = 0; i < n; i++)
-        displacements[i] = MPI_Aint_diff(displacements[i], base_address);
-
-      static_assert(sizeof(LocalDatabaseElement) == sizeof(measure),
-                    "Measure has bad size");
-
-//      MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
-//      MPI_Type_commit(&dt);
       return vector(sizeof(LocalDatabaseElement), MPI_CHAR);
-      // TODO: write tests in order to know if this works
-//      return dt;
     }
   };
   // MPI Types:1 ends here
