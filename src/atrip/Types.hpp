@@ -24,6 +24,11 @@ template <typename F>
 struct DataField;
 
 template <>
+struct DataField<float> {
+  using type = float;
+};
+
+template <>
 struct DataField<double> {
   using type = double;
 };

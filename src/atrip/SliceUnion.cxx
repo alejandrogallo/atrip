@@ -560,6 +560,7 @@ SliceUnion<F>::~SliceUnion() {
 // instantiate SliceUnion
 template class SliceUnion<Complex>;
 template class SliceUnion<double>;
+template class SliceUnion<float>;
 
 template <typename F>
 SliceUnion<F> &union_by_name(std::vector<SliceUnion<F> *> const &unions,
@@ -577,6 +578,9 @@ SliceUnion<F> &union_by_name(std::vector<SliceUnion<F> *> const &unions,
 }
 
 // instantiate union_by_name
+template SliceUnion<float> &
+union_by_name(std::vector<SliceUnion<float> *> const &,
+              typename Slice<float>::Name);
 template SliceUnion<double> &
 union_by_name(std::vector<SliceUnion<double> *> const &,
               typename Slice<double>::Name);

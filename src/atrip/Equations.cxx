@@ -347,6 +347,23 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
 #endif /* defined(ATRIP_NEW_ENERGY) */
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:3]]
+// instantiate float
+template __MAYBE_GLOBAL__ void
+get_energy_distinct(DataFieldType<float> const epsabc,
+                    size_t const No,
+                    DataFieldType<float> *const epsi,
+                    DataFieldType<float> *const Tijk,
+                    DataFieldType<float> *const Zijk,
+                    DataFieldType<double> *energy);
+
+template __MAYBE_GLOBAL__ void
+get_energy_same(DataFieldType<float> const epsabc,
+                size_t const No,
+                DataFieldType<float> *const epsi,
+                DataFieldType<float> *const Tijk,
+                DataFieldType<float> *const Zijk,
+                DataFieldType<double> *energy);
+
 // instantiate double
 template __MAYBE_GLOBAL__ void
 get_energy_distinct(DataFieldType<double> const epsabc,
@@ -426,6 +443,17 @@ __MAYBE_GLOBAL__ void singles_contribution(size_t No,
 }
 
 // instantiate
+template __MAYBE_GLOBAL__ void singles_contribution<float>(size_t No,
+                                                           size_t Nv,
+                                                           size_t a,
+                                                           size_t b,
+                                                           size_t c,
+                                                           float *const Tph,
+                                                           float *const VABij,
+                                                           float *const VACij,
+                                                           float *const VBCij,
+                                                           float *Zijk);
+
 template __MAYBE_GLOBAL__ void singles_contribution<double>(size_t No,
                                                             size_t Nv,
                                                             size_t a,
@@ -728,6 +756,38 @@ void doubles_contribution(size_t const No,
 }
 
 // instantiate templates
+template void doubles_contribution<float>(size_t const No,
+                                          size_t const Nv
+                                          // -- VABCI
+                                          ,
+                                          DataPtr<float> const VABph,
+                                          DataPtr<float> const VACph,
+                                          DataPtr<float> const VBCph,
+                                          DataPtr<float> const VBAph,
+                                          DataPtr<float> const VCAph,
+                                          DataPtr<float> const VCBph
+                                          // -- VHHHA
+                                          ,
+                                          DataPtr<float> const VhhhA,
+                                          DataPtr<float> const VhhhB,
+                                          DataPtr<float> const VhhhC
+                                          // -- TA
+                                          ,
+                                          DataPtr<float> const TAphh,
+                                          DataPtr<float> const TBphh,
+                                          DataPtr<float> const TCphh
+                                          // -- TABIJ
+                                          ,
+                                          DataPtr<float> const TABhh,
+                                          DataPtr<float> const TAChh,
+                                          DataPtr<float> const TBChh
+                                          // -- TIJK
+                                          ,
+                                          DataFieldType<float> *Tijk,
+                                          // -- tmp buffers
+                                          DataFieldType<float> *_t_buffer,
+                                          DataFieldType<float> *_vhhh);
+
 template void doubles_contribution<double>(size_t const No,
                                            size_t const Nv
                                            // -- VABCI

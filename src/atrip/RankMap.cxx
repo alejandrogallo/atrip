@@ -98,5 +98,6 @@ RankMap<F>::RankMap(std::vector<size_t> lens, size_t np_)
 
 template class RankMap<Complex>;
 template class RankMap<double>;
+template class RankMap<float>;
 
 } // namespace atrip

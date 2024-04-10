@@ -280,17 +280,23 @@ std::string state_to_string(typename Slice<F>::State t) {
   }
 }
 
+template std::string state_to_string<float>(typename Slice<float>::State t);
 template std::string state_to_string<double>(typename Slice<double>::State t);
 template std::string state_to_string<Complex>(typename Slice<Complex>::State t);
+template size_t
+name_to_size<float>(typename Slice<float>::Name t, size_t No, size_t Nv);
 template size_t
 name_to_size<double>(typename Slice<double>::Name t, size_t No, size_t Nv);
 template size_t
 name_to_size<Complex>(typename Slice<Complex>::Name t, size_t No, size_t Nv);
+template std::string name_to_string<float>(typename Slice<float>::Name t);
 template std::string name_to_string<double>(typename Slice<double>::Name t);
 template std::string name_to_string<Complex>(typename Slice<Complex>::Name t);
+template std::string type_to_string<float>(typename Slice<float>::Type t);
 template std::string type_to_string<double>(typename Slice<double>::Type t);
 template std::string type_to_string<Complex>(typename Slice<Complex>::Type t);
 
+template class Slice<float>;
 template class Slice<double>;
 template class Slice<Complex>;
 

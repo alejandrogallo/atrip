@@ -4,6 +4,7 @@
 #include <atrip/CTFReader.hpp>
 
 #define INSTANTIATE_READER(name_)                                              \
+  template void CTFReader<name_<float>>::read(const size_t slice_index);       \
   template void CTFReader<name_<double>>::read(const size_t slice_index);      \
   template void CTFReader<name_<Complex>>::read(const size_t slice_index)
 
@@ -147,6 +148,9 @@ std::vector<F> read_all(std::vector<size_t> lengths,
   return buffer;
 }
 
+template std::vector<float> read_all<float>(std::vector<size_t> lengths,
+                                            std::string const &ctf_file_path,
+                                            MPI_Comm comm);
 template std::vector<double> read_all<double>(std::vector<size_t> lengths,
                                               std::string const &ctf_file_path,
                                               MPI_Comm comm);

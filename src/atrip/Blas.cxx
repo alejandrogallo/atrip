@@ -45,6 +45,54 @@ static inline hipblasOperation_t char_to_accblasOperation(const char *trans) {
 namespace atrip {
 
 template <>
+void xgemm<float>(const char *transa,
+                  const char *transb,
+                  const int *m,
+                  const int *n,
+                  const int *k,
+                  float *alpha,
+                  const typename DataField<float>::type *A,
+                  const int *lda,
+                  const typename DataField<float>::type *B,
+                  const int *ldb,
+                  float *beta,
+                  typename DataField<float>::type *C,
+                  const int *ldc) {
+#if defined(HAVE_ACC)
+  // TODO: remove this verbose checking
+  const ACC_BLAS_STATUS error = ACC_BLAS_SGEMM(Atrip::cuda.handle,
+                                               char_to_accblasOperation(transa),
+                                               char_to_accblasOperation(transb),
+                                               *m,
+                                               *n,
+                                               *k,
+                                               alpha,
+                                               A,
+                                               *lda,
+                                               B,
+                                               *ldb,
+                                               beta,
+                                               C,
+                                               *ldc);
+  if (error != 0)
+    printf(
+        ":%-3ld (%4ldth) ERR<%4d> blasDgemm: "
+        "A = %20ld "
+        "B = %20ld "
+        "C = %20ld "
+        "\n",
+        Atrip::rank,
+        dgem_call++,
+        error,
+        A,
+        B,
+        C);
+#else
+  sgemm_(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+#endif
+}
+
+template <>
 void xgemm<double>(const char *transa,
                    const char *transb,
                    const int *m,
@@ -127,6 +175,19 @@ void xgemm<Complex>(const char *transa,
                                 *ldc));
 #else
   zgemm_(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+#endif
+}
+
+template <>
+void xcopy<float>(int *n,
+                  const DataFieldType<float> *x,
+                  int *incx,
+                  DataFieldType<float> *y,
+                  int *incy) {
+#if defined(HAVE_ACC)
+  ACC_BLAS_SCOPY(Atrip::cuda.handle, *n, x, *incx, y, *incy);
+#else
+  scopy_(n, x, incx, y, incy);
 #endif
 }
 

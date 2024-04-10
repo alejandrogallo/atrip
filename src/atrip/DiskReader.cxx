@@ -5,6 +5,7 @@
 #include <atrip/Complex.hpp>
 
 #define INSTANTIATE_READER(name_)                                              \
+  template void DiskReader<name_<float>>::read(const size_t slice_index);      \
   template void DiskReader<name_<double>>::read(const size_t slice_index);     \
   template void DiskReader<name_<Complex>>::read(const size_t slice_index)
 

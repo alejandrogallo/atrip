@@ -29,6 +29,7 @@ using namespace atrip;
 
 template <typename F>
 bool RankMap<F>::RANK_ROUND_ROBIN;
+template bool RankMap<float>::RANK_ROUND_ROBIN;
 template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 size_t Atrip::rank;
@@ -1143,7 +1144,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // TODO: change the sign in  the getEnergy routines
   return global_output;
 }
+
 // instantiate
+template Atrip::Output Atrip::run(Atrip::Input<float> const &in);
 template Atrip::Output Atrip::run(Atrip::Input<double> const &in);
 template Atrip::Output Atrip::run(Atrip::Input<Complex> const &in);
 // Main:1 ends here
