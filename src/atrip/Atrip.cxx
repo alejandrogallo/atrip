@@ -52,6 +52,12 @@ void atrip::register_iteration_descriptor(IterationDescriptor d) {
   IterationDescription::descriptor = d;
 }
 
+template <typename F>
+struct LocalOutput {
+  F energy;
+  F ct_energy;
+};
+
 void Atrip::init(MPI_Comm world) {
   Atrip::communicator = world;
   MPI_Comm_rank(world, (int *)&Atrip::rank);
@@ -597,7 +603,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // START MAIN LOOP ======================================================{{{1
 
   MPI_Barrier(universe);
-  Output local_output = {0, 0}, global_output = {0, 0};
+  LocalOutput<EnergyType<F>> local_output = {0, 0};
+  Output global_output = {0, 0};
   size_t first_iteration = 0;
   Checkpoint c;
   const size_t checkpoint_mod =
@@ -626,7 +633,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         // take the negative of the energy to correct for the
         // negativity of the equations, the energy in the checkpoint
         // should always be the correct physical one.
-        local_output.energy = -(double)c.energy;
+        local_output.energy = -EnergyType<F>(c.energy);
       }
       LOG(0, "Atrip") << "energy from checkpoint " << local_output.energy
                       << "\n";
@@ -643,19 +650,19 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 #endif /* defined(ATRIP_ONLY_DGEMM) */
           if (!fake_tuple_p) {
 #if defined(HAVE_ACC)
-            double *tuple_energy;
+            EnergyType<F> *tuple_energy;
             MALLOC_DATA_PTR("tuple energy",
-                            (DataPtr<double> *)&tuple_energy,
-                            sizeof(double));
+                            (DataPtr<EnergyType<F>> *)&tuple_energy,
+                            sizeof(EnergyType<F>));
 #else
-          double _tuple_energy(0.);
-          double *tuple_energy = &_tuple_energy;
+          EnergyType<F> _tuple_energy(0.);
+          EnergyType<F> *tuple_energy = &_tuple_energy;
 #endif /* defined(HAVE_ACC) */
 
             int distinct(0);
             if (abc[0] == abc[1]) distinct++;
             if (abc[1] == abc[2]) distinct--;
-            const double epsabc =
+            const PrecisionType<F> epsabc =
                 std::real(_epsa[abc[0]] + _epsa[abc[1]] + _epsa[abc[2]]);
 
             DataFieldType<F> _epsabc{epsabc};
@@ -685,17 +692,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                 })
 
 #if defined(HAVE_ACC)
-            double host_tuple_energy;
+            EnergyType<F> host_tuple_energy;
             ACC_MEMCPY_DEV_TO_HOST((void *)&host_tuple_energy,
-                                   (DataPtr<double>)tuple_energy,
-                                   sizeof(double));
+                                   (DataPtr<EnergyType<F>>)tuple_energy,
+                                   sizeof(EnergyType<F>));
 #else
-          double host_tuple_energy = *tuple_energy;
+          EnergyType<F> host_tuple_energy = *tuple_energy;
 #endif /* defined(HAVE_ACC) */
 
             return host_tuple_energy;
           }
-        return 0.0;
+        return EnergyType<F>(0.0);
       };
 
   for (size_t i = first_iteration, iteration = first_iteration + 1;
@@ -726,11 +733,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // write checkpoints
     // TODO: ENABLE THIS
     if (iteration % checkpoint_mod == 0 && false) {
-      double global_energy = 0;
+      EnergyType<F> global_energy = 0;
       MPI_Reduce(&local_output.energy,
                  &global_energy,
                  1,
-                 MPI_DOUBLE,
+                 traits::mpi::datatype_of<EnergyType<F>>(),
                  MPI_SUM,
                  0,
                  universe);
@@ -1085,8 +1092,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   if (jabph) delete jabph;
   MPI_Barrier(universe);
 
-  // PRINT TUPLES
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
+// PRINT TUPLES
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0, "Atrip") << "tuple energies"
                   << "\n";
@@ -1104,20 +1111,24 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   // COMMUNICATE THE ENERGIES
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
   LOG(0, "Atrip") << "COMMUNICATING ENERGIES \n";
+  EnergyType<F> _pt_energy = 0, _ct_energy = 0;
   MPI_Reduce(&local_output.energy,
-             &global_output.energy,
+             &_pt_energy,
              1,
              MPI_DOUBLE,
              MPI_SUM,
              0,
              universe);
+  global_output.energy = _pt_energy;
+
   MPI_Reduce(&local_output.ct_energy,
-             &global_output.ct_energy,
+             &_ct_energy,
              1,
              MPI_DOUBLE,
              MPI_SUM,
              0,
              universe);
+  global_output.ct_energy = _ct_energy;
   if (!in.ijkabc) {
     global_output.energy = -global_output.energy;
     global_output.ct_energy = -global_output.ct_energy;

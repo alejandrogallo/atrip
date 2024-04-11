@@ -104,7 +104,7 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                                           F *const epsi,
                                           F *const Tijk,
                                           F *const Zijk,
-                                          double *energy) {
+                                          EnergyType<F> *energy) {
   constexpr size_t block_size = 16;
   // TODO: zero this number generically and implement in Operations
   F _energy = F{0.};
@@ -185,7 +185,7 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                                       F *const epsi,
                                       F *const Tijk,
                                       F *const Zijk,
-                                      double *energy) {
+                                      EnergyType<F> *energy) {
   constexpr size_t block_size = 16;
   // TODO: zero this number generically and implement in Operations
   F _energy = F{0.};
@@ -247,7 +247,7 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                                           F *const epsi,
                                           F *const Tijk,
                                           F *const Zijk,
-                                          double *_energy) {
+                                          EnergyType<F> *_energy) {
   constexpr size_t block_size = 16;
   F energy(0.);
   for (size_t kk = 0; kk < No; kk += block_size) {
@@ -304,7 +304,7 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                                       F *const epsi,
                                       F *const Tijk,
                                       F *const Zijk,
-                                      double *_energy) {
+                                      EnergyType<F> *_energy) {
   constexpr size_t block_size = 16;
   F energy = F(0.);
   for (size_t kk = 0; kk < No; kk += block_size) {
@@ -354,7 +354,7 @@ get_energy_distinct(DataFieldType<float> const epsabc,
                     DataFieldType<float> *const epsi,
                     DataFieldType<float> *const Tijk,
                     DataFieldType<float> *const Zijk,
-                    DataFieldType<double> *energy);
+                    DataFieldType<float> *energy);
 
 template __MAYBE_GLOBAL__ void
 get_energy_same(DataFieldType<float> const epsabc,
@@ -362,7 +362,7 @@ get_energy_same(DataFieldType<float> const epsabc,
                 DataFieldType<float> *const epsi,
                 DataFieldType<float> *const Tijk,
                 DataFieldType<float> *const Zijk,
-                DataFieldType<double> *energy);
+                DataFieldType<float> *energy);
 
 // instantiate double
 template __MAYBE_GLOBAL__ void

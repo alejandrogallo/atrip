@@ -33,7 +33,7 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                                           F *const epsi,
                                           F *const Tijk,
                                           F *const Zijk,
-                                          double *energy);
+                                          EnergyType<F> *energy);
 
 template <typename F = double>
 __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
@@ -41,7 +41,7 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                                       F *const epsi,
                                       F *const Tijk,
                                       F *const Zijk,
-                                      double *energy);
+                                      EnergyType<F> *energy);
 // Energy:1 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles

@@ -60,5 +60,31 @@ struct DataField<Complex> {
 template <typename F>
 using DataFieldType = typename DataField<F>::type;
 
+/// Energy type
+
+template <typename F>
+struct EnergyTypeProxy;
+
+template <>
+struct EnergyTypeProxy<float> {
+  using type = float;
+};
+
+template <>
+struct EnergyTypeProxy<double> {
+  using type = double;
+};
+
+template <>
+struct EnergyTypeProxy<Complex> {
+  using type = double;
+};
+
+template <typename F>
+using EnergyType = typename EnergyTypeProxy<F>::type;
+
+template <typename F>
+using PrecisionType = EnergyType<F>;
+
 } // namespace atrip
 // Data pointer:1 ends here
