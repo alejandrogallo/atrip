@@ -36,6 +36,7 @@ AC_ARG_WITH(ctf,
             [LIBCTF_PATH="`readlink -f $withval`";
              LIBCTF_CPATH="`readlink -f $withval`/include";
              LIBCTF_LD_LIBRARY_PATH="`readlink -f $withval`/lib";
+             WITH_CTF=yes
              BUILD_CTF=NO],
             [BUILD_CTF=YES
              LIBCTF_PATH="$ac_pwd"/extern/ctf

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <atrip/Tuples.hpp>
 #include <atrip/Atrip.hpp>
 
