@@ -65,26 +65,23 @@ using DataFieldType = typename DataField<F>::type;
 template <typename F>
 struct EnergyTypeProxy;
 
-template <>
-struct EnergyTypeProxy<float> {
-  using type = float;
-};
+#define DEF_ENERGY_TYPE(__F, __type)                                           \
+  template <>                                                                  \
+  struct EnergyTypeProxy<__F> {                                                \
+    using type = __type;                                                       \
+  }
 
-template <>
-struct EnergyTypeProxy<double> {
-  using type = double;
-};
-
-template <>
-struct EnergyTypeProxy<Complex> {
-  using type = double;
-};
+DEF_ENERGY_TYPE(float, double);
+DEF_ENERGY_TYPE(double, double);
+DEF_ENERGY_TYPE(Complex, double);
 
 template <typename F>
 using EnergyType = typename EnergyTypeProxy<F>::type;
 
 template <typename F>
 using PrecisionType = EnergyType<F>;
+
+#undef DEF_ENERGY_TYPE
 
 } // namespace atrip
 // Data pointer:1 ends here
