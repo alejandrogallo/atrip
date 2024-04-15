@@ -354,7 +354,7 @@ get_energy_distinct(DataFieldType<float> const epsabc,
                     DataFieldType<float> *const epsi,
                     DataFieldType<float> *const Tijk,
                     DataFieldType<float> *const Zijk,
-                    DataFieldType<float> *energy);
+                    EnergyType<float> *energy);
 
 template __MAYBE_GLOBAL__ void
 get_energy_same(DataFieldType<float> const epsabc,
@@ -362,7 +362,7 @@ get_energy_same(DataFieldType<float> const epsabc,
                 DataFieldType<float> *const epsi,
                 DataFieldType<float> *const Tijk,
                 DataFieldType<float> *const Zijk,
-                DataFieldType<float> *energy);
+                EnergyType<float> *energy);
 
 // instantiate double
 template __MAYBE_GLOBAL__ void
@@ -371,7 +371,7 @@ get_energy_distinct(DataFieldType<double> const epsabc,
                     DataFieldType<double> *const epsi,
                     DataFieldType<double> *const Tijk,
                     DataFieldType<double> *const Zijk,
-                    DataFieldType<double> *energy);
+                    EnergyType<double> *energy);
 
 template __MAYBE_GLOBAL__ void
 get_energy_same(DataFieldType<double> const epsabc,
@@ -379,7 +379,7 @@ get_energy_same(DataFieldType<double> const epsabc,
                 DataFieldType<double> *const epsi,
                 DataFieldType<double> *const Tijk,
                 DataFieldType<double> *const Zijk,
-                DataFieldType<double> *energy);
+                EnergyType<double> *energy);
 
 // instantiate Complex
 template __MAYBE_GLOBAL__ void
@@ -388,7 +388,7 @@ get_energy_distinct(DataFieldType<Complex> const epsabc,
                     DataFieldType<Complex> *const epsi,
                     DataFieldType<Complex> *const Tijk,
                     DataFieldType<Complex> *const Zijk,
-                    DataFieldType<double> *energy);
+                    EnergyType<double> *energy);
 
 template __MAYBE_GLOBAL__ void
 get_energy_same(DataFieldType<Complex> const epsabc,
@@ -396,7 +396,7 @@ get_energy_same(DataFieldType<Complex> const epsabc,
                 DataFieldType<Complex> *const epsi,
                 DataFieldType<Complex> *const Tijk,
                 DataFieldType<Complex> *const Zijk,
-                DataFieldType<double> *energy);
+                EnergyType<double> *energy);
 // Energy:3 ends here
 
 // [[file:~/cuda/atrip/atrip.org::*Singles%20contribution][Singles
