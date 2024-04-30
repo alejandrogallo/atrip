@@ -111,7 +111,7 @@ struct Settings {
   int no, nv, it_mod, percentage_mod;
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
-      complex, cT, ijkabc;
+    complex, single, cT, ijkabc;
 #if defined(HAVE_CTF)
   bool ei_ctf, ea_ctf, Tph_ctf, Tpphh_ctf, Vpphh_ctf, Vhhhp_ctf, Vppph_ctf,
       Jppph_ctf, Jhhhp_ctf;
@@ -358,18 +358,14 @@ void run(int argc, char **argv, Settings const &s) {
       /**/
       /**/
       /**/
-      Jhhhp = new CTF::Tensor<FIELD>(4, ooov.data(), symmetries.data(), world);
-      MPI_Barrier(comm);
-      if (!rank)
-        std::cout << _FORMAT("made Jhhhp done <%p>", static_cast<void *>(Jhhhp))
-                  << std::endl;
-      const auto conjugate =
-          CTF::Transform<FIELD, FIELD>([](FIELD d, FIELD &f) {
-            f = atrip::acc::maybe_conjugate_scalar<FIELD>(d);
-          });
-      Jhhhp->read_dense_from_file(s.Jhhhp_path.c_str());
-      MPI_Barrier(comm);
-      // input: Jhhhp
+      Jhhhp = read_or_fill<FIELD>("Jhhhp",
+                                  4,
+                                  ooov.data(),
+                                  symmetries.data(),
+                                  world,
+                                  s.Jhhhp_path,
+                                  0,
+                                  1);
       in.with_Jhhhp(Jhhhp);
     } else {
       in.with_Jhhhp_path(s.Jhhhp_path);
@@ -378,17 +374,14 @@ void run(int argc, char **argv, Settings const &s) {
     /**/
     /**/
     if (s.Jppph_ctf) {
-      Jppph = new CTF::Tensor<FIELD>(4, vvvo.data(), symmetries.data(), world);
-      if (!rank)
-        std::cout << _FORMAT("made Jppph done <%p>", static_cast<void *>(Jppph))
-                  << std::endl;
-      Jppph->read_dense_from_file(s.Jppph_path.c_str());
-      MPI_Barrier(comm);
-      if (!rank)
-        std::cout << _FORMAT("read Jppph done <%p>", static_cast<void *>(Jppph))
-                  << std::endl;
-      MPI_Barrier(comm);
-      // input: Jppph
+      Jppph = read_or_fill<FIELD>("Jppph",
+                                  4,
+                                  vvvo.data(),
+                                  symmetries.data(),
+                                  world,
+                                  s.Jppph_path,
+                                  0,
+                                  1);
       in.with_Jppph(Jppph);
     } else {
       in.with_Jppph_path(s.Jppph_path);
@@ -422,7 +415,10 @@ void run(int argc, char **argv, Settings const &s) {
   }
 #endif
 
-  *Tph = atrip::read_all<FIELD>({nv, no}, s.Tph_path, comm);
+  if (s.Tph_path.size()) {
+    if (!rank) std::cout << "Reading Tai\n";
+    *Tph = atrip::read_all<FIELD>({nv, no}, s.Tph_path, comm);
+  }
   in.with_Tph(Tph);
 
 #if !defined(HAVE_CTF)
@@ -485,6 +481,8 @@ int main(int argc, char **argv) {
             s.max_iterations,
             "Maximum number of iterations to run")
       ->default_val(0);
+  defflag(app, "--single", s.single, "Use single precision algorithm")
+      ->default_val(false);
   defflag(app, "--complex", s.complex, "Use the complex version of atrip bench")
       ->default_val(false);
   defflag(app, "--keep-vppph", s.keep_Vppph, "Do not delete the tensor Vppph")
@@ -587,7 +585,20 @@ int main(int argc, char **argv) {
 
   CLI11_PARSE(app, argc, argv);
 
-  s.complex ? run<atrip::Complex>(argc, argv, s) : run<double>(argc, argv, s);
+  if (s.complex) {
+    if (s.single) {
+      // run<std::complex<float>>(argc, argv, s);
+      throw "Not implemented";
+    } else {
+      run<atrip::Complex>(argc, argv, s);
+    }
+  } else {
+    if (s.single) {
+      run<float>(argc, argv, s);
+    } else {
+      run<double>(argc, argv, s);
+    }
+  }
 
   return 0;
 }
