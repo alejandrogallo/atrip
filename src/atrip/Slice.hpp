@@ -130,32 +130,6 @@ public:
       return dt;
     }
 
-    static MPI_Datatype slice_location() {
-      constexpr int n = 2;
-      // create a slice_location to measure in the current architecture
-      // the packing of the struct
-      Slice<F>::Location measure;
-      MPI_Datatype dt;
-      const std::vector<int> lengths(n, 1);
-      const MPI_Datatype types[n] = {usize_dt(), usize_dt()};
-
-      static_assert(sizeof(Slice<F>::Location) == 2 * sizeof(size_t),
-                    "The Location packing is wrong in your compiler");
-
-      // measure the displacements in the struct
-      size_t j = 0;
-      MPI_Aint base_address, displacements[n];
-      MPI_Get_address(&measure, &base_address);
-      MPI_Get_address(&measure.rank, &displacements[j++]);
-      MPI_Get_address(&measure.source, &displacements[j++]);
-      for (size_t i = 0; i < n; i++)
-        displacements[i] = MPI_Aint_diff(displacements[i], base_address);
-
-      MPI_Type_create_struct(n, lengths.data(), displacements, types, &dt);
-      MPI_Type_commit(&dt);
-      return dt;
-    }
-
     static MPI_Datatype usize_dt() { return MPI_UINT64_T; }
 
     static MPI_Datatype local_database_element() {
