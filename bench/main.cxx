@@ -9,7 +9,7 @@
 #include <bench/utils.hpp>
 
 #include <atrip/Atrip.hpp>
-#include <atrip/CTFReader.hpp>
+#include <atrip/CTF_disk_reader.hpp>
 #include <atrip/Complex.hpp>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
@@ -111,7 +111,7 @@ struct Settings {
   int no, nv, it_mod, percentage_mod;
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
-    complex, single, cT, ijkabc;
+      complex, single, cT, ijkabc;
 #if defined(HAVE_CTF)
   bool ei_ctf, ea_ctf, Tph_ctf, Tpphh_ctf, Vpphh_ctf, Vhhhp_ctf, Vppph_ctf,
       Jppph_ctf, Jhhhp_ctf;

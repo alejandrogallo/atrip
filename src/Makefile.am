@@ -10,7 +10,7 @@ NO_ACC_FILES = \
 ./atrip/Tuples.cxx \
 ./atrip/RankMap.cxx \
 ./atrip/Slice.cxx \
-./atrip/CTFReader.cxx \
+./atrip/CTF_disk_reader.cxx \
 ./atrip/DiskReader.cxx
 
 libatrip_a_CPPFLAGS =

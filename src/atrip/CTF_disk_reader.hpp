@@ -12,9 +12,9 @@
   template <typename F>                                                        \
   class name_;                                                                 \
   template <typename F>                                                        \
-  class CTFReader<name_<F>> : public CTFReaderProxy<F> {                       \
+  class CTF_disk_reader<name_<F>> : public CTF_disk_reader_proxy<F> {          \
   public:                                                                      \
-    using CTFReaderProxy<F>::CTFReaderProxy;                                   \
+    using CTF_disk_reader_proxy<F>::CTF_disk_reader_proxy;                     \
     void read(const size_t) override;                                          \
     std::string name() override { return "CTF Reader " #name_; }               \
   }
@@ -71,17 +71,17 @@ static void slice_into_vector
 }
 
 template <typename F>
-class CTFReaderProxy : public Reader {
+class CTF_disk_reader_proxy : public Reader {
 public:
   const CTF::Tensor<F> *source_tensor;
   SliceUnion<F> *slice_union;
   const int No, Nv;
   CTF::Tensor<F> *temp_tensor = nullptr;
   CTF::World *world;
-  CTFReaderProxy(const CTF::Tensor<F> *source_tensor_,
-                 SliceUnion<F> *slice_union_,
-                 int No_,
-                 int Nv_)
+  CTF_disk_reader_proxy(const CTF::Tensor<F> *source_tensor_,
+                        SliceUnion<F> *slice_union_,
+                        int No_,
+                        int Nv_)
       : source_tensor(source_tensor_)
       , slice_union(slice_union_)
       , No(No_)
@@ -91,7 +91,7 @@ public:
 };
 
 template <typename F>
-class CTFReader;
+class CTF_disk_reader;
 
 DECLARE_CTF_READER(HHHA);
 DECLARE_CTF_READER(APHH);

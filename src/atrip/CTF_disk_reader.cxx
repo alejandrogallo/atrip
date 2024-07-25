@@ -1,17 +1,18 @@
 #include <vector>
 
 #include <atrip/Unions.hpp>
-#include <atrip/CTFReader.hpp>
+#include <atrip/CTF_disk_reader.hpp>
 
 #define INSTANTIATE_READER(name_)                                              \
-  template void CTFReader<name_<float>>::read(const size_t slice_index);       \
-  template void CTFReader<name_<double>>::read(const size_t slice_index);      \
-  template void CTFReader<name_<Complex>>::read(const size_t slice_index)
+  template void CTF_disk_reader<name_<float>>::read(const size_t slice_index); \
+  template void CTF_disk_reader<name_<double>>::read(                          \
+      const size_t slice_index);                                               \
+  template void CTF_disk_reader<name_<Complex>>::read(const size_t slice_index)
 
 namespace atrip {
 #if defined(HAVE_CTF)
 template <typename F>
-void CTFReader<APHH<F>>::read(const size_t slice_index) {
+void CTF_disk_reader<APHH<F>>::read(const size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -36,7 +37,7 @@ void CTFReader<APHH<F>>::read(const size_t slice_index) {
 INSTANTIATE_READER(APHH);
 
 template <typename F>
-void CTFReader<HHHA<F>>::read(size_t slice_index) {
+void CTF_disk_reader<HHHA<F>>::read(size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -61,7 +62,7 @@ void CTFReader<HHHA<F>>::read(size_t slice_index) {
 INSTANTIATE_READER(atrip::HHHA);
 
 template <typename F>
-void CTFReader<ABPH<F>>::read(size_t slice_index) {
+void CTF_disk_reader<ABPH<F>>::read(size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
@@ -87,7 +88,7 @@ void CTFReader<ABPH<F>>::read(size_t slice_index) {
 INSTANTIATE_READER(atrip::ABPH);
 
 template <typename F>
-void CTFReader<ABHH<F>>::read(size_t slice_index) {
+void CTF_disk_reader<ABHH<F>>::read(size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
