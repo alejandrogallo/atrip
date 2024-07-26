@@ -710,7 +710,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
     // write checkpoints
     // TODO: ENABLE THIS
-    if (iteration % checkpoint_mod == 0 && false) {
+    if (!checkpoint_mod || iteration % checkpoint_mod == 0 && false) {
       double global_energy = 0;
       MPI_Reduce(&local_output.energy,
                  &global_energy,
@@ -731,7 +731,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     }
 
     // write reporting
-    if (iteration % iteration_mod == 0 || iteration == iteration1Percent) {
+    if (!iteration_mod || iteration % iteration_mod == 0 || iteration == iteration1Percent) {
 
       if (IterationDescription::descriptor) {
         IterationDescription::descriptor(
