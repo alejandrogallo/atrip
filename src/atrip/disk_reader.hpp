@@ -10,8 +10,8 @@
   template <typename F>                                                        \
   class name_;                                                                 \
   template <typename F>                                                        \
-  class DiskReader<name_<F>> : public DiskReaderProxy<F> {                     \
-    using DiskReaderProxy<F>::DiskReaderProxy;                                 \
+  class disk_reader<name_<F>> : public disk_reader_proxy<F> {                  \
+    using disk_reader_proxy<F>::disk_reader_proxy;                             \
     void read(const size_t slice_index) override;                              \
     std::string name() override { return "Disk MPI Reader: " #name_; }         \
   }
@@ -19,17 +19,17 @@
 namespace atrip {
 
 template <typename F>
-class DiskReaderProxy : public Reader {
+class disk_reader_proxy : public Reader {
 public:
   const std::string file_path;
   SliceUnion<F> *slice_union;
   const int No, Nv;
   MPI_File handle;
   std::vector<F> reorder_buffer, mpi_buffer;
-  DiskReaderProxy(const std::string file_path_,
-                  SliceUnion<F> *slice_union_,
-                  int No_,
-                  int Nv_)
+  disk_reader_proxy(const std::string file_path_,
+                    SliceUnion<F> *slice_union_,
+                    int No_,
+                    int Nv_)
       : file_path(file_path_)
       , slice_union(slice_union_)
       , No(No_)
@@ -50,7 +50,7 @@ public:
 };
 
 template <typename F>
-class DiskReader;
+class disk_reader;
 
 DECLARE_DISK_READER(APHH);
 DECLARE_DISK_READER(ABPH);

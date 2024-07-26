@@ -19,7 +19,7 @@
 
 #include <atrip/SliceUnion.hpp>
 #include <atrip/CTF_disk_reader.hpp>
-#include <atrip/DiskReader.hpp>
+#include <atrip/disk_reader.hpp>
 
 namespace atrip {
 
@@ -44,7 +44,7 @@ public:
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new DiskReader<APHH<F>>(tensor_path, this, No, Nv);
+      this->reader = new disk_reader<APHH<F>>(tensor_path, this, No, Nv);
     } else {
 #if defined(HAVE_CTF)
       this->reader = new CTF_disk_reader<APHH<F>>(&source_tensor, this, No, Nv);
@@ -76,7 +76,7 @@ public:
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new DiskReader<HHHA<F>>(tensor_path, this, No, Nv);
+      this->reader = new disk_reader<HHHA<F>>(tensor_path, this, No, Nv);
     } else {
 #if defined(HAVE_CTF)
       this->reader = new CTF_disk_reader<HHHA<F>>(&source_tensor, this, No, Nv);
@@ -111,7 +111,7 @@ public:
                       name,
                       2 * 6) {
     if (tensor_path.size()) {
-      this->reader = new DiskReader<ABPH<F>>(tensor_path, this, No, Nv);
+      this->reader = new disk_reader<ABPH<F>>(tensor_path, this, No, Nv);
     } else {
 #if defined(HAVE_CTF)
       this->reader = new CTF_disk_reader<ABPH<F>>(&source_tensor, this, No, Nv);
@@ -141,7 +141,7 @@ public:
                       name,
                       6) {
     if (tensor_path.size()) {
-      this->reader = new DiskReader<ABHH<F>>(tensor_path, this, No, Nv);
+      this->reader = new disk_reader<ABHH<F>>(tensor_path, this, No, Nv);
     } else {
 #if defined(HAVE_CTF)
       this->reader = new CTF_disk_reader<ABHH<F>>(&source_tensor, this, No, Nv);
