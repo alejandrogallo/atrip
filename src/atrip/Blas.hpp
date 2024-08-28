@@ -17,7 +17,7 @@
 
 #include <atrip/Complex.hpp>
 #include <atrip/Types.hpp>
-#include "config.h"
+#include <atrip/Config.hpp>
 
 namespace atrip {
 

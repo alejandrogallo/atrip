@@ -19,8 +19,8 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include "config.h"
 
+#include <atrip/Config.hpp>
 #include <atrip/Acc.hpp>
 #include <atrip/Chrono.hpp>
 #include <atrip/mpi.hpp>

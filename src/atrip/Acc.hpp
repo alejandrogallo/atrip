@@ -1,7 +1,7 @@
 #ifndef ACC_HPP_
 #define ACC_HPP_
 
-#include "config.h"
+#include <atrip/Config.hpp>
 #include <atrip/Utils.hpp>
 
 // --------------------------------------------------------------------------------

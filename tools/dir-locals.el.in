@@ -4,7 +4,6 @@
 ((c++-mode . ((outline-regexp . "// \\[\\[file:")
               (mode . format-all)
               (mode . flycheck)
-              (mode . company)
               (eval . (let ((root (expand-file-name
                                    (project-root (project-current)))))
                         (setq-local flycheck-gcc-args "@ATRIP_MPI@")
