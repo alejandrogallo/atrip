@@ -35,9 +35,10 @@ if !WITH_CUDA
 ## tuples distribution
 ##
 if WITH_CTF
-bin_PROGRAMS += tuples-distribution
-tuples_distribution_LDADD  = $(BENCHES_LDADD)
-tuples_distribution_SOURCES = tuples-distribution.cxx
+# TODO: make tuples-distribution compile with the new changes in the SliceUnions
+# bin_PROGRAMS += tuples-distribution
+# tuples_distribution_LDADD  = $(BENCHES_LDADD)
+# tuples_distribution_SOURCES = tuples-distribution.cxx
 endif
 endif
 
