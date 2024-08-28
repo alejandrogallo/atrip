@@ -1,9 +1,13 @@
 #ifndef ATRIP_CTF_HPP_
 #define ATRIP_CTF_HPP_
+
+// cppcheck-suppress-begin [nullPointer, autovarInvalidDeallocation]
+
+#include <atrip/Config.hpp>
+
 #if defined(HAVE_CTF)
 
 #  define WITH_CTF(...) __VA_ARGS__
-
 #  if defined(__NVCC__)
 #    pragma nv_diagnostic_push
 #    if defined __NVCC_DIAG_PRAGMA_SUPPORT__
@@ -28,4 +32,7 @@
 #else
 #  define WITH_CTF(...)
 #endif /* defined(HAVE_CTF) */
+
+// cppcheck-suppress-end [nullPointer, autovarInvalidDeallocation]
+
 #endif

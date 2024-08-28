@@ -9,10 +9,14 @@
       const size_t slice_index);                                               \
   template void CTF_disk_reader<name_<Complex>>::read(const size_t slice_index)
 
-namespace atrip {
+#define IMPLEMENT_READER(name_, slice_index)                                   \
+  INSTANTIATE_READER(name_);                                                   \
+  template <typename F>                                                        \
+  void CTF_disk_reader<name_<F>>::read(slice_index)
+
 #if defined(HAVE_CTF)
-template <typename F>
-void CTF_disk_reader<APHH<F>>::read(const size_t slice_index) {
+namespace atrip {
+IMPLEMENT_READER(APHH, const size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -34,10 +38,7 @@ void CTF_disk_reader<APHH<F>>::read(const size_t slice_index) {
                        std::vector<int>({a + 1, this->Nv, this->No, this->No}));
 }
 
-INSTANTIATE_READER(APHH);
-
-template <typename F>
-void CTF_disk_reader<HHHA<F>>::read(size_t slice_index) {
+IMPLEMENT_READER(HHHA, size_t slice_index) {
 
   const int a = this->slice_union->rank_map.find(
       {static_cast<size_t>(Atrip::rank), slice_index});
@@ -59,10 +60,7 @@ void CTF_disk_reader<HHHA<F>>::read(size_t slice_index) {
                        {this->No, this->No, this->No, a + 1});
 }
 
-INSTANTIATE_READER(atrip::HHHA);
-
-template <typename F>
-void CTF_disk_reader<ABPH<F>>::read(size_t slice_index) {
+IMPLEMENT_READER(ABPH, size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
@@ -85,10 +83,7 @@ void CTF_disk_reader<ABPH<F>>::read(size_t slice_index) {
                        {a + 1, b + 1, this->Nv, this->No});
 }
 
-INSTANTIATE_READER(atrip::ABPH);
-
-template <typename F>
-void CTF_disk_reader<ABHH<F>>::read(size_t slice_index) {
+IMPLEMENT_READER(ABHH, size_t slice_index) {
 
   const int el = this->slice_union->rank_map.find(
                 {static_cast<size_t>(Atrip::rank), slice_index}),
@@ -111,53 +106,5 @@ void CTF_disk_reader<ABHH<F>>::read(size_t slice_index) {
                        {a + 1, b + 1, this->No, this->No});
 }
 
-INSTANTIATE_READER(atrip::ABHH);
-#endif /* defined(HAVE_CTF) */
-
-template <typename F>
-std::vector<F> read_all(std::vector<size_t> lengths,
-                        std::string const &ctf_file_path,
-                        MPI_Comm comm) {
-  MPI_File handle;
-  MPI_Offset offset = 0;
-  const size_t count = std::accumulate(lengths.begin(),
-                                       lengths.end(),
-                                       1UL,
-                                       std::multiplies<size_t>());
-  std::vector<F> buffer(count);
-
-  LOG(0, "Atrip") << "Openning file " << ctf_file_path << "\n";
-  MPI_File_open(comm,
-                ctf_file_path.c_str(),
-                MPI_MODE_RDONLY,
-                MPI_INFO_NULL,
-                &handle);
-
-  LOG(0, "Atrip") << "Reading " << ctf_file_path << "\n";
-  if (MPI_SUCCESS
-      != MPI_File_read_at(handle,
-                          offset,
-                          buffer.data(),
-                          count,
-                          MPI_DOUBLE,
-                          MPI_STATUS_IGNORE)) {
-    throw "error reading!";
-  }
-
-  LOG(0, "Atrip") << "Closing " << ctf_file_path << "\n";
-  MPI_File_close(&handle);
-  return buffer;
-}
-
-template std::vector<float> read_all<float>(std::vector<size_t> lengths,
-                                            std::string const &ctf_file_path,
-                                            MPI_Comm comm);
-template std::vector<double> read_all<double>(std::vector<size_t> lengths,
-                                              std::string const &ctf_file_path,
-                                              MPI_Comm comm);
-template std::vector<Complex>
-read_all<Complex>(std::vector<size_t> lengths,
-                  std::string const &ctf_file_path,
-                  MPI_Comm comm);
-
 } // namespace atrip
+#endif /* defined(HAVE_CTF) */
