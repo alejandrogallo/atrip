@@ -10,6 +10,7 @@
 
 #include <atrip/Atrip.hpp>
 #include <atrip/CTF_disk_reader.hpp>
+#include <atrip/CTF_utils.hpp>
 #include <atrip/Complex.hpp>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
