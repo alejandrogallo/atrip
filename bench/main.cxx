@@ -4,8 +4,7 @@
 
 #include <mpi.h>
 
-#include <CLI11.hpp>
-
+#include <bench/CLI11.hpp>
 #include <bench/utils.hpp>
 
 #include <atrip/Atrip.hpp>
@@ -16,6 +15,7 @@
 #include <atrip/Debug.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Operations.hpp>
+#include <atrip/Reader.hpp>
 
 #define _print_size(what, size)                                                \
   do {                                                                         \
@@ -121,6 +121,9 @@ struct Settings {
   // paths
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
       Vppph_path, Jppph_path, Jhhhp_path;
+  atrip::ReaderKind default_reader, //
+      ei_reader, ea_reader, Tph_reader, Tpphh_reader, Vpphh_reader,
+      Vhhhp_reader, Vppph_reader, Jppph_reader, Jhhhp_reader;
 };
 
 template <typename FIELD>
@@ -543,6 +546,46 @@ int main(int argc, char **argv) {
       ->check(CLI::ExistingFile);
   defoption(app, "--Jhhhp", s.Jhhhp_path, "Path for Jhhhp intermediates")
       ->check(CLI::ExistingFile);
+
+  // Reader section
+  {
+#if defined(HAVE_CTF)
+    atrip::ReaderKind default_reader = atrip::ReaderKind::CTF_DISK;
+#else
+    atrip::ReaderKind default_reader = atrip::ReaderKind::DISK;
+#endif /* defined(HAVE_CTF) */
+    const std::map<std::string, atrip::ReaderKind> m(
+        {{"DISK", atrip::ReaderKind::DISK},
+         WITH_CTF({"CTF_DISK", atrip::ReaderKind::CTF_DISK},
+                  {"CTF_MEMORY", atrip::ReaderKind::CTF_MEMORY})});
+
+    defoption(app,
+              "--default-reader",
+              s.default_reader,
+              "Default reader to be used")
+        ->default_val(default_reader)
+        ->transform(CLI::CheckedTransformer(m, CLI::ignore_case));
+
+#define DEFOPTION_READER(tensor_name)                                          \
+  defoption(app,                                                               \
+            "--" #tensor_name "-reader",                                       \
+            s.tensor_name##_reader,                                            \
+            "Reader for " #tensor_name)                                        \
+      ->default_val(default_reader)                                            \
+      ->transform(CLI::CheckedTransformer(m, CLI::ignore_case))
+
+    DEFOPTION_READER(ei);
+    DEFOPTION_READER(ea);
+    DEFOPTION_READER(Tph);
+    DEFOPTION_READER(Tpphh);
+    DEFOPTION_READER(Vpphh);
+    DEFOPTION_READER(Vhhhp);
+    DEFOPTION_READER(Vppph);
+    DEFOPTION_READER(Jppph);
+    DEFOPTION_READER(Jhhhp);
+
+#undef DEFOPTION_READER
+  }
 
 #if defined(HAVE_CTF)
   // Use reader from ctf or not
