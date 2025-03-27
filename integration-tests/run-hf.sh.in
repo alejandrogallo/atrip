@@ -3,31 +3,41 @@
 set -eu
 set -o pipefail
 
-resources=H2O
+resources=atrip_resources/hf
 atrip="../bench/atrip"
-outfile=h2o.out
+outfile=hf.out
 
 cmd=(
   mpirun # -np 4
 
   ${atrip}
 
-  --no 4
-  --nv 36
+  --no 5
+  --nv 7
 
   # --max-iterations 50
 
-  --ei ./${resources}/EigenEnergiesSliced.components.h.elements
-  --ea ./${resources}/EigenEnergiesSliced.components.p.elements
-  --Tpphh ./${resources}/Amplitudes.components.pphh.elements
-  --Tph ./${resources}/Amplitudes.components.ph.elements
+  --ei ./${resources}/EigenEnergiesH.elements
+  --ea ./${resources}/EigenEnergiesP.elements
+  --Tpphh ./${resources}/AmplitudesPPHH.elements
+  --Tph ./${resources}/AmplitudesPH.elements
   --Vpphh ./${resources}/CoulombIntegralsPPHH.elements
   --Vhhhp ./${resources}/CoulombIntegralsHHHP.elements
   --Vppph ./${resources}/CoulombIntegralsPPPH.elements
   # J for ct
-  --Jhhhp ./${resources}/CtIntermediate.components.hhhp.elements
-  --Jppph ./${resources}/CtIntermediate.components.ppph.elements
+  --Jhhhp ./${resources}/CtintermediateHHHP.elements
+  --Jppph ./${resources}/CtintermediatePPPH.elements
   --cT
+  --ei-from-ctf=0
+  --ea-from-ctf=0
+  --Tpphh-from-ctf=0
+  --Tph-from-ctf=0
+  --Vpphh-from-ctf=0
+  --Vhhhp-from-ctf=0
+  --Vppph-from-ctf=0
+  --Jhhhp-from-ctf=0
+  --Jppph-from-ctf=0
+
 
   # dist can also be naive
   --nocheckpoint
@@ -49,8 +59,8 @@ printf '\n\n\n\n'
   echo Name Correct Ours Diff | sed "p; s/[^ ]/-/g"
   {
     paste - <(grep '^Energy' $outfile | awk -F: '{print $2}') <<EOF
-(T) -0.005239608018571
-(cT) -0.0048452100
+(T) -0.001308470746
+(cT) -0.001175260435
 EOF
   } | awk '{print $1, $2, $3, $2-$3}'
 } | column -t
