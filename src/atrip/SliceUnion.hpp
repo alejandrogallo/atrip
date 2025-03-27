@@ -141,7 +141,7 @@ public:
              MPI_Comm global_world,
              typename Slice<F>::Name name_,
              size_t n_slice_buffers = 4)
-      : rank_map(param_length, np)
+      : rank_map(param_length)
       , world(child_world)
       , universe(global_world)
       , slice_length(slice_length_)

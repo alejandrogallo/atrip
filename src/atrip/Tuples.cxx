@@ -399,9 +399,11 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
                 0,
                 INTRA_COMM);
 
+    MPI_Barrier(INTRA_COMM);
     MPI_Type_free(&MPI_ABCTUPLE);
   }
-
+  MPI_Barrier(INTRA_COMM);
+  MPI_Comm_free(&INTRA_COMM);
   return result;
 }
 

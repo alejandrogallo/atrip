@@ -211,9 +211,9 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
         throw std::domain_error(
             _FORMAT("Trying to garbage collect "
                     " a non-unwrapped slice! "
-                    "%p %s",
-                    &slice,
-                    info_to_string<F>(slice.info)));
+                    "%p", // %s
+                    &slice));
+                    //info_to_string<F>(slice.info).c_str()));
 
       // it can be that our slice is ready, but it has some hanging
       // references lying around in the form of a recycled slice.
@@ -397,10 +397,10 @@ void SliceUnion<F>::send(size_t other_rank,
 
   if (inter_node_communication) { goto no_mpi_staging; }
 
-  isend_buffer = pop_free_pointers();
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
 
+  isend_buffer = pop_free_pointers();
 #  if defined(ATRIP_SOURCES_IN_GPU) && defined(HAVE_ACC)
   WITH_CHRONO(
       "cuda:memcpy",

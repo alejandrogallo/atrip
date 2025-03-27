@@ -30,16 +30,16 @@ disk_io_SOURCES = disk-io.cxx
 disk_io_LDADD = $(BENCHES_LDADD)
 
 
-if !WITH_CUDA
-##
-## tuples distribution
-##
-if WITH_CTF
-bin_PROGRAMS += tuples-distribution
-tuples_distribution_LDADD  = $(BENCHES_LDADD)
-tuples_distribution_SOURCES = tuples-distribution.cxx
-endif
-endif
+#if !WITH_CUDA
+###
+### tuples distribution
+###
+#if WITH_CTF
+#bin_PROGRAMS += tuples-distribution
+#tuples_distribution_LDADD  = $(BENCHES_LDADD)
+#tuples_distribution_SOURCES = tuples-distribution.cxx
+#endif
+#endif
 
 
 

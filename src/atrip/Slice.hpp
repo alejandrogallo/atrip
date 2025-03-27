@@ -134,7 +134,19 @@ public:
 
     static MPI_Datatype local_database_element() {
       return vector(sizeof(LocalDatabaseElement), MPI_CHAR);
+
+//      static MPI_Datatype dt = vector(sizeof(LocalDatabaseElement), MPI_CHAR);
+//      return dt;
     }
+
+//    static void free_local_database_element() {
+//      static bool freed = false;
+//      if (!freed) {
+//        static MPI_Datatype dt = local_database_element();  // Store reference
+//        MPI_Type_free(&dt);
+//        freed = true;
+//      }
+//    }
   };
   // MPI Types:1 ends here
 

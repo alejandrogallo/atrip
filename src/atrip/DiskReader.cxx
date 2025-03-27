@@ -48,9 +48,14 @@ void DiskReaderProxy<F>::read_into_buffer(
 #endif
 }
 
+// Note:
+// the disk reader expects a PPHH tensor stored in row major
+// (first index 'A' is slowest index)
+// consequently we have to reorder the source buffer as
+// atrip logic is implemented in column major
 template <typename F>
 void DiskReader<APHH<F>>::read(const size_t slice_index) {
-  const int /**/
+  const size_t /**/
       a = this->slice_union->rank_map.find(
           {static_cast<size_t>(Atrip::rank), slice_index}),
       count = this->Nv * this->No * this->No;
@@ -68,6 +73,7 @@ void DiskReader<APHH<F>>::read(const size_t slice_index) {
             for (size_t b = 0; b < this->Nv; b++)
               source_buffer[b + i * this->Nv + j * this->Nv * this->No] =
                   reorder_buffer[j + i * this->No + b * this->No * this->No];
+
       });
 }
 
@@ -75,7 +81,7 @@ INSTANTIATE_READER(APHH);
 
 template <typename F>
 void DiskReader<ABPH<F>>::read(const size_t slice_index) {
-  const int /**/
+  const size_t /**/
       el = this->slice_union->rank_map.find(
           {static_cast<size_t>(Atrip::rank), slice_index}),
       a = el % this->Nv, b = el / this->Nv, count = this->Nv * this->No;
@@ -100,7 +106,7 @@ INSTANTIATE_READER(ABPH);
 
 template <typename F>
 void DiskReader<HHHA<F>>::read(const size_t slice_index) {
-  const int /**/
+  const size_t /**/
       a = this->slice_union->rank_map.find(
           {static_cast<size_t>(Atrip::rank), slice_index}),
       count = this->No * this->No * this->No;
@@ -118,7 +124,7 @@ INSTANTIATE_READER(HHHA);
 
 template <typename F>
 void DiskReader<ABHH<F>>::read(const size_t slice_index) {
-  const int /**/
+  const size_t /**/
       el = this->slice_union->rank_map.find(
           {static_cast<size_t>(Atrip::rank), slice_index}),
       a = el % this->Nv, b = el / this->Nv, count = this->No * this->No;

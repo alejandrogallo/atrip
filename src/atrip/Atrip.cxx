@@ -473,7 +473,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                                     MPI_LDB_ELEMENT,
                                     c);))
 
+      MPI_Barrier(c); // we need a barrier - otherwise mpi oject gets free'd while in use!
       WITH_CHRONO("db:comm:type:free", MPI_Type_free(&MPI_LDB_ELEMENT);)
+
+//      WITH_CHRONO("db:comm:type:free", Slice<F>::mpi::free_local_database_element();)
 
       return db;
     }
@@ -1134,7 +1137,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     global_output.ct_energy = -global_output.ct_energy;
   }
   WITH_RANK << "local energy " << local_output.energy << "\n";
-  LOG(0, "Atrip") << "Energy: " << std::setprecision(15) << std::setw(23)
+  LOG(0, "Atrip") << "Energy (T): " << std::setprecision(15) << std::setw(23)
                   << global_output.energy << std::endl;
   LOG(0, "Atrip") << "Energy (cT): " << std::setprecision(15) << std::setw(23)
                   << global_output.ct_energy << std::endl;

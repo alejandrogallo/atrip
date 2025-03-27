@@ -85,14 +85,30 @@ RankMap<F>::find(ABCTuple const &abc,
 }
 
 template <typename F>
-RankMap<F>::RankMap(std::vector<size_t> lens, size_t np_)
+RankMap<F>::RankMap(std::vector<size_t> lens)
     : lengths(lens)
-    , np(np_)
     , size(std::accumulate(lengths.begin(),
                            lengths.end(),
                            1UL,
                            std::multiplies<size_t>()))
-    , cluster_info(*Atrip::cluster_info) {
+    , cluster_info((Atrip::cluster_info) ? *Atrip::cluster_info
+                                         : throw std::runtime_error(
+                                           "Atrip::cluster_info not intialized")
+                  )
+    , np(Atrip::cluster_info->np) {
+  assert(lengths.size() <= 2);
+}
+
+
+template <typename F>
+RankMap<F>::RankMap(std::vector<size_t> lens, ClusterInfo &cluster_info_)
+    : lengths(lens)
+    , cluster_info(cluster_info_)
+    , np(cluster_info_.np)
+    , size(std::accumulate(lengths.begin(),
+                           lengths.end(),
+                           1UL,
+                           std::multiplies<size_t>())) {
   assert(lengths.size() <= 2);
 }
 

@@ -31,7 +31,8 @@ public:
   size_t const np, size;
   ClusterInfo const cluster_info;
 
-  RankMap(std::vector<size_t> lens, size_t np_);
+  RankMap(std::vector<size_t> lens, ClusterInfo & cluster_info);
+  RankMap(std::vector<size_t> lens);
 
   size_t find(typename Slice<F>::Location const &p) const noexcept;
 
