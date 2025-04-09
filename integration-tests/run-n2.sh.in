@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+resources=atrip_resources/n2_complex
+atrip="../bench/atrip"
+outfile=n2.out
+
+cmd=(
+  mpirun -np 4 # -np 4
+
+  ${atrip}
+
+  --no 5
+  --nv 27
+
+  # --max-iterations 50
+
+  --ei ./${resources}/EigenEnergiesH.elements
+  --ea ./${resources}/EigenEnergiesP.elements
+  --Tpphh ./${resources}/AmplitudesPPHH.elements
+  --Tph ./${resources}/AmplitudesPH.elements
+  --Vpphh ./${resources}/CoulombIntegralsPPHH.elements
+  --Vhhhp ./${resources}/CoulombIntegralsHHHP.elements
+  --Vppph ./${resources}/CoulombIntegralsPPPH.elements
+  # J for ct
+  --Jhhhp ./${resources}/CtintermediateHHHP.elements
+  --Jppph ./${resources}/CtintermediatePPPH.elements
+  --cT
+  --complex
+
+  # dist can also be naive
+  --nocheckpoint
+  --dist group
+  # --dist naive
+
+  # --mod 10
+  -% 50
+  --nochrono
+)
+
+set -x
+date
+"${cmd[@]}" | tee $outfile
+date
+set +x
+
+printf '\n\n\n\n'
+{
+  echo Name Correct Ours Diff | sed "p; s/[^ ]/-/g"
+  {
+    paste - <(grep '^Energy' $outfile | awk -F: '{print $2}') <<EOF
+(T) -0.505924681353569 
+(cT) -0.453765565143826
+EOF
+  } | awk '{print $1, $2, $3, $2-$3}'
+} | column -t
+printf '\n\n\n\n'

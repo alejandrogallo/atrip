@@ -1,20 +1,31 @@
-H2O:
-	git clone --depth 2 https://github.com/airmler/atrip_resources H2O
-	cd $@; git reset --hard 929a6b0be4ed20e431d4c51f11b3f59ef0b1981d
+REPO_URL = https://github.com/airmler/atrip_resources
+REPO_DIR = atrip_resources
+COMMIT = 8a6b37f
 
-.PHONY: run-h2o run-hf all
-run-h2o: H2O
-	bash ./run-h2o.sh
+.PHONY: all clone run-h2o run-hf run-n2
 
-HF:
-	@if [ ! -d "atrip_resources/.git" ]; then \
-		git clone --depth 1 https://github.com/airmler/atrip_resources; \
+# Global clone + checkout
+clone:
+	@if [ ! -d "$(REPO_DIR)/.git" ]; then \
+		echo "Cloning repo..."; \
+		git init $(REPO_DIR) \
+		cd $(REPO_DIR) \
+		git remote add origin $(REPO_URL) \
+		git fetch --depth=1 origin $(COMMIT) \
+		git checkout $(COMMIT) \
 	else \
-		echo "Directory 'atrip_resources' already exists. Skipping clone."; \
+		echo "Repo already cloned."; \
 	fi
-	cd atrip_resources/hf
 
-run-hf: HF
-	bash ./run-hf.sh
+run-h2o: clone
+	bash run-h2o.sh
 
-all: run-h2o run-hf
+run-hf: clone
+	bash run-hf.sh
+
+run-n2: clone
+	bash run-n2.sh
+
+all: run-h2o run-hf run-n2
+
+
