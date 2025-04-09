@@ -132,13 +132,14 @@ std::vector<F> read_all(std::vector<size_t> lengths,
                 MPI_INFO_NULL,
                 &handle);
 
+  char *dest = reinterpret_cast<char *>(buffer.data());
   LOG(0, "Atrip") << "Reading " << ctf_file_path << "\n";
   if (MPI_SUCCESS
       != MPI_File_read_at(handle,
                           offset,
-                          buffer.data(),
-                          count,
-                          MPI_DOUBLE,
+                          dest,
+                          count * sizeof(F),
+                          MPI_CHAR,
                           MPI_STATUS_IGNORE)) {
     throw "error reading!";
   }
