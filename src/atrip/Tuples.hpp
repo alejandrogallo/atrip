@@ -99,6 +99,8 @@ struct ClusterInfo {
 ClusterInfo get_cluster_info(MPI_Comm comm);
 // Node information:2 ends here
 
+int get_logical_rank(ClusterInfo& cluster_info);
+
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:1]]
 ABCTuples get_tuples_list(size_t Nv, size_t rank, size_t np);
 // Naive list:1 ends here

@@ -166,15 +166,8 @@ void Slice<F>::unwrap_and_mark_ready() {
   WITH_RANK << "__slice__:mpi: waiting "
             << "\n";
 #endif
+
   const int error_code = MPI_Wait(&request, &status);
-
-  // FIXME: it appears not to work to free
-  // this request, investigate if this is necessary or not
-  // const auto _mpi_request_free = MPI_Request_free(&request);
-
-  // if (MPI_SUCCESS != _mpi_request_free)
-  // throw "Atrip: Error freeing MPI request";
-
   if (error_code != MPI_SUCCESS) throw "Atrip: Unexpected error MPI ERROR";
 
 #if defined(HAVE_ACC) && !defined(ATRIP_SOURCES_IN_GPU)

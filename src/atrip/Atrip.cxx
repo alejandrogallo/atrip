@@ -24,6 +24,7 @@
 #include <atrip/DatabaseCommunicator.hpp>
 #include <atrip/Malloc.hpp>
 #include <atrip/Acc.hpp>
+#include <atrip/RiskReader.hpp>
 
 using namespace atrip;
 
@@ -33,6 +34,7 @@ template bool RankMap<float>::RANK_ROUND_ROBIN;
 template bool RankMap<double>::RANK_ROUND_ROBIN;
 template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 size_t Atrip::rank;
+int Atrip::logical_rank;
 size_t Atrip::np;
 ClusterInfo *Atrip::cluster_info;
 #if defined(HAVE_ACC)
@@ -221,25 +223,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   MALLOC_DATA_PTR("Tijk", &Tijk, sizeof(DataFieldType<F>) * No * No * No);
 
   RankMap<F>::RANK_ROUND_ROBIN = in.rank_round_robin;
+  Atrip::logical_rank = get_logical_rank(*Atrip::cluster_info);
   if (RankMap<F>::RANK_ROUND_ROBIN) {
     LOG(0, "Atrip") << "Doing rank round robin slices distribution\n";
   } else {
     LOG(0, "Atrip")
         << "Doing node > local rank round robin slices distribution\n";
-  }
-
-  // COMMUNICATOR CONSTRUCTION ========================================={{{1
-  //
-  // Construct a new communicator living only on a single rank
-  int child_size = 1, child_rank;
-  const int color = rank / child_size, crank = rank % child_size;
-  MPI_Comm child_comm;
-  if (np == 1) {
-    child_comm = universe;
-  } else {
-    MPI_Comm_split(universe, color, crank, &child_comm);
-    MPI_Comm_rank(child_comm, &child_rank);
-    MPI_Comm_size(child_comm, &child_size);
   }
 
   // a, b, c, d, e, f and P => Nv
@@ -282,43 +271,58 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-      ABPH<F> abph(in.Vppph_path,
-                   WITH_CTF(*in.Vppph, ) // TODO: generalize without macros
-                   Slice<F>::Name::VABCI,
-                   (size_t)No,
-                   (size_t)Nv,
-                   (size_t)np,
-                   child_comm,
-                   universe);
+    auto sourcesE = newReader(in.Vppph,
+                              {Nv, Nv, Nv, No},
+                              {1, 1, 0, 0},
+                              No,
+                              Nv,
+                              *Atrip::cluster_info,
+                              in.Vppph_path,
+                              true);
 
-      // TODO
-      // DataPtr<F> offseted_pointer = all_sources_pointer
-      //                             * total_source_sizes[_source_pointer_idx++];
-      ABHH<F> abhh(in.Vpphh_path,
-                   WITH_CTF(*in.Vpphh, ) // TODO: generalize without macros
-                   Slice<F>::Name::VABIJ,
-                   (size_t)No,
-                   (size_t)Nv,
-                   (size_t)np,
-                   child_comm,
-                   universe);
+    SliceUnion<F> abph({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC, Slice<F>::BA, Slice<F>::CB, Slice<F>::CA},
+                       Slice<F>::Name::VABCI,
+                       sourcesE,
+                       {Nv, Nv},
+                       12
+                      );
 
-      // TODO
-      // DataPtr<F> offseted_pointer = all_sources_pointer
-      //                             * total_source_sizes[_source_pointer_idx++];
-      ABHH<F> tabhh(in.Tpphh_path,
-                    WITH_CTF(*in.Tpphh, ) // TODO: generalize without macros
-                    Slice<F>::Name::TABIJ,
-                    (size_t)No,
-                    (size_t)Nv,
-                    (size_t)np,
-                    child_comm,
-                    universe);)
+    auto sourcesD = newReader(in.Vpphh,
+                              {Nv, Nv, No, No},
+                              {1, 1, 0, 0},
+                              No,
+                              Nv,
+                              *Atrip::cluster_info,
+                              in.Vpphh_path,
+                              true);
+    SliceUnion<F> abhh({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC},
+                        Slice<F>::Name::VABIJ,
+                        sourcesD,
+                        {Nv, Nv},
+                        6);
+
+    auto sourcesC = newReader(in.Tpphh,
+                              {Nv, Nv, No, No},
+                              {1, 1, 0, 0},
+                              No,
+                              Nv,
+                              *Atrip::cluster_info,
+                              in.Tpphh_path,
+                              true);
+
+    SliceUnion<F> tabhh({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC},
+                        Slice<F>::Name::TABIJ,
+                        sourcesC,
+                        {Nv, Nv},
+                        6);
+
+  )
 
   // delete the Vppph so that we don't have a HWM situation for the NV slices
 #if defined(HAVE_CTF)
   if (in.delete_Vppph && in.Vppph != nullptr) { delete in.Vppph; }
 #endif /* defined(HAVE_CTF) */
+
 
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   WITH_CHRONO(
@@ -326,59 +330,91 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-      APHH<F> taphh(in.Tpphh_path,
-                    WITH_CTF(*in.Tpphh, ) // TODO: generalize without macros
-                    Slice<F>::Name::TA,
-                    (size_t)No,
-                    (size_t)Nv,
-                    (size_t)np,
-                    child_comm,
-                    universe);
-      // TODO
-      // DataPtr<F> offseted_pointer = all_sources_pointer
-      //                             * total_source_sizes[_source_pointer_idx++];
-      HHHA<F> hhha(in.Vhhhp_path,
-                   WITH_CTF(*in.Vhhhp, ) // TODO: generalize without macros
-                   Slice<F>::Name::VIJKA,
-                   (size_t)No,
-                   (size_t)Nv,
-                   (size_t)np,
-                   child_comm,
-                   universe);)
+    auto sourcesA = newReader(in.Tpphh,
+                              {Nv, Nv, No, No},
+                              {1, 0, 0, 0},
+                              No,
+                              Nv,
+                              *Atrip::cluster_info,
+                              in.Tpphh_path,
+                              true);
+    SliceUnion<F> taphh({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
+                        Slice<F>::Name::TA,
+                        sourcesA,
+                        {Nv},
+                        6);
+    auto sourcesB = newReader(in.Vhhhp,
+                              {No, No, No, Nv},
+                              {0, 0, 0, 1},
+                              No,
+                              Nv,
+                              *Atrip::cluster_info,
+                              in.Vhhhp_path,
+                              false);
+
+
+
+    SliceUnion<F> hhha({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
+                       Slice<F>::Name::VIJKA,
+                       sourcesB,
+                       {Nv},
+                       6);
+
+  )
 
   // all tensors
   std::vector<SliceUnion<F> *> unions = {&taphh, &hhha, &abph, &abhh, &tabhh};
 
   // IF (cT) IS USED: HANDLE TWO FURTHER SLICES==========================={{{1
-  HHHA<F> *jhhha = nullptr;
-  ABPH<F> *jabph = nullptr;
+  ///HHHA<F> *jhhha = nullptr;
+  SliceUnion<F> *jhhha = nullptr;
+  SliceUnion<F> *jabph = nullptr;
+  //ABPH<F> *jabph = nullptr;
   if (WITH_CTF(in.Jhhhp != nullptr ||) in.Jhhhp_path.size()) {
     WITH_CHRONO("Jhhha-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jijka" << std::endl;
-                jhhha = new HHHA<F>(
-                    in.Jhhhp_path,
-                    WITH_CTF(*in.Jhhhp, ) // TODO: generalize without macros
-                    Slice<F>::Name::JIJKA,
-                    (size_t)No,
-                    (size_t)Nv,
-                    (size_t)np,
-                    child_comm,
-                    universe);)
+      auto sourcesJ = newReader(in.Jhhhp,
+                                {No, No, No, Nv},
+                                {0, 0, 0, 1},
+                                No,
+                                Nv,
+                                *Atrip::cluster_info,
+                                in.Jhhhp_path,
+                                false);
+
+      jhhha = new SliceUnion<F>({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
+                                Slice<F>::Name::JIJKA,
+                                sourcesJ,
+                                {Nv},
+                                6);
+
+    )
     unions.push_back(jhhha);
   }
 
   if (WITH_CTF(in.Jppph != nullptr ||) in.Jppph_path.size()) {
     WITH_CHRONO("Jabph-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jabci" << std::endl;
-                jabph = new ABPH<F>(
-                    in.Jppph_path,
-                    WITH_CTF(*in.Jppph, ) // TODO: generalize without macros
-                    Slice<F>::Name::JABCI,
-                    (size_t)No,
-                    (size_t)Nv,
-                    (size_t)np,
-                    child_comm,
-                    universe);)
+
+      auto sourcesJ = newReader(in.Jppph,
+                                {Nv, Nv, Nv, No},
+                                {1, 1, 0, 0},
+                                No,
+                                Nv,
+                                *Atrip::cluster_info,
+                                in.Jppph_path,
+                                true);
+
+
+
+      jabph = new SliceUnion<F>({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC, Slice<F>::BA, Slice<F>::CB, Slice<F>::CA},
+                                Slice<F>::Name::JABCI,
+                                sourcesJ,
+                                {Nv, Nv},
+                                12);
+    )
+
+
     unions.push_back(jabph);
   }
 

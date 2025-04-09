@@ -25,6 +25,7 @@
 #include <atrip/Utils.hpp>
 #include <atrip/Malloc.hpp>
 #include <atrip/Reader.hpp>
+#include <atrip/RiskReader.hpp>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
 #  define SOURCES_DATA(s) (s)
@@ -39,11 +40,11 @@ namespace atrip {
 template <typename F = double>
 class SliceUnion {
 public:
-  const RankMap<F> rank_map;
-  const MPI_Comm world;
-  const MPI_Comm universe;
-  const std::vector<size_t> slice_length;
-  const size_t slice_size;
+  RankMap<F> rank_map;
+  MPI_Comm world;
+  MPI_Comm universe;
+  std::vector<size_t> slice_length;
+  size_t slice_size;
 #if defined(ATRIP_SOURCES_IN_GPU)
   std::vector<DataPtr<F>> sources;
 #else
@@ -51,7 +52,7 @@ public:
 #endif
   std::vector<Slice<F>> slices;
   typename Slice<F>::Name name;
-  const std::vector<typename Slice<F>::Type> slice_types;
+  std::vector<typename Slice<F>::Type> slice_types;
   std::vector<DataPtr<F>> slice_buffers;
   std::set<DataPtr<F>> free_pointers;
   Reader *reader = nullptr;
@@ -227,6 +228,41 @@ public:
                     << "\n";
   } // constructor ends
 
+  SliceUnion(std::vector<typename Slice<F>::Type> slice_types_,
+             typename Slice<F>::Name name_,
+             Sources<F> &sources_,
+             std::vector<size_t> slice_dimension,
+             size_t n_slice_buffers)
+      : slice_size(sources_.s_sources)
+      , slice_types(slice_types_)
+      , name(name_)
+      , sources(sources_.sources)
+      , rank_map(slice_dimension)
+      , slice_buffers(n_slice_buffers) {
+
+    universe = Atrip::communicator;
+    for (auto &ptr : slice_buffers) {
+      MALLOC_DATA_PTR("Slice Buffer", &ptr, sizeof(F) * slice_size);
+    }
+    slices = std::vector<Slice<F>>(2 * slice_types.size(), {slice_size});
+    // initialize the free_pointers with the pointers to the buffers
+    std::transform(slice_buffers.begin(),
+                   slice_buffers.end(),
+                   std::inserter(free_pointers, free_pointers.begin()),
+                   [](DataPtr<F> ptr) { return ptr; });
+
+    LOG(1, "Atrip") << "Initializing " << name_to_string<F>(name) << "|"
+                    << " #slices " << slices.size() << "|"
+                    << " #sources " << sources.size() << "|"
+                    << " #slice_buffers " << slice_buffers.size() << "\n";
+    WITH_RANK << "\n\t#slices[0] " << slices[0].size << "|";
+    WITH_RANK << "\t#sources[0] " << slice_size << "|";
+    WITH_RANK << "\t#free_pointers " << free_pointers.size() << "|";
+
+  }
+
+
+
   void init();
 
   /*
@@ -247,6 +283,8 @@ public:
    * \brief Receive asynchronously only if the state is Fetch
    */
   void receive(typename Slice<F>::Info const &info, size_t tag) noexcept;
+
+
 }; // class SliceUnion
 
 template <typename F>

@@ -455,6 +455,8 @@ mpi_staging_done:
   default:;
   }
   Atrip::bytes_sent += slice_size * sizeof(F);
+  assert(isend_buffer != nullptr);
+
   MPI_Isend((void *)isend_buffer,
             slice_size,
             traits::mpi::datatype_of<F>(),

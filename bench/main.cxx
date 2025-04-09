@@ -15,6 +15,7 @@
 #include <atrip/Debug.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Operations.hpp>
+#include <atrip/RiskReader.hpp>
 
 #define _print_size(what, size)                                                \
   do {                                                                         \
@@ -84,7 +85,7 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
 
   int rank;
   MPI_Comm_rank(world.comm, &rank);
-  auto tsr = new CTF::Tensor<F>(order, lens, syms, world);
+  auto tsr = new CTF::Tensor<F>(order, lens, syms, world, name.c_str());
   if (path.size() && file_exists(path)) {
     tsr->read_dense_from_file(path.c_str());
   } else {
@@ -250,6 +251,9 @@ void run(int argc, char **argv, Settings const &s) {
   _print_size(Vabci, no * nv * nv * nv);
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
+
+  //this is a hack because there is an issue
+  MPI_Comm_rank(MPI_COMM_WORLD, (int *)&atrip::Atrip::rank);
 
   std::vector<FIELD> *epsi = get_epsilon<FIELD>(s.ei_path, no, comm),
                      *epsa = get_epsilon<FIELD>(s.ea_path, nv, comm);

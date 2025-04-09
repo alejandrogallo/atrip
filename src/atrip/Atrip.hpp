@@ -43,6 +43,7 @@ namespace atrip {
 struct Atrip {
 
   static size_t rank;
+  static int logical_rank;
   static size_t np;
   static ClusterInfo *cluster_info;
   static MPI_Comm communicator;
@@ -129,8 +130,16 @@ struct Atrip {
   static Output run(Input<F> const &in);
 };
 
-} // namespace atrip
 
+//Later we want better control over the mapping between
+// el (generic atrip index) and the virtual orbtials a and b
+static size_t orbitalMap(const size_t el) { return el;}
+static std::pair<size_t,size_t> orbitalMap(const size_t el, const size_t Nv) {
+  return {el % Nv, el / Nv};
+}
+
+
+} // namespace atrip
 #undef ADD_ATTRIBUTE
 // Header:1 ends here
 
