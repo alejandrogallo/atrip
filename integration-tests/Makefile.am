@@ -8,11 +8,9 @@ COMMIT = 8a6b37f
 clone:
 	@if [ ! -d "$(REPO_DIR)/.git" ]; then \
 		echo "Cloning repo..."; \
-		git init $(REPO_DIR) \
-		cd $(REPO_DIR) \
-		git remote add origin $(REPO_URL) \
-		git fetch --depth=1 origin $(COMMIT) \
-		git checkout $(COMMIT) \
+		git clone $(REPO_URL) $(REPO_DIR); \
+		cd $(REPO_DIR); \
+		git checkout $(COMMIT); \
 	else \
 		echo "Repo already cloned."; \
 	fi

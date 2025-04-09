@@ -3,7 +3,7 @@
 set -eu
 set -o pipefail
 
-resources=H2O
+resources=atrip_resources/h2o_dz
 atrip="../bench/atrip"
 outfile=h2o.out
 
