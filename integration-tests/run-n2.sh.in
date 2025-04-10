@@ -12,8 +12,8 @@ cmd=(
 
   ${atrip}
 
-  --no 5
-  --nv 27
+  #--no 5
+  #--nv 27
 
   # --max-iterations 50
 

@@ -125,7 +125,6 @@ std::vector<F> read_all(std::vector<size_t> lengths,
                                        std::multiplies<size_t>());
   std::vector<F> buffer(count);
 
-  LOG(0, "Atrip") << "Openning file " << ctf_file_path << "\n";
   MPI_File_open(comm,
                 ctf_file_path.c_str(),
                 MPI_MODE_RDONLY,
@@ -133,7 +132,7 @@ std::vector<F> read_all(std::vector<size_t> lengths,
                 &handle);
 
   char *dest = reinterpret_cast<char *>(buffer.data());
-  LOG(0, "Atrip") << "Reading " << ctf_file_path << "\n";
+  LOG(0, "Atrip") << "Reading file " << ctf_file_path << " from disk" << std::endl;
   if (MPI_SUCCESS
       != MPI_File_read_at(handle,
                           offset,
@@ -144,7 +143,6 @@ std::vector<F> read_all(std::vector<size_t> lengths,
     throw "error reading!";
   }
 
-  LOG(0, "Atrip") << "Closing " << ctf_file_path << "\n";
   MPI_File_close(&handle);
   return buffer;
 }

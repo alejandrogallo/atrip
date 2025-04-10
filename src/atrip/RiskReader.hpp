@@ -8,12 +8,12 @@
 namespace atrip {
 
 //WATCH OUT: still mpi comm world in our routine!
-template <typename F>
-struct Sources {
-  size_t n_sources;
-  size_t s_sources;
-  std::vector<std::vector<F>> sources;
-};
+//template <typename F>
+//struct Sources {
+//  size_t n_sources;
+//  size_t s_sources;
+//  std::vector<std::vector<F>> sources;
+//};
 
 template <typename F>
 Sources<F> riskReader(const std::string &file_path,
@@ -32,8 +32,9 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       const size_t Nv,
                       ClusterInfo cluster_info);
 
+
 template <typename F>
-Sources<F> newReader(CTF::Tensor<F>* tensor,
+Sources<F> newReader(void* tensor_,
                      std::vector<size_t> tensor_dimension,
                      std::vector<size_t> slice_mapping,
                      const size_t No,
@@ -41,7 +42,7 @@ Sources<F> newReader(CTF::Tensor<F>* tensor,
                      ClusterInfo cluster_info,
                      const std::string &file_path = "",
                      bool rowMajor = false) {
-  if (tensor == nullptr) {
+  if (tensor_ == nullptr) {
     assert(!file_path.empty());
     return riskReader<F>(file_path,
                          tensor_dimension,
@@ -51,6 +52,11 @@ Sources<F> newReader(CTF::Tensor<F>* tensor,
                          cluster_info,
                          rowMajor);
   }
+//TODO preprocessor if around this cast
+  auto *tensor = reinterpret_cast<CTF::Tensor<F>*>(tensor_);
+  if (tensor == nullptr) {
+    throw std::invalid_argument("Invalid tensor pointer, failed dynamic_cast");
+  }
   return citfReader<F>(*tensor,
                        tensor_dimension,
                        slice_mapping,
@@ -59,6 +65,7 @@ Sources<F> newReader(CTF::Tensor<F>* tensor,
                        cluster_info);
 
 }
+
 
 } // namespace atrip
 

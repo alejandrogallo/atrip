@@ -12,8 +12,8 @@ cmd=(
 
   ${atrip}
 
-  --no 5
-  --nv 7
+  #--no 5
+  #--nv 7
 
   # --max-iterations 50
 
@@ -28,16 +28,7 @@ cmd=(
   --Jhhhp ./${resources}/CtintermediateHHHP.elements
   --Jppph ./${resources}/CtintermediatePPPH.elements
   --cT
-  --ei-from-ctf=0
-  --ea-from-ctf=0
-  --Tpphh-from-ctf=0
-  --Tph-from-ctf=0
-  --Vpphh-from-ctf=0
-  --Vhhhp-from-ctf=0
-  --Vppph-from-ctf=0
-  --Jhhhp-from-ctf=0
-  --Jppph-from-ctf=0
-
+  --use_ctf=0
 
   # dist can also be naive
   --nocheckpoint

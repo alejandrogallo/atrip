@@ -30,7 +30,7 @@
 #include <atrip/Tuples.hpp>
 
 #include <atrip/CTF.hpp>
-
+#include <atrip/Sources.hpp>
 #define ADD_ATTRIBUTE(_type, _name, _default)                                  \
   _type _name = _default;                                                      \
   Input &with_##_name(_type i) {                                               \
@@ -89,6 +89,13 @@ struct Atrip {
     ADD_ATTRIBUTE(CTF::Tensor<F> *, Jhhhp, nullptr);
 #endif /* defined(HAVE_CTF) */
 
+    ADD_ATTRIBUTE(Sources<F> *, sTaphh, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sTabhh, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sVabhh, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sVhhha, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sVabph, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sJhhha, nullptr);
+    ADD_ATTRIBUTE(Sources<F> *, sJabph, nullptr);
     // File handles coming from disk reader
     ADD_ATTRIBUTE(std::string, epsilon_i_path, "");
     ADD_ATTRIBUTE(std::string, epsilon_a_path, "");

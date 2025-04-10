@@ -271,58 +271,27 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-    auto sourcesE = newReader(in.Vppph,
-                              {Nv, Nv, Nv, No},
-                              {1, 1, 0, 0},
-                              No,
-                              Nv,
-                              *Atrip::cluster_info,
-                              in.Vppph_path,
-                              true);
 
     SliceUnion<F> abph({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC, Slice<F>::BA, Slice<F>::CB, Slice<F>::CA},
                        Slice<F>::Name::VABCI,
-                       sourcesE,
+                       *in.sVabph,
                        {Nv, Nv},
                        12
                       );
 
-    auto sourcesD = newReader(in.Vpphh,
-                              {Nv, Nv, No, No},
-                              {1, 1, 0, 0},
-                              No,
-                              Nv,
-                              *Atrip::cluster_info,
-                              in.Vpphh_path,
-                              true);
     SliceUnion<F> abhh({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC},
                         Slice<F>::Name::VABIJ,
-                        sourcesD,
+                        *in.sVabhh,
                         {Nv, Nv},
                         6);
 
-    auto sourcesC = newReader(in.Tpphh,
-                              {Nv, Nv, No, No},
-                              {1, 1, 0, 0},
-                              No,
-                              Nv,
-                              *Atrip::cluster_info,
-                              in.Tpphh_path,
-                              true);
-
     SliceUnion<F> tabhh({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC},
                         Slice<F>::Name::TABIJ,
-                        sourcesC,
+                        *in.sTabhh,
                         {Nv, Nv},
                         6);
 
   )
-
-  // delete the Vppph so that we don't have a HWM situation for the NV slices
-#if defined(HAVE_CTF)
-  if (in.delete_Vppph && in.Vppph != nullptr) { delete in.Vppph; }
-#endif /* defined(HAVE_CTF) */
-
 
   // BUILD SLICES PARAMETRIZED BY NV ==================================={{{1
   WITH_CHRONO(
@@ -330,33 +299,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       // TODO
       // DataPtr<F> offseted_pointer = all_sources_pointer
       //                             * total_source_sizes[_source_pointer_idx++];
-    auto sourcesA = newReader(in.Tpphh,
-                              {Nv, Nv, No, No},
-                              {1, 0, 0, 0},
-                              No,
-                              Nv,
-                              *Atrip::cluster_info,
-                              in.Tpphh_path,
-                              true);
     SliceUnion<F> taphh({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
                         Slice<F>::Name::TA,
-                        sourcesA,
+                        *in.sTaphh,
                         {Nv},
                         6);
-    auto sourcesB = newReader(in.Vhhhp,
-                              {No, No, No, Nv},
-                              {0, 0, 0, 1},
-                              No,
-                              Nv,
-                              *Atrip::cluster_info,
-                              in.Vhhhp_path,
-                              false);
-
-
 
     SliceUnion<F> hhha({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
                        Slice<F>::Name::VIJKA,
-                       sourcesB,
+                       *in.sVhhha,
                        {Nv},
                        6);
 
@@ -370,21 +321,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   SliceUnion<F> *jhhha = nullptr;
   SliceUnion<F> *jabph = nullptr;
   //ABPH<F> *jabph = nullptr;
-  if (WITH_CTF(in.Jhhhp != nullptr ||) in.Jhhhp_path.size()) {
+  if (in.sJhhha != nullptr) {
     WITH_CHRONO("Jhhha-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jijka" << std::endl;
-      auto sourcesJ = newReader(in.Jhhhp,
-                                {No, No, No, Nv},
-                                {0, 0, 0, 1},
-                                No,
-                                Nv,
-                                *Atrip::cluster_info,
-                                in.Jhhhp_path,
-                                false);
 
       jhhha = new SliceUnion<F>({Slice<F>::Type::A, Slice<F>::Type::B, Slice<F>::Type::C},
                                 Slice<F>::Name::JIJKA,
-                                sourcesJ,
+                                *in.sJhhha,
                                 {Nv},
                                 6);
 
@@ -392,24 +335,13 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     unions.push_back(jhhha);
   }
 
-  if (WITH_CTF(in.Jppph != nullptr ||) in.Jppph_path.size()) {
+  if (in.sJabph != nullptr) {
     WITH_CHRONO("Jabph-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jabci" << std::endl;
 
-      auto sourcesJ = newReader(in.Jppph,
-                                {Nv, Nv, Nv, No},
-                                {1, 1, 0, 0},
-                                No,
-                                Nv,
-                                *Atrip::cluster_info,
-                                in.Jppph_path,
-                                true);
-
-
-
       jabph = new SliceUnion<F>({Slice<F>::AB, Slice<F>::BC, Slice<F>::AC, Slice<F>::BA, Slice<F>::CB, Slice<F>::CA},
                                 Slice<F>::Name::JABCI,
-                                sourcesJ,
+                                *in.sJabph,
                                 {Nv, Nv},
                                 12);
     )

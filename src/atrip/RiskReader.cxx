@@ -271,7 +271,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
 
   MPI_Barrier(MPI_COMM_WORLD);
   double endCtf = MPI_Wtime();
-  LOG(0,"TIMINGS") << "Ctf: " << endCtf - startCtf << std::endl;
+//  LOG(0,"TIMINGS") << "Ctf: " << endCtf - startCtf << std::endl;
 
   ptensor.set_name("pVpphh");
 
@@ -356,7 +356,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
 
   MPI_Barrier(MPI_COMM_WORLD);
   double endBuro = MPI_Wtime();
-  LOG(0,"TIMINGS") << "Burocracy: " << endBuro - startBuro << std::endl;
+//  LOG(0,"TIMINGS") << "Burocracy: " << endBuro - startBuro << std::endl;
 
   MPI_Barrier(MPI_COMM_WORLD);
   double startMpi = MPI_Wtime();
@@ -402,7 +402,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
 
   MPI_Barrier(MPI_COMM_WORLD);
   double endMpi = MPI_Wtime();
-  LOG(0,"TIMINGS") << "MPI Phase: " << endMpi - startMpi << std::endl;
+//  LOG(0,"TIMINGS") << "MPI Phase: " << endMpi - startMpi << std::endl;
 
   if (0) {
     for (auto &s: sources) {
@@ -415,7 +415,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
 
   MPI_Barrier(MPI_COMM_WORLD);
   double endReader = MPI_Wtime();
-  LOG(0,"TIMINGS") << "Total: " << endReader - startReader << std::endl;
+//  LOG(0,"TIMINGS") << "Total: " << endReader - startReader << std::endl;
   return {n_sources, s_sources, sources};
 }
 
