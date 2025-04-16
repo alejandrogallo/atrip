@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+TMPFILE="$1"
 set -eu
 set -o pipefail
 
@@ -32,6 +33,7 @@ cmd=(
   # dist can also be naive
   --nocheckpoint
   --dist group
+  --nochrono
   # --dist naive
 
   # --mod 10
@@ -46,6 +48,7 @@ set +x
 
 printf '\n\n\n\n'
 {
+  echo "<<< H2O calculation"
   echo Name Correct Ours Diff | sed "p; s/[^ ]/-/g"
   {
     paste - <(grep '^Energy' $outfile | awk -F: '{print $2}') <<EOF
@@ -53,5 +56,5 @@ printf '\n\n\n\n'
 (cT) -0.0048452100
 EOF
   } | awk '{print $1, $2, $3, $2-$3}'
-} | column -t
+} | column -t | tee -a "$TMPFILE"
 printf '\n\n\n\n'
