@@ -91,6 +91,8 @@ struct RankInfo {
 std::vector<RankInfo>
 get_node_infos(std::vector<std::string> const &node_names);
 
+std::tuple<int,int,int,int> get_mpi_info(MPI_Comm comm);
+
 struct ClusterInfo {
   const size_t n_nodes, np, ranks_per_node;
   const std::vector<RankInfo> rank_infos;
@@ -99,7 +101,7 @@ struct ClusterInfo {
 ClusterInfo get_cluster_info(MPI_Comm comm);
 // Node information:2 ends here
 
-int get_logical_rank(ClusterInfo& cluster_info);
+int get_logical_rank(int rank);
 
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:1]]
 ABCTuples get_tuples_list(size_t Nv, size_t rank, size_t np);

@@ -87,15 +87,13 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
                              F const a,
                              F const b) {
 
-  int rank;
-  MPI_Comm_rank(world.comm, &rank);
   auto tsr = new CTF::Tensor<F>(order, lens, syms, world, name.c_str());
   if (path.size()) {
-    if (!rank)
+    if (!atrip::Atrip::rank)
       std::cout << "Read tensor data from file " << path << std::endl;
     tsr->read_dense_from_file(path.c_str());
   } else {
-    if (!rank)
+    if (!atrip::Atrip::rank)
       std::cout << "Random initialization for tensor " << name << std::endl;
     tsr->fill_random(a, b);
   }
@@ -246,58 +244,6 @@ void run(int argc, char **argv, Settings const &s) {
 
   // USER PRINTING TEST END
 
-  size_t const
-
-      f = s.complex ? sizeof(double) : sizeof(atrip::Complex),
-
-      n_tuples =
-
-          nv * (nv + 1) * (nv + 2) / 6 - nv, // All tuples
-
-      atrip_memory =
-
-          3 * sizeof(size_t) * n_tuples // tuples_memory
-
-          //
-          // one dimensional slices (all ranks)
-          //
-
-          + f * nranks * 6 * nv * no * no // taphh
-          + f * nranks * 6 * no * no * no // hhha
-
-          //
-          // two dimensional slices (all ranks)
-          //
-
-          + f * nranks * 12 * nv * no // abph
-          + f * nranks * 6 * no * no  // abhh
-          + f * nranks * 6 * no * no  // tabhh
-
-          //
-          // distributed sources (all ranks)
-          //
-
-          + f * nv * nv * no * no // tpphh
-          + f * no * no * no * nv // vhhhp
-          + f * nv * nv * nv * no // vppph
-          + f * nv * nv * no * no // vpphh
-          + f * nv * nv * no * no // tpphh2
-
-          //
-          // tensors in every rank
-          //
-
-          + f * nranks * no * no * no // tijk
-          + f * nranks * no * no * no // zijk
-          + f * nranks * (no + nv)    // epsp
-          + f * nranks * no * nv      // tai
-      ;                               // end
-
-  if (rank == 0) {
-    std::cout << "Tentative MEMORY USAGE (GB): "
-              << double(atrip_memory) / 1024.0 / 1024.0 / 1024.0 << "\n";
-  }
-
 
   std::vector<int>
 
@@ -329,7 +275,74 @@ void run(int argc, char **argv, Settings const &s) {
   }
   if (s.ijkabc) { _flip(no, nv); }
 
-  atrip::Atrip::init(comm);
+  // split the communicator and let only every n-th rank be part of the game
+
+  int omp_threads = 4; // for example
+  int color = (rank % omp_threads == 0) ? 1 : MPI_UNDEFINED;
+
+
+  //MPI_Comm atrip_comm;
+  //MPI_Comm_split(comm, color, rank, &atrip_comm);
+
+  //if (color == 1) {
+    //atrip::Atrip::init(atrip_comm);
+    atrip::Atrip::init(s.rank_round_robin, comm);
+  //}
+  //
+  //
+
+
+  size_t const
+
+      f = s.complex ? sizeof(double) : sizeof(atrip::Complex),
+
+      n_tuples =
+
+          nv * (nv + 1) * (nv + 2) / 6 - nv, // All tuples
+
+      atrip_memory =
+
+          3 * sizeof(size_t) * n_tuples // tuples_memory
+
+          //
+          // one dimensional slices (all ranks)
+          //
+
+          + f * atrip::Atrip::np * 6 * nv * no * no // taphh
+          + f * atrip::Atrip::np * 6 * no * no * no // hhha
+
+          //
+          // two dimensional slices (all ranks)
+          //
+
+          + f * atrip::Atrip::np * 12 * nv * no // abph
+          + f * atrip::Atrip::np * 6 * no * no  // abhh
+          + f * atrip::Atrip::np * 6 * no * no  // tabhh
+
+          //
+          // distributed sources (all ranks)
+          //
+
+          + f * nv * nv * no * no // tpphh
+          + f * no * no * no * nv // vhhhp
+          + f * nv * nv * nv * no // vppph
+          + f * nv * nv * no * no // vpphh
+          + f * nv * nv * no * no // tpphh2
+
+          //
+          // tensors in every rank
+          //
+
+          + f * atrip::Atrip::np * no * no * no // tijk
+          + f * atrip::Atrip::np * no * no * no // zijk
+          + f * atrip::Atrip::np * (no + nv)    // epsp
+          + f * atrip::Atrip::np * no * nv      // tai
+      ;                               // end
+
+  if (rank == 0) {
+    std::cout << "Tentative MEMORY USAGE (GB): "
+              << double(atrip_memory) / 1024.0 / 1024.0 / 1024.0 << "\n";
+  }
 
   typename atrip::Atrip::Input<FIELD>::TuplesDistribution tuples_distribution;
   {
@@ -344,6 +357,7 @@ void run(int argc, char **argv, Settings const &s) {
       std::exit(1);
     }
   }
+
   in.with_tuples_distribution(tuples_distribution);
 
   /* We use the s.notation p = v and q = o for the initial load of T1&T2 */
@@ -397,15 +411,11 @@ void run(int argc, char **argv, Settings const &s) {
   }
 #endif
 
-//TODO Evaluate CCSD ENERGY FOR REFERENCE!!
-
-
   auto sVabph = atrip::newReader<FIELD>(Vppph_,
                                         {nv, nv, nv, no},
                                         {1, 1, 0, 0},
                                         no,
                                         nv,
-                                        *atrip::Atrip::cluster_info,
                                         s.Vppph_path,
                                         true);
 
@@ -414,7 +424,6 @@ void run(int argc, char **argv, Settings const &s) {
                                         {1, 1, 0, 0},
                                         no,
                                         nv,
-                                        *atrip::Atrip::cluster_info,
                                         s.Vpphh_path,
                                         true);
 
@@ -423,7 +432,6 @@ void run(int argc, char **argv, Settings const &s) {
                                         {1, 1, 0, 0},
                                         no,
                                         nv,
-                                        *atrip::Atrip::cluster_info,
                                         s.Tpphh_path,
                                         true);
 
@@ -432,7 +440,6 @@ void run(int argc, char **argv, Settings const &s) {
                                         {1, 0, 0, 0},
                                         no,
                                         nv,
-                                        *atrip::Atrip::cluster_info,
                                         s.Tpphh_path,
                                         true);
 
@@ -441,7 +448,6 @@ void run(int argc, char **argv, Settings const &s) {
                                         {0, 0, 0, 1},
                                         no,
                                         nv,
-                                        *atrip::Atrip::cluster_info,
                                         s.Vhhhp_path,
                                         false);
 
@@ -460,7 +466,6 @@ void run(int argc, char **argv, Settings const &s) {
                               {1, 1, 0, 0},
                               no,
                               nv,
-                              *atrip::Atrip::cluster_info,
                               s.Jppph_path,
                               true)
     );
@@ -471,7 +476,6 @@ void run(int argc, char **argv, Settings const &s) {
                               {0, 0, 0, 1},
                               no,
                               nv,
-                              *atrip::Atrip::cluster_info,
                               s.Jhhhp_path,
                               false)
     );

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_map>
 
 #include <atrip/Tuples.hpp>
 #include <atrip/Atrip.hpp>
@@ -49,6 +50,60 @@ std::vector<std::string> get_node_names(MPI_Comm comm) {
   return node_list;
 }
 
+std::tuple<int, int, int, int> get_mpi_info(MPI_Comm comm) {
+    int rank, size;
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &size);
+
+    // Get the node names
+    std::vector<std::string> node_names = get_node_names(comm);
+
+    // Create a map to count ranks per node and assign node IDs
+    std::unordered_map<std::string, int> node_rank_count;
+    std::unordered_map<std::string, int> node_id_map;
+    int current_node_id = 0;
+
+    for (const auto &node : node_names) {
+        if (node_rank_count.find(node) == node_rank_count.end()) {
+            node_rank_count[node] = 0;
+            node_id_map[node] = current_node_id++;
+        }
+        node_rank_count[node]++;
+    }
+
+    // Determine the number of unique nodes
+    int n_nodes = node_id_map.size();
+
+    // Determine the number of ranks per node (assuming uniform distribution)
+    int ranks_per_node = size / n_nodes;
+
+    // Check if all ranks have the same ranks_per_node value
+    int global_ranks_per_node;
+    MPI_Allreduce(&ranks_per_node, &global_ranks_per_node, 1, MPI_INT, MPI_MAX, comm);
+    if (ranks_per_node != global_ranks_per_node || size != ranks_per_node * n_nodes) {
+        throw std::runtime_error("Inconsistent ranks_per_node value across ranks");
+    }
+
+
+    // Get the current node name from the node_names vector
+    std::string current_node_name = node_names[rank];
+
+    // Determine the local rank ID within the node
+    int local_rank_id = 0;
+    for (int i = 0; i < rank; ++i) {
+        if (node_names[i] == current_node_name) {
+            local_rank_id++;
+        }
+    }
+
+    // Determine the node ID
+    int node_id = node_id_map[current_node_name];
+    // Return the results as a tuple
+    return std::make_tuple(local_rank_id, node_id, n_nodes, ranks_per_node);
+}
+
+
+
 std::vector<RankInfo>
 get_node_infos(std::vector<std::string> const &node_names) {
   std::vector<RankInfo> result;
@@ -89,10 +144,11 @@ ClusterInfo get_cluster_info(MPI_Comm comm) {
                      rank_infos};
 }
 
-int get_logical_rank(ClusterInfo &cluster_info) {
-  int node_id( Atrip::rank / cluster_info.ranks_per_node);
-  int local_rank(Atrip::rank % cluster_info.ranks_per_node);
-  return local_rank * cluster_info.n_nodes + node_id;
+int get_logical_rank(int rank) {
+  int node_id( rank / Atrip::ranks_per_node);
+  int local_rank(rank % Atrip::ranks_per_node);
+
+  return local_rank * Atrip::n_nodes + node_id;
 }
 
 
@@ -320,26 +376,16 @@ ABCTuples special_distribution(Info const &info, ABCTuples const &all_tuples) {
 
 std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
-  int rank, np;
-  MPI_Comm_rank(universe, &rank);
-  MPI_Comm_size(universe, &np);
-
   std::vector<ABCTuple> result;
 
-  // auto const node_names(get_node_names(universe));
-  // size_t const n_nodes = unique(node_names).size();
-  // auto const node_infos = get_node_infos(node_names);
-  auto cluster_info = Atrip::cluster_info;
-  auto const node_infos = cluster_info->rank_infos;
-  size_t const n_nodes = cluster_info->n_nodes;
 
   // We want to construct a communicator which only contains of one
   // element per node
-  bool const compute_distribution_p = node_infos[rank].local_rank == 0;
+  bool const compute_distribution_p = Atrip::local_rank == 0;
 
   std::vector<ABCTuple> node_tuples =
       compute_distribution_p
-          ? special_distribution(Info{n_nodes, node_infos[rank].node_id},
+          ? special_distribution(Info{Atrip::n_nodes, Atrip::node_id},
                                  get_all_tuples_list(Nv))
           : std::vector<ABCTuple>();
 
@@ -347,7 +393,7 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   // now we have to send the data from **one** rank on each node
   // to all others ranks of this node
-  const int color = node_infos[rank].node_id, key = node_infos[rank].local_rank;
+  const int color = Atrip::node_id, key = Atrip::local_rank;
 
   MPI_Comm INTRA_COMM;
   MPI_Comm_split(universe, color, key, &INTRA_COMM);
@@ -355,8 +401,8 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
 
   // [[file:~/cuda/atrip/atrip.org::*Main][Main:2]]
   size_t const tuples_per_rank_local =
-      node_tuples.size() / node_infos[rank].ranks_per_node
-      + size_t(node_tuples.size() % node_infos[rank].ranks_per_node != 0);
+      node_tuples.size() / Atrip::ranks_per_node
+      + size_t(node_tuples.size() % Atrip::ranks_per_node != 0);
 
   size_t tuples_per_rank_global;
 
@@ -371,14 +417,14 @@ std::vector<ABCTuple> main(MPI_Comm universe, size_t Nv) {
   MPI_Bcast(&tuples_per_rank_global, 1, MPI_UINT64_T, 0, universe);
 
   LOG(1, "Atrip") << "Tuples per rank: " << tuples_per_rank_global << "\n";
-  LOG(1, "Atrip") << "ranks per node " << node_infos[rank].ranks_per_node
+  LOG(1, "Atrip") << "ranks per node " << Atrip::ranks_per_node
                   << "\n";
-  LOG(1, "Atrip") << "#nodes " << n_nodes << "\n";
+  LOG(1, "Atrip") << "#nodes " << Atrip::n_nodes << "\n";
   // Main:2 ends here
 
   // [[file:~/cuda/atrip/atrip.org::*Main][Main:3]]
   size_t const total_tuples =
-      tuples_per_rank_global * node_infos[rank].ranks_per_node;
+      tuples_per_rank_global * Atrip::ranks_per_node;
 
   if (compute_distribution_p) {
     // pad with FAKE_TUPLEs

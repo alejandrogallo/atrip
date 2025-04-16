@@ -7,21 +7,12 @@
 
 namespace atrip {
 
-//WATCH OUT: still mpi comm world in our routine!
-//template <typename F>
-//struct Sources {
-//  size_t n_sources;
-//  size_t s_sources;
-//  std::vector<std::vector<F>> sources;
-//};
-
 template <typename F>
 Sources<F> riskReader(const std::string &file_path,
                       std::vector<size_t> tensor_dimension,
                       std::vector<size_t> slice_mapping,
                       const size_t No,
                       const size_t Nv,
-                      ClusterInfo cluster_info,
                       bool rowMajor);
 
 template <typename F>
@@ -29,8 +20,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       std::vector<size_t> tensor_dimension,
                       std::vector<size_t> slice_mapping,
                       const size_t No,
-                      const size_t Nv,
-                      ClusterInfo cluster_info);
+                      const size_t Nv);
 
 
 template <typename F>
@@ -39,7 +29,6 @@ Sources<F> newReader(void* tensor_,
                      std::vector<size_t> slice_mapping,
                      const size_t No,
                      const size_t Nv,
-                     ClusterInfo cluster_info,
                      const std::string &file_path = "",
                      bool rowMajor = false) {
   if (tensor_ == nullptr) {
@@ -49,7 +38,6 @@ Sources<F> newReader(void* tensor_,
                          slice_mapping,
                          No,
                          Nv,
-                         cluster_info,
                          rowMajor);
   }
 //TODO preprocessor if around this cast
@@ -61,10 +49,16 @@ Sources<F> newReader(void* tensor_,
                        tensor_dimension,
                        slice_mapping,
                        No,
-                       Nv,
-                       cluster_info);
+                       Nv);
 
 }
+
+
+// read file data into a vector
+template <typename F>
+std::vector<F> read_all(std::vector<size_t> lengths,
+                        std::string const &file_path,
+                        MPI_Comm comm);
 
 
 } // namespace atrip
