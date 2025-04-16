@@ -24,6 +24,7 @@ Sources<F> riskReader(const std::string &file_path,
                       ClusterInfo cluster_info,
                       bool rowMajor);
 
+#if defined(HAVE_CTF)
 template <typename F>
 Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       std::vector<size_t> tensor_dimension,
@@ -31,7 +32,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       const size_t No,
                       const size_t Nv,
                       ClusterInfo cluster_info);
-
+#endif
 
 template <typename F>
 Sources<F> newReader(void* tensor_,
@@ -52,7 +53,7 @@ Sources<F> newReader(void* tensor_,
                          cluster_info,
                          rowMajor);
   }
-//TODO preprocessor if around this cast
+#if defined(HAVE_CTF)
   auto *tensor = reinterpret_cast<CTF::Tensor<F>*>(tensor_);
   if (tensor == nullptr) {
     throw std::invalid_argument("Invalid tensor pointer, failed dynamic_cast");
@@ -63,7 +64,10 @@ Sources<F> newReader(void* tensor_,
                        No,
                        Nv,
                        cluster_info);
-
+#endif
+  if (!Atrip::rank) std::cout << "CTF not available. Abort!" << std::endl;
+  assert(0);
+  return Sources<F>{};
 }
 
 

@@ -162,6 +162,8 @@ static std::vector<int> largest_factors(int N) {
 //            this implies that we have to rearrange the tensor data such that the
 //            indices to slice are the slowest (V_PHAB)
 //        2.)
+
+#if defined(HAVE_CTF)
 template <typename F>
 Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       std::vector<size_t> tensor_dimension,
@@ -419,6 +421,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   return {n_sources, s_sources, sources};
 }
 
+#endif /* defined(HAVE_CTF) */
 
 
 
@@ -439,6 +442,8 @@ INSTANTIATE_RISK_READER(double)
 INSTANTIATE_RISK_READER(float)
 
 
+#if defined(HAVE_CTF) 
+
 #define INSTANTIATE_CITF_READER(T) \
 template Sources<T> citfReader<T>(CTF::Tensor<T>&, \
                                   std::vector<size_t>, \
@@ -451,7 +456,7 @@ template Sources<T> citfReader<T>(CTF::Tensor<T>&, \
 INSTANTIATE_CITF_READER(double)
 INSTANTIATE_CITF_READER(float)
 INSTANTIATE_CITF_READER(Complex)
-
+#endif  /* HAVE CTF */
 
 
 template struct Sources<Complex>;
