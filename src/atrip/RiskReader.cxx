@@ -13,7 +13,6 @@ Sources<F> riskReader(const std::string &file_path,
                       std::vector<size_t> slice_mapping,
                       const size_t No,
                       const size_t Nv,
-                      ClusterInfo cluster_info,
                       bool rowMajor) {
   // check if the slicing is valid
   int transitions = 0;
@@ -32,7 +31,7 @@ Sources<F> riskReader(const std::string &file_path,
                      : source_dimension.push_back(tensor_dimension[i]);
   }
 
-  RankMap<F> rank_map(slice_dimension, cluster_info);
+  RankMap<F> rank_map(slice_dimension);
 
   size_t s_sources = std::accumulate(source_dimension.begin(),
                                      source_dimension.end(),
@@ -44,7 +43,7 @@ Sources<F> riskReader(const std::string &file_path,
                                          1UL,
                                          std::multiplies<size_t>());
 
-  auto np(cluster_info.np);
+  auto np(Atrip::np);
   size_t n_sources = number_slices / np;
   if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
 
@@ -64,7 +63,7 @@ Sources<F> riskReader(const std::string &file_path,
   size_t a,b;
   for (auto s(0); s < n_sources; s++) {
     // if we have a 1D map the result is smaller Nv, so b will always b=0
-    std::tie(a,b) = orbitalMap(rank_map.find({(size_t) Atrip::rank, s}), Nv);
+    std::tie(a,b) = orbitalMap(rank_map.find_element({Atrip::logical_rank, s}), Nv);
     size_t off = (slice_dimension.size() == 1 || !rowMajor) ? a + Nv*b : a*Nv + b;
     MPI_Offset offset = s_sources * off * sizeof(F);
     if (!rowMajor) buffer = sources[s].data();
@@ -169,13 +168,12 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       std::vector<size_t> tensor_dimension,
                       std::vector<size_t> slice_mapping,
                       const size_t No,
-                      const size_t Nv,
-                      ClusterInfo cluster_info) {
+                      const size_t Nv) {
 
-  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Barrier(Atrip::communicator);
   double startReader = MPI_Wtime();
   // right now the logic works only for more than one node
-  assert(cluster_info.np > 1);
+  assert(Atrip::np > 1);
   auto order(tensor_dimension.size());
 
   std::vector<size_t> slice_dimension, source_dimension, ptensor_dimension(tensor_dimension);
@@ -208,7 +206,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   }
 
 
-  RankMap<F> rank_map(slice_dimension, cluster_info);
+  RankMap<F> rank_map(slice_dimension);
 
   size_t s_sources = std::accumulate(source_dimension.begin(),
                                      source_dimension.end(),
@@ -220,7 +218,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                                          1UL,
                                          std::multiplies<size_t>());
 
-  auto np(cluster_info.np);
+  auto np(Atrip::np);
   size_t n_sources = number_slices / np;
   if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
 
@@ -235,10 +233,10 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   std::vector<int> plens(tensor.order, 1);
   if (slice_dimension.size() == 1) {
     for (auto i(0); i < slice_mapping.size(); i++) {
-      if (slice_mapping[i] > 0) plens[i] = cluster_info.np;
+      if (slice_mapping[i] > 0) plens[i] = Atrip::np;
     }
   } else if (slice_dimension.size() == 2) {
-    auto facs(largest_factors(cluster_info.np));
+    auto facs(largest_factors(Atrip::np));
     size_t u(0);
     for (auto i(0); i < slice_mapping.size(); i++) {
       if (slice_mapping[i] > 0) plens[i] = facs[u++];
@@ -287,7 +285,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   double startBuro = MPI_Wtime();
   // Atrip source distribution
   for (size_t i(0); i < n_sources; i++) {
-    list_target.push_back(rank_map.find({Atrip::rank, i}));
+    list_target.push_back(rank_map.find_element({Atrip::logical_rank, i}));
 //    std::cout << "TARGET: Rank " << Atrip::rank << " " << i << " " << list_target.back()
 //              << " | " << list_target.back() % Nv << " " << list_target.back() / Nv << std::endl;
   }
@@ -421,7 +419,43 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   return {n_sources, s_sources, sources};
 }
 
+
 #endif /* defined(HAVE_CTF) */
+
+template <typename F>
+std::vector<F> read_all(std::vector<size_t> lengths,
+                        std::string const &ctf_file_path,
+                        MPI_Comm comm) {
+  MPI_File handle;
+  MPI_Offset offset = 0;
+  const size_t count = std::accumulate(lengths.begin(),
+                                       lengths.end(),
+                                       1UL,
+                                       std::multiplies<size_t>());
+  std::vector<F> buffer(count);
+
+  MPI_File_open(comm,
+                ctf_file_path.c_str(),
+                MPI_MODE_RDONLY,
+                MPI_INFO_NULL,
+                &handle);
+
+  char *dest = reinterpret_cast<char *>(buffer.data());
+  LOG(0, "Atrip") << "Reading file " << ctf_file_path << " from disk" << std::endl;
+  if (MPI_SUCCESS
+      != MPI_File_read_at(handle,
+                          offset,
+                          dest,
+                          count * sizeof(F),
+                          MPI_CHAR,
+                          MPI_STATUS_IGNORE)) {
+    throw "error reading!";
+  }
+
+  MPI_File_close(&handle);
+  return buffer;
+}
+
 
 
 
@@ -433,7 +467,6 @@ template Sources<T> riskReader<T>(const std::string&, \
                                   std::vector<size_t>, \
                                   const size_t, \
                                   const size_t, \
-                                  ClusterInfo, \
                                   bool);
 
 
@@ -449,14 +482,27 @@ template Sources<T> citfReader<T>(CTF::Tensor<T>&, \
                                   std::vector<size_t>, \
                                   std::vector<size_t>, \
                                   const size_t, \
-                                  const size_t, \
-                                  ClusterInfo);
+                                  const size_t);
 
 
 INSTANTIATE_CITF_READER(double)
 INSTANTIATE_CITF_READER(float)
 INSTANTIATE_CITF_READER(Complex)
 #endif  /* HAVE CTF */
+
+template std::vector<float> read_all<float>(std::vector<size_t> lengths,
+                                            std::string const &ctf_file_path,
+                                            MPI_Comm comm);
+template std::vector<double> read_all<double>(std::vector<size_t> lengths,
+                                              std::string const &ctf_file_path,
+                                              MPI_Comm comm);
+template std::vector<Complex>
+read_all<Complex>(std::vector<size_t> lengths,
+                  std::string const &ctf_file_path,
+                  MPI_Comm comm);
+
+
+
 
 
 template struct Sources<Complex>;

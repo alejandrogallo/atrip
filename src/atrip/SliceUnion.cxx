@@ -50,7 +50,7 @@ SliceUnion<F>::build_local_database(ABCTuple const &abc) {
   for (auto const &pair : needed) {
     auto const type = pair.first;
     auto const tuple = pair.second;
-    auto const from = rank_map.find(abc, type);
+    auto const from = rank_map.find_location(abc, type);
 
 #ifdef HAVE_OCD
     WITH_RANK << "__db__:want:"
@@ -389,8 +389,8 @@ void SliceUnion<F>::send(size_t other_rank,
   // Only a staging buffer will be allocated if the communication
   // is to happen in an INTER-node manner.
 
-  size_t target_node = Atrip::cluster_info->rank_infos[other_rank].node_id,
-         from_node = Atrip::cluster_info->rank_infos[info.from.rank].node_id;
+  size_t target_node = Atrip::node_ids[other_rank],
+         from_node = Atrip::node_ids[info.from.rank];
   const bool inter_node_communication = target_node == from_node;
 
   DataPtr<F> isend_buffer;
@@ -447,7 +447,7 @@ mpi_staging_done:
   // We count network sends only for the largest buffers
   switch (el.name) {
   case Slice<F>::Name::TA:
-    if (other_rank / Atrip::ppn == Atrip::rank / Atrip::ppn) {
+    if (Atrip::node_ids[other_rank] == Atrip::node_id) {
       Atrip::local_send++;
     } else {
       Atrip::network_send++;

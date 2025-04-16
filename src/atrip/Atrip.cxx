@@ -28,22 +28,24 @@
 
 using namespace atrip;
 
-template <typename F>
-bool RankMap<F>::RANK_ROUND_ROBIN;
-template bool RankMap<float>::RANK_ROUND_ROBIN;
-template bool RankMap<double>::RANK_ROUND_ROBIN;
-template bool RankMap<Complex>::RANK_ROUND_ROBIN;
 size_t Atrip::rank;
 int Atrip::logical_rank;
 size_t Atrip::np;
-ClusterInfo *Atrip::cluster_info;
+bool Atrip::rank_round_robin;
+
 #if defined(HAVE_ACC)
 typename Atrip::CudaContext Atrip::cuda;
 typename Atrip::KernelDimensions Atrip::kernel_dimensions;
 #endif
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
-size_t Atrip::ppn;
+size_t Atrip::ranks_per_node;
+size_t Atrip::n_nodes;
+size_t Atrip::node_id;
+size_t Atrip::local_rank;
+std::vector<size_t> Atrip::rank_phys_to_log;
+std::vector<size_t> Atrip::rank_log_to_phys;
+std::vector<size_t> Atrip::node_ids;
 size_t Atrip::network_send;
 size_t Atrip::local_send;
 double Atrip::bytes_sent;
@@ -60,37 +62,56 @@ struct LocalOutput {
   F ct_energy;
 };
 
-void Atrip::init(MPI_Comm world) {
-  Atrip::communicator = world;
-  MPI_Comm_rank(world, (int *)&Atrip::rank);
-  MPI_Comm_size(world, (int *)&Atrip::np);
-  Atrip::cluster_info = new ClusterInfo(get_cluster_info(world));
+void Atrip::init(bool rank_round_robin_, MPI_Comm atrip_world, MPI_Comm global_world) {
+  Atrip::rank_round_robin = rank_round_robin_;
+  if (global_world == MPI_COMM_NULL) global_world = atrip_world;
+  Atrip::communicator = atrip_world;
+  MPI_Comm_rank(Atrip::communicator, (int *)&Atrip::rank);
+  MPI_Comm_size(Atrip::communicator, (int *)&Atrip::np);
   Atrip::network_send = 0UL;
   Atrip::local_send = 0UL;
   Atrip::bytes_sent = 0.0;
-  Atrip::ppn = Atrip::cluster_info->ranks_per_node;
+
+  //TODO: check what happens if ranks_per_node is not identical over all nodes
+  std::tie(Atrip::local_rank,
+           Atrip::node_id,
+           Atrip::n_nodes,
+           Atrip::ranks_per_node) = get_mpi_info(atrip_world);
+
+  //WATCH OUT: this is the node_id in the default rank distribution!
+  Atrip::node_ids.resize(Atrip::np);
+  MPI_Allgather(&Atrip::node_id, 1, MPI_UINT64_T, Atrip::node_ids.data(), 1, MPI_UINT64_T, Atrip::communicator);
+  int global_np;
+  MPI_Comm_size(global_world, &global_np);
+  for (auto r(0); r < global_np; r++) {
+    int lr = (Atrip::rank_round_robin) ? r : get_logical_rank(r);
+    Atrip::rank_phys_to_log.push_back(lr);
+  }
+  Atrip::rank_log_to_phys.resize(global_np);
+  for (size_t r(0); r < Atrip::rank_phys_to_log.size(); r++) {
+    int log(Atrip::rank_phys_to_log[r]);
+    if (log != MPI_UNDEFINED)  Atrip::rank_log_to_phys[log] = r;
+  }
+
+  Atrip::logical_rank = Atrip::rank_phys_to_log[Atrip::rank];
 }
 
 template <typename F>
 Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
-  const size_t np = Atrip::np;
-  const size_t rank = Atrip::rank;
-  MPI_Comm universe = Atrip::communicator;
 
   const size_t No = in.epsilon_i->size();
   const size_t Nv = in.epsilon_a->size();
   LOG(0, "Atrip") << "No: " << No << "\n";
   LOG(0, "Atrip") << "Nv: " << Nv << "\n";
-  LOG(0, "Atrip") << "np: " << np << "\n";
+  LOG(0, "Atrip") << "np: " << Atrip::np << "\n";
 
 #if defined(HAVE_ACC)
   int ngcards;
   ACC_CHECK_SUCCESS("initializing accelerator", ACC_INIT(0));
   ACC_CHECK_SUCCESS("getting device count", ACC_DEVICE_GET_COUNT(&ngcards));
-  const auto cluster_info = *Atrip::cluster_info;
   LOG(0, "Atrip") << "ngcards: " << ngcards << "\n";
-  if (cluster_info.ranks_per_node > ngcards) {
+  if (Atrip::ranks_per_node > ngcards) {
     const auto msg = _FORMAT(
         "ATRIP: You are running on more ranks per node than the number of "
         "graphic cards\n"
@@ -98,17 +119,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         ngcards);
     std::cerr << msg;
     throw msg;
-  } else if (cluster_info.ranks_per_node < ngcards) {
+  } else if (Atrip::ranks_per_node < ngcards) {
     const auto msg = _FORMAT(
         "You have %d cards at your disposal.\n"
         "You will be only using %d, i.e, the number of ranks\n",
         ngcards,
-        cluster_info.ranks_per_node);
+        Atrip::ranks_per_node);
     std::cerr << msg;
   }
 
-  for (size_t _rank = 0; _rank < np; _rank++) {
-    if (rank == _rank) {
+  for (size_t _rank = 0; _rank < Atrip::np; _rank++) {
+    if (Atrip::rank == _rank) {
       ACC_CONTEXT ctx;
       ACC_DEVICE dev;
       struct {
@@ -125,7 +146,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
       // set current device
       ACC_CHECK_SUCCESS("getting device for index <rank>",
-                        ACC_DEVICE_GET(&dev, rank % ngcards));
+                        ACC_DEVICE_GET(&dev, Atrip::rank % ngcards));
       ACC_CHECK_SUCCESS("creating a accelerator context",
                         ACC_CONTEXT_CREATE(&ctx, 0, dev));
       ACC_CHECK_SUCCESS("setting the context", ACC_CONTEXT_SET_CURRENT(ctx));
@@ -157,7 +178,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       ACC_CHECK_BLAS("creating a cublas handle",
                      ACC_BLAS_CREATE(&Atrip::cuda.handle));
     }
-    MPI_Barrier(universe);
+    MPI_Barrier(Atrip::communicator);
   }
 
   if (in.ooo_threads > 0) {
@@ -222,9 +243,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   MALLOC_DATA_PTR("Zijk", &Zijk, sizeof(DataFieldType<F>) * No * No * No);
   MALLOC_DATA_PTR("Tijk", &Tijk, sizeof(DataFieldType<F>) * No * No * No);
 
-  RankMap<F>::RANK_ROUND_ROBIN = in.rank_round_robin;
-  Atrip::logical_rank = get_logical_rank(*Atrip::cluster_info);
-  if (RankMap<F>::RANK_ROUND_ROBIN) {
+  if (Atrip::rank_round_robin) {
     LOG(0, "Atrip") << "Doing rank round robin slices distribution\n";
   } else {
     LOG(0, "Atrip")
@@ -241,15 +260,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   // const std::vector<size_t> total_source_sizes = {
   //     // ABPH
-  //     SliceUnion<F>::get_size({Nv, No}, {Nv, Nv}, (size_t)np, universe),
+  //     SliceUnion<F>::get_size({Nv, No}, {Nv, Nv}, (size_t)np, Atrip::communicator),
   //     // ABHH
-  //     SliceUnion<F>::get_size({No, No}, {Nv, Nv}, (size_t)np, universe),
+  //     SliceUnion<F>::get_size({No, No}, {Nv, Nv}, (size_t)np, Atrip::communicator),
   //     // TABHH
-  //     SliceUnion<F>::get_size({No, No}, {Nv, Nv}, (size_t)np, universe),
+  //     SliceUnion<F>::get_size({No, No}, {Nv, Nv}, (size_t)np, Atrip::communicator),
   //     // TAPHH
-  //     SliceUnion<F>::get_size({Nv, No, No}, {Nv}, (size_t)np, universe),
+  //     SliceUnion<F>::get_size({Nv, No, No}, {Nv}, (size_t)np, Atrip::communicator),
   //     // HHHA
-  //     SliceUnion<F>::get_size({No, No, No}, {Nv}, (size_t)np, universe),
+  //     SliceUnion<F>::get_size({No, No, No}, {Nv}, (size_t)np, Atrip::communicator),
   // };
 
   // const size_t total_source_size = sizeof(DataFieldType<F>)
@@ -381,11 +400,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   LOG(0, "Atrip") << "BUILDING TUPLE LIST\n";
   WITH_CHRONO("tuples:build",
-              auto const tuples_list = distribution->get_tuples(Nv, universe);)
+              auto const tuples_list = distribution->get_tuples(Nv, Atrip::communicator);)
   const size_t n_iterations = tuples_list.size();
   {
     LOG(0, "Atrip") << "#iterations: " << n_iterations << "/"
-                    << n_iterations * np << "\n";
+                    << n_iterations * Atrip::np << "\n";
   }
 
   const size_t iteration_mod = (in.percentage_mod > 0)
@@ -401,14 +420,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   using Database = typename Slice<F>::Database;
   auto communicate_database =
-      [&unions, &in, Nv, np](ABCTuple const &abc,
-                             MPI_Comm const &c,
-                             size_t iteration) -> Database {
+      [&unions, &in, Nv](ABCTuple const &abc,
+                                    MPI_Comm const &c,
+                                    size_t iteration) -> Database {
     if (in.tuples_distribution == Atrip::Input<F>::TuplesDistribution::NAIVE) {
 
       WITH_CHRONO("db:comm:naive",
                   auto const &db =
-                      naive_database<F>(unions, Nv, np, iteration);)
+                      naive_database<F>(unions, Nv, Atrip::np, iteration);)
       return db;
 
     } else {
@@ -424,7 +443,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
             ldb.insert(ldb.end(), tensor_db.begin(), tensor_db.end());
           })
 
-      Database db(np * ldb.size(), ldb[0]);
+      Database db(Atrip::np * ldb.size(), ldb[0]);
 
       WITH_CHRONO(
           "oneshot-db:comm:allgather",
@@ -451,30 +470,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   };
 
   auto do_io_phase =
-      [&unions, &rank, &np, No, Nv, &universe, &db_last_iteration_time](
+      [&unions, No, Nv, &db_last_iteration_time](
           Database const &db,
           ABCTuple const abc,
           size_t iteration) {
         IGNORABLE(iteration); // iteration used to print database
-        const size_t localDBLength = db.size() / np;
+        const size_t localDBLength = db.size() / Atrip::np;
 
-        size_t send_tag = 0, recv_tag = rank * localDBLength;
+        size_t send_tag = 0, recv_tag = Atrip::rank * localDBLength;
 
         // RECIEVE PHASE ======================================================
         {
           // At this point, we have already send to everyone that fits
-          auto const &begin = &db[rank * localDBLength],
+          auto const &begin = &db[Atrip::rank * localDBLength],
                      end = begin + localDBLength;
           for (auto it = begin; it != end; ++it) {
             recv_tag++;
             auto const &el = *it;
             auto &u = union_by_name(unions, el.name);
 
-            WITH_DBG std::cout << rank << ":r"
+            WITH_DBG std::cout << Atrip::rank << ":r"
                                << "♯" << recv_tag << " =>"
                                << " «n" << el.name << ", t" << el.info.type
                                << ", s" << el.info.state << "»"
-                               << " ⊙ {" << rank << "⇐" << el.info.from.rank
+                               << " ⊙ {" << Atrip::rank << "⇐" << el.info.from.rank
                                << ", " << el.info.from.source << "}"
                                << " ∴ {" << el.info.tuple[0] << ", "
                                << el.info.tuple[1] << "}"
@@ -489,7 +508,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                   "RECV",
                   iteration,
                   el.info.from.rank,
-                  rank,
+                  Atrip::rank,
                   recv_tag,
                   name_to_string<double>(el.name).c_str(),
                   type_to_string<double>(el.info.type).c_str(),
@@ -509,21 +528,21 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           } // recv
         }
 
-        MPI_Barrier(universe);
+        MPI_Barrier(Atrip::communicator);
 
         // SEND PHASE =========================================================
-        for (size_t other_rank = 0; other_rank < np; other_rank++) {
+        for (size_t other_rank = 0; other_rank < Atrip::np; other_rank++) {
           auto const &begin = &db[other_rank * localDBLength],
                      end = begin + localDBLength;
           for (auto it = begin; it != end; ++it) {
             send_tag++;
             typename Slice<F>::LocalDatabaseElement const &el = *it;
 
-            if (el.info.from.rank != rank) continue;
+            if (el.info.from.rank != Atrip::rank) continue;
 
             auto &u = union_by_name(unions, el.name);
             WITH_DBG std::cout
-                << rank << ":s"
+                << Atrip::rank << ":s"
                 << "♯" << send_tag << " =>"
                 << " «n" << el.name << ", t" << el.info.type << ", s"
                 << el.info.state << "»"
@@ -573,7 +592,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   // START MAIN LOOP ======================================================{{{1
 
-  MPI_Barrier(universe);
+  MPI_Barrier(Atrip::communicator);
   LocalOutput<EnergyType<F>> local_output = {0, 0};
   Output global_output = {0, 0};
   size_t first_iteration = 0;
@@ -699,7 +718,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // check overhead of doing a barrier at the beginning
     WITH_CHRONO(
         "oneshot-mpi:barrier",
-        WITH_CHRONO("mpi:barrier", if (in.barrier) MPI_Barrier(universe);))
+        WITH_CHRONO("mpi:barrier", if (in.barrier) MPI_Barrier(Atrip::communicator);))
 
     // write checkpoints
     // TODO: ENABLE THIS
@@ -711,11 +730,11 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  traits::mpi::datatype_of<EnergyType<F>>(),
                  MPI_SUM,
                  0,
-                 universe);
+                 Atrip::communicator);
       Checkpoint out = {No,
                         Nv,
-                        Atrip::cluster_info->ranks_per_node,
-                        Atrip::cluster_info->n_nodes,
+                        Atrip::ranks_per_node,
+                        Atrip::n_nodes,
                         -global_energy,
                         iteration - 1,
                         in.rank_round_robin};
@@ -741,7 +760,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  MPI_UINT64_T,
                  MPI_SUM,
                  0,
-                 universe);
+                 Atrip::communicator);
 
       size_t local_send(0);
       MPI_Reduce(&Atrip::local_send,
@@ -750,7 +769,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  MPI_UINT64_T,
                  MPI_SUM,
                  0,
-                 universe);
+                 Atrip::communicator);
 
       double bytes_sent(0.0);
       MPI_Reduce(&Atrip::bytes_sent,
@@ -759,7 +778,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  MPI_DOUBLE,
                  MPI_SUM,
                  0,
-                 universe);
+                 Atrip::communicator);
 
       const size_t total_send = network_send + local_send;
 
@@ -798,7 +817,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // ================================================{{{1
     if (i == first_iteration) {
       WITH_RANK << "__first__:first database ............ \n";
-      const auto db = communicate_database(abc, universe, i);
+      const auto db = communicate_database(abc, Atrip::communicator, i);
       WITH_RANK << "__first__:first database communicated \n";
       WITH_RANK << "__first__:first database io phase \n";
       do_io_phase(db, abc, i);
@@ -806,7 +825,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       WITH_RANK << "__first__::::Unwrapping all slices for first database\n";
       for (auto &u : unions) u->unwrap_all(abc);
       WITH_RANK << "__first__::::Unwrapping slices for first database DONE\n";
-      MPI_Barrier(universe);
+      MPI_Barrier(Atrip::communicator);
     }
 
     // COMM NEXT DATABASE
@@ -814,14 +833,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     if (abc_next) {
       WITH_RANK << "__comm__:" << iteration << "th communicating database\n";
       WITH_CHRONO("db:comm",
-                  const auto db = communicate_database(*abc_next, universe, i);)
+                  const auto db = communicate_database(*abc_next, Atrip::communicator, i);)
       WITH_CHRONO("db:io", do_io_phase(db, abc, i + 1);)
       WITH_RANK << "__comm__:" << iteration << "th database io phase DONE\n";
     }
 
     // COMPUTE DOUBLES
     // ===================================================={{{1
-    OCD_Barrier(universe);
+    OCD_Barrier(Atrip::communicator);
     if (!is_fake_tuple(i)) {
       WITH_RANK << iteration << "-th doubles\n";
       WITH_CHRONO(
@@ -841,7 +860,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                  : decltype(unions){&abph, &hhha, &taphh, &tabhh}) {
               u->unwrap_all(*abc_next);
             })
-        WITH_CHRONO("blocking-barrier", MPI_Barrier(universe);)
+        WITH_CHRONO("blocking-barrier", MPI_Barrier(Atrip::communicator);)
       }
 
       WITH_CHRONO("oneshot-doubles",
@@ -879,7 +898,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
     // COMPUTE SINGLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // {{{1
-    OCD_Barrier(universe);
+    OCD_Barrier(Atrip::communicator);
 #if defined(ATRIP_ONLY_DGEMM)
     if (false)
 #endif
@@ -972,7 +991,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
     // CLEANUP UNIONS
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
-    OCD_Barrier(universe);
+    OCD_Barrier(Atrip::communicator);
     if (abc_next) {
       WITH_RANK << "__gc__:" << iteration << "-th cleaning up.......\n";
       for (auto &u : unions) {
@@ -1026,7 +1045,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 
     // AMB: debugging only
-    // WITH_CHRONO("mpi:barrier", MPI_Barrier(universe););
+    // WITH_CHRONO("mpi:barrier", MPI_Barrier(Atrip::communicator););
     ACC_DEVICE_SYNCHRONIZE();
 #if defined(HAVE_ACC)
 #  if defined(HAVE_CUDA)
@@ -1061,17 +1080,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   if (jhhha) delete jhhha;
   if (jabph) delete jabph;
-  MPI_Barrier(universe);
+  MPI_Barrier(Atrip::communicator);
 
 // PRINT TUPLES
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{1
 #if defined(HAVE_OCD) || defined(ATRIP_PRINT_TUPLES)
   LOG(0, "Atrip") << "tuple energies"
                   << "\n";
-  for (size_t i = 0; i < np; i++) {
-    MPI_Barrier(universe);
+  for (size_t i = 0; i < Atrip::np; i++) {
+    MPI_Barrier(Atrip::communicator);
     for (auto const &pair : tuple_energies) {
-      if (i == rank)
+      if (i == Atrip::rank)
         std::cout << pair.first[0] << " " << pair.first[1] << " "
                   << pair.first[2] << std::setprecision(15) << std::setw(23)
                   << " tuple_energy: " << pair.second << "\n";
@@ -1089,7 +1108,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
              MPI_DOUBLE,
              MPI_SUM,
              0,
-             universe);
+             Atrip::communicator);
   global_output.energy = _pt_energy;
 
   MPI_Reduce(&local_output.ct_energy,
@@ -1098,7 +1117,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
              MPI_DOUBLE,
              MPI_SUM,
              0,
-             universe);
+             Atrip::communicator);
   global_output.ct_energy = _ct_energy;
   if (!in.ijkabc) {
     global_output.energy = -global_output.energy;

@@ -10,9 +10,11 @@ NO_ACC_FILES = \
 ./atrip/Tuples.cxx \
 ./atrip/RankMap.cxx \
 ./atrip/Slice.cxx \
-./atrip/CTFReader.cxx \
-./atrip/DiskReader.cxx \
 ./atrip/RiskReader.cxx
+
+#./atrip/CTFReader.cxx \
+#./atrip/DiskReader.cxx \
+
 
 libatrip_a_CPPFLAGS =
 if !WITH_HIP

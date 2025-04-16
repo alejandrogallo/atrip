@@ -56,7 +56,7 @@ void DiskReaderProxy<F>::read_into_buffer(
 template <typename F>
 void DiskReader<APHH<F>>::read(const size_t slice_index) {
   const size_t /**/
-      a = orbitalMap(this->slice_union->rank_map.find({Atrip::rank, slice_index})),
+      a = orbitalMap(this->slice_union->rank_map.find_element({Atrip::rank, slice_index})),
       count = this->Nv * this->No * this->No;
 
   const MPI_Offset offset = a * count * sizeof(F);
@@ -82,7 +82,7 @@ INSTANTIATE_READER(APHH);
 template <typename F>
 void DiskReader<ABPH<F>>::read(const size_t slice_index) {
   size_t a, b;
-  std::tie(a, b) = orbitalMap(this->slice_union->rank_map.find({Atrip::rank, slice_index}), this->Nv);
+  std::tie(a, b) = orbitalMap(this->slice_union->rank_map.find_element({Atrip::rank, slice_index}), this->Nv);
   const size_t count = this->Nv * this->No;
 
   // Be careful, now we have
@@ -107,7 +107,7 @@ template <typename F>
 void DiskReader<HHHA<F>>::read(const size_t slice_index) {
 
   const size_t /**/
-      a = orbitalMap(this->slice_union->rank_map.find({Atrip::rank, slice_index})),
+      a = orbitalMap(this->slice_union->rank_map.find_element({Atrip::rank, slice_index})),
       count = this->No * this->No * this->No;
 
   const MPI_Offset offset = a * count * sizeof(F);
@@ -126,7 +126,7 @@ INSTANTIATE_READER(HHHA);
 template <typename F>
 void DiskReader<ABHH<F>>::read(const size_t slice_index) {
   size_t a, b;
-  std::tie(a, b) = orbitalMap(this->slice_union->rank_map.find({Atrip::rank, slice_index}), this->Nv);
+  std::tie(a, b) = orbitalMap(this->slice_union->rank_map.find_element({Atrip::rank, slice_index}), this->Nv);
   const size_t count = this->No * this->No;
 
   // Be careful, now we have
