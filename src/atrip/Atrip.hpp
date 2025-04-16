@@ -148,8 +148,8 @@ struct Atrip {
 
 //Later we want better control over the mapping between
 // el (generic atrip index) and the virtual orbtials a and b
-static size_t orbitalMap(const size_t el) { return el;}
-static std::pair<size_t,size_t> orbitalMap(const size_t el, const size_t Nv) {
+inline size_t orbitalMap(const size_t el) { return el;}
+inline std::pair<size_t,size_t> orbitalMap(const size_t el, const size_t Nv) {
   return {el % Nv, el / Nv};
 }
 

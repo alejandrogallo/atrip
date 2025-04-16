@@ -12,8 +12,8 @@ NO_ACC_FILES = \
 ./atrip/Slice.cxx \
 ./atrip/RiskReader.cxx
 
-#./atrip/CTFReader.cxx \
-#./atrip/DiskReader.cxx \
+#./atrip/CTFReader.cxx
+#./atrip/DiskReader.cxx
 
 
 libatrip_a_CPPFLAGS =

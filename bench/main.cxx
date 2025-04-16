@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <random>
 
 #include <mpi.h>
 
@@ -108,10 +109,7 @@ struct Settings {
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
     complex, single, cT, ijkabc;
-#if defined(HAVE_CTF)
-  bool Tph_ctf, Tpphh_ctf, Vpphh_ctf, Vhhhp_ctf, Vppph_ctf,
-      Jppph_ctf, Jhhhp_ctf, use_ctf;
-#endif /*   defined(HAVE_CTF) */
+  bool use_ctf;
   std::string tuples_distribution_string, checkpoint_path;
   // paths
   std::string ei_path, ea_path, Tph_path, Tpphh_path, Vpphh_path, Vhhhp_path,
@@ -137,15 +135,15 @@ void run(int argc, char **argv, Settings const &s) {
   if (nv == 0) nv = 100;
 
   const auto file_exists = [](std::string const &filename) {
-    ifstream file(filename.c_str());
+    std::ifstream file(filename.c_str());
     return file.good();
   };
 
   if (s.ei_path.size() && s.ea_path.size()) {
     if (!rank) std::cout << "EigenEnergies provided - system dimensions"
                          << "will be inferred from the file size." << std::endl;
-    ifstream ifile(s.ei_path, ios::in|ios::binary);
-    ifstream afile(s.ea_path, ios::in|ios::binary);
+    std::ifstream ifile(s.ei_path, std::ios::in | std::ios::binary);
+    std::ifstream afile(s.ea_path, std::ios::in | std::ios::binary);
     ifile.seekg(0, std::ios::end);
     size_t lengthI = ifile.tellg();
     afile.seekg(0, std::ios::end);
@@ -158,7 +156,7 @@ void run(int argc, char **argv, Settings const &s) {
     size_t els(1);
     for (size_t i: dims) els *= i;
     els *= sizeof(FIELD);
-    ifstream file(filename.c_str());
+    std::ifstream file(filename.c_str());
     file.seekg(0, std::ios::end);
     size_t length = file.tellg();
     if (length == els) return;
@@ -603,6 +601,13 @@ int main(int argc, char **argv) {
           s.use_ctf,
           "Read tensors using CTF")
       ->default_val(true);
+#else
+  defflag(app,
+          "--use_ctf",
+          s.use_ctf,
+          "Read tensors using CTF")
+      ->default_val(false);
+
 #endif /* defined(HAVE_CTF) */
 
   CLI11_PARSE(app, argc, argv);

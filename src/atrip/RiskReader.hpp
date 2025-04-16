@@ -34,6 +34,7 @@ Sources<F> newReader(void* tensor_,
                      bool rowMajor = false) {
   if (tensor_ == nullptr) {
     assert(!file_path.empty());
+    LOG(0, "Atrip") << "Loading tensor from disk. File path: " << file_path << std::endl;
     return riskReader<F>(file_path,
                          tensor_dimension,
                          slice_mapping,
@@ -46,6 +47,7 @@ Sources<F> newReader(void* tensor_,
   if (tensor == nullptr) {
     throw std::invalid_argument("Invalid tensor pointer, failed dynamic_cast");
   }
+  LOG(0, "Atrip") << "Loading tensor from CTF. Tensor name: " << tensor->name << std::endl;
   return citfReader<F>(*tensor,
                        tensor_dimension,
                        slice_mapping,

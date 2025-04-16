@@ -6,86 +6,6 @@
 
 namespace atrip {
 
-
-template <typename F>
-Sources<F> riskReader(const std::string &file_path,
-                      std::vector<size_t> tensor_dimension,
-                      std::vector<size_t> slice_mapping,
-                      const size_t No,
-                      const size_t Nv,
-                      bool rowMajor) {
-  // check if the slicing is valid
-  int transitions = 0;
-  for (size_t i = 1; i < slice_mapping.size(); i++) {
-    if (slice_mapping[i] != slice_mapping[i-1]) ++transitions;
-  }
-  assert(slice_mapping.size() && transitions == 1); // {0,1,0,1} is not allowed!
-  // if we have {1,0,0,0} we have to work with column major storage!
-  assert(static_cast<bool>(slice_mapping.front()) == rowMajor);
-
-
-  std::vector<size_t> slice_dimension, source_dimension;
-
-  for (auto i(0); i < slice_mapping.size(); i++) {
-    slice_mapping[i] ? slice_dimension.push_back(tensor_dimension[i])
-                     : source_dimension.push_back(tensor_dimension[i]);
-  }
-
-  RankMap<F> rank_map(slice_dimension);
-
-  size_t s_sources = std::accumulate(source_dimension.begin(),
-                                     source_dimension.end(),
-                                     1UL,
-                                     std::multiplies<size_t>());
-
-  size_t number_slices = std::accumulate(slice_dimension.begin(),
-                                         slice_dimension.end(),
-                                         1UL,
-                                         std::multiplies<size_t>());
-
-  auto np(Atrip::np);
-  size_t n_sources = number_slices / np;
-  if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
-
-  MPI_File handle;
-  MPI_File_open(MPI_COMM_WORLD,
-                file_path.c_str(),
-                MPI_MODE_RDONLY,
-                MPI_INFO_NULL,
-                &handle);
-
-  std::vector<std::vector<F>> sources(n_sources, std::vector<F>(s_sources));
-
-  // in case we have to reorder the buffer we create a new array
-  // otherwise we write to the result array directly
-  F *buffer;
-  if (rowMajor) buffer = new F[s_sources];
-  size_t a,b;
-  for (auto s(0); s < n_sources; s++) {
-    // if we have a 1D map the result is smaller Nv, so b will always b=0
-    std::tie(a,b) = orbitalMap(rank_map.find_element({Atrip::logical_rank, s}), Nv);
-    size_t off = (slice_dimension.size() == 1 || !rowMajor) ? a + Nv*b : a*Nv + b;
-    MPI_Offset offset = s_sources * off * sizeof(F);
-    if (!rowMajor) buffer = sources[s].data();
-    if (MPI_SUCCESS != MPI_File_read_at(handle,
-                                        offset,
-                                        buffer,
-                                        s_sources,
-                                        traits::mpi::datatype_of<F>(),
-                                        MPI_STATUS_IGNORE)) {
-      throw "error reading!";
-    }
-
-    if (rowMajor) {
-      permute_copy(source_dimension, buffer, sources[s].data());
-    }
-  }
-
-  MPI_File_close(&handle);
-  return {n_sources, s_sources, sources};
-}
-
-
 template <typename F>
 static void permute_copy(std::vector<size_t> ranges,
                          const F* reorder_buffer,
@@ -137,6 +57,88 @@ static void permute_copy(std::vector<size_t> ranges,
 
 //  MPI_Finalize();
 }
+
+
+
+
+template <typename F>
+Sources<F> riskReader(const std::string &file_path,
+                      std::vector<size_t> tensor_dimension,
+                      std::vector<size_t> slice_mapping,
+                      const size_t No,
+                      const size_t Nv,
+                      bool rowMajor) {
+  // check if the slicing is valid
+  int transitions = 0;
+  for (size_t i = 1; i < slice_mapping.size(); i++) {
+    if (slice_mapping[i] != slice_mapping[i-1]) ++transitions;
+  }
+  assert(slice_mapping.size() && transitions == 1); // {0,1,0,1} is not allowed!
+  // if we have {1,0,0,0} we have to work with column major storage!
+  assert(static_cast<bool>(slice_mapping.front()) == rowMajor);
+
+
+  std::vector<size_t> slice_dimension, source_dimension;
+
+  for (auto i(0UL); i < slice_mapping.size(); i++) {
+    slice_mapping[i] ? slice_dimension.push_back(tensor_dimension[i])
+                     : source_dimension.push_back(tensor_dimension[i]);
+  }
+
+  RankMap<F> rank_map(slice_dimension);
+
+  size_t s_sources = std::accumulate(source_dimension.begin(),
+                                     source_dimension.end(),
+                                     1UL,
+                                     std::multiplies<size_t>());
+
+  size_t number_slices = std::accumulate(slice_dimension.begin(),
+                                         slice_dimension.end(),
+                                         1UL,
+                                         std::multiplies<size_t>());
+
+  auto np(Atrip::np);
+  size_t n_sources = number_slices / np;
+  if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
+
+  MPI_File handle;
+  MPI_File_open(MPI_COMM_WORLD,
+                file_path.c_str(),
+                MPI_MODE_RDONLY,
+                MPI_INFO_NULL,
+                &handle);
+
+  std::vector<std::vector<F>> sources(n_sources, std::vector<F>(s_sources));
+
+  // in case we have to reorder the buffer we create a new array
+  // otherwise we write to the result array directly
+  F *buffer;
+  if (rowMajor) buffer = new F[s_sources];
+  size_t a,b;
+  for (auto s(0UL); s < n_sources; s++) {
+    // if we have a 1D map the result is smaller Nv, so b will always b=0
+    std::tie(a,b) = orbitalMap(rank_map.find_element({Atrip::logical_rank, s}), Nv);
+    size_t off = (slice_dimension.size() == 1 || !rowMajor) ? a + Nv*b : a*Nv + b;
+    MPI_Offset offset = s_sources * off * sizeof(F);
+    if (!rowMajor) buffer = sources[s].data();
+    if (MPI_SUCCESS != MPI_File_read_at(handle,
+                                        offset,
+                                        buffer,
+                                        s_sources,
+                                        traits::mpi::datatype_of<F>(),
+                                        MPI_STATUS_IGNORE)) {
+      throw "error reading!";
+    }
+
+    if (rowMajor) {
+      permute_copy(source_dimension, buffer, sources[s].data());
+    }
+  }
+
+  MPI_File_close(&handle);
+  return {n_sources, s_sources, sources};
+}
+
 
 
 static std::vector<int> largest_factors(int N) {
@@ -500,6 +502,18 @@ template std::vector<Complex>
 read_all<Complex>(std::vector<size_t> lengths,
                   std::string const &ctf_file_path,
                   MPI_Comm comm);
+
+
+
+template static void permute_copy(std::vector<size_t> ranges,
+                                  const float* reorder_buffer,
+                                  float* source_buffer);
+template static void permute_copy(std::vector<size_t> ranges,
+                                  const double* reorder_buffer,
+                                  double* source_buffer);
+template static void permute_copy(std::vector<size_t> ranges,
+                                  const Complex* reorder_buffer,
+                                  Complex* source_buffer);
 
 
 

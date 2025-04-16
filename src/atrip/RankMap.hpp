@@ -27,7 +27,7 @@ template <typename F = double>
 class RankMap {
 public:
   std::vector<size_t> const lengths;
-  size_t const np, size;
+  size_t const size, np;
 
   RankMap(std::vector<size_t> lens);
 
