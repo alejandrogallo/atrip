@@ -20,6 +20,7 @@
 #include <string>
 #include <map>
 #include "config.h"
+#include <omp.h>
 
 #include <atrip/Acc.hpp>
 #include <atrip/Chrono.hpp>
@@ -42,22 +43,21 @@ namespace atrip {
 
 struct Atrip {
 
-  static size_t rank;
-  static int logical_rank;
-  static size_t np;
+  static int rank;
+  static int np;
+  static int omp_threads;
+  static int omp_granularity;
   static MPI_Comm communicator;
   static Timings chrono;
   static bool rank_round_robin;
   static size_t network_send;
   static size_t local_send;
   static double bytes_sent;
-  static size_t ranks_per_node;
-  static size_t n_nodes;
-  static size_t node_id;
-  static size_t local_rank;
-  static std::vector<size_t> rank_phys_to_log;
-  static std::vector<size_t> rank_log_to_phys;
-  static std::vector<size_t> node_ids;
+  static int ranks_per_node;
+  static int n_nodes;
+  static int node_id;
+  static int local_rank;
+  static std::vector<int> node_ids;
 #if defined(HAVE_ACC)
   struct CudaContext {
     ACC_BLAS_STATUS status;
@@ -71,9 +71,7 @@ struct Atrip {
   } kernel_dimensions;
 #endif
 
-  static void init(bool rank_round_robin_,
-                   MPI_Comm atrip_world,
-                   MPI_Comm global_world = MPI_COMM_NULL);
+  static void init(MPI_Comm atrip_world, int omp_granularity = 1);
 
   template <typename F = double>
   struct Input {

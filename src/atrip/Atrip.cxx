@@ -28,9 +28,10 @@
 
 using namespace atrip;
 
-size_t Atrip::rank;
-int Atrip::logical_rank;
-size_t Atrip::np;
+int Atrip::rank = MPI_UNDEFINED;
+int Atrip::np = 0;
+int Atrip::omp_threads;
+int Atrip::omp_granularity;
 bool Atrip::rank_round_robin;
 
 #if defined(HAVE_ACC)
@@ -39,13 +40,11 @@ typename Atrip::KernelDimensions Atrip::kernel_dimensions;
 #endif
 MPI_Comm Atrip::communicator;
 Timings Atrip::chrono;
-size_t Atrip::ranks_per_node;
-size_t Atrip::n_nodes;
-size_t Atrip::node_id;
-size_t Atrip::local_rank;
-std::vector<size_t> Atrip::rank_phys_to_log;
-std::vector<size_t> Atrip::rank_log_to_phys;
-std::vector<size_t> Atrip::node_ids;
+int Atrip::ranks_per_node;
+int Atrip::n_nodes;
+int Atrip::node_id;
+int Atrip::local_rank;
+std::vector<int> Atrip::node_ids;
 size_t Atrip::network_send;
 size_t Atrip::local_send;
 double Atrip::bytes_sent;
@@ -62,17 +61,18 @@ struct LocalOutput {
   F ct_energy;
 };
 
-void Atrip::init(bool rank_round_robin_, MPI_Comm atrip_world, MPI_Comm global_world) {
-  Atrip::rank_round_robin = rank_round_robin_;
-  if (global_world == MPI_COMM_NULL) global_world = atrip_world;
+void Atrip::init(MPI_Comm atrip_world, int omp_granularity_) {
   Atrip::communicator = atrip_world;
-  MPI_Comm_rank(Atrip::communicator, (int *)&Atrip::rank);
-  MPI_Comm_size(Atrip::communicator, (int *)&Atrip::np);
+  MPI_Comm_rank(Atrip::communicator, &Atrip::rank);
+  MPI_Comm_size(Atrip::communicator, &Atrip::np);
   Atrip::network_send = 0UL;
   Atrip::local_send = 0UL;
   Atrip::bytes_sent = 0.0;
+  Atrip::omp_granularity = omp_granularity_;
 
-  //TODO: check what happens if ranks_per_node is not identical over all nodes
+  int num_threads = omp_get_max_threads();
+  Atrip::omp_threads = num_threads * omp_granularity_;
+  // not sure if this is still working correctly
   std::tie(Atrip::local_rank,
            Atrip::node_id,
            Atrip::n_nodes,
@@ -80,20 +80,7 @@ void Atrip::init(bool rank_round_robin_, MPI_Comm atrip_world, MPI_Comm global_w
 
   //WATCH OUT: this is the node_id in the default rank distribution!
   Atrip::node_ids.resize(Atrip::np);
-  MPI_Allgather(&Atrip::node_id, 1, MPI_UINT64_T, Atrip::node_ids.data(), 1, MPI_UINT64_T, Atrip::communicator);
-  int global_np;
-  MPI_Comm_size(global_world, &global_np);
-  for (auto r(0); r < global_np; r++) {
-    int lr = (Atrip::rank_round_robin) ? r : get_logical_rank(r);
-    Atrip::rank_phys_to_log.push_back(lr);
-  }
-  Atrip::rank_log_to_phys.resize(global_np);
-  for (size_t r(0); r < Atrip::rank_phys_to_log.size(); r++) {
-    int log(Atrip::rank_phys_to_log[r]);
-    if (log != MPI_UNDEFINED)  Atrip::rank_log_to_phys[log] = r;
-  }
-
-  Atrip::logical_rank = Atrip::rank_phys_to_log[Atrip::rank];
+  MPI_Allgather(&Atrip::node_id, 1, MPI_INT, Atrip::node_ids.data(), 1, MPI_INT, Atrip::communicator);
 }
 
 template <typename F>
@@ -695,12 +682,14 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         return EnergyType<F>(0.0);
       };
 
+  // Swich number of omp threads
+  omp_set_num_threads(Atrip::omp_threads);
+  LOG(0, "atrip") << "number of omp threads " << Atrip::omp_threads << std::endl;
   for (size_t i = first_iteration, iteration = first_iteration + 1;
        i < tuples_list.size();
        i++, iteration++) {
     Atrip::chrono["iterations"].start();
     Atrip::chrono["db-last-iteration"].start();
-
 #if defined(HAVE_ACC)
     char nvtx_name[60];
     sprintf(nvtx_name, "iteration: %ld", i);
@@ -1134,12 +1123,12 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     for (auto const &pair : Atrip::chrono)
       LOG(0, "atrip:chrono")
           << pair.first << " " << pair.second.count() << std::endl;
-
+  size_t _it = (in.max_iterations) ? in.max_iterations : n_iterations;
   LOG(0, "atrip:flops(doubles)")
-      << n_iterations * doubles_flops / Atrip::chrono["doubles"].count()
+      << _it * doubles_flops / Atrip::chrono["doubles"].count()
       << "\n";
   LOG(0, "atrip:flops(iterations)")
-      << n_iterations * doubles_flops / Atrip::chrono["iterations"].count()
+      << _it * doubles_flops / Atrip::chrono["iterations"].count()
       << "\n";
 
   // TODO: change the sign in  the getEnergy routines

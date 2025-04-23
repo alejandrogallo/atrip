@@ -33,8 +33,8 @@ public:
 
   // [[file:~/cuda/atrip/atrip.org::*Location][Location:1]]
   struct Location {
-    size_t rank;
-    size_t source;
+    int rank;
+    int source;
   };
   // Location:1 ends here
 

@@ -340,9 +340,10 @@ AC_CONFIG_FILES([Makefile
                  extern/ctf/Makefile
                  test/Makefile
                  integration-tests/Makefile
-                 integration-tests/run-h2o.sh
-                 integration-tests/run-hf.sh
-                 integration-tests/run-n2.sh
+                 integration-tests/h2o.inp
+                 integration-tests/hf.inp
+                 integration-tests/n2.inp
+                 integration-tests/launcher.sh
                  docs/Makefile
                  docs/conf.py:docs/conf.py
                  docs/Doxyfile:docs/Doxyfile

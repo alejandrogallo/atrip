@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+set -e
+
+TMPFILE="$1"
+EXE="../bench/atrip"
+
+
+TMPFILE="$1"
+INPFILE="$2"
+
+OUTFILE="${INPFILE%.inp}.out"
+
+# Define arguments for your program
+# we should get EXE_ARGS and REF_VALUES
+source "$INPFILE"
+
+# MPI defaults
+MPI_LAUNCHER=${MPI_LAUNCHER:-mpirun}
+MPI_HOSTS=${MPI_HOSTS:-}
+NP=${NP:-}
+
+# Autodetect MPI flavor
+flavor=$( ( $MPI_LAUNCHER --version || $MPI_LAUNCHER -v ) 2>/dev/null | head -n 1 | tr '[:upper:]' '[:lower:]' )
+if echo "$flavor" | grep -q "intel"; then
+  HOST_FLAG="-hosts"
+elif echo "$flavor" | grep -q "open mpi"; then
+  HOST_FLAG="--host"
+elif echo "$flavor" | grep -q "mpich"; then
+  HOST_FLAG="-host"
+else
+  HOST_FLAG="--host"
+fi
+
+# Build host args
+if [[ -n "$MPI_HOSTS" ]]; then
+  if [[ -f "$MPI_HOSTS" ]]; then
+    MPI_HOST_ARGS="--hostfile $MPI_HOSTS"
+  else
+    MPI_HOST_ARGS="$HOST_FLAG $MPI_HOSTS"
+  fi
+else
+  MPI_HOST_ARGS=""
+fi
+
+# Build the MPI command
+cmd=(
+  "$MPI_LAUNCHER"
+)
+
+# Add optional -np
+if [[ -n "$NP" ]]; then
+  cmd+=("-np" "$NP")
+fi
+
+# Add optional host args
+if [[ -n "$MPI_HOST_ARGS" ]]; then
+  cmd+=($MPI_HOST_ARGS)
+fi
+
+# Check if the 'atrip_args_omp_granularity' environment variable is set
+if [ -n "$atrip_args_omp_granularity" ]; then
+  EXE_ARGS+=("--omp-granularity" "$atrip_args_omp_granularity")
+fi
+
+# Add the binary and its args
+cmd+=("$EXE" "${EXE_ARGS[@]}")
+
+
+# Run it
+echo "Running: ${cmd[*]}"
+"${cmd[@]}" | tee "$OUTFILE"
+
+if [ ! -s "$TMPFILE" ]; then
+echo "==================== MPI CONFIGURATION ====================" >> $TMPFILE
+echo "MPI Launcher:    ${MPI_LAUNCHER}" >> $TMPFILE
+echo "MPI Hosts:       ${MPI_HOSTS:-"Not specified"}" >> $TMPFILE
+echo "Number of Procs: ${NP:-"Not specified"}" >> $TMPFILE
+echo "OMP granularity: $atrip_args_omp_granularity" >> $TMPFILE
+echo "" >> $TMPFILE
+
+printf "%-6s | %-20s | %-20s | %-20s\n" "Label" "Expected" "Actual" "AbsDiff" | tee -a $TMPFILE
+printf -- "---------------------------------------------------------------\n" | tee -a $TMPFILE
+fi
+
+echo "${INPFILE%.inp}" >>  $TMPFILE
+
+# Extract label and expected value
+for ref in "${REF_VALUES[@]}"; do
+  label=$(echo "$ref" | cut -d= -f1 | xargs)       # (T)
+  expected=$(echo "$ref" | cut -d= -f2 | xargs)    # -0.0052...
+
+  # Clean label for grep (e.g. (T) -> T)
+  grep_label=$(echo "$label" | tr -d '()')
+
+  # Try to find the matching line in the output
+  actual=$(grep "^Energy $label: " "$OUTFILE" | awk '{print $(NF)}')
+
+  if [ -z "$actual" ]; then
+    printf "%-6s | %-20s | %-20s | %-20s\n" "$label" "$expected" "NOT FOUND" "-" | tee $TMPFILE
+    pass=false
+    continue
+  fi
+
+  diff=$(awk -v a="$actual" -v b="$expected" 'BEGIN { d=(a > b) ? a - b : b - a; printf "%.10g", d }')
+
+  printf "%-6s | %-20s | %-20s | %-20s\n" "$label" "$expected" "$actual" "$diff" | tee -a $TMPFILE
+
+done
+printf "\n" >> $TMPFILE

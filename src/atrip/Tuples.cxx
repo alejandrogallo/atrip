@@ -144,14 +144,6 @@ ClusterInfo get_cluster_info(MPI_Comm comm) {
                      rank_infos};
 }
 
-int get_logical_rank(int rank) {
-  int node_id( rank / Atrip::ranks_per_node);
-  int local_rank(rank % Atrip::ranks_per_node);
-
-  return local_rank * Atrip::n_nodes + node_id;
-}
-
-
 
 ABCTuples get_tuples_list(size_t Nv, size_t rank, size_t np) {
 

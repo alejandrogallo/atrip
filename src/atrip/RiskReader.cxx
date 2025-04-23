@@ -68,6 +68,7 @@ Sources<F> riskReader(const std::string &file_path,
                       const size_t No,
                       const size_t Nv,
                       bool rowMajor) {
+
   // check if the slicing is valid
   int transitions = 0;
   for (size_t i = 1; i < slice_mapping.size(); i++) {
@@ -98,8 +99,12 @@ Sources<F> riskReader(const std::string &file_path,
                                          std::multiplies<size_t>());
 
   auto np(Atrip::np);
-  size_t n_sources = number_slices / np;
-  if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
+  size_t n_sources(0);
+  if (np > 0) {
+    n_sources = number_slices / np;
+    if (number_slices % np > 0 && Atrip::rank < (number_slices % np)) n_sources++;
+  }
+
 
   MPI_File handle;
   MPI_File_open(MPI_COMM_WORLD,
@@ -117,7 +122,7 @@ Sources<F> riskReader(const std::string &file_path,
   size_t a,b;
   for (auto s(0UL); s < n_sources; s++) {
     // if we have a 1D map the result is smaller Nv, so b will always b=0
-    std::tie(a,b) = orbitalMap(rank_map.find_element({Atrip::logical_rank, s}), Nv);
+    std::tie(a,b) = orbitalMap(rank_map.find_element({Atrip::rank, s}), Nv);
     size_t off = (slice_dimension.size() == 1 || !rowMajor) ? a + Nv*b : a*Nv + b;
     MPI_Offset offset = s_sources * off * sizeof(F);
     if (!rowMajor) buffer = sources[s].data();
@@ -172,10 +177,19 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                       const size_t No,
                       const size_t Nv) {
 
-  MPI_Barrier(Atrip::communicator);
-  double startReader = MPI_Wtime();
+  // We have to work with the communicator of the world's tensor.
+  // the atrip::communicator is a subworld (or identical) of it
+
+  MPI_Comm world = tensor.wrld->comm;
+  int ctf_rank, ctf_np, atrip_np(Atrip::np);
+  MPI_Comm_size(world, &ctf_np);
+  MPI_Comm_rank(world, &ctf_rank);
+  if (ctf_rank == 0)  assert(atrip_np);
+  MPI_Bcast(&atrip_np, 1, MPI_INT, 0, world);
+
+  //MPI_Barrier(world); double startReader = MPI_Wtime();
   // right now the logic works only for more than one node
-  assert(Atrip::np > 1);
+  assert(ctf_np > 1);
   auto order(tensor_dimension.size());
 
   std::vector<size_t> slice_dimension, source_dimension, ptensor_dimension(tensor_dimension);
@@ -220,12 +234,16 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                                          1UL,
                                          std::multiplies<size_t>());
 
-  auto np(Atrip::np);
-  size_t n_sources = number_slices / np;
-  if (number_slices % np > 0 && Atrip::logical_rank < (number_slices % np)) n_sources++;
-
+  size_t n_sources(0);
+  // This means: you are not MPI_UNDEFINED in the atrip communicator!
+  if (Atrip::np > 0) {
+    n_sources = number_slices / Atrip::np;
+    if (number_slices % Atrip::np > 0
+        && Atrip::rank < (number_slices % Atrip::np)) n_sources++;
+  }
   std::vector<std::vector<F>> sources(n_sources, std::vector<F>(s_sources));
 
+  //std::cout << ctf_rank << " " << Atrip::rank << " " << Atrip::np << " | " << n_sources << std::endl;
   // do the magic
   assert(tensor.order == tensor_dimension.size());
   for (auto i(0); i < tensor.order; i++) assert(tensor.lens[i] == tensor_dimension[i]);
@@ -235,10 +253,10 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   std::vector<int> plens(tensor.order, 1);
   if (slice_dimension.size() == 1) {
     for (auto i(0); i < slice_mapping.size(); i++) {
-      if (slice_mapping[i] > 0) plens[i] = Atrip::np;
+      if (slice_mapping[i] > 0) plens[i] = atrip_np;
     }
   } else if (slice_dimension.size() == 2) {
-    auto facs(largest_factors(Atrip::np));
+    auto facs(largest_factors(atrip_np));
     size_t u(0);
     for (auto i(0); i < slice_mapping.size(); i++) {
       if (slice_mapping[i] > 0) plens[i] = facs[u++];
@@ -262,18 +280,13 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
     std::swap(s3[2], s3[3]);
     std::swap(plens[2], plens[3]);
   }
-  MPI_Barrier(MPI_COMM_WORLD);
-  double startCtf = MPI_Wtime();
+  //MPI_Barrier(world);  double startCtf = MPI_Wtime();
   CTF::Tensor<F> ptensor(order, lens.data(), tensor.sym, *tensor.wrld, s3.c_str(), part[s1.c_str()]);
-  //LOG(0, "Citf") << plens[0] << " " << plens[1] << " " << plens[2] << " " << plens[3] << std::endl;
-  //ptensor.print_map();
-  //LOG(0, "ss") << s1 << " " << s2 << std::endl;
   ptensor[s2.c_str()] = tensor[s1.c_str()];
 
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double endCtf = MPI_Wtime();
-//  LOG(0,"TIMINGS") << "Ctf: " << endCtf - startCtf << std::endl;
+  //MPI_Barrier(world);   double endCtf = MPI_Wtime();
+  //LOG(0,"TIMINGS") << "Ctf: " << endCtf - startCtf << std::endl;
 
   ptensor.set_name("pVpphh");
 
@@ -283,15 +296,14 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   std::vector<int> list_target,list_origin;
 
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double startBuro = MPI_Wtime();
+  //MPI_Barrier(world); double startBuro = MPI_Wtime();
   // Atrip source distribution
-  for (size_t i(0); i < n_sources; i++) {
-    list_target.push_back(rank_map.find_element({Atrip::logical_rank, i}));
-//    std::cout << "TARGET: Rank " << Atrip::rank << " " << i << " " << list_target.back()
-//              << " | " << list_target.back() % Nv << " " << list_target.back() / Nv << std::endl;
+  for (int i(0); i < n_sources; i++) {
+    list_target.push_back(rank_map.find_element({Atrip::rank, i}));
+    //list_target.push_back(rank_map.find_element({ctf_rank, i}));
+    //std::cout << "TARGET: Rank " << ctf_rank << " " << Atrip::rank  << " +++ "  << i << " " << list_target.back()
+    //          << " | " << list_target.back() % Nv << " " << list_target.back() / Nv << std::endl;
   }
-  MPI_Barrier(MPI_COMM_WORLD);
   // Ctf distribution
   std::vector<size_t> grid;
   for (auto i(0); i < slice_mapping.size(); i++) {
@@ -305,31 +317,33 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   if (slice_dimension.size() == 1) {
     assert(grid.size() == 1);
     for (auto _v(0); _v < Nv; _v++) {
-      if (Atrip::rank == _v % grid[0]) list_origin.push_back(_v);
+      //if (Atrip::rank == _v % grid[0]) list_origin.push_back(_v);
+      if (ctf_rank == _v % grid[0]) list_origin.push_back(_v);
     }
   } else {
-    // switch w and v for a moment
+    // switch a and b for a moment
     // IF REVERTED - SWITCH ORDER HERE
     for (auto _b(0); _b < Nv; _b++)
     for (auto _a(0); _a < Nv; _a++) {
       auto proc =  _a % grid[0] + (_b % grid[1]) * grid[0];
-      if (Atrip::rank == proc) {
+      //if (Atrip::rank == proc) {
+      if (ctf_rank == proc) {
         auto el = (is_reversed) ?  _b + _a*Nv : _a + _b*Nv;
-//        std::cout << "ORIGIN: Rank " << Atrip::rank << " " << _a << " " << _b << " | " << el << std::endl;
+        //std::cout << "ORIGIN: Rank " << ctf_rank << " " << _a << " " << _b << " | " << el << std::endl;
         // this is the tag for the element atrip is waiting for.
         list_origin.push_back(el);
       }
     }
   }
   auto n_list = (slice_dimension.size() == 1 ) ? Nv : Nv*Nv;
-  // this is just a poor man's database which tells to origin and target of the data
+  // this is a poor man's database which tells to origin and target of the data
   std::vector<int> send_recv_list(n_list*2, -1), glb_send_recv_list(n_list*2, -1);
 
   for (auto _v(0); _v < n_list; _v++) {
     if (std::find(list_origin.begin(), list_origin.end(), _v) != list_origin.end())
-      send_recv_list[_v*2] = static_cast<int>(Atrip::rank);
+      send_recv_list[_v*2] = static_cast<int>(ctf_rank);
     if (std::find(list_target.begin(), list_target.end(), _v) != list_target.end())
-      send_recv_list[_v*2+1] = static_cast<int>(Atrip::rank);
+      send_recv_list[_v*2+1] = static_cast<int>(ctf_rank);
   }
   //distribute the result on all ranks
   MPI_Allreduce(send_recv_list.data(),
@@ -337,7 +351,7 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
                 2*n_list,
                 MPI_INT,
                 MPI_MAX,
-                MPI_COMM_WORLD);
+                world);
 
   auto get_matching_indices = [&glb_send_recv_list](int rank, bool count_even) {
   std::vector<int> matching_indices;
@@ -350,28 +364,27 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
     return matching_indices;
   };
 
-  auto origin_indices = get_matching_indices(Atrip::rank, 0);
-  auto target_indices = get_matching_indices(Atrip::rank, 1);
+  auto origin_indices = get_matching_indices(ctf_rank, 0);
+  auto target_indices = get_matching_indices(ctf_rank, 1);
 
   size_t n_origins = origin_indices.size();
   size_t n_targets = target_indices.size();
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double endBuro = MPI_Wtime();
+  //MPI_Barrier(world);  double endBuro = MPI_Wtime();
 //  LOG(0,"TIMINGS") << "Burocracy: " << endBuro - startBuro << std::endl;
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double startMpi = MPI_Wtime();
+  //MPI_Barrier(world);  double startMpi = MPI_Wtime();
+  //++++++++++++++++++
   // +++ MPI PHASE +++
+  //++++++++++++++++++
   std::vector<MPI_Request> send_requests(n_targets);
   std::vector<MPI_Request> recv_requests(n_origins);
-  //char *ctf_data_pointer = ptensor.data;
 
   std::vector<int64_t> loc_lens(ptensor.pad_edge_len, ptensor.pad_edge_len + order);
   loc_lens.erase(loc_lens.begin(), loc_lens.begin() + order - grid.size());
   // we know that the ctf tensor is distribtued by the n most right dimensions
   if (is_reversed) std::reverse(loc_lens.begin(), loc_lens.end());
-  // this is is wrong...but every 2d slice is currently reversed
+  // this is wrong for general tensors...but every 2d slice is currently reversed
   if (is_reversed && slice_dimension.size() > 1) {
     for (size_t i = grid.size(); i-- > 0;) {
       loc_lens[i] /= grid[i];
@@ -382,8 +395,14 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
     auto &t = origin_indices[i];
     int recv_rank = glb_send_recv_list[t*2];
     char *dest = reinterpret_cast<char *>(sources[i].data());
-//    std::cout << Atrip::rank << " <--" << recv_rank << " TAG " << t << " pos: " << i << std::endl;
-    MPI_Irecv(dest,  static_cast<int>(s_sources*sizeof(F)), MPI_CHAR, recv_rank, t, MPI_COMM_WORLD, &recv_requests[i]);
+    //std::cout << ctf_rank << "/" << Atrip::rank << " <--" << recv_rank << " TAG " << t << " pos: " << i << std::endl;
+    MPI_Irecv(dest,
+              static_cast<int>(s_sources*sizeof(F)),
+              MPI_CHAR,
+              recv_rank,
+              t,
+              world,
+              &recv_requests[i]);
   }
   // Send phase
   for (size_t i(0); i < n_targets; i++) {
@@ -395,16 +414,20 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
     }
     int send_rank = glb_send_recv_list[2*t+1];
     char *ctf_data_pointer = ptensor.data + j * s_sources * sizeof(F);
-    //std::cout << Atrip::rank << "-->" << send_rank << " TAG " << t << " pos: " << i << " " << j << std::endl;
-    MPI_Isend(ctf_data_pointer, static_cast<int>(s_sources*sizeof(F)), MPI_CHAR, send_rank, t, MPI_COMM_WORLD, &send_requests[i]);
+    //std::cout << ctf_rank << "/"<< Atrip::rank <<  "-->" << send_rank << " TAG " << t << " pos: " << i << " " << j << std::endl;
+    MPI_Isend(ctf_data_pointer,
+              static_cast<int>(s_sources*sizeof(F)),
+              MPI_CHAR,
+              send_rank,
+              t,
+              world,
+              &send_requests[i]);
   }
 
   MPI_Waitall(n_origins, recv_requests.data(), MPI_STATUSES_IGNORE);
   MPI_Waitall(n_targets, send_requests.data(), MPI_STATUSES_IGNORE);
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double endMpi = MPI_Wtime();
-//  LOG(0,"TIMINGS") << "MPI Phase: " << endMpi - startMpi << std::endl;
+  //MPI_Barrier(world);  double endMpi = MPI_Wtime();
 
   if (0) {
     for (auto &s: sources) {
@@ -415,9 +438,8 @@ Sources<F> citfReader(CTF::Tensor<F>& tensor,
   }
 
 
-  MPI_Barrier(MPI_COMM_WORLD);
-  double endReader = MPI_Wtime();
-//  LOG(0,"TIMINGS") << "Total: " << endReader - startReader << std::endl;
+  //MPI_Barrier(world);  double endReader = MPI_Wtime();
+  //  LOG(0,"TIMINGS") << "Total: " << endReader - startReader << std::endl;
   return {n_sources, s_sources, sources};
 }
 
@@ -477,7 +499,7 @@ INSTANTIATE_RISK_READER(double)
 INSTANTIATE_RISK_READER(float)
 
 
-#if defined(HAVE_CTF) 
+#if defined(HAVE_CTF)
 
 #define INSTANTIATE_CITF_READER(T) \
 template Sources<T> citfReader<T>(CTF::Tensor<T>&, \

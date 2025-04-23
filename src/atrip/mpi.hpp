@@ -7,9 +7,21 @@
 #endif
 
 #include <mpi.h>
+#include <string>
+#include <vector>
 
 #ifdef __GNUC__
 #  pragma GCC diagnostic pop
 #endif
+
+namespace atrip {
+
+MPI_Comm create_final_comm(MPI_Comm in_comm, int omp_stide = 1, bool use_round_robin = true);
+
+void print_comm_mapping(MPI_Comm in_comm, MPI_Comm final_comm, const std::string& label = "");
+
+std::vector<int> create_rank_lookup(MPI_Comm in_comm, MPI_Comm final_comm);
+
+} // end namespace trip
 
 #endif

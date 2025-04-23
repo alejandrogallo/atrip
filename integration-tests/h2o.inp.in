@@ -1,18 +1,6 @@
-#!/usr/bin/env bash
-
-TMPFILE="$1"
-set -eu
-set -o pipefail
-
 resources=atrip_resources/h2o_dz
-atrip="../bench/atrip"
-outfile=h2o.out
 
-cmd=(
-  mpirun # -np 4
-
-  ${atrip}
-
+EXE_ARGS=(
   #--no 4
   #--nv 36
 
@@ -40,21 +28,8 @@ cmd=(
   -% 50
 )
 
-set -x
-date
-"${cmd[@]}" | tee $outfile
-date
-set +x
 
-printf '\n\n\n\n'
-{
-  echo "<<< H2O calculation"
-  echo Name Correct Ours Diff | sed "p; s/[^ ]/-/g"
-  {
-    paste - <(grep '^Energy' $outfile | awk -F: '{print $2}') <<EOF
-(T) -0.005239608018571
-(cT) -0.0048452100
-EOF
-  } | awk '{print $1, $2, $3, $2-$3}'
-} | column -t | tee -a "$TMPFILE"
-printf '\n\n\n\n'
+REF_VALUES=(
+"(T) = -0.005239608018571"
+"(cT) = -0.0048452100"
+)

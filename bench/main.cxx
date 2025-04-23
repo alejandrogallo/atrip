@@ -88,24 +88,26 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
                              F const a,
                              F const b) {
 
+  MPI_Comm _comm = world.comm;
+  int _rank;
+  MPI_Comm_rank(_comm, &_rank);
   auto tsr = new CTF::Tensor<F>(order, lens, syms, world, name.c_str());
   if (path.size()) {
-    if (!atrip::Atrip::rank)
+    if (!_rank)
       std::cout << "Read tensor data from file " << path << std::endl;
     tsr->read_dense_from_file(path.c_str());
   } else {
-    if (!atrip::Atrip::rank)
+    if (!_rank)
       std::cout << "Random initialization for tensor " << name << std::endl;
     tsr->fill_random(a, b);
   }
-
   return tsr;
 }
 #endif /*   defined(HAVE_CTF) */
 
 struct Settings {
   size_t checkpoint_it, max_iterations;
-  int no, nv, it_mod, percentage_mod;
+  int no, nv, it_mod, percentage_mod, omp_granularity;
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
     complex, single, cT, ijkabc;
@@ -252,8 +254,6 @@ void run(int argc, char **argv, Settings const &s) {
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
 
-  //this is a hack because there is an issue
-  MPI_Comm_rank(MPI_COMM_WORLD, (int *)&atrip::Atrip::rank);
 
   std::vector<FIELD> *epsi = get_epsilon<FIELD>(s.ei_path, no, comm, false),
                      *epsa = get_epsilon<FIELD>(s.ea_path, nv, comm, true);
@@ -275,19 +275,12 @@ void run(int argc, char **argv, Settings const &s) {
 
   // split the communicator and let only every n-th rank be part of the game
 
-  int omp_threads = 4; // for example
-  int color = (rank % omp_threads == 0) ? 1 : MPI_UNDEFINED;
+  MPI_Comm atrip_comm = atrip::create_final_comm(comm, s.omp_granularity, !s.rank_round_robin);
+  atrip::print_comm_mapping(comm, atrip_comm);
 
-
-  //MPI_Comm atrip_comm;
-  //MPI_Comm_split(comm, color, rank, &atrip_comm);
-
-  //if (color == 1) {
-    //atrip::Atrip::init(atrip_comm);
-    atrip::Atrip::init(s.rank_round_robin, comm);
-  //}
-  //
-  //
+  if (atrip_comm != MPI_COMM_NULL) {
+    atrip::Atrip::init(atrip_comm, s.omp_granularity);
+  }
 
 
   size_t const
@@ -409,6 +402,7 @@ void run(int argc, char **argv, Settings const &s) {
   }
 #endif
 
+
   auto sVabph = atrip::newReader<FIELD>(Vppph_,
                                         {nv, nv, nv, no},
                                         {1, 1, 0, 0},
@@ -484,10 +478,12 @@ void run(int argc, char **argv, Settings const &s) {
   }
 
   try {
-    auto out = atrip::Atrip::run<FIELD>(in);
-    if (!atrip::Atrip::rank) {
-      std::cout << "Energy: " << out.energy << std::endl;
-      std::cout << "Energy (cT): " << out.ct_energy << std::endl;
+    if (atrip_comm != MPI_COMM_NULL) {
+      auto out = atrip::Atrip::run<FIELD>(in);
+      if (!atrip::Atrip::rank) {
+        std::cout << "Energy (T): " << out.energy << std::endl;
+        std::cout << "Energy (cT): " << out.ct_energy << std::endl;
+      }
     }
   } catch (const char *msg) {
     if (!atrip::Atrip::rank)
@@ -549,7 +545,8 @@ int main(int argc, char **argv) {
       ->default_val(false);
   defoption(app, "-%", s.percentage_mod, "Percentage to be printed")
       ->default_val(10);
-
+  defoption(app, "--omp-granularity", s.omp_granularity, "OpenMP threads per MPI rank")
+      ->default_val(1);
   //
   // checkpointing
   //

@@ -1,20 +1,9 @@
-#!/usr/bin/env bash
-TMPFILE="$1"
+resources=atrip_resources/n2_complex
 
-set -eu
-set -o pipefail
-
-resources=atrip_resources/hf
-atrip="../bench/atrip"
-outfile=hf.out
-
-cmd=(
-  mpirun # -np 4
-
-  ${atrip}
+EXE_ARGS=(
 
   #--no 5
-  #--nv 7
+  #--nv 27
 
   # --max-iterations 50
 
@@ -29,33 +18,19 @@ cmd=(
   --Jhhhp ./${resources}/CtintermediateHHHP.elements
   --Jppph ./${resources}/CtintermediatePPPH.elements
   --cT
-  --use_ctf=0
+  --complex
 
   # dist can also be naive
   --nocheckpoint
   --dist group
-  --nochrono
   # --dist naive
 
   # --mod 10
   -% 50
+  --nochrono
 )
 
-set -x
-date
-"${cmd[@]}" | tee $outfile
-date
-set +x
-
-printf '\n\n\n\n'
-{
-  echo ">>> HF calculation"
-  echo Name Correct Ours Diff | sed "p; s/[^ ]/-/g"
-  {
-    paste - <(grep '^Energy' $outfile | awk -F: '{print $2}') <<EOF
-(T) -0.001308470746
-(cT) -0.001175260435
-EOF
-  } | awk '{print $1, $2, $3, $2-$3}'
-} | column -t | tee -a "$TMPFILE"
-printf '\n\n\n\n'
+REF_VALUES=(
+"(T) = -0.505924681353569"
+"(cT) = -0.453765565143826"
+)

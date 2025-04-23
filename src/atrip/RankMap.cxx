@@ -39,7 +39,7 @@ RankMap<F>::find_location(ABCTuple const &abc,
   size_t rank = index % Atrip::np,
          source = index / Atrip::np;
 
-  return {Atrip::rank_log_to_phys[rank], source};
+  return {rank, source};
 
 }
 

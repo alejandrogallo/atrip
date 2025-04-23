@@ -94,7 +94,7 @@ _MAKE_REORDER_(KJI, GO(to[idx], from[_IJK_(k, j, i)]))
 #  define MIN(a, b) std::min((a), (b))
 #endif
 
-#define ATRIP_NEW_ENERGY
+//#define ATRIP_NEW_ENERGY
 #if defined(ATRIP_NEW_ENERGY)
 
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
@@ -240,6 +240,8 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
 
 #else
 
+#pragma omp declare reduction(+:Complex:omp_out += omp_in) initializer(omp_priv = omp_orig)
+
 // [[file:~/cuda/atrip/atrip.org::*Energy][Energy:2]]
 template <typename F>
 __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
@@ -250,11 +252,12 @@ __MAYBE_GLOBAL__ void get_energy_distinct(F const epsabc,
                                           EnergyType<F> *_energy) {
   constexpr size_t block_size = 16;
   F energy(0.);
+  #pragma omp parallel for reduction(+:energy)
   for (size_t kk = 0; kk < No; kk += block_size) {
-    const size_t kend(MIN(No, kk + block_size));
-    for (size_t jj(kk); jj < No; jj += block_size) {
-      const size_t jend(MIN(No, jj + block_size));
-      for (size_t ii(jj); ii < No; ii += block_size) {
+    for (size_t jj = kk; jj < No; jj += block_size) {
+      for (size_t ii = jj; ii < No; ii += block_size) {
+        const size_t kend(MIN(No, kk + block_size));
+        const size_t jend(MIN(No, jj + block_size));
         const size_t iend(MIN(No, ii + block_size));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);
@@ -307,11 +310,12 @@ __MAYBE_GLOBAL__ void get_energy_same(F const epsabc,
                                       EnergyType<F> *_energy) {
   constexpr size_t block_size = 16;
   F energy = F(0.);
+  #pragma omp parallel for reduction(+:energy)
   for (size_t kk = 0; kk < No; kk += block_size) {
-    const size_t kend(MIN(kk + block_size, No));
-    for (size_t jj(kk); jj < No; jj += block_size) {
-      const size_t jend(MIN(jj + block_size, No));
-      for (size_t ii(jj); ii < No; ii += block_size) {
+    for (size_t jj = kk; jj < No; jj += block_size) {
+      for (size_t ii = jj; ii < No; ii += block_size) {
+        const size_t kend(MIN(kk + block_size, No));
+        const size_t jend(MIN(jj + block_size, No));
         const size_t iend(MIN(ii + block_size, No));
         for (size_t k(kk); k < kend; k++) {
           const F ek(epsi[k]);

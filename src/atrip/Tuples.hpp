@@ -101,8 +101,6 @@ struct ClusterInfo {
 ClusterInfo get_cluster_info(MPI_Comm comm);
 // Node information:2 ends here
 
-int get_logical_rank(int rank);
-
 // [[file:~/cuda/atrip/atrip.org::*Naive%20list][Naive list:1]]
 ABCTuples get_tuples_list(size_t Nv, size_t rank, size_t np);
 // Naive list:1 ends here
@@ -132,8 +130,8 @@ inline size_t is_on_node(size_t tuple, size_t n_nodes);
 std::vector<size_t> get_tuple_nodes(ABCTuple const &t, size_t n_nodes);
 
 struct Info {
-  size_t n_nodes;
-  size_t node_id;
+  int n_nodes;
+  int node_id;
 };
 // Utils:1 ends here
 
