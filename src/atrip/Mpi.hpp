@@ -16,7 +16,7 @@
 
 namespace atrip {
 
-MPI_Comm create_final_comm(MPI_Comm in_comm, int omp_stide = 1, bool use_round_robin = true);
+MPI_Comm create_comm(MPI_Comm in_comm, int omp_stide = 1, bool use_round_robin = true);
 
 void print_comm_mapping(MPI_Comm in_comm, MPI_Comm final_comm, const std::string& label = "");
 

@@ -7,7 +7,7 @@
 
 namespace atrip {
 
-MPI_Comm create_final_comm(MPI_Comm in_comm, int omp_stride, bool use_round_robin) {
+MPI_Comm create_comm(MPI_Comm in_comm, int omp_stride, bool use_round_robin) {
   int glb_rank, glb_size;
   MPI_Comm_rank(in_comm, &glb_rank);
   MPI_Comm_size(in_comm, &glb_size);

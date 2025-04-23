@@ -274,7 +274,7 @@ void run(int argc, char **argv, Settings const &s) {
 
   // split the communicator and let only every n-th rank be part of the game
 
-  MPI_Comm atrip_comm = atrip::create_final_comm(comm, s.omp_granularity, !s.rank_round_robin);
+  MPI_Comm atrip_comm = atrip::create_comm(comm, s.omp_granularity, !s.rank_round_robin);
   atrip::print_comm_mapping(comm, atrip_comm);
 
   if (atrip_comm != MPI_COMM_NULL) {
