@@ -1,8 +1,9 @@
-#include <atrip/mpi.hpp>
+#include <atrip/Mpi.hpp>
 #include <unordered_map>
 #include <algorithm>
 #include <cstring>
 #include <iomanip>
+#include <iostream>
 
 namespace atrip {
 

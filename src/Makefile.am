@@ -10,8 +10,8 @@ NO_ACC_FILES = \
 ./atrip/Tuples.cxx \
 ./atrip/RankMap.cxx \
 ./atrip/Slice.cxx \
-./atrip/RiskReader.cxx \
-./atrip/mpi.cxx
+./atrip/Reader.cxx \
+./atrip/Mpi.cxx
 
 
 #./atrip/CTFReader.cxx

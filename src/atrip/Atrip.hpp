@@ -24,7 +24,7 @@
 
 #include <atrip/Acc.hpp>
 #include <atrip/Chrono.hpp>
-#include <atrip/mpi.hpp>
+#include <atrip/Mpi.hpp>
 
 #include <atrip/Utils.hpp>
 #include <atrip/Types.hpp>

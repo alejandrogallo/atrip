@@ -291,43 +291,6 @@ void SliceUnion<F>::clear_unused_slices_for_next_tuple(ABCTuple const &abc) {
   }
 }
 
-// template <typename F>
-// size_t SliceUnion<F>::get_size(const std::vector<size_t> slice_length,
-//                                const std::vector<size_t> param_length,
-//                                const size_t np) {
-//   const RankMap<F> rank_map(param_length, np);
-//   const size_t n_sources = rank_map.n_sources(),
-//                slice_size = std::accumulate(slice_length.begin(),
-//                                             slice_length.end(),
-//                                             1UL,
-//                                             std::multiplies<size_t>());
-//   return n_sources * slice_size;
-// }
-
-template <typename F>
-void SliceUnion<F>::init() {
-
-  if (this->reader == nullptr) {
-    throw "Reader object not set, can not read slices of tensor";
-  }
-
-  const int rank = Atrip::rank;
-
-  // setUp sources
-  LOG(0, "Atrip") << "\tReading and slicing using reader: " << reader->name()
-                  << "\n";
-  size_t last_source = 0;
-  for (size_t it(0); it < rank_map.n_sources(); ++it) {
-    const size_t source =
-        rank_map.is_source_padding(rank, last_source) ? 0 : it;
-    WITH_OCD
-    WITH_RANK << "Init:to_slice_into it-" << it << " :: source " << source
-              << "\n";
-    reader->read(source);
-    last_source = source;
-  }
-  reader->close();
-}
 
 template <typename F>
 void SliceUnion<F>::allocate_free_buffer() {

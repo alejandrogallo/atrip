@@ -19,12 +19,10 @@
 #include <atrip/Utils.hpp>
 #include <atrip/Equations.hpp>
 #include <atrip/SliceUnion.hpp>
-#include <atrip/Unions.hpp>
 #include <atrip/Checkpoint.hpp>
 #include <atrip/DatabaseCommunicator.hpp>
 #include <atrip/Malloc.hpp>
 #include <atrip/Acc.hpp>
-#include <atrip/RiskReader.hpp>
 
 using namespace atrip;
 

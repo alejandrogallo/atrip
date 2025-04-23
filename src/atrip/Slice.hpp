@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <vector>
 
-#include <atrip/mpi.hpp>
+#include <atrip/Mpi.hpp>
 #include <atrip/Types.hpp>
 #include <atrip/Tuples.hpp>
 #include <atrip/Utils.hpp>

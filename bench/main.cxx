@@ -10,13 +10,12 @@
 #include <bench/utils.hpp>
 
 #include <atrip/Atrip.hpp>
-#include <atrip/CTFReader.hpp>
 #include <atrip/Complex.hpp>
 #include <atrip.hpp>
 #include <atrip/Debug.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Operations.hpp>
-#include <atrip/RiskReader.hpp>
+#include <atrip/Reader.hpp>
 
 #define _print_size(what, size)                                                \
   do {                                                                         \

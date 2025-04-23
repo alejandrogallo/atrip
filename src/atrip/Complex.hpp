@@ -18,7 +18,7 @@
 #include <complex>
 
 #include <atrip/Acc.hpp>
-#include <atrip/mpi.hpp>
+#include <atrip/Mpi.hpp>
 
 #include "config.h"
 #if defined(HAVE_CUDA)

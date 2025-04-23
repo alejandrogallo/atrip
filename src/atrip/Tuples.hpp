@@ -29,7 +29,7 @@
 #include <chrono>
 #include <climits>
 
-#include <atrip/mpi.hpp>
+#include <atrip/Mpi.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Debug.hpp>
 

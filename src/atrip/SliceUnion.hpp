@@ -24,8 +24,6 @@
 #include <atrip/RankMap.hpp>
 #include <atrip/Utils.hpp>
 #include <atrip/Malloc.hpp>
-#include <atrip/Reader.hpp>
-#include <atrip/RiskReader.hpp>
 
 #if defined(ATRIP_SOURCES_IN_GPU)
 #  define SOURCES_DATA(s) (s)
@@ -55,7 +53,6 @@ public:
   std::vector<typename Slice<F>::Type> slice_types;
   std::vector<DataPtr<F>> slice_buffers;
   std::set<DataPtr<F>> free_pointers;
-  Reader *reader = nullptr;
 
 #if defined(ATRIP_MPI_STAGING_BUFFERS)
   struct StagingBufferInfo {
@@ -262,8 +259,6 @@ public:
   }
 
 
-
-  void init();
 
   /*
    */

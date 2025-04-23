@@ -1,4 +1,4 @@
-#include <atrip/RiskReader.hpp>
+#include <atrip/Reader.hpp>
 #include <cstring> // For std::memcpy
 #include <atrip/Complex.hpp>
 #include <thread>
@@ -69,6 +69,16 @@ Sources<F> riskReader(const std::string &file_path,
                       const size_t Nv,
                       bool rowMajor) {
 
+//TODO
+/*
+size_t Nv = [&]{
+    size_t v = 0;
+    for(size_t i = 0; i < tensor_dimension.size(); ++i)
+        if(slice_mapping[i] == 1)
+            v = std::max(v, tensor_dimension[i]);
+    return v;
+}();
+*/
   // check if the slicing is valid
   int transitions = 0;
   for (size_t i = 1; i < slice_mapping.size(); i++) {
