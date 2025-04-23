@@ -1,5 +1,5 @@
-#ifndef RISKREADER_HPP_
-#define RISKREADER_HPP_
+#ifndef READER_HPP_
+#define READER_HPP_
 
 #include <string>
 #include <atrip/RankMap.hpp>
@@ -8,38 +8,30 @@
 namespace atrip {
 
 template <typename F>
-Sources<F> riskReader(const std::string &file_path,
+Sources<F> diskReader(const std::string &file_path,
                       std::vector<size_t> tensor_dimension,
                       std::vector<size_t> slice_mapping,
-                      const size_t No,
-                      const size_t Nv,
                       bool rowMajor);
 
 #if defined(HAVE_CTF)
 template <typename F>
-Sources<F> citfReader(CTF::Tensor<F>& tensor,
-                      std::vector<size_t> tensor_dimension,
-                      std::vector<size_t> slice_mapping,
-                      const size_t No,
-                      const size_t Nv);
+Sources<F> ctfReader(CTF::Tensor<F>& tensor,
+                     std::vector<size_t> tensor_dimension,
+                     std::vector<size_t> slice_mapping);
 #endif
 
 template <typename F>
-Sources<F> newReader(void* tensor_,
-                     std::vector<size_t> tensor_dimension,
-                     std::vector<size_t> slice_mapping,
-                     const size_t No,
-                     const size_t Nv,
-                     const std::string &file_path = "",
-                     bool rowMajor = false) {
+Sources<F> reader(void* tensor_,
+                  std::vector<size_t> tensor_dimension,
+                  std::vector<size_t> slice_mapping,
+                  const std::string &file_path = "",
+                  bool rowMajor = false) {
   if (tensor_ == nullptr) {
     assert(!file_path.empty());
     LOG(0, "Atrip") << "Loading tensor from disk. File path: " << file_path << std::endl;
-    return riskReader<F>(file_path,
+    return diskReader<F>(file_path,
                          tensor_dimension,
                          slice_mapping,
-                         No,
-                         Nv,
                          rowMajor);
   }
 #if defined(HAVE_CTF)
@@ -48,11 +40,9 @@ Sources<F> newReader(void* tensor_,
     throw std::invalid_argument("Invalid tensor pointer, failed dynamic_cast");
   }
   LOG(0, "Atrip") << "Loading tensor from CTF. Tensor name: " << tensor->name << std::endl;
-  return citfReader<F>(*tensor,
-                       tensor_dimension,
-                       slice_mapping,
-                       No,
-                       Nv);
+  return ctfReader<F>(*tensor,
+                      tensor_dimension,
+                      slice_mapping);
 #endif
   if (!Atrip::rank) std::cout << "CTF not available. Abort!" << std::endl;
   assert(0);

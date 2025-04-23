@@ -402,45 +402,35 @@ void run(int argc, char **argv, Settings const &s) {
 #endif
 
 
-  auto sVabph = atrip::newReader<FIELD>(Vppph_,
-                                        {nv, nv, nv, no},
-                                        {1, 1, 0, 0},
-                                        no,
-                                        nv,
-                                        s.Vppph_path,
-                                        true);
+  auto sVabph = atrip::reader<FIELD>(Vppph_,
+                                     {nv, nv, nv, no},
+                                     {1, 1, 0, 0},
+                                     s.Vppph_path,
+                                     true);
 
-  auto sVabhh = atrip::newReader<FIELD>(Vpphh_,
-                                        {nv, nv, no, no},
-                                        {1, 1, 0, 0},
-                                        no,
-                                        nv,
-                                        s.Vpphh_path,
-                                        true);
+  auto sVabhh = atrip::reader<FIELD>(Vpphh_,
+                                     {nv, nv, no, no},
+                                     {1, 1, 0, 0},
+                                     s.Vpphh_path,
+                                     true);
 
-  auto sTabhh = atrip::newReader<FIELD>(Tpphh_,
-                                        {nv, nv, no, no},
-                                        {1, 1, 0, 0},
-                                        no,
-                                        nv,
-                                        s.Tpphh_path,
-                                        true);
+  auto sTabhh = atrip::reader<FIELD>(Tpphh_,
+                                     {nv, nv, no, no},
+                                     {1, 1, 0, 0},
+                                     s.Tpphh_path,
+                                     true);
 
-  auto sTaphh = atrip::newReader<FIELD>(Tpphh_,
-                                        {nv, nv, no, no},
-                                        {1, 0, 0, 0},
-                                        no,
-                                        nv,
-                                        s.Tpphh_path,
-                                        true);
+  auto sTaphh = atrip::reader<FIELD>(Tpphh_,
+                                     {nv, nv, no, no},
+                                     {1, 0, 0, 0},
+                                     s.Tpphh_path,
+                                     true);
 
-  auto sVhhha = atrip::newReader<FIELD>(Vhhhp_,
-                                        {no, no, no, nv},
-                                        {0, 0, 0, 1},
-                                        no,
-                                        nv,
-                                        s.Vhhhp_path,
-                                        false);
+  auto sVhhha = atrip::reader<FIELD>(Vhhhp_,
+                                     {no, no, no, nv},
+                                     {0, 0, 0, 1},
+                                     s.Vhhhp_path,
+                                     false);
 
 
   in.with_sVabph(&sVabph);
@@ -452,23 +442,19 @@ void run(int argc, char **argv, Settings const &s) {
   //this will not work as sJabph will go out of scope...i will have to move it
   if (s.cT) {
     auto* sJabph = new atrip::Sources<FIELD>(
-      atrip::newReader<FIELD>(Jppph_,
-                              {nv, nv, nv, no},
-                              {1, 1, 0, 0},
-                              no,
-                              nv,
-                              s.Jppph_path,
-                              true)
+      atrip::reader<FIELD>(Jppph_,
+                           {nv, nv, nv, no},
+                           {1, 1, 0, 0},
+                           s.Jppph_path,
+                           true)
     );
 
     auto* sJhhha = new atrip::Sources<FIELD>(
-      atrip::newReader<FIELD>(Jhhhp_,
-                              {no, no, no, nv},
-                              {0, 0, 0, 1},
-                              no,
-                              nv,
-                              s.Jhhhp_path,
-                              false)
+      atrip::reader<FIELD>(Jhhhp_,
+                           {no, no, no, nv},
+                           {0, 0, 0, 1},
+                           s.Jhhhp_path,
+                           false)
     );
 
 
