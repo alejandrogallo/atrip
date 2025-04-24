@@ -23,7 +23,6 @@
 #    pragma GCC diagnostic ignored "-Wunused-parameter"
 #    pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #    pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#    pragma warning(disable: 654)
 #    include <ctf.hpp>
 #    pragma GCC diagnostic pop
 #  endif /* defined(__NVCC__) */

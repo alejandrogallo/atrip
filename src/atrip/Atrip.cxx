@@ -325,7 +325,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
   SliceUnion<F> *jhhha = nullptr;
   SliceUnion<F> *jabph = nullptr;
   //ABPH<F> *jabph = nullptr;
-  if (in.sJhhha != nullptr) {
+  if (in.cT) {
     WITH_CHRONO("Jhhha-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jijka" << std::endl;
 
@@ -339,7 +339,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     unions.push_back(jhhha);
   }
 
-  if (in.sJabph != nullptr) {
+  if (in.cT) {
     WITH_CHRONO("Jabph-slice",
                 /**/ LOG(0, "Atrip") << "slicing Jabci" << std::endl;
 
@@ -923,7 +923,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
     local_output.energy += compute_local_energy(abc, is_fake_tuple(i));
 
     // COMPUTE (cT) DOUBLES WITH THE J-INTERMEDIATE%%%%%%%%%%%%%%%%%%%%%
-    if (!is_fake_tuple(i) && jhhha && jabph) {
+    if (!is_fake_tuple(i) && in.cT) {
 
       WITH_CHRONO("oneshot-doubles-J",
                   WITH_CHRONO("doubles-J",

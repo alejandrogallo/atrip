@@ -207,7 +207,8 @@ void run(int argc, char **argv, Settings const &s) {
                 .with_checkpoint_at_percentage(s.checkpoint_percentage)
                 .with_checkpoint_path(s.checkpoint_path)
                 .with_read_checkpoint_if_exists(!s.no_checkpoint)
-                .with_ijkabc(s.ijkabc);
+                .with_ijkabc(s.ijkabc)
+                .with_cT(s.cT);
 
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
   if (s.ijkabc) { _flip(no, nv); }

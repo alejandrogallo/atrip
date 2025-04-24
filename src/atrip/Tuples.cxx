@@ -120,10 +120,10 @@ get_node_infos(std::vector<std::string> const &node_names) {
     auto const &it = std::find(unique_names.begin(), unique_names.end(), s);
     return std::distance(unique_names.begin(), it);
   };
-  std::vector<size_t> local_ranks(unique_names.size(), 0);
-  size_t global_rank = 0;
+  std::vector<int> local_ranks(unique_names.size(), 0);
+  int global_rank = 0;
   for (auto const &name : node_names) {
-    const size_t node_id = index(name);
+    const int node_id = index(name);
     result.push_back(
         {name,
          node_id,
@@ -295,13 +295,13 @@ ABCTuples special_distribution(Info const &info, ABCTuples const &all_tuples) {
                  size = node_tuples.size();
 
     size_t nbeg, nend;
-    if (info.node_id == idx) {
+    if (info.node_id == (int) idx) {
       nbeg = 0 * n_third;
       nend = 1 * n_third;
-    } else if (info.node_id == idy) {
+    } else if (info.node_id == (int) idy) {
       nbeg = 1 * n_third;
       nend = 2 * n_third;
-    } else if (info.node_id == idz) {
+    } else if (info.node_id == (int) idz) {
       nbeg = 2 * n_third;
       nend = _tuples.size();
     } else {

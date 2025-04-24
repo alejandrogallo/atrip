@@ -82,10 +82,10 @@ std::vector<std::string> get_node_names(MPI_Comm comm);
 // [[file:~/cuda/atrip/atrip.org::*Node%20information][Node information:2]]
 struct RankInfo {
   const std::string name;
-  const size_t node_id;
-  const size_t global_rank;
-  const size_t local_rank;
-  const size_t ranks_per_node;
+  const int node_id;
+  const int global_rank;
+  const int local_rank;
+  const int ranks_per_node;
 };
 
 std::vector<RankInfo>

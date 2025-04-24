@@ -194,7 +194,7 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
   auto order(tensor_dimension.size());
 
   std::vector<size_t> slice_dimension, source_dimension, ptensor_dimension(tensor_dimension);
-  assert(order == slice_mapping.size() && tensor.order == order);
+  assert(order == slice_mapping.size() && tensor.order == (int) order);
 
   bool is_reversed;
   auto reorder(slice_mapping);
@@ -214,7 +214,7 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
     std::sort(slice_mapping.begin(), slice_mapping.end());
   }
 
-  for (auto i(0); i < slice_mapping.size(); i++) {
+  for (auto i(0UL); i < slice_mapping.size(); i++) {
     slice_mapping[i] ? slice_dimension.push_back(ptensor_dimension[i])
                      : source_dimension.push_back(ptensor_dimension[i]);
   }
@@ -248,13 +248,13 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
   // one dimensional case is easy - we have to find the non-zero entry
   std::vector<int> plens(tensor.order, 1);
   if (slice_dimension.size() == 1) {
-    for (auto i(0); i < slice_mapping.size(); i++) {
+    for (auto i(0UL); i < slice_mapping.size(); i++) {
       if (slice_mapping[i] > 0) plens[i] = atrip_np;
     }
   } else if (slice_dimension.size() == 2) {
     auto facs(largest_factors(atrip_np));
     size_t u(0);
-    for (auto i(0); i < slice_mapping.size(); i++) {
+    for (auto i(0UL); i < slice_mapping.size(); i++) {
       if (slice_mapping[i] > 0) plens[i] = facs[u++];
     }
   } else {

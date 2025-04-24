@@ -114,6 +114,7 @@ struct Atrip {
     ADD_ATTRIBUTE(std::string, Jhhhp_path, "");
 
     // Miscellaneous options
+    ADD_ATTRIBUTE(bool, cT, false)
     ADD_ATTRIBUTE(bool, delete_Vppph, false)
     ADD_ATTRIBUTE(bool, rank_round_robin, false)
     ADD_ATTRIBUTE(bool, chrono, false)

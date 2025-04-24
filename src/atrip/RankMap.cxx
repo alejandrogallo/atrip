@@ -36,10 +36,9 @@ RankMap<F>::find_location(ABCTuple const &abc,
   const size_t index =
       tuple[0] + tuple[1] * (lengths.size() > 1 ? lengths[0] : 0);
 
-  size_t rank = index % Atrip::np,
-         source = index / Atrip::np;
-
-  return {rank, source};
+  int rank = index % Atrip::np,
+      source = index / Atrip::np;
+   return {rank, source};
 
 }
 
