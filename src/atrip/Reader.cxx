@@ -490,7 +490,8 @@ INSTANTIATE_DISK_READER(float)
 #define INSTANTIATE_CTF_READER(T) \
 template Sources<T> ctfReader<T>(CTF::Tensor<T>&, \
                                  std::vector<size_t>, \
-                                 std::vector<size_t>);
+                                 std::vector<size_t>, \
+                                 bool);
 
 
 INSTANTIATE_CTF_READER(double)
