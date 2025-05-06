@@ -401,6 +401,8 @@ void run(int argc, char **argv, Settings const &s) {
     }
   }
 #endif
+  // for debugging purposes one can swith on and of dynamically
+  //atrip::Atrip::useSwitchRedistribution = true;
 
 
   auto sVabph = atrip::reader<FIELD>(Vppph_,
