@@ -40,17 +40,29 @@ int main() {
   TESTCASE(
       "Testing checkpoint reader and writers",
       const std::string out_checkpoint = "/tmp/checkpoint.yaml";
-      const double energy = -1.493926352289995443;
+      const double global_energy = -1.493926352289995443;
+      const double iteration_energy = -3.1545154;
+      const double global_ct_energy = -5.496549819816895443;
+      const double iteration_ct_energy = -9.15451654654;
       const size_t no = 154, nv = 1500, nranks = 48 * 10, nnodes = 10;
       const size_t iteration = 546;
       std::cout << "\twriting to " << out_checkpoint << std::endl;
 
       for (bool rank_round_robin
            : {true, false}) {
-        atrip::Checkpoint
-            out = {no, nv, nranks, nnodes, energy, iteration, rank_round_robin},
-            in;
+        atrip::Checkpoint out = {no,
+                                 nv,
+                                 nranks,
+                                 nnodes,
+                                 global_energy,
+                                 iteration_energy,
+                                 global_ct_energy,
+                                 iteration_ct_energy,
+                                 iteration,
+                                 rank_round_robin},
+                          in;
 
+        write_checkpoint_header(out_checkpoint);
         write_checkpoint(out, out_checkpoint);
         in = read_checkpoint(out_checkpoint);
 
@@ -60,7 +72,10 @@ int main() {
         _CMP_CHECK(nnodes);
         _CMP_CHECK(iteration);
         _CMP_CHECK(rank_round_robin);
-        _CMP_CHECK(energy);
+        _CMP_CHECK(global_energy);
+        _CMP_CHECK(iteration_energy);
+        _CMP_CHECK(global_ct_energy);
+        _CMP_CHECK(iteration_ct_energy);
       }
 
   )

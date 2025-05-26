@@ -5,6 +5,9 @@ AM_LDFLAGS =   @LAPACK_LIBS@ @BLAS_LIBS@
 bin_PROGRAMS = main
 main_SOURCES = main.cxx
 
+.PHONY: test
+test: ${bin_PROGRAMS}
+	./main
 
 main_LDADD  = \
 	$(top_builddir)/src/libatrip.a
