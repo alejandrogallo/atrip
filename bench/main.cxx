@@ -35,19 +35,22 @@
 template <typename F>
 std::vector<F> generate_random_vector(size_t N, F min = 0.0, F max = 1.0) {
   std::vector<F> result(N);
-  std::random_device rd;                           // Non-deterministic random seed
-  std::mt19937 gen(rd());                          // Mersenne Twister engine
-  std::uniform_real_distribution<F> dist(min, max); // Uniform distribution in [min, max)
+  std::random_device rd;  // Non-deterministic random seed
+  std::mt19937 gen(rd()); // Mersenne Twister engine
+  std::uniform_real_distribution<F> dist(
+      min,
+      max); // Uniform distribution in [min, max)
 
   for (size_t i = 0; i < N; ++i) result[i] = dist(gen);
 
   return result;
 }
 
-
 template <typename F>
-std::vector<F> *
-get_epsilon(std::string const &path, size_t const len, MPI_Comm comm, bool sign) {
+std::vector<F> *get_epsilon(std::string const &path,
+                            size_t const len,
+                            MPI_Comm comm,
+                            bool sign) {
   std::vector<F> *result = nullptr;
   F max = (sign) ? F(1) : F(-1);
   if (path.size()) {
@@ -58,8 +61,10 @@ get_epsilon(std::string const &path, size_t const len, MPI_Comm comm, bool sign)
   return result;
 }
 
-template std::vector<double> *
-get_epsilon<double>(std::string const &path, size_t const len, MPI_Comm comm, bool sign);
+template std::vector<double> *get_epsilon<double>(std::string const &path,
+                                                  size_t const len,
+                                                  MPI_Comm comm,
+                                                  bool sign);
 
 template <>
 std::vector<atrip::Complex> *
@@ -92,8 +97,7 @@ CTF::Tensor<F> *read_or_fill(std::string const &name,
   MPI_Comm_rank(_comm, &_rank);
   auto tsr = new CTF::Tensor<F>(order, lens, syms, world, name.c_str());
   if (path.size()) {
-    if (!_rank)
-      std::cout << "Read tensor data from file " << path << std::endl;
+    if (!_rank) std::cout << "Read tensor data from file " << path << std::endl;
     tsr->read_dense_from_file(path.c_str());
   } else {
     if (!_rank)
@@ -109,7 +113,7 @@ struct Settings {
   int no, nv, it_mod, percentage_mod, omp_granularity;
   float checkpoint_percentage;
   bool nochrono, barrier, rank_round_robin, keep_Vppph, no_checkpoint, blocking,
-    complex, single, cT, ijkabc;
+      complex, single, cT, ijkabc;
   bool use_ctf;
   std::string tuples_distribution_string, checkpoint_path;
   // paths
@@ -141,8 +145,9 @@ void run(int argc, char **argv, Settings const &s) {
   };
 
   if (s.ei_path.size() && s.ea_path.size()) {
-    if (!rank) std::cout << "EigenEnergies provided - system dimensions"
-                         << "will be inferred from the file size." << std::endl;
+    if (!rank)
+      std::cout << "EigenEnergies provided - system dimensions"
+                << "will be inferred from the file size." << std::endl;
     std::ifstream ifile(s.ei_path, std::ios::in | std::ios::binary);
     std::ifstream afile(s.ea_path, std::ios::in | std::ios::binary);
     ifile.seekg(0, std::ios::end);
@@ -153,24 +158,25 @@ void run(int argc, char **argv, Settings const &s) {
     nv = lengthA / sizeof(double);
   }
 
-  auto check_file = [rank,no,nv](std::string const &filename, std::vector<int> dims) {
+  auto check_file = [rank, no, nv](std::string const &filename,
+                                   std::vector<int> dims) {
     size_t els(1);
-    for (size_t i: dims) els *= i;
+    for (size_t i : dims) els *= i;
     els *= sizeof(FIELD);
     std::ifstream file(filename.c_str());
     file.seekg(0, std::ios::end);
     size_t length = file.tellg();
     if (length == els) return;
-    if (!rank) std::cout << "File size of " << filename
-                         << " is not consistent with the dimensions:\n"
-                         << "no: " << no << " , nv: " << nv << " !!" << std::endl;
+    if (!rank)
+      std::cout << "File size of " << filename
+                << " is not consistent with the dimensions:\n"
+                << "no: " << no << " , nv: " << nv << " !!" << std::endl;
     MPI_Finalize();
     return;
   };
 
-
   if (file_exists(s.Tpphh_path)) check_file(s.Tpphh_path, {nv, nv, no, no});
-  if (file_exists(s.Tph_path))   check_file(s.Tph_path,   {nv, no});
+  if (file_exists(s.Tph_path)) check_file(s.Tph_path, {nv, no});
   if (file_exists(s.Vpphh_path)) check_file(s.Vpphh_path, {nv, nv, no, no});
   if (file_exists(s.Vppph_path)) check_file(s.Vppph_path, {nv, nv, nv, no});
   if (file_exists(s.Vhhhp_path)) check_file(s.Vhhhp_path, {no, no, no, nv});
@@ -178,21 +184,18 @@ void run(int argc, char **argv, Settings const &s) {
   if (file_exists(s.Jhhhp_path)) check_file(s.Jhhhp_path, {no, no, no, nv});
 
   if (s.use_ctf == false) {
-    bool allfiles(file_exists(s.ei_path)    &&
-                  file_exists(s.ea_path)    &&
-                  file_exists(s.Tpphh_path) &&
-                  file_exists(s.Tph_path)   &&
-                  file_exists(s.Vpphh_path) &&
-                  file_exists(s.Vhhhp_path) &&
-                  file_exists(s.Vppph_path)
-                 );
+    bool allfiles(file_exists(s.ei_path) && file_exists(s.ea_path)
+                  && file_exists(s.Tpphh_path) && file_exists(s.Tph_path)
+                  && file_exists(s.Vpphh_path) && file_exists(s.Vhhhp_path)
+                  && file_exists(s.Vppph_path));
     if (allfiles == false) {
-      if (!rank) std::cout << "If working without CTF all files have to be present!" << std::endl;
+      if (!rank)
+        std::cout << "If working without CTF all files have to be present!"
+                  << std::endl;
       MPI_Finalize();
       return;
     }
   }
-
 
   auto in = atrip::Atrip::Input<FIELD>()
                 .with_delete_Vppph(!s.keep_Vppph)
@@ -244,7 +247,6 @@ void run(int argc, char **argv, Settings const &s) {
 
   // USER PRINTING TEST END
 
-
   std::vector<int>
 
       vo({nv, no}), vvoo({nv, nv, no, no}), ooov({no, no, no, nv}),
@@ -253,7 +255,6 @@ void run(int argc, char **argv, Settings const &s) {
   _print_size(Vabci, no * nv * nv * nv);
   _print_size(Vabij, no * no * nv * nv);
   _print_size(Vijka, no * no * no * nv);
-
 
   std::vector<FIELD> *epsi = get_epsilon<FIELD>(s.ei_path, no, comm, false),
                      *epsa = get_epsilon<FIELD>(s.ea_path, nv, comm, true);
@@ -275,13 +276,13 @@ void run(int argc, char **argv, Settings const &s) {
 
   // split the communicator and let only every n-th rank be part of the game
 
-  MPI_Comm atrip_comm = atrip::create_comm(comm, s.omp_granularity, !s.rank_round_robin);
+  MPI_Comm atrip_comm =
+      atrip::create_comm(comm, s.omp_granularity, !s.rank_round_robin);
   atrip::print_comm_mapping(comm, atrip_comm);
 
   if (atrip_comm != MPI_COMM_NULL) {
     atrip::Atrip::init(atrip_comm, s.omp_granularity);
   }
-
 
   size_t const
 
@@ -328,7 +329,7 @@ void run(int argc, char **argv, Settings const &s) {
           + f * atrip::Atrip::np * no * no * no // zijk
           + f * atrip::Atrip::np * (no + nv)    // epsp
           + f * atrip::Atrip::np * no * nv      // tai
-      ;                               // end
+      ;                                         // end
 
   if (rank == 0) {
     std::cout << "Tentative MEMORY USAGE (GB): "
@@ -359,20 +360,20 @@ void run(int argc, char **argv, Settings const &s) {
     ppqq = {no, no, nv, nv};
   }
 
-/*
-  //TODO
-  //if (P<->H) Switch Tph //
-  if (s.ijkabc) {
-    Tpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
-    Vpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
+  /*
+    //TODO
+    //if (P<->H) Switch Tph //
+    if (s.ijkabc) {
+      Tpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
+      Vpphh = new CTF::Tensor<FIELD>(4, vvoo.data(), symmetries.data(), world);
 
-    (*Tpphh)["ijab"] = (*iTpphh)["abij"];
-    (*Vpphh)["ijab"] = (*iVpphh)["abij"];
-  } else {
-    Tpphh = iTpphh;
-    Vpphh = iVpphh;
-  o}
-*/
+      (*Tpphh)["ijab"] = (*iTpphh)["abij"];
+      (*Vpphh)["ijab"] = (*iVpphh)["abij"];
+    } else {
+      Tpphh = iTpphh;
+      Vpphh = iVpphh;
+    o}
+  */
 
   std::vector<FIELD> *Tph = new std::vector<FIELD>(no * nv, 0.1);
   if (s.Tph_path.size()) {
@@ -380,7 +381,7 @@ void run(int argc, char **argv, Settings const &s) {
   }
   in.with_Tph(Tph);
 
-  void *Tph_   = nullptr;
+  void *Tph_ = nullptr;
   void *Tpphh_ = nullptr;
   void *Vppph_ = nullptr;
   void *Vpphh_ = nullptr;
@@ -390,18 +391,60 @@ void run(int argc, char **argv, Settings const &s) {
 #if defined(HAVE_CTF)
   int syms[] = {NS, NS, NS, NS};
   if (s.use_ctf) {
-    Tph_   = read_or_fill<FIELD>("Tph", 2, vo.data(), syms, world, s.Tph_path, 0, 1);
-    Tpphh_ = read_or_fill<FIELD>("Tpphh", 4, vvoo.data(), syms, world, s.Tpphh_path, 0, 1);
-    Vppph_ = read_or_fill<FIELD>("Vppph", 4, vvvo.data(), syms, world, s.Vppph_path, 0, 1);
-    Vpphh_ = read_or_fill<FIELD>("Vpphh", 4, vvoo.data(), syms, world, s.Vpphh_path, 0, 1);
-    Vhhhp_ = read_or_fill<FIELD>("Vhhhp", 4, ooov.data(), syms, world, s.Vhhhp_path, 0, 1);
+    Tph_ =
+        read_or_fill<FIELD>("Tph", 2, vo.data(), syms, world, s.Tph_path, 0, 1);
+    Tpphh_ = read_or_fill<FIELD>("Tpphh",
+                                 4,
+                                 vvoo.data(),
+                                 syms,
+                                 world,
+                                 s.Tpphh_path,
+                                 0,
+                                 1);
+    Vppph_ = read_or_fill<FIELD>("Vppph",
+                                 4,
+                                 vvvo.data(),
+                                 syms,
+                                 world,
+                                 s.Vppph_path,
+                                 0,
+                                 1);
+    Vpphh_ = read_or_fill<FIELD>("Vpphh",
+                                 4,
+                                 vvoo.data(),
+                                 syms,
+                                 world,
+                                 s.Vpphh_path,
+                                 0,
+                                 1);
+    Vhhhp_ = read_or_fill<FIELD>("Vhhhp",
+                                 4,
+                                 ooov.data(),
+                                 syms,
+                                 world,
+                                 s.Vhhhp_path,
+                                 0,
+                                 1);
     if (s.cT) {
-      Jppph_ = read_or_fill<FIELD>("Jppph", 4, vvvo.data(), syms, world, s.Jppph_path, 0, 1);
-      Jhhhp_ = read_or_fill<FIELD>("Jhhhp", 4, ooov.data(), syms, world, s.Jhhhp_path, 0, 1);
+      Jppph_ = read_or_fill<FIELD>("Jppph",
+                                   4,
+                                   vvvo.data(),
+                                   syms,
+                                   world,
+                                   s.Jppph_path,
+                                   0,
+                                   1);
+      Jhhhp_ = read_or_fill<FIELD>("Jhhhp",
+                                   4,
+                                   ooov.data(),
+                                   syms,
+                                   world,
+                                   s.Jhhhp_path,
+                                   0,
+                                   1);
     }
   }
 #endif
-
 
   auto sVabph = atrip::reader<FIELD>(Vppph_,
                                      {nv, nv, nv, no},
@@ -433,31 +476,27 @@ void run(int argc, char **argv, Settings const &s) {
                                      s.Vhhhp_path,
                                      false);
 
-
   in.with_sVabph(&sVabph);
   in.with_sVabhh(&sVabhh);
   in.with_sTabhh(&sTabhh);
   in.with_sTaphh(&sTaphh);
   in.with_sVhhha(&sVhhha);
 
-  //this will not work as sJabph will go out of scope...i will have to move it
+  // this will not work as sJabph will go out of scope...i will have to move it
   if (s.cT) {
-    auto* sJabph = new atrip::Sources<FIELD>(
-      atrip::reader<FIELD>(Jppph_,
-                           {nv, nv, nv, no},
-                           {1, 1, 0, 0},
-                           s.Jppph_path,
-                           true)
-    );
+    auto *sJabph =
+        new atrip::Sources<FIELD>(atrip::reader<FIELD>(Jppph_,
+                                                       {nv, nv, nv, no},
+                                                       {1, 1, 0, 0},
+                                                       s.Jppph_path,
+                                                       true));
 
-    auto* sJhhha = new atrip::Sources<FIELD>(
-      atrip::reader<FIELD>(Jhhhp_,
-                           {no, no, no, nv},
-                           {0, 0, 0, 1},
-                           s.Jhhhp_path,
-                           false)
-    );
-
+    auto *sJhhha =
+        new atrip::Sources<FIELD>(atrip::reader<FIELD>(Jhhhp_,
+                                                       {no, no, no, nv},
+                                                       {0, 0, 0, 1},
+                                                       s.Jhhhp_path,
+                                                       false));
 
     in.with_sJabph(sJabph);
     in.with_sJhhha(sJhhha);
@@ -493,15 +532,15 @@ int main(int argc, char **argv) {
   defoption(app, "--no", s.no, "Number of occupied orbitals")
       ->default_val(0)
       ->check(CLI::PositiveNumber);
-//      ->required();
+  //      ->required();
   defoption(app, "--nv", s.nv, "Number of Virtual orbitals")
       ->default_val(0)
       ->check(CLI::PositiveNumber);
-//      ->required();
+  //      ->required();
   defoption(app, "--dist", s.tuples_distribution_string, "Tuples distribution")
       ->default_val("group")
       ->check(CLI::IsMember({"group", "naive"}));
-//      ->required();
+  //      ->required();
 
   //
   // OPTIONAL
@@ -531,7 +570,10 @@ int main(int argc, char **argv) {
       ->default_val(false);
   defoption(app, "-%", s.percentage_mod, "Percentage to be printed")
       ->default_val(10);
-  defoption(app, "--omp-granularity", s.omp_granularity, "OpenMP threads per MPI rank")
+  defoption(app,
+            "--omp-granularity",
+            s.omp_granularity,
+            "OpenMP threads per MPI rank")
       ->default_val(1);
   //
   // checkpointing
@@ -539,7 +581,7 @@ int main(int argc, char **argv) {
   defflag(app, "--nocheckpoint", s.no_checkpoint, "Do not use checkpoint")
       ->default_val(false);
   defoption(app, "--checkpoint-path", s.checkpoint_path, "Path for checkpoint")
-      ->default_val("checkpoint.yaml");
+      ->default_val("PerturbativeTriples.checkpoint");
   defoption(app,
             "--checkpoint-it",
             s.checkpoint_it,
@@ -579,16 +621,10 @@ int main(int argc, char **argv) {
 
 #if defined(HAVE_CTF)
   // Use reader from ctf or not
-  defflag(app,
-          "--use_ctf",
-          s.use_ctf,
-          "Read tensors using CTF")
+  defflag(app, "--use_ctf", s.use_ctf, "Read tensors using CTF")
       ->default_val(true);
 #else
-  defflag(app,
-          "--use_ctf",
-          s.use_ctf,
-          "Read tensors using CTF")
+  defflag(app, "--use_ctf", s.use_ctf, "Read tensors using CTF")
       ->default_val(false);
 
 #endif /* defined(HAVE_CTF) */
