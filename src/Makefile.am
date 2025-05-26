@@ -11,6 +11,7 @@ NO_ACC_FILES = \
 ./atrip/RankMap.cxx \
 ./atrip/Slice.cxx \
 ./atrip/Reader.cxx \
+./atrip/Checkpoint.cxx \
 ./atrip/Mpi.cxx
 
 
