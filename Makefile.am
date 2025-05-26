@@ -4,6 +4,11 @@ SUBDIRS = src bench test extern integration-tests
 
 all: atrip
 
+.PHONY: test
+test:
+	make -C integration-tests
+	make -C $@ $@
+
 _ATRIPSRCS = Sources.mk
 
 ORG_MAIN = atrip.org
