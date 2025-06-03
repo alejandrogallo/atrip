@@ -23,7 +23,7 @@ const std::regex
 } // namespace details
 
 void write_checkpoint_header(std::string const &filepath) {
-  std::ofstream out(filepath, std::ios::app);
+  std::ofstream out(filepath, std::ios::app | std::ios::out);
   for (auto const &name : std::vector<std::string>({"iteration",
                                                     "no",
                                                     "nv",
@@ -42,7 +42,7 @@ void write_checkpoint_header(std::string const &filepath) {
 
 void write_checkpoint(Checkpoint const &c, std::string const &filepath) {
   const auto sep = CHECKPOINT_FIELD_SEPARATION;
-  std::ofstream out(filepath, std::ios::app);
+  std::ofstream out(filepath, std::ios::app | std::ios::out);
   out                                                          /**/
       << c.iteration << sep                                    /**/
       << c.no << sep                                           /**/

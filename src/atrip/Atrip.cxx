@@ -628,20 +628,25 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         LOG(0, "Atrip") << "Checkpoint discarded: First iteration is higher "
                            "than the total number of iterations\n";
       }
-      if (No != c.no) { /* TODO: write warning */
-        checkpoint_failure = true;
-        LOG(0, "Atrip")
-            << "Checkpoint discarded: Invalid No present in checkpoint file."
-               "\n";
-      }
-      if (Nv != c.nv) { /* TODO: write warning */
-        checkpoint_failure = true;
-        LOG(0, "Atrip")
-            << "Checkpoint discarded: Invalid Nv present in checkpoint file."
-               "\n";
-      }
+
+#define CHECK_CHECKPOINT_(name, check_a, a)                                    \
+  do {                                                                         \
+    if (a != check_a) {                                                        \
+      checkpoint_failure = true;                                               \
+      LOG(0, "Atrip") << "Checkpoint discarded: Invalid " << name << "\n";     \
+      LOG(0, "Atrip") << "  ⤷ Checkpoint file has: " << check_a                \
+                      << " while the correct value is " << a << "\n";          \
+    }                                                                          \
+  } while (0)
+      CHECK_CHECKPOINT_("No", c.no, No);
+      CHECK_CHECKPOINT_("Nv", c.nv, Nv);
+      CHECK_CHECKPOINT_("number of ranks", c.nranks, Atrip::ranks_per_node);
+      CHECK_CHECKPOINT_("number of nodes", c.nnodes, Atrip::n_nodes);
+#undef CHECK_CHECKPOINT_
+
       // TODO write warnings for nrank and so on
       if (!checkpoint_failure) {
+        checkpoint_read = true;
         first_iteration = (size_t)c.iteration;
         if (Atrip::rank == 0) {
           // take the negative of the energy to correct for the
@@ -652,11 +657,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           local_output.iteration_energy = -EnergyType<F>(c.iteration_energy);
           local_output.iteration_ct_energy =
               -EnergyType<F>(c.iteration_ct_energy);
+          LOG(0, "Atrip") << "energy from checkpoint " << local_output.energy
+                          << "\n";
+          LOG(0, "Atrip") << "iteration energy from checkpoint "
+                          << local_output.iteration_energy << "\n";
+          LOG(0, "Atrip") << "ct energy from checkpoint "
+                          << local_output.ct_energy << "\n";
+          LOG(0, "Atrip") << "iteration ct energy from checkpoint "
+                          << local_output.iteration_ct_energy << "\n";
+          LOG(0, "Atrip") << "iteration from checkpoint " << first_iteration
+                          << "\n";
         }
-        LOG(0, "Atrip") << "energy from checkpoint " << local_output.energy
-                        << "\n";
-        LOG(0, "Atrip") << "iteration from checkpoint " << first_iteration
-                        << "\n";
       }
     }
     if (in.first_iteration)
@@ -771,17 +782,30 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                             if (in.barrier) MPI_Barrier(Atrip::communicator);))
 
     // write checkpoints
-    // TODO: ENABLE THIS
-    // if (f!checkpoint_mod || iteration % checkpoint_mod == 0 && false) {
-    if (false) {
-      EnergyType<F> global_energy = 0;
-      MPI_Reduce(&local_output.energy,
-                 &global_energy,
-                 1,
-                 traits::mpi::datatype_of<EnergyType<F>>(),
-                 MPI_SUM,
-                 0,
-                 Atrip::communicator);
+    if (in.writeCheckpoint
+        && (!checkpoint_mod // Checkpoint_mod is not 0
+            || iteration % checkpoint_mod == 0
+            || iteration == n_iterations // write the checkpoint at the
+                                         // last iteration if we get there
+            )) {
+      // if (iteration_log && i % iteration_log == 0) {
+      EnergyType<F> global_energy = 0, global_ct_energy = 0, iteration_energy,
+                    iteration_ct_energy;
+      const auto gather_energies = [&](EnergyType<F> *local,
+                                       EnergyType<F> *global) {
+        MPI_Reduce(local,
+                   global,
+                   1,
+                   traits::mpi::datatype_of<EnergyType<F>>(),
+                   MPI_SUM,
+                   0,
+                   Atrip::communicator);
+      };
+      gather_energies(&local_output.energy, &global_energy);
+      gather_energies(&local_output.ct_energy, &global_ct_energy);
+      gather_energies(&local_output.iteration_energy, &iteration_energy);
+      gather_energies(&local_output.iteration_ct_energy, &iteration_ct_energy);
+
       Checkpoint out;
       { // build checkpoint
         out.no = No;
@@ -790,7 +814,9 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         out.nnodes = Atrip::n_nodes;
         out.iteration = iteration - 1;
         out.global_energy = -global_energy;
-        out.iteration_energy = 0.0; // todo
+        out.global_ct_energy = -global_ct_energy;
+        out.iteration_energy = -iteration_energy;       // todo
+        out.iteration_ct_energy = -iteration_ct_energy; // todo
         out.rank_round_robin = in.rank_round_robin;
       }
       if (Atrip::rank == 0) {
