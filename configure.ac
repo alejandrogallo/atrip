@@ -51,7 +51,9 @@ AC_ARG_ENABLE([ctf],
                               [WITH_CTF=no])
 if test x${WITH_CTF} = xyes; then
 AC_DEFINE([HAVE_CTF],1,[Use CTF library])
+AC_DEFINE([CTF_SWITCH_REDISTRIBUTION],1,[Use CTF redistribution])
 fi
+
 
 dnl ///////////////////////
 dnl CLANG
@@ -171,7 +173,7 @@ dnl CTF EXPORT ------------------------------------------------------------
 dnl -----------------------------------------------------------------------
 AM_CONDITIONAL([WITH_BUILD_CTF], [test x${BUILD_CTF} = xYES])
 AM_CONDITIONAL([WITH_CTF], [test x${WITH_CTF} = xyes])
-CTF_COMMIT="53ae5daad851bf3b198ebe1fa761c13b12291116"
+CTF_COMMIT="99a96c4ebc0a3aba3ed0045d85748c1d3edb285b"
 AC_SUBST([CTF_COMMIT])
 AC_SUBST(LIBCTF_PATH)
 AC_SUBST(LIBCTF_CPATH)
