@@ -646,7 +646,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
       // TODO write warnings for nrank and so on
       if (!checkpoint_failure) {
-        checkpoint_read = true;
+        //checkpoint_read = true;
         first_iteration = (size_t)c.iteration;
         if (Atrip::rank == 0) {
           // take the negative of the energy to correct for the
