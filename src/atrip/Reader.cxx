@@ -192,7 +192,7 @@ Sources<F> diskReader(const std::string &file_path,
 
 
 static std::vector<int> largest_factors(int N) {
-    for (int i = N / 2; i >= 1; --i) if (N % i == 0) return {i, N / i};
+    for (int i = sqrt(N); i >= 1; --i) if (N % i == 0) return {i, N / i};
     return {1, N};  // For N = 1 case
 }
 // This can only be a incomplete documentation of the algorithm as both,
