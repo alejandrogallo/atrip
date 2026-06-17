@@ -90,20 +90,7 @@
 #endif
 // Macros:3 ends here
 
-// [[file:~/cuda/atrip/atrip.org::IterationDescriptor][IterationDescriptor]]
 namespace atrip {
-
-struct IterationDescription;
-using IterationDescriptor = std::function<void(IterationDescription const &)>;
-class IterationDescription {
-public:
-  static IterationDescriptor descriptor;
-  size_t current_iteration;
-  size_t total_iterations;
-  double current_elapsed_time;
-};
-
-void register_iteration_descriptor(IterationDescriptor);
 
 // a further logger. usage:
 // in the main program
@@ -122,6 +109,15 @@ inline void log(const std::string& msg) {
     if (getLogger()) getLogger()(msg);
 }
 
+//
+inline std::function<void(const std::string&)>& getWriter() {
+    static std::function<void(const std::string&)> instance = nullptr;
+    return instance;
+}
+
+inline void out(const std::string& msg) {
+    if (getWriter()) getWriter()(msg);
+}
+
 
 } // namespace atrip
-// IterationDescriptor ends here

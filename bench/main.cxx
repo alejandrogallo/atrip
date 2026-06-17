@@ -216,37 +216,6 @@ void run(int argc, char **argv, Settings const &s) {
   constexpr double elem_to_gb = 8.0 / 1024.0 / 1024.0 / 1024.0;
   if (s.ijkabc) { _flip(no, nv); }
 
-  // USER PRINTING TEST BEGIN
-  const double doubles_flops = no * no * no // common parts of the matrices
-                             * (no + nv)    // particles and holes
-                             * (s.complex ? 4.0 : 1.0)
-                             * 2.0    // flops has to be times 2
-                             * 6.0    // how many dgemms are there
-                             / 1.0e9; // calculate it in gflops
-  double last_elapsed_time = 0;
-  bool first_header_printed = false;
-  atrip::register_iteration_descriptor(
-      [doubles_flops, &first_header_printed, rank, &last_elapsed_time](
-          atrip::IterationDescription const &d) {
-        const char *fmt_nums = "%-13.0f%-10.0f%-13.3f";
-        char out[256];
-        if (!first_header_printed) {
-          const char *fmt_header = "%-13s%-10s%-13s";
-          sprintf(out, fmt_header, "Progress(%)", "time(s)", "GFLOP/s");
-          first_header_printed = true;
-          if (rank == 0) std::cout << out << "\n";
-        }
-        sprintf(out,
-                fmt_nums,
-                double(d.current_iteration) / double(d.total_iterations) * 100,
-                (d.current_elapsed_time - last_elapsed_time),
-                d.current_iteration * doubles_flops / d.current_elapsed_time);
-        last_elapsed_time = d.current_elapsed_time;
-        if (rank == 0) std::cout << out << "\n";
-      });
-
-  // USER PRINTING TEST END
-
   std::vector<int>
 
       vo({nv, no}), vvoo({nv, nv, no, no}), ooov({no, no, no, nv}),

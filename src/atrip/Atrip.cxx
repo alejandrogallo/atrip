@@ -48,11 +48,6 @@ size_t Atrip::network_send;
 size_t Atrip::local_send;
 double Atrip::bytes_sent;
 
-// user printing block
-IterationDescriptor IterationDescription::descriptor;
-void atrip::register_iteration_descriptor(IterationDescriptor d) {
-  IterationDescription::descriptor = d;
-}
 
 template <typename F>
 struct LocalOutput {
@@ -417,12 +412,10 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
                     << n_iterations * Atrip::np << "\n";
   }
 
-  const size_t iteration_mod = (in.percentage_mod > 0)
-                                 ? n_iterations * in.percentage_mod / 100.0
-                                 : in.iteration_mod,
-               iteration1Percent = n_iterations * 0.01;
+  size_t iteration_mod = (in.percentage_mod > 0) ? n_iterations * in.percentage_mod / 100.0
+                                                 : in.iteration_mod,
+         iteration1Percent = n_iterations * 0.01;
 
-  const size_t iteration_log = in.iteration_log;
   auto const is_fake_tuple = [&tuples_list, distribution](size_t const i) {
     return distribution->tuple_is_fake(tuples_list[i]);
   };
@@ -601,7 +594,8 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       double(No) * double(No) * double(No) * (double(No) + double(Nv)) * 2.0
       * (traits::is_complex<F>() ? 4.0 : 1.0) * 6.0 / 1e9;
 
-  //  Reading checkpoint
+  //////////////////////////////////////////////////
+  // Reading checkpoint
   //////////////////////////////////////////////////
   MPI_Barrier(Atrip::communicator);
   LocalOutput<EnergyType<F>> local_output = {0, 0, 0};
@@ -627,22 +621,24 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
         checkpoint_failure = true;
         LOG(0, "Atrip") << "Checkpoint discarded: First iteration is higher "
                            "than the total number of iterations\n";
+        out("Checkpoint discarded: First iteration is higher than the total number of iterations");
       }
 
-#define CHECK_CHECKPOINT_(name, check_a, a)                                    \
-  do {                                                                         \
-    if (a != check_a) {                                                        \
-      checkpoint_failure = true;                                               \
-      LOG(0, "Atrip") << "Checkpoint discarded: Invalid " << name << "\n";     \
-      LOG(0, "Atrip") << "  ⤷ Checkpoint file has: " << check_a                \
-                      << " while the correct value is " << a << "\n";          \
-    }                                                                          \
-  } while (0)
-      CHECK_CHECKPOINT_("No", c.no, No);
-      CHECK_CHECKPOINT_("Nv", c.nv, Nv);
-      CHECK_CHECKPOINT_("number of ranks", c.nranks, Atrip::ranks_per_node);
-      CHECK_CHECKPOINT_("number of nodes", c.nnodes, Atrip::n_nodes);
-#undef CHECK_CHECKPOINT_
+      auto check_checkpoint = [&](const std::string& name, auto check_a, auto a) {
+        if (a != check_a) {
+          checkpoint_failure = true;
+          std::string msg = "Checkpoint discarded: Invalid " + name + "\n"
+            + "   Checkpoint file has: " + std::to_string(check_a)
+            + " while the correct value is " + std::to_string(a);
+          LOG(0, "Atrip") << msg << std::endl;
+          out(msg);
+
+        }
+      };
+      check_checkpoint("No", c.no, No);
+      check_checkpoint("Nv", c.nv, Nv);
+      check_checkpoint("number of ranks", c.nranks, Atrip::ranks_per_node);
+      check_checkpoint("number of nodes", c.nnodes, Atrip::n_nodes);
 
       // TODO write warnings for nrank and so on
       if (!checkpoint_failure) {
@@ -654,18 +650,17 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           local_output.energy = -EnergyType<F>(c.global_energy);
           local_output.ct_energy = -EnergyType<F>(c.global_ct_energy);
           local_output.iteration_energy = -EnergyType<F>(c.iteration_energy);
-          local_output.iteration_ct_energy =
-              -EnergyType<F>(c.iteration_ct_energy);
-          LOG(0, "Atrip") << "energy from checkpoint " << local_output.energy
-                          << "\n";
-          LOG(0, "Atrip") << "iteration energy from checkpoint "
-                          << local_output.iteration_energy << "\n";
-          LOG(0, "Atrip") << "ct energy from checkpoint "
-                          << local_output.ct_energy << "\n";
-          LOG(0, "Atrip") << "iteration ct energy from checkpoint "
-                          << local_output.iteration_ct_energy << "\n";
-          LOG(0, "Atrip") << "iteration from checkpoint " << first_iteration
-                          << "\n";
+          local_output.iteration_ct_energy = -EnergyType<F>(c.iteration_ct_energy);
+          std::string msg;
+          msg = "energy from checkpoint " + std::to_string(local_output.energy);
+          LOG(0, "Atrip") << msg << "\n";
+          msg =  "ct energy from checkpoint " + std::to_string(local_output.ct_energy);
+          LOG(0, "Atrip") << msg << "\n";
+          msg = "iteration from checkpoint " + std::to_string(first_iteration);
+          LOG(0, "Atrip") << msg << "\n";
+          size_t it_percent = first_iteration * 100.0 / tuples_list.size();
+          out("Resuming calculation at " + std::to_string(it_percent) + "%");
+
         }
       }
     }
@@ -751,10 +746,15 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
 
   //////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
-  //  Main Iteration Loop
+  // Main Iteration Loop
   //////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
+  size_t report_steps = first_iteration + 1;
+  iteration1Percent += first_iteration;
+
+  double report_time = 0.0;
+  out("Progress(%), time(s), GFLOP/s");
   log("Start iterations.");
   for (size_t i = first_iteration, iteration = first_iteration + 1;
        i < tuples_list.size();
@@ -787,7 +787,6 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
             || iteration == n_iterations // write the checkpoint at the
                                          // last iteration if we get there
             )) {
-      // if (iteration_log && i % iteration_log == 0) {
       EnergyType<F> global_energy = 0, global_ct_energy = 0, iteration_energy,
                     iteration_ct_energy;
       const auto gather_energies = [&](EnergyType<F> *local,
@@ -826,76 +825,33 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
       };
     }
 
-    if (iteration_log && i % iteration_log == 0) {
-      std::ostringstream sst;
-      EnergyType<F> global_energy = 0;
-      MPI_Reduce(&local_output.energy,
-                 &global_energy,
-                 1,
-                 traits::mpi::datatype_of<EnergyType<F>>(),
-                 MPI_SUM,
-                 0,
-                 Atrip::communicator);
-      std::string log_out("energy log. iteration " + std::to_string(i)
-                          + " , (T): ");
-      sst << std::setprecision(15) << -global_energy;
-      log_out += sst.str();
-      if (in.cT) {
-        std::ostringstream ssct;
-        EnergyType<F> ct_energy = 0;
-        MPI_Reduce(&local_output.ct_energy,
-                   &ct_energy,
-                   1,
-                   traits::mpi::datatype_of<EnergyType<F>>(),
-                   MPI_SUM,
-                   0,
-                   Atrip::communicator);
-        log_out += " , (cT): ";
-        ssct << std::setprecision(15) << -ct_energy;
-        log_out += ssct.str();
-      }
-      log(log_out);
-    }
     // write reporting
     if (!iteration_mod || iteration % iteration_mod == 0
         || iteration == iteration1Percent) {
 
-      if (IterationDescription::descriptor) {
-        IterationDescription::descriptor(
-            {iteration, n_iterations, Atrip::chrono["iterations"].count()});
-      }
-
       const double _doubles_time = Atrip::chrono["doubles"].count(),
                    _its_time = Atrip::chrono["iterations"].count();
 
-      size_t network_send(0);
-      MPI_Reduce(&Atrip::network_send,
-                 &network_send,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 Atrip::communicator);
+      size_t progress = iteration * 100.0 / tuples_list.size();
 
-      size_t local_send(0);
-      MPI_Reduce(&Atrip::local_send,
-                 &local_send,
-                 1,
-                 MPI_UINT64_T,
-                 MPI_SUM,
-                 0,
-                 Atrip::communicator);
+      std::ostringstream oss;
+      oss << std::left << std::fixed
+          << std::setw(13) << std::setprecision(0) << progress
+          << std::setw(10) << std::setprecision(0) << _its_time - report_time
+          << std::setw(13) << std::setprecision(3)
+          << doubles_flops * (iteration - report_steps) / (_its_time - report_time);
+     out(oss.str());
 
-      double bytes_sent(0.0);
-      MPI_Reduce(&Atrip::bytes_sent,
-                 &bytes_sent,
-                 1,
-                 MPI_DOUBLE,
-                 MPI_SUM,
-                 0,
-                 Atrip::communicator);
+     report_time = _its_time;
+     report_steps = iteration;
 
-      const size_t total_send = network_send + local_send;
+      size_t n_send = 0, l_send = 0;
+      double bytes_sent = 0.0;
+      MPI_Reduce(&Atrip::network_send, &n_send, 1, MPI_UINT64_T, MPI_SUM, 0, Atrip::communicator);
+      MPI_Reduce(&Atrip::local_send, &l_send, 1, MPI_UINT64_T, MPI_SUM, 0, Atrip::communicator);
+      MPI_Reduce(&Atrip::bytes_sent, &bytes_sent, 1, MPI_DOUBLE, MPI_SUM, 0, Atrip::communicator);
+
+      const size_t total_send = n_send + l_send;
 
       LOG(0, "Atrip")
           << "iteration " << iteration << " [" << 100 * iteration / n_iterations
@@ -907,7 +863,7 @@ Atrip::Output Atrip::run(Atrip::Input<F> const &in) {
           << " ("
           << (_its_time > 0.0 ? doubles_flops * iteration / _its_time : -1)
           << "GF) :: GB sent per rank: " << bytes_sent / 1073741824.0 << " :: "
-          << (total_send > 0UL ? (double)network_send / total_send : 0UL)
+          << (total_send > 0UL ? 100.0 * n_send / total_send : 0UL)
           << " % network communication" << std::endl;
 
       // PRINT TIMINGS
