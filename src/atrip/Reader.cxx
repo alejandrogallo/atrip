@@ -192,7 +192,7 @@ Sources<F> diskReader(const std::string &file_path,
 
 
 static std::vector<int> largest_factors(int N) {
-    for (int i = sqrt(N); i >= 1; --i) if (N % i == 0) return {i, N / i};
+    for (int i = N / 2; i >= 1; --i) if (N % i == 0) return {i, N / i};
     return {1, N};  // For N = 1 case
 }
 // This can only be a incomplete documentation of the algorithm as both,
@@ -469,13 +469,40 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
                      std::vector<size_t> slice_mapping,
                      bool delete_tensor_data) {
 
-  size_t Nv = [&]{
-      size_t v = 0;
-      for(size_t i = 0; i < tensor_dimension.size(); ++i)
-          if(slice_mapping[i] == 1)
-              v = std::max(v, tensor_dimension[i]);
-      return v;
-  }();
+  // just a sanity check. tensor_dimension is just provided as sanity check!
+  auto order(tensor_dimension.size());
+  assert(order == slice_mapping.size() && (tensor.order == (int) order));
+
+  for (auto i(0); i < tensor.order; i++) assert(tensor.lens[i] == tensor_dimension[i]);
+
+
+  // sanity check for the mapping
+  const bool left_touch  = slice_mapping.front() == 1;
+  const bool right_touch = slice_mapping.back()  == 1;
+  assert(left_touch || right_touch); // must touch at least one boundary
+
+  // Walk inward from the touching boundary; once we see a 0, no more 1s allowed
+  bool in_block = true;
+  if (left_touch) {
+    for (const auto v : slice_mapping) {
+      if (v == 1) assert(in_block);
+      else in_block = false;
+    }
+  } else {
+    for (auto it = slice_mapping.rbegin(); it != slice_mapping.rend(); ++it) {
+      if (*it == 1) assert(in_block);
+      else in_block = false;
+    }
+  }
+  // Extract Nv: common size of all sliced dimensions
+  size_t Nv = 0, n_slice = 0;
+  for (size_t i = 0; i < tensor_dimension.size(); ++i) {
+    if (slice_mapping[i] == 1) {
+      n_slice++;
+      if (Nv == 0) Nv = tensor_dimension[i];
+      else assert(tensor_dimension[i] == Nv);
+    }
+  }
 
   // We have to work with the communicator of the world's tensor.
   // the atrip::communicator is a subworld (or identical) of it
@@ -495,61 +522,51 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
                               delete_tensor_data);
   }
 
-  auto order(tensor_dimension.size());
 
-  std::vector<size_t> slice_dimension, source_dimension, ptensor_dimension(tensor_dimension);
-  assert(order == slice_mapping.size() && tensor.order == (int) order);
-
-  bool is_reversed;
-  auto reorder(slice_mapping);
-  std::sort(reorder.begin(), reorder.end());
+  //TODO move
+  std::vector<size_t> ptensor_dimension(tensor_dimension);
 
   std::ostringstream oss;
   for (size_t i = 0; i < slice_mapping.size(); ++i)
     oss << slice_mapping[i] << (i + 1 < slice_mapping.size() ? ", " : "");
 
-  if (reorder == slice_mapping) {
-    is_reversed = false;
-    std::iota(reorder.begin(), reorder.end(), 0);
-    LOG(0, "Atrip") << "CtfReader: " << tensor.name << " (" << oss.str() << ") | tensor is in correct order." << std::endl;
+  // the tensor data is stored in fortran format. if first index is sliced the
+  // data array has to be permuted
+  if (left_touch) {
+    log(concat("CtfReader: ", tensor.name, " (", oss.str(), ") | tensor will be reverted."));
   } else {
-    LOG(0, "Atrip") << "CtfReader: " << tensor.name << " (" << oss.str() << ") | tensor will be reverted." << std::endl;
-    is_reversed = true;
-    std::iota(reorder.begin(), reorder.end(), 0);
-    std::sort(reorder.begin(), reorder.end(), [&slice_mapping](size_t a, size_t b) {
-      return slice_mapping[a] < slice_mapping[b];
-    });
+    log(concat("CtfReader: ", tensor.name, " (", oss.str(), ") | tensor is in correct order."));
   }
 
+  std::vector<size_t> slice_dimension, source_dimension;
   for (auto i(0UL); i < slice_mapping.size(); i++) {
-    slice_mapping[i] ? slice_dimension.push_back(tensor_dimension[i])
-                     : source_dimension.push_back(tensor_dimension[i]);
+    (slice_mapping[i] ? slice_dimension : source_dimension).push_back(tensor_dimension[i]);
   }
-
 
   RankMap<F> rank_map(slice_dimension);
 
+  // number of elements in one slice
   size_t s_sources = std::accumulate(source_dimension.begin(),
                                      source_dimension.end(),
                                      1UL,
                                      std::multiplies<size_t>());
 
+  // total number of slices
   size_t number_slices = std::accumulate(slice_dimension.begin(),
                                          slice_dimension.end(),
                                          1UL,
                                          std::multiplies<size_t>());
 
+  // number of slices per atrip rank
   size_t n_sources(0);
-  // This means: you are not MPI_UNDEFINED in the atrip communicator!
+  // Only ranks which are not MPI_UNDEFINED in the atrip communicator!
   if (Atrip::np > 0) {
     n_sources = number_slices / Atrip::np;
-    if (number_slices % Atrip::np > 0
-        && Atrip::rank < (number_slices % Atrip::np)) n_sources++;
+    if (number_slices % Atrip::np > 0 && Atrip::rank < (number_slices % Atrip::np)) n_sources++;
   }
+
   std::vector<std::vector<F>> sources(n_sources, std::vector<F>(s_sources));
 
-  assert(tensor.order == tensor_dimension.size());
-  for (auto i(0); i < tensor.order; i++) assert(tensor.lens[i] == tensor_dimension[i]);
 
   // identify the slice-mapping in order to create the CTF::Partition
   // one dimensional case is easy - we have to find the non-zero entry
@@ -570,16 +587,9 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
   CTF::Partition part(tensor.order, plens.data());
   std::string albet{"abcdefghijklmnopqrstuvwxyz"};
   auto s1 = albet.substr(0, tensor.order);
-  auto s2 = albet.substr(0, tensor.order);
-
-  for (size_t i(0); i < order; i++) s2[i] = s1[reorder[i]];
 
 
-  LOG(0, "Atrip") << "Rearrange ctf tensor via switch distribution "
-                  << s2.c_str() << " <-- " << s1.c_str() <<  std::endl;
-
-  // we delete the tensor data at the end of the function (if demanded)
-  //if (!delete_tensor_data) backup = new CTF::Tensor<F>(tensor);
+  log("Rearrange ctf tensor using switch_distribution");
 
   // we switch the processor layout such that we have phases as desired
   tensor.switch_distribution(s1.c_str(), part[s1.c_str()]);
@@ -591,15 +601,23 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
   for ( size_t _l(0); _l < plens.size(); _l++) {
     _loc_lens[_l] /= plens[_l];
   }
-  assert(std::is_permutation(s1.begin(), s1.end(), s2.begin()));
-  if (s1 != s2) {
+
+  std::vector<size_t> reorder;
+  if (left_touch) {
+    reorder.resize(tensor.order);
+    size_t front = 0, back = order - n_slice;
+    for (size_t i = 0; i < order; ++i)
+      (slice_mapping[i] == 0) ? reorder[front++] = i : reorder[back++]  = i;
+
     buffer.resize(tensor.size);
     permute_copy(_loc_lens, reorder, reinterpret_cast<const F*>(tensor.data), buffer.data());
     //std::memcpy(tensor.data, _buffer.data(), _buffer.size() * sizeof(F));
   }
 
+
   // we run into problems if the local buffer gets too large!
-  assert(s_sources*sizeof(F) < std::numeric_limits<int>::max());
+  if (s_sources*sizeof(F) >= std::numeric_limits<int>::max())
+    throw std::runtime_error("buffer overflow");
 
   std::vector<int> list_target,list_origin;
 
@@ -612,11 +630,12 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
   for (auto i(0); i < slice_mapping.size(); i++) {
     if (slice_mapping[i] > 0) grid.push_back(plens[i]);
   }
+
+
   // if we have reversed the tensor the grid is also revered
   // the grid is also reversed?! result is wrong if we do not reverse once more
   //if (is_reversed) std::reverse(grid.begin(), grid.end());
-
-  is_reversed = false;
+  bool is_reversed = false;
   if (slice_dimension.size() == 1) {
     assert(grid.size() == 1);
     for (auto _v(0); _v < Nv; _v++) {
@@ -720,7 +739,7 @@ Sources<F> ctfReader(CTF::Tensor<F>& tensor,
 
   // if we dont remove the tensor we have to bring the tensor back in correct order
   if (delete_tensor_data == false) {
-    if (s1 != s2) {
+    if (left_touch) {
       std::vector<size_t> inv_reorder(reorder.size());
       for (size_t i = 0; i < reorder.size(); ++i)
         inv_reorder[reorder[i]] = i;

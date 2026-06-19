@@ -38,6 +38,18 @@ namespace atrip {
     return std::string(_out.data());                                           \
   })()
 
+// Base case: single argument
+inline std::string concat() {
+    return "";
+}
+
+// Recursive variadic template for multiple arguments
+template<typename T, typename... Args>
+std::string concat(T&& first, Args&&... args) {
+    std::ostringstream oss;
+    oss << std::forward<T>(first);
+    return oss.str() + concat(std::forward<Args>(args)...);
+}
 // [[file:~/cuda/atrip/atrip.org::*Epilog][Epilog:1]]
 } // namespace atrip
 // Epilog:1 ends here
